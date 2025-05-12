@@ -1,0 +1,59 @@
+/* Buttons */
+.btn-custom {
+  background-color: #198754;
+  color: white;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-weight: 500;
+}
+
+.btn-custom:hover {
+  background-color: #157347;
+}
+
+/* Product Card */
+.product-card {
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 15px;
+  background-color: white;
+  transition: box-shadow 0.3s;
+}
+
+.product-card:hover {
+  box-shadow: 0 0 12px rgba(0,0,0,0.12);
+}
+
+.product-card img {
+  width: 100%;
+  border-radius: 5px;
+}
+
+.product-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.product-price {
+  color: #dc3545;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+/* Form Group (dùng thêm class Bootstrap) */
+.form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(13,110,253,.25);
+}
+
+/* Alerts, badges... nếu cần bạn có thể mở rộng */
+.search-wrapper {
+  position: relative;
+}
+
+.search-form {
+  background-color: white;
+  padding: 10px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}

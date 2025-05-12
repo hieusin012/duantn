@@ -1,0 +1,55 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body - nền trắng */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #ffffff;
+  color: #000000;
+  line-height: 1.6;
+}
+
+/* Header */
+header {
+  background-color: #ffffff; /* Bootstrap blue */
+  padding: 10px 0;
+  color: white;
+}
+
+header nav {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+}
+
+header nav a {
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+header nav a:hover {
+  color: #555050;
+}
+
+/* Container */
+.container {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 30px 15px;
+  background-color: #fff;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  background-color: #f8f9fa;
+  color: #6c757d;
+  padding: 20px 0;
+  font-size: 14px;
+  border-top: 1px solid #dee2e6;
+}
