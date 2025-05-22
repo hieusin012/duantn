@@ -229,34 +229,7 @@
     </div>
 
     <!-- main -->
-    {{-- <div class="card">
-      <div class="card-header d-flex justify-content-between align-items-center">
-        <span>Danh sách sản phẩm</span>
-        <a href="" class="btn btn-light btn-sm"><i class="fas fa-plus me-1"></i> Thêm sản phẩm</a>
-      </div>
-      <div class="card-body table-responsive">
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Tên sản phẩm</th>
-              <th>Hình ảnh</th>
-              <th>Giá</th>
-              <th>Số lượng</th>
-              <th>Màu</th>
-              <th>Size</th>
-              <th>Danh mục</th>
-              <th>Hành động</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td colspan="9" class="text-center text-muted">Không có sản phẩm nào.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div> --}}
+
     @yield('content')
 
     <!-- Footer -->
