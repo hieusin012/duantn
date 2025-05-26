@@ -1,46 +1,48 @@
-@extends('admin.layouts.index')
+@extends('admin.layouts.index') {{-- Giả sử bạn có layout admin --}}
 
 @section('content')
 <div class="container">
-    <h1>Thêm Mới</h1>
+    <h2>Danh sách danh mục</h2>
+    <a href="{{ route('categories.create') }}" class="btn btn-primary mb-3">Thêm mới</a>
 
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
 
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Tên</th>
+                <th>Ảnh</th>
+                <th>Hiển thị</th>
+                <th>Danh mục cha</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($categories as $cat)
+                <tr>
+                    <td>{{ $cat->name }}</td>
+                    <td>
+                        @if($cat->image)
+                            <img src="{{ asset('storage/' . $cat->image) }}" alt="{{ $cat->name }}" width="50" height="50">
+                        @endif
+                    </td>
+                    <td>{{ $cat->is_active ? '✔' : '✖' }}</td>
+                    <td>{{ $cat->parent->name ?? 'Không có' }}</td>
+                    <td>
+                        <a href="{{ route('categories.edit', $cat) }}" class="btn btn-sm btn-warning">Sửa</a>
+                        <form action="{{ route('categories.destroy', $cat) }}" method="POST" style="display:inline;">
+                            @csrf 
+                            @method('DELETE')
+                            <button class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</button>
+                        </form>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
 
-        <div class="mb-3">
-            <label for="title" class="form-label">Tiêu đề</label>
-            <input type="text" name="title" id="title" class="form-control" value="{{ old('title') }}" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="image" class="form-label">Ảnh banner</label>
-            <input type="file" name="image" id="image" class="form-control" accept="image/*" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="link" class="form-label">Link</label>
-            <input type="url" name="link" id="link" class="form-control" value="{{ old('link') }}">
-        </div>
-
-        <div class="mb-3">
-            <label for="status" class="form-label">Trạng thái</label>
-            <select name="status" id="status" class="form-select" required>
-                <option value="1" {{ old('status') == 1 ? 'selected' : '' }}>Kích hoạt</option>
-                <option value="0" {{ old('status') == 0 ? 'selected' : '' }}>Không kích hoạt</option>
-            </select>
-        </div>
-
-        {{-- Nếu bạn dùng thêm trường location, bỏ comment phần này --}}
-
-        <div class="mb-3">
-            <label for="location" class="form-label">Vị trí</label>
-            <select name="location" id="location" class="form-select" required>
-                <option value="0" {{ old('location') == 0 ? 'selected' : '' }}>Vị trí 0</option>
-                <option value="1" {{ old('location') == 1 ? 'selected' : '' }}>Vị trí 1</option>
-            </select>
-        </div> 
-    
-
-        <button type="submit" class="btn btn-primary">Lưu</button>
-    </form>
+    {{ $categories->links() }}
 </div>
 @endsection

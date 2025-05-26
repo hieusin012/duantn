@@ -42,14 +42,20 @@
         </li>
         
         <li>
-            <a href="typography.html">
+            <a href="{{ route('categories.index') }}">
                 <i class="fas fa-th-list"></i>
                 <span class="menu-text"> Categories </span>
             </a>
         </li>
+        <li>
+            <a href="{{ route('sizes.index') }}">
+                <i class="fas fa-th-list"></i>
+                <span class="menu-text"> Size </span>
+            </a>
+        </li>
         
         <li>
-            <a href="{{route('dash.index')}}">
+            <a href="products.index">
                 <i class="fas fa-box-open"></i>
                 <span class="menu-text"> Products </span>
             </a>
