@@ -1,76 +1,14 @@
-<div class="sidebar" id="sidebar">
-    <script type="text/javascript">
-        try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
-    </script>
-
-    <div class="sidebar-shortcuts" id="sidebar-shortcuts">
-        <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
-            <button class="btn btn-small btn-success">
-                <i class="icon-signal"></i>
-            </button>
-
-            <button class="btn btn-small btn-info">
-                <i class="icon-pencil"></i>
-            </button>
-
-            <button class="btn btn-small btn-warning">
-                <i class="icon-group"></i>
-            </button>
-
-            <button class="btn btn-small btn-danger">
-                <i class="icon-cogs"></i>
-            </button>
-        </div>
-
-        <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
-            <span class="btn btn-success"></span>
-
-            <span class="btn btn-info"></span>
-
-            <span class="btn btn-warning"></span>
-
-            <span class="btn btn-danger"></span>
-        </div>
-    </div><!-- #sidebar-shortcuts -->
-
-    <ul class="nav nav-list">
-        <li class="active">
-            <a href="index.html">
-                <i class="icon-dashboard"></i>
-                <span class="menu-text"> Dashboard </span>
-            </a>
-        </li>
-        
-        <li>
-            <a href="{{ route('categories.index') }}">
-                <i class="fas fa-th-list"></i>
-                <span class="menu-text"> Categories </span>
-            </a>
-        </li>
-        <li>
-            <a href="{{ route('sizes.index') }}">
-                <i class="fas fa-th-list"></i>
-                <span class="menu-text"> Size </span>
-            </a>
-        </li>
-        
-        <li>
-            <a href="products.index">
-                <i class="fas fa-box-open"></i>
-                <span class="menu-text"> Products </span>
-            </a>
-        </li>
-        
-        
-        
-
-    </ul><!-- /.nav-list -->
-
-    <div class="sidebar-collapse" id="sidebar-collapse">
-        <i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
-    </div>
-
-    <script type="text/javascript">
-        try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
-    </script>
+<div class="sidebar">
+    <h4 style="text-align: center">🌟Admin</h4>
+    <a href="{{route('dashboard.index')}}"><i class="fas fa-boxes me-2"></i>DashBoard</a>
+    <a href="{{route('categories.index')}}"><i class="fas fa-th-list me-2"></i>Danh Mục</a>
+    <a href="{{route('products.index')}}"><i class="fas fa-box me-2"></i>Sản Phẩm</a>
+    <a href="{{route('productVariants.all')}}"><i class="fas fa-cubes me-2"></i>Sản Phẩm Thuộc Tính</a>
+    <a href=""><i class="fas fa-ruler-combined me-2"></i>Size</a>
+    <a href=""><i class="fas fa-palette me-2"></i>Màu</a>
+    <a href="#"><i class="fas fa-users me-2"></i>Người dùng</a>
+    <a href="#"><i class="fas fa-shopping-cart me-2"></i>Đơn hàng</a>
+    <a href=""><i class="fas fa-sign-out-alt me-2"></i>Đăng xuất</a>
 </div>
+
+

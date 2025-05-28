@@ -13,14 +13,15 @@ return new class extends Migration
     {
         Schema::create('product_variants', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained('products');
+            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->foreignId('color_id')->constrained('colors');
             $table->foreignId('size_id')->constrained('sizes');
             $table->double('price');
             $table->double('sale_price')->nullable();
-            $table->date('sale_date')->nullable();
-            $table->integer('quantity',);
-            $table->string('image', 255);
+            $table->date('sale_start_date')->nullable();
+            $table->date('sale_end_date')->nullable();
+            $table->integer('quantity');
+            $table->text('images')->nullable(); // lưu JSON array ảnh
             $table->softDeletes();
             $table->timestamps();
         });

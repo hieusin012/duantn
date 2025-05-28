@@ -1,264 +1,38 @@
-<div class="navbar" id="navbar">
-    <script type="text/javascript">
-        try{ace.settings.check('navbar' , 'fixed')}catch(e){}
-    </script>
-
-    <div class="navbar-inner">
-        <div class="container-fluid">
-            <a href="#" class="brand">
-                <small>
-                    <i class="icon-leaf"></i>
-                    ADMIN SPORTBAY
-                </small>
-            </a><!-- /.brand -->
-
-            <ul class="nav ace-nav pull-right">
-                <li class="grey">
-                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                        <i class="icon-tasks"></i>
-                        <span class="badge badge-grey">4</span>
-                    </a>
-
-                    <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-closer">
-                        <li class="nav-header">
-                            <i class="icon-ok"></i>
-                            4 Tasks to complete
-                        </li>
-
-                        <li>
-                            <a href="#">
-                                <div class="clearfix">
-                                    <span class="pull-left">Software Update</span>
-                                    <span class="pull-right">65%</span>
-                                </div>
-
-                                <div class="progress progress-mini ">
-                                    <div style="width:65%" class="bar"></div>
-                                </div>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#">
-                                <div class="clearfix">
-                                    <span class="pull-left">Hardware Upgrade</span>
-                                    <span class="pull-right">35%</span>
-                                </div>
-
-                                <div class="progress progress-mini progress-danger">
-                                    <div style="width:35%" class="bar"></div>
-                                </div>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#">
-                                <div class="clearfix">
-                                    <span class="pull-left">Unit Testing</span>
-                                    <span class="pull-right">15%</span>
-                                </div>
-
-                                <div class="progress progress-mini progress-warning">
-                                    <div style="width:15%" class="bar"></div>
-                                </div>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#">
-                                <div class="clearfix">
-                                    <span class="pull-left">Bug Fixes</span>
-                                    <span class="pull-right">90%</span>
-                                </div>
-
-                                <div class="progress progress-mini progress-success progress-striped active">
-                                    <div style="width:90%" class="bar"></div>
-                                </div>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#">
-                                See tasks with details
-                                <i class="icon-arrow-right"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="purple">
-                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                        <i class="icon-bell-alt icon-animated-bell"></i>
-                        <span class="badge badge-important">8</span>
-                    </a>
-
-                    <ul class="pull-right dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-closer">
-                        <li class="nav-header">
-                            <i class="icon-warning-sign"></i>
-                            8 Notifications
-                        </li>
-
-                        <li>
-                            <a href="#">
-                                <div class="clearfix">
-                                    <span class="pull-left">
-                                        <i class="btn btn-mini no-hover btn-pink icon-comment"></i>
-                                        New Comments
-                                    </span>
-                                    <span class="pull-right badge badge-info">+12</span>
-                                </div>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#">
-                                <i class="btn btn-mini btn-primary icon-user"></i>
-                                Bob just signed up as an editor ...
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#">
-                                <div class="clearfix">
-                                    <span class="pull-left">
-                                        <i class="btn btn-mini no-hover btn-success icon-shopping-cart"></i>
-                                        New Orders
-                                    </span>
-                                    <span class="pull-right badge badge-success">+8</span>
-                                </div>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#">
-                                <div class="clearfix">
-                                    <span class="pull-left">
-                                        <i class="btn btn-mini no-hover btn-info icon-twitter"></i>
-                                        Followers
-                                    </span>
-                                    <span class="pull-right badge badge-info">+11</span>
-                                </div>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#">
-                                See all notifications
-                                <i class="icon-arrow-right"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="green">
-                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                        <i class="icon-envelope icon-animated-vertical"></i>
-                        <span class="badge badge-success">5</span>
-                    </a>
-
-                    <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-closer">
-                        <li class="nav-header">
-                            <i class="icon-envelope-alt"></i>
-                            5 Messages
-                        </li>
-
-                        <li>
-                            <a href="#">
-                                <img src="assets/avatars/avatar.png" class="msg-photo" alt="Alex's Avatar" />
-                                <span class="msg-body">
-                                    <span class="msg-title">
-                                        <span class="blue">Alex:</span>
-                                        Ciao sociis natoque penatibus et auctor ...
-                                    </span>
-
-                                    <span class="msg-time">
-                                        <i class="icon-time"></i>
-                                        <span>a moment ago</span>
-                                    </span>
-                                </span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#">
-                                <img src="assets/avatars/avatar3.png" class="msg-photo" alt="Susan's Avatar" />
-                                <span class="msg-body">
-                                    <span class="msg-title">
-                                        <span class="blue">Susan:</span>
-                                        Vestibulum id ligula porta felis euismod ...
-                                    </span>
-
-                                    <span class="msg-time">
-                                        <i class="icon-time"></i>
-                                        <span>20 minutes ago</span>
-                                    </span>
-                                </span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#">
-                                <img src="assets/avatars/avatar4.png" class="msg-photo" alt="Bob's Avatar" />
-                                <span class="msg-body">
-                                    <span class="msg-title">
-                                        <span class="blue">Bob:</span>
-                                        Nullam quis risus eget urna mollis ornare ...
-                                    </span>
-
-                                    <span class="msg-time">
-                                        <i class="icon-time"></i>
-                                        <span>3:15 pm</span>
-                                    </span>
-                                </span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#">
-                                See all messages
-                                <i class="icon-arrow-right"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="light-blue">
-                    <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                        <img class="nav-user-photo" src="assets/avatars/user.jpg" alt="Jason's Photo" />
-                        <span class="user-info">
-                            <small>Welcome,</small>
-                            Jason
-                        </span>
-
-                        <i class="icon-caret-down"></i>
-                    </a>
-
-                    <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
-                        <li>
-                            <a href="#">
-                                <i class="icon-cog"></i>
-                                Settings
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#">
-                                <i class="icon-user"></i>
-                                Profile
-                            </a>
-                        </li>
-
-                        <li class="divider"></li>
-
-                        <li>
-                            <a href="#">
-                                <i class="icon-off"></i>
-                                Logout
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            </ul><!-- /.ace-nav -->
-        </div><!-- /.container-fluid -->
-    </div><!-- /.navbar-inner -->
+<nav class="navbar navbar-expand-lg bg-white shadow-sm px-4 py-3 mb-4">
+    <div class="container-fluid">
+      <h3 class="fw-bold text-primary m-0">Bảng điều khiển</h3>
+      <div class="d-flex align-items-center gap-3 ms-auto">
+  
+        <!-- Icon thư -->
+        <a href="#" class="position-relative text-dark" title="Tin nhắn">
+          <i class="fas fa-envelope fa-lg"></i>
+          <span class="badge bg-danger position-absolute top-0 start-100 translate-middle badge-pill">3</span>
+        </a>
+  
+        <!-- Icon chuông -->
+        <a href="#" class="position-relative text-dark" title="Thông báo">
+          <i class="fas fa-bell fa-lg"></i>
+          <span class="badge bg-danger position-absolute top-0 start-100 translate-middle badge-pill">2</span>
+        </a>
+  
+        <!-- Avatar + dropdown -->
+      <!-- Avatar + dropdown -->
+<div class="dropdown">
+  <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+    <div class="position-relative">
+      <img src="https://i.pravatar.cc/150?img=12" class="rounded-circle border border-2 border-primary shadow-sm avatar-img" alt="Avatar" width="40" height="40">
+      <span class="position-absolute bottom-0 end-0 translate-middle p-1 bg-success border border-white rounded-circle online-indicator"></span>
+    </div>
+    <span class="fw-semibold d-none d-md-inline text-dark ms-2">Nguyễn Duy Đạt</span>
+  </a>
+  <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userDropdown">
+    <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Hồ sơ</a></li>
+    <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Cài đặt</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-sign-out-alt me-2"></i>Đăng xuất</a></li>
+  </ul>
 </div>
+
+      </div>
+    </div>
+  </nav>
