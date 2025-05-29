@@ -7,7 +7,7 @@
         @csrf
         <div class="mb-3">
             <label for="name" class="form-label">Tên size</label>
-            <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}" required maxlength="255">
+            <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}" maxlength="255">
             @error('name')
                 <div class="text-danger">{{ $message }}</div>
             @enderror

@@ -3,6 +3,12 @@
 @section('content')
 <div class="container">
     <h2>Danh sách danh mục</h2>
+    <form action="{{ route('categories.index') }}" method="GET" class="mb-3" style="max-width: 1200px;">
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Tìm kiếm tên danh mục..." value="{{ old('q', $query ?? '') }}">
+            <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+        </div>
+    </form>
     <a href="{{ route('categories.create') }}" class="btn btn-primary mb-3">Thêm mới</a>
 
     @if(session('success'))

@@ -9,7 +9,7 @@ class SizeController extends Controller
 {
     public function index()
     {
-        $sizes = Size::paginate(10);
+        $sizes = Size::orderBy('created_at', 'desc')->paginate(10);
         return view('admin.sizes.index', compact('sizes'));
     }
 
@@ -21,7 +21,10 @@ class SizeController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:sizes,name',
+        ], [
+            'name.required' => 'Trường tên size là bắt buộc',
+            'name.unique' => 'Tên size đã tồn tại',
         ]);
 
         Size::create($request->only('name'));
@@ -42,7 +45,10 @@ class SizeController extends Controller
     public function update(Request $request, Size $size)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:sizes,name,' . $size->id,
+        ], [
+            'name.required' => 'Trường tên size là bắt buộc',
+            'name.unique' => 'Tên size đã tồn tại',
         ]);
 
         $size->update($request->only('name'));

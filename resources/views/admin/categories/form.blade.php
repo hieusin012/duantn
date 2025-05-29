@@ -3,7 +3,7 @@
 <div class="mb-3">
     <label for="name" class="form-label">Tên danh mục</label>
     <input type="text" name="name" id="name" class="form-control" 
-           value="{{ old('name', $category->name ?? '') }}" required maxlength="200">
+           value="{{ old('name', $category->name ?? '') }}" maxlength="200">
     @error('name')
         <div class="text-danger">{{ $message }}</div>
     @enderror
