@@ -12,8 +12,23 @@
         {{-- Menu chính --}}
         <nav class="d-none d-lg-flex align-items-center gap-4 flex-wrap">
             <a href="{{ route('home') }}" class="text-dark text-decoration-none">Trang chủ</a>
-            <a href="#" class="text-dark text-decoration-none">Sản phẩm</a>
+            {{-- Danh mục động --}}
+    <div class="dropdown">
+        <a class="text-dark text-decoration-none dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+            Danh mục
+        </a>
+        <ul class="dropdown-menu">
+            @foreach ($headerCategories as $category)
+                <li>
+                    <a class="dropdown-item" href="{{ route('client.categories.show', $category->slug) }}">
+                        {{ $category->name }}
+                    </a>
+                </li>
+            @endforeach
+        </ul>
+    </div>
             <a href="#" class="text-dark text-decoration-none">Liên hệ</a>
+            
         </nav>
 
         {{-- Tài khoản + Giỏ hàng + Tìm kiếm --}}

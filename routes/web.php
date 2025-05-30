@@ -2,6 +2,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Client\ClientCategoryController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
@@ -53,3 +54,9 @@ Route::delete('sizes/{size}', [SizeController::class, 'destroy'])->name('sizes.d
 
 //home web 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+// Route::prefix('shop')->group(function () {
+//     Route::get('/', [ClientProductController::class, 'index'])->name('client.products.index');           // Danh sách sản phẩm
+//     Route::get('/{slug}', [ClientProductController::class, 'show'])->name('client.products.show');        // Chi tiết sản phẩm
+// });
+
+Route::get('/danh-muc/{slug}', [ClientCategoryController::class, 'show'])->name('client.categories.show');
