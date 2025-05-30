@@ -2,6 +2,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductVariantController;
@@ -50,3 +51,5 @@ Route::get('sizes/{size}/edit', [SizeController::class, 'edit'])->name('sizes.ed
 Route::put('sizes/{size}', [SizeController::class, 'update'])->name('sizes.update'); 
 Route::delete('sizes/{size}', [SizeController::class, 'destroy'])->name('sizes.destroy');
 
+//home web 
+Route::get('/home', [HomeController::class, 'index'])->name('home');
