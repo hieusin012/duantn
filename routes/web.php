@@ -59,5 +59,9 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 //     Route::get('/{slug}', [ClientProductController::class, 'show'])->name('client.products.show');        // Chi tiết sản phẩm
 // });
 
+// Hiển thị form liên hệ
+Route::get('/contact', function () {
+    return view('clients.contact');
+});
 
 Route::get('/danh-muc/{slug}', [ClientCategoryController::class, 'show'])->name('client.categories.show');
