@@ -1,3 +1,7 @@
-<div class="footer mt-5">
-    © 2025 Admin Dashboard - Thiết kế bởi <strong>Dat</strong>
+<div class="text-center" style="font-size: 13px">
+    <p><b>Copyright
+        <script type="text/javascript">
+          document.write(new Date().getFullYear());
+        </script> Phần mềm quản lý bán hàng | Dev By Trường
+      </b></p>
   </div>
