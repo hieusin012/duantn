@@ -62,6 +62,6 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 // Hiển thị form liên hệ
 Route::get('/contact', function () {
     return view('clients.contact');
-});
+})->name('contact');;
 
 Route::get('/danh-muc/{slug}', [ClientCategoryController::class, 'show'])->name('client.categories.show');
