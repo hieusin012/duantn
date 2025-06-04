@@ -19,7 +19,7 @@
                         <a class="btn btn-add btn-sm" data-toggle="modal" data-target="#addtinhtrang"><i class="fas fa-folder-plus"></i> Thêm tình trạng</a>
                     </div>
                 </div>
-                <form class="row" action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
+                <form class="row" action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group col-md-3">
                         <label class="control-label">Mã sản phẩm</label>
@@ -119,7 +119,7 @@
                     </div>
                     <div class="form-group col-md-12">
                         <button class="btn btn-save" type="submit">Lưu lại</button>
-                        <a class="btn btn-cancel" href="{{ route('products.index') }}">Hủy bỏ</a>
+                        <a class="btn btn-cancel" href="{{ route('admin.products.index') }}">Hủy bỏ</a>
                     </div>
                 </form>
             </div>

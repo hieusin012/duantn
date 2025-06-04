@@ -16,7 +16,7 @@
             <div class="tile-body">
                 <div class="row element-button">
                     <div class="col-sm-2">
-                        <a class="btn btn-add btn-sm" href="{{ route('products.create') }}" title="Thêm"><i class="fas fa-plus"></i> Tạo mới sản phẩm</a>
+                        <a class="btn btn-add btn-sm" href="{{ route('admin.products.create') }}" title="Thêm"><i class="fas fa-plus"></i> Tạo mới sản phẩm</a>
                     </div>
                     <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm nhap-tu-file" type="button" title="Nhập"><i class="fas fa-file-upload"></i> Tải từ file</a>
@@ -71,17 +71,17 @@
                             </td>
                             <td>{{ $product->category ? $product->category->name : 'N/A' }}</td>
                             <td>
-                                <a href="{{ route('products.edit', $product->id) }}" class="btn btn-primary btn-sm edit" title="Sửa" data-toggle="modal" data-target="#ModalUP">
+                                <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-primary btn-sm edit" title="Sửa" data-toggle="modal" data-target="#ModalUP">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này?');">
+                                <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-primary btn-sm trash" title="Xóa">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </form>
-                                <a href="{{ route('products.show', $product->id) }}" class="btn btn-primary btn-sm" title="View Details">
+                                <a href="{{ route('admin.products.show', $product->id) }}" class="btn btn-primary btn-sm" title="View Details">
                                     <i class="fas fa-eye"></i>
                                 </a>
                             </td>

@@ -18,7 +18,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('product-variants.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.product-variants.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label for="product_id">Sản phẩm</label>
@@ -67,7 +67,7 @@
                         @enderror
                     </div>
                     <button type="submit" class="btn btn-primary">Lưu</button>
-                    <a href="{{ route('product-variants.index') }}" class="btn btn-secondary">Hủy</a>
+                    <a href="{{ route('admin.product-variants.index') }}" class="btn btn-secondary">Hủy</a>
                 </form>
             </div>
         </div>

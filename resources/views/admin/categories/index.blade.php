@@ -17,7 +17,7 @@
             <div class="tile-body">
                 <div class="row element-button">
                     <div class="col-sm-2">
-                        <a class="btn btn-add btn-sm" href="{{ route('categories.create') }}" title="Add"><i class="fas fa-plus"></i> Add Category</a>
+                        <a class="btn btn-add btn-sm" href="{{ route('admin.categories.create') }}" title="Add"><i class="fas fa-plus"></i> Add Category</a>
                     </div>
                     <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm nhap-tu-file" type="button" title="Import"><i class="fas fa-file-upload"></i> Import File</a>
@@ -40,7 +40,7 @@
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-4">
-                        <form action="{{ route('categories.index') }}" method="GET">
+                        <form action="{{ route('admin.categories.index') }}" method="GET">
                             <div class="input-group">
                                 <input type="text" name="q" class="form-control" placeholder="Search categories..." value="{{ $query ?? '' }}">
                                 <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
@@ -74,13 +74,11 @@
                                 </td>
                                 <td>{{ $category->parent ? $category->parent->name : 'None' }}</td>
                                 <td>
-                                    <a href="{{ route('categories.show', $category->id) }}" class="btn btn-primary btn-sm" title="View Details">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-primary btn-sm" title="Edit">
+                                   
+                                    <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn btn-primary btn-sm" title="Edit">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this category?');">
+                                    <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this category?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-primary btn-sm trash" title="Delete">

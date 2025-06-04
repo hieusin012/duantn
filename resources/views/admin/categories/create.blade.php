@@ -20,7 +20,7 @@
                         <a class="btn btn-add btn-sm" data-toggle="modal" data-target="#addParentCategory"><i class="fas fa-folder-plus"></i> Add Parent Category</a>
                     </div>
                 </div>
-                <form class="row" action="{{ route('categories.store') }}" method="POST" enctype="multipart/form-data">
+                <form class="row" action="{{ route('admin.categories.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group col-md-3">
                         <label class="control-label">Category Name</label>
@@ -67,7 +67,7 @@
                     </div>
                     <div class="form-group col-md-12">
                         <button class="btn btn-save" type="submit">Save</button>
-                        <a class="btn btn-cancel" href="{{ route('categories.index') }}">Cancel</a>
+                        <a class="btn btn-cancel" href="{{ route('admin.categories.index') }}">Cancel</a>
                     </div>
                 </form>
             </div>
@@ -86,7 +86,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('categories.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.categories.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label class="control-label">Category Name</label>
