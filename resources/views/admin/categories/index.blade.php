@@ -17,32 +17,32 @@
             <div class="tile-body">
                 <div class="row element-button">
                     <div class="col-sm-2">
-                        <a class="btn btn-add btn-sm" href="{{ route('admin.categories.create') }}" title="Add"><i class="fas fa-plus"></i> Add Category</a>
+                        <a class="btn btn-add btn-sm" href="{{ route('admin.categories.create') }}" title="Add"><i class="fas fa-plus"></i> Thêm danh mục</a>
                     </div>
                     <div class="col-sm-2">
-                        <a class="btn btn-delete btn-sm nhap-tu-file" type="button" title="Import"><i class="fas fa-file-upload"></i> Import File</a>
+                        <a class="btn btn-delete btn-sm nhap-tu-file" type="button" title="Import"><i class="fas fa-file-upload"></i> Nhập tệp</a>
                     </div>
                     <div class="col-sm-2">
-                        <a class="btn btn-delete btn-sm print-file" type="button" title="Print"><i class="fas fa-print"></i> Print Data</a>
+                        <a class="btn btn-delete btn-sm print-file" type="button" title="Print"><i class="fas fa-print"></i> In dữ liệu</a>
                     </div>
                     <div class="col-sm-2">
-                        <a class="btn btn-delete btn-sm js-textareacopybtn" type="button" title="Copy"><i class="fas fa-copy"></i> Copy</a>
+                        <a class="btn btn-delete btn-sm js-textareacopybtn" type="button" title="Copy"><i class="fas fa-copy"></i> Sao chép</a>
                     </div>
                     <div class="col-sm-2">
-                        <a class="btn btn-excel btn-sm" href="#" title="Export"><i class="fas fa-file-excel"></i> Export to Excel</a>
+                        <a class="btn btn-excel btn-sm" href="#" title="Export"><i class="fas fa-file-excel"></i> Xuất sang Excel</a>
                     </div>
                     <div class="col-sm-2">
-                        <a class="btn btn-delete btn-sm pdf-file" type="button" title="Export PDF"><i class="fas fa-file-pdf"></i> Export PDF</a>
+                        <a class="btn btn-delete btn-sm pdf-file" type="button" title="Export PDF"><i class="fas fa-file-pdf"></i> Xuất sang PDF</a>
                     </div>
                     <div class="col-sm-2">
-                        <a class="btn btn-delete btn-sm" type="button" title="Delete All"><i class="fas fa-trash-alt"></i> Delete All</a>
+                        <a class="btn btn-delete btn-sm" type="button" title="Delete All"><i class="fas fa-trash-alt"></i> Xóa tất cả</a>
                     </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-4">
                         <form action="{{ route('admin.categories.index') }}" method="GET">
                             <div class="input-group">
-                                <input type="text" name="q" class="form-control" placeholder="Search categories..." value="{{ $query ?? '' }}">
+                                <input type="text" name="q" class="form-control" placeholder="Tìm kiếm danh mục..." value="{{ $query ?? '' }}">
                                 <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
                             </div>
                         </form>
@@ -52,11 +52,11 @@
                     <thead>
                         <tr>
                             <th width="10"><input type="checkbox" id="all"></th>
-                            <th>Name</th>
+                            <th>Tên</th>
                             <th>Slug</th>
-                            <th>Image</th>
-                            <th>Parent Category</th>
-                            <th>Actions</th>
+                            <th>Hình ảnh</th>
+                            <th>Danh mục cha</th>
+                            <th>Hành động</th>
                         </tr>
                     </thead>
                     <tbody>

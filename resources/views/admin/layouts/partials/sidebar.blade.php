@@ -22,7 +22,13 @@
                     <i class='app-menu__icon bx bx-category'></i>
                     <span class="app-menu__label">Quản lý danh mục</span>
                   </a>
-                </li>
+            </li>
+            <li>
+                  <a class="app-menu__item" href="{{ route(name: 'admin.sizes.index') }}">
+                        <i class='app-menu__icon bx bx-category'></i>
+                        <span class="app-menu__label">Quản lý kích cỡ</span>
+                  </a>
+            </li>
                 
                 
 

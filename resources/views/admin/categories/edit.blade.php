@@ -13,13 +13,13 @@
 <div class="row">
     <div class="col-md-12">
         <div class="tile">
-            <h3 class="tile-title">Edit Category</h3>
+            <h3 class="tile-title">Chỉnh sửa danh mục</h3>
             <div class="tile-body">
-                <form class="row" action="{{ route('categories.update', $category->id) }}" method="POST" enctype="multipart/form-data">
+                <form class="row" action="{{ route('admin.categories.update', $category->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="form-group col-md-3">
-                        <label class="control-label">Category Name</label>
+                        <label class="control-label">Tên danh mục</label>
                         <input class="form-control" type="text" name="name" id="name" value="{{ old('name', $category->name) }}">
                         @error('name')
                             <span class="text-danger">{{ $message }}</span>
@@ -33,9 +33,9 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="parent_id" class="control-label">Parent Category</label>
+                        <label for="parent_id" class="control-label">Danh mục cha</label>
                         <select class="form-control" name="parent_id" id="parent_id">
-                            <option value="">-- Select Parent Category --</option>
+                            <option value="">-- Chọn danh mục chính --</option>
                             @foreach ($parents as $parent)
                                 <option value="{{ $parent->id }}" {{ old('parent_id', $category->parent_id) == $parent->id ? 'selected' : '' }}>{{ $parent->name }}</option>
                             @endforeach
@@ -45,7 +45,7 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-12">
-                        <label class="control-label">Category Image</label>
+                        <label class="control-label">Hình ảnh danh mục</label>
                         <div id="myfileupload">
                             <input type="file" id="uploadfile" name="image" onchange="readURL(this);" accept="image/*" />
                         </div>
@@ -55,10 +55,10 @@
                             @else
                                 <img height="450" width="400" alt="Thumb image" id="thumbimage" style="display: none" />
                             @endif
-                            <a class="removeimg" href="javascript:" onclick="clearImage()">Remove Image</a>
+                            <a class="removeimg" href="javascript:" onclick="clearImage()">Xóa hình ảnh</a>
                         </div>
                         <div id="boxchoice">
-                            <a href="javascript:" class="Choicefile" onclick="document.getElementById('uploadfile').click();"><i class="fas fa-cloud-upload-alt"></i> Choose Image</a>
+                            <a href="javascript:" class="Choicefile" onclick="document.getElementById('uploadfile').click();"><i class="fas fa-cloud-upload-alt"></i> Chọn hình ảnh</a>
                             <p style="clear:both"></p>
                         </div>
                         @error('image')
@@ -66,8 +66,8 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-12">
-                        <button class="btn btn-save" type="submit">Save</button>
-                        <a class="btn btn-cancel" href="{{ route('categories.index') }}">Cancel</a>
+                        <button class="btn btn-save" type="submit">Lưu</button>
+                        <a class="btn btn-cancel" href="{{ route('admin.categories.index') }}">Quay lại</a>
                     </div>
                 </form>
             </div>

@@ -22,9 +22,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-    View::composer('clients.layouts.partials.header', function ($view) {
-        $categories = Category::whereNull('parent_id')->orderBy('name')->get();
-        $view->with('headerCategories', $categories);
+        Paginator::useBootstrap(); // Đừng xóa dòng này (Đây là bootstrap phân trang)
+        View::composer('clients.layouts.partials.header', function ($view) {
+            $categories = Category::whereNull('parent_id')->orderBy('name')->get();
+            $view->with('headerCategories', $categories);
     });
 }
 }

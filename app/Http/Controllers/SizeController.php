@@ -29,7 +29,7 @@ class SizeController extends Controller
 
         Size::create($request->only('name'));
 
-        return redirect()->route('sizes.index')->with('success', 'Size created successfully.');
+        return redirect()->route('admin.sizes.index')->with('success', 'Kích cỡ được tạo thành công.');
     }
 
     public function show(Size $size)
@@ -53,12 +53,12 @@ class SizeController extends Controller
 
         $size->update($request->only('name'));
 
-        return redirect()->route('sizes.index')->with('success', 'Size updated successfully.');
+        return redirect()->route('admin.sizes.index')->with('success', 'Đã cập nhật kích cỡ thành công.');
     }
 
     public function destroy(Size $size)
     {
         $size->delete();
-        return redirect()->route('sizes.index')->with('success', 'Size deleted successfully.');
+        return redirect()->route('admin.sizes.index')->with('success', 'Đã xóa kích cỡ thành công.');
     }
 }
