@@ -15,7 +15,7 @@
         <div class="tile">
             <h3 class="tile-title">Edit Category</h3>
             <div class="tile-body">
-                <form class="row" action="{{ route('categories.update', $category->id) }}" method="POST" enctype="multipart/form-data">
+                <form class="row" action="{{ route('admin.categories.update', $category->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="form-group col-md-3">
@@ -67,7 +67,7 @@
                     </div>
                     <div class="form-group col-md-12">
                         <button class="btn btn-save" type="submit">Save</button>
-                        <a class="btn btn-cancel" href="{{ route('categories.index') }}">Cancel</a>
+                        <a class="btn btn-cancel" href="{{ route('admin.categories.index') }}">Cancel</a>
                     </div>
                 </form>
             </div>
