@@ -7,7 +7,21 @@ use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductVariantController;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Response;
 
+Route::get('/custom-assets/{folder}/{filename}', function ($folder, $filename) {
+    $path = resource_path("views/template/hema/assets/images/{$folder}/{$filename}");
+
+    if (!File::exists($path)) {
+        abort(404, 'File not found');
+    }
+
+    $file = File::get($path);
+    $type = File::mimeType($path);
+
+    return Response::make($file, 200)->header("Content-Type", $type);
+});
 Route::get('/',[DashboardController::class, 'index'])->name('dashboard.index');
 
 // Product
