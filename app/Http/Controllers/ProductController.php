@@ -13,9 +13,35 @@ use Illuminate\Support\Str;
 class ProductController extends Controller
 {
     // Hiển thị danh sách sản phẩm
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::orderByDesc('created_at')->paginate(10);
+        $query = Product::with(['category', 'brand']);
+
+        // Tìm kiếm theo từ khóa nếu có
+        if ($keyword = $request->input('keyword')) {
+            $query->where(function ($q) use ($keyword) {
+                $q->where('name', 'like', "%{$keyword}%")
+                  ->orWhere('code', 'like', "%{$keyword}%")
+                  ->orWhereHas('category', fn($q) => $q->where('name', 'like', "%{$keyword}%"))
+                  ->orWhereHas('brand', fn($q) => $q->where('name', 'like', "%{$keyword}%"));
+            });
+        }
+
+        // Lọc theo trạng thái active nếu có
+        if (!is_null($request->input('is_active'))) {
+            $query->where('is_active', $request->input('is_active'));
+        }
+
+        // Sắp xếp theo tên
+        if ($sort = $request->input('sort')) {
+            $order = $sort === 'az' ? 'asc' : 'desc';
+            $query->orderBy('name', $order);
+        } else {
+            $query->orderByDesc('created_at');
+        }
+
+        $products = $query->paginate(10)->appends($request->all());
+
         return view('admin.products.index', compact('products'));
     }
 
@@ -45,7 +71,7 @@ class ProductController extends Controller
     // Lưu sản phẩm mới
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'image' => 'nullable|image|max:2048',
             'price' => 'required|numeric|min:0',
@@ -56,12 +82,12 @@ class ProductController extends Controller
             'brand_id' => 'required|exists:brands,id',
         ]);
 
-        // Tạo mã ngẫu nhiên duy nhất
+        // Tạo mã code duy nhất
         do {
             $code = (string)random_int(100000, 999999);
         } while (Product::where('code', $code)->exists());
 
-        $slug = Str::slug($request->name);
+        $slug = Str::slug($validated['name']);
         $imagePath = null;
 
         if ($request->hasFile('image')) {
@@ -72,21 +98,21 @@ class ProductController extends Controller
 
         Product::create([
             'code' => $code,
-            'name' => $request->name,
+            'name' => $validated['name'],
             'slug' => $slug,
             'image' => $imagePath,
-            'price' => $request->price,
-            'description' => $request->description,
-            'status' => $request->status,
-            'is_active' => $request->is_active,
-            'category_id' => $request->category_id,
-            'brand_id' => $request->brand_id,
+            'price' => $validated['price'],
+            'description' => $validated['description'] ?? null,
+            'status' => $validated['status'],
+            'is_active' => $validated['is_active'],
+            'category_id' => $validated['category_id'],
+            'brand_id' => $validated['brand_id'],
         ]);
 
-        return redirect()->route('products.index')->with('success', 'Thêm sản phẩm thành công');
+        return redirect()->route('admin.products.index')->with('success', 'Thêm sản phẩm thành công');
     }
 
-    // Form chỉnh sửa
+    // Form chỉnh sửa sản phẩm
     public function edit($id)
     {
         $product = Product::findOrFail($id);
@@ -103,7 +129,7 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
 
-        $validatedData = $request->validate([
+        $validated = $request->validate([
             'code' => 'required|string|max:20|unique:products,code,' . $id,
             'name' => 'required|string|max:255',
             'image' => 'nullable|image|max:2048',
@@ -115,7 +141,7 @@ class ProductController extends Controller
             'brand_id' => 'required|exists:brands,id',
         ]);
 
-        $slug = Str::slug($request->name);
+        $slug = Str::slug($validated['name']);
         $imagePath = $product->image;
 
         if ($request->hasFile('image')) {
@@ -129,19 +155,19 @@ class ProductController extends Controller
         }
 
         $product->update([
-            'code' => $validatedData['code'],
-            'name' => $validatedData['name'],
+            'code' => $validated['code'],
+            'name' => $validated['name'],
             'slug' => $slug,
             'image' => $imagePath,
-            'price' => $validatedData['price'],
-            'description' => $validatedData['description'] ?? null,
-            'status' => $validatedData['status'],
-            'is_active' => $validatedData['is_active'],
-            'category_id' => $validatedData['category_id'],
-            'brand_id' => $validatedData['brand_id'],
+            'price' => $validated['price'],
+            'description' => $validated['description'] ?? null,
+            'status' => $validated['status'],
+            'is_active' => $validated['is_active'],
+            'category_id' => $validated['category_id'],
+            'brand_id' => $validated['brand_id'],
         ]);
 
-        return redirect()->route('products.index')->with('success', 'Cập nhật sản phẩm thành công');
+        return redirect()->route('admin.products.index')->with('success', 'Cập nhật sản phẩm thành công');
     }
 
     // Xóa sản phẩm
@@ -155,40 +181,6 @@ class ProductController extends Controller
 
         $product->delete();
 
-        return redirect()->route('products.index')->with('success', 'Xóa sản phẩm thành công');
-    }
-
-    // Tìm kiếm
-    public function search(Request $request)
-    {
-        $keyword = $request->input('keyword');
-
-        $products = Product::query()
-            ->with(['category', 'brand'])
-            ->where('name', 'like', "%$keyword%")
-            ->orWhere('code', 'like', "%$keyword%")
-            ->orWhereHas('category', fn($q) => $q->where('name', 'like', "%$keyword%"))
-            ->orWhereHas('brand', fn($q) => $q->where('name', 'like', "%$keyword%"))
-            ->paginate(10);
-
-        return view('admin.products.index', compact('products'));
-    }
-
-    // Lọc sản phẩm
-    public function filter(Request $request)
-    {
-        $query = Product::query();
-
-        if ($request->has('is_active')) {
-            $query->where('is_active', $request->is_active);
-        }
-
-        if ($request->has('sort')) {
-            $query->orderBy('name', $request->sort === 'az' ? 'asc' : 'desc');
-        }
-
-        $products = $query->paginate(10);
-
-        return view('admin.products.index', compact('products'));
+        return redirect()->route('admin.products.index')->with('success', 'Xóa sản phẩm thành công');
     }
 }

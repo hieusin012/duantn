@@ -1,9 +1,9 @@
 @extends('admin.layouts.index')
 
-@section('title', 'Quản Lý Danh Mục')
+@section('title', 'Quản lý kích cỡ')
 
 @section('content')
-@if (session('success'))
+@if(session('success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{ session('success') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -16,7 +16,9 @@
             <div class="tile-body">
                 <div class="row element-button">
                     <div class="col-sm-2">
-                        <a class="btn btn-add btn-sm" href="{{ route('admin.categories.create') }}" title="Add"><i class="fas fa-plus"></i> Thêm danh mục</a>
+                        <a href="{{ route('admin.sizes.create') }}" class="btn btn-add btn-sm" title="Thêm kích cỡ">
+                            <i class="fas fa-plus"></i> Thêm mới kích cỡ
+                        </a>
                     </div>
                     <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm nhap-tu-file" type="button" title="Import"><i class="fas fa-file-upload"></i> Nhập tệp</a>
@@ -37,50 +39,35 @@
                         <a class="btn btn-delete btn-sm" type="button" title="Delete All"><i class="fas fa-trash-alt"></i> Xóa tất cả</a>
                     </div>
                 </div>
-                <div class="row mb-3">
-                    <div class="col-md-4">
-                        <form action="{{ route('admin.categories.index') }}" method="GET">
-                            <div class="input-group">
-                                <input type="text" name="q" class="form-control" placeholder="Tìm kiếm danh mục..." value="{{ $query ?? '' }}">
-                                <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <table class="table table-hover table-bordered" id="categories-table">
+
+                <table class="table table-hover table-bordered">
                     <thead>
                         <tr>
-                            <th width="10"><input type="checkbox" id="all"></th>
+                            <th>ID</th>
                             <th>Tên</th>
-                            <th>Slug</th>
-                            <th>Hình ảnh</th>
-                            <th>Danh mục cha</th>
+                            <th>Ngày tạo</th>
+                            <th>Ngày cập nhật</th>
                             <th>Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($categories as $category)
+                        @foreach ($sizes as $size)
                             <tr>
-                                <td width="10"><input type="checkbox" name="check[]" value="{{ $category->id }}"></td>
-                                <td>{{ $category->name }}</td>
-                                <td>{{ $category->slug }}</td>
+                                <td>{{ $size->id }}</td>
+                                <td>{{ $size->name }}</td>
+                                <td>{{ $size->created_at }}</td>
+                                <td>{{ $size->updated_at }}</td>
                                 <td>
-                                    @if ($category->image)
-                                        <img src="{{ Storage::url($category->image) }}" alt="{{ $category->name }}" width="100px;" />
-                                    @else
-                                        <span>No image</span>
-                                    @endif
-                                </td>
-                                <td>{{ $category->parent ? $category->parent->name : 'None' }}</td>
-                                <td>
-                                   
-                                    <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn btn-primary btn-sm" title="Edit">
+                                    <a href="{{ route('admin.sizes.show', $size->id) }}" class="btn btn-info btn-sm" title="Xem">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{{ route('admin.sizes.edit', $size->id) }}" class="btn btn-primary btn-sm" title="Sửa">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this category?');">
+                                    <form action="{{ route('admin.sizes.destroy', $size->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa kích cỡ này không?');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-primary btn-sm trash" title="Delete">
+                                        <button type="submit" class="btn btn-primary btn-sm trash" title="Xóa">
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
                                     </form>
@@ -89,9 +76,9 @@
                         @endforeach
                     </tbody>
                 </table>
-                <!-- Pagination Links -->
+
                 <div class="pagination">
-                    {{ $categories->links() }}
+                    {{ $sizes->links() }}
                 </div>
             </div>
         </div>

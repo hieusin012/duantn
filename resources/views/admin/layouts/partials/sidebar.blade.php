@@ -14,15 +14,21 @@
             class="app-menu__label">Bảng điều khiển</span></a></li>
       <li><a class="app-menu__item " href="{{route('admin.dashboard.index')}}"><i class='app-menu__icon bx bx-id-card'></i> <span
             class="app-menu__label">Quản lý nhân viên</span></a></li>
-      <li><a class="app-menu__item" href="#"><i class='app-menu__icon bx bx-user-voice'></i><span
-            class="app-menu__label">Quản lý khách hàng</span></a></li>
+      <li><a class="app-menu__item" href="{{ route(name: 'admin.users.index') }}"><i class='app-menu__icon bx bx-user-voice'></i><span
+            class="app-menu__label">Quản lý người dùng</span></a></li>
 
             <li>
                   <a class="app-menu__item" href="{{ route(name: 'admin.categories.index') }}">
                     <i class='app-menu__icon bx bx-category'></i>
                     <span class="app-menu__label">Quản lý danh mục</span>
                   </a>
-                </li>
+            </li>
+            <li>
+                  <a class="app-menu__item" href="{{ route(name: 'admin.sizes.index') }}">
+                        <i class='app-menu__icon bx bx-category'></i>
+                        <span class="app-menu__label">Quản lý kích cỡ</span>
+                  </a>
+            </li>
                 
                 
 
@@ -30,10 +36,13 @@
             class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản phẩm</span></a>
       </li>
 
-      
-      <li><a class="app-menu__item" href="{{ route('admin.product-variants.index') }}"><i
-            class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản phẩm thuộc tính</span></a>
-      </li>
+      <li>
+            <a class="app-menu__item" href="{{ route('admin.product-variants.index') }}">
+              <i class='app-menu__icon bx bx-layer'></i>
+              <span class="app-menu__label">Quản lý sản phẩm thuộc tính</span>
+            </a>
+          </li>
+          
 
       <li><a class="app-menu__item" href="table-data-oder.html"><i class='app-menu__icon bx bx-task'></i><span
             class="app-menu__label">Quản lý đơn hàng</span></a></li>

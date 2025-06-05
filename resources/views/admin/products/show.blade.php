@@ -44,7 +44,7 @@
                         </div>
                     </div>
                 </div>
-                <a href="{{ route('products.index') }}" class="btn btn-secondary">Quay lại</a>
+                <a href="{{ route('admin.products.index') }}" class="btn btn-secondary">Quay lại</a>
             </div>
         </div>
     </div>

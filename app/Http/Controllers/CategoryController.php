@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
-use Illuminate\Support\Facades\View;
 
 class CategoryController extends Controller
 {
@@ -16,7 +15,7 @@ class CategoryController extends Controller
         $query = $request->input('q');
 
         $categories = Category::with('parent')
-            ->when($query, function($q) use ($query) {
+            ->when($query, function ($q) use ($query) {
                 $q->where('name', 'like', '%' . $query . '%');
             })
             ->orderBy('created_at', 'desc')
@@ -27,12 +26,9 @@ class CategoryController extends Controller
         return view('admin.categories.index', compact('categories', 'query'));
     }
 
-
     public function create()
     {
         $parents = Category::whereNull('parent_id')->get();
-        // dd($parents);
-
         return view('admin.categories.create', compact('parents'));
     }
 
@@ -45,7 +41,7 @@ class CategoryController extends Controller
         }
 
         Category::create($data);
-        return redirect()->route('categories.index')->with('success', 'Tạo danh mục thành công.');
+        return redirect()->route('admin.categories.index')->with('success', 'Tạo danh mục thành công.');
     }
 
     public function edit(Category $category)
@@ -64,13 +60,12 @@ class CategoryController extends Controller
         }
 
         $category->update($data);
-        return redirect()->route('categories.index')->with('success', 'Cập nhật thành công.');
+        return redirect()->route('admin.categories.index')->with('success', 'Cập nhật thành công.');
     }
 
     public function destroy(Category $category)
     {
         $category->delete();
-        return redirect()->route('categories.index')->with('success', 'Đã xóa danh mục.');
+        return redirect()->route('admin.categories.index')->with('success', 'Đã xóa danh mục thành công.');
     }
-    
 }

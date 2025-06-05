@@ -20,9 +20,12 @@
         <ul class="dropdown-menu">
             @foreach ($headerCategories as $category)
                 <li>
-                    <a class="dropdown-item" href="{{ route('client.categories.show', $category->slug) }}">
+                    @if(!empty($category->slug))
+                    <a href="{{ route('client.categories.show', ['slug' => $category->slug]) }}">
                         {{ $category->name }}
                     </a>
+                @endif
+                
                 </li>
             @endforeach
         </ul>
