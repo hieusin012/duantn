@@ -1,12 +1,13 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SizeController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\Client\ClientCategoryController;
-use App\Http\Controllers\Client\HomeController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\ProductVariantController;
+use App\Http\Controllers\Client\ClientCategoryController;
 
 // Trang Dashboard admin
 
@@ -47,7 +48,21 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/sizes/{size}/edit', [SizeController::class, 'edit'])->name('sizes.edit');
     Route::put('/sizes/{size}', [SizeController::class, 'update'])->name('sizes.update');
     Route::delete('/sizes/{size}', [SizeController::class, 'destroy'])->name('sizes.destroy');
+
+
+    // Users
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 });
+    
+
+
+
 
 // Trang client (không nằm trong admin)
 Route::get('/home', [HomeController::class, 'index'])->name('home');

@@ -1,7 +1,6 @@
-```html
 @extends('admin.layouts.index')
 
-@section('title', 'Category Management')
+@section('title', 'Quản Lý Danh Mục')
 
 @section('content')
 @if (session('success'))

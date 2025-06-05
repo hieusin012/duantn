@@ -1,6 +1,6 @@
 @extends('admin.layouts.index')
 
-@section('title', 'Edit Category')
+@section('title', 'Chỉnh sửa danh mục')
 
 @section('content')
 @if (session('success'))
@@ -109,4 +109,3 @@ document.getElementById('name').addEventListener('input', function() {
 });
 </script>
 @endsection
-```
