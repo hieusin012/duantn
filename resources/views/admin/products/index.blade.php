@@ -1,129 +1,100 @@
 @extends('admin.layouts.index')
 
-@section('title', 'Danh sách sản phẩm')
+@section('title', 'Quản lý sản phẩm')
 
 @section('content')
-<div class="container mt-4">
-    <h1>Danh sách sản phẩm</h1>
+@if (session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
+    </div>
+@endif
 
-    {{-- Hiển thị thông báo thành công --}}
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-
-    {{-- Form tìm kiếm --}}
-    <form action="{{ route('products.search') }}" method="GET" class="mb-3">
-        <div class="input-group">
-            <input type="text" name="keyword" class="form-control" placeholder="Tìm kiếm sản phẩm..." value="{{ request('keyword') }}">
-        
-            <button class="btn btn-primary" type="submit">
-                <i class="bi bi-search"></i> Tìm kiếm
-            </button>
+<div class="row">
+    <div class="col-md-12">
+        <div class="tile">
+            <div class="tile-body">
+                <div class="row element-button">
+                    <div class="col-sm-2">
+                        <a class="btn btn-add btn-sm" href="{{ route('admin.products.create') }}" title="Thêm"><i class="fas fa-plus"></i> Tạo mới sản phẩm</a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a class="btn btn-delete btn-sm nhap-tu-file" type="button" title="Nhập"><i class="fas fa-file-upload"></i> Tải từ file</a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a class="btn btn-delete btn-sm print-file" type="button" title="In"><i class="fas fa-print"></i> In dữ liệu</a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a class="btn btn-delete btn-sm js-textareacopybtn" type="button" title="Sao chép"><i class="fas fa-copy"></i> Sao chép</a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a class="btn btn-excel btn-sm" href="#" title="In"><i class="fas fa-file-excel"></i> Xuất Excel</a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a class="btn btn-delete btn-sm pdf-file" type="button" title="In"><i class="fas fa-file-pdf"></i> Xuất PDF</a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a class="btn btn-delete btn-sm" type="button" title="Xóa"><i class="fas fa-trash-alt"></i> Xóa tất cả</a>
+                    </div>
+                </div>
+                <table class="table table-hover table-bordered" id="sampleTable">
+                    <thead>
+                        <tr>
+                            <th width="10"><input type="checkbox" id="all"></th>
+                            <th>Mã sản phẩm</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Ảnh</th>
+                            <th>Giá tiền</th>
+                            <th>Tình trạng</th>
+                            <th>Danh mục</th>
+                            <th>Chức năng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($products as $product)
+                        <tr>
+                            <td width="10"><input type="checkbox" name="check[]" value="{{ $product->id }}"></td>
+                            <td>{{ $product->code }}</td>
+                            <td>{{ $product->name }}</td>
+                            <td>
+                                @if ($product->image)
+                                    <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" width="100px;">
+                                @else
+                                    <span>Không có ảnh</span>
+                                @endif
+                            </td>
+                            <td>{{ number_format($product->price, 0, ',', '.') }} đ</td>
+                            <td>
+                                <span class="badge {{ $product->is_active ? 'bg-success' : 'bg-danger' }}">
+                                    {{ $product->is_active ? 'Còn hàng' : 'Hết hàng' }}
+                                </span>
+                            </td>
+                            <td>{{ $product->category ? $product->category->name : 'N/A' }}</td>
+                            <td>
+                                <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-primary btn-sm edit" title="Sửa" data-toggle="modal" data-target="#ModalUP">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-primary btn-sm trash" title="Xóa">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                                <a href="{{ route('admin.products.show', $product->id) }}" class="btn btn-primary btn-sm" title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                <!-- Pagination Links -->
+                <div class="pagination">
+                    {{ $products->links() }}
+                </div>
+            </div>
         </div>
-    </form>
-
-    {{-- Form lọc --}}
-    <form action="{{ route('products.filter') }}" method="GET" class="mb-3 d-flex align-items-center gap-3">
-        <select name="is_active" class="form-select" style="max-width: 200px;">
-            <option value="">-- Chọn trạng thái --</option>
-            <option value="1" {{ request('is_active') == '1' ? 'selected' : '' }}>Kích hoạt</option>
-            <option value="0" {{ request('is_active') == '0' ? 'selected' : '' }}>Không kích hoạt</option>
-        </select>
-
-        <select name="sort" class="form-select" style="max-width: 200px;">
-            <option value="">-- Sắp xếp --</option>
-            <option value="az" {{ request('sort') == 'az' ? 'selected' : '' }}>Tên sản phẩm (A đến Z)</option>
-            <option value="za" {{ request('sort') == 'za' ? 'selected' : '' }}>Tên sản phẩm (Z đến A)</option>
-        </select>
-
-        <button type="submit" class="btn btn-secondary">Lọc</button>
-    </form>
-
-    {{-- Nút thêm sản phẩm mới --}}
-    <a href="{{ route('products.create') }}" class="btn btn-success mb-3">
-        <i class="fas fa-plus"></i> Thêm sản phẩm mới
-    </a>
-    
-    {{-- Bảng danh sách sản phẩm --}}
-    <table class="table table-bordered table-hover">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Mã sản phẩm</th>
-                <th>Tên</th>
-                <th>Ảnh</th>
-                <th>Giá</th>
-                <th>Danh mục</th>
-                <th>Thương hiệu</th>
-                <th>Trạng thái</th>
-                <th>Kích hoạt</th>
-                <th>Hành động</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse ($products as $product)
-            <tr>
-                <td>{{ $product->id }}</td>
-                <td>{{ $product->code }}</td>
-                <td>{{ $product->name }}</td>
-                <td>
-                    @if($product->image)
-                        <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" width="60">
-                    @else
-                        <span class="text-muted">Không có ảnh</span>
-                    @endif
-                </td>
-                <td>{{ number_format($product->price, 0, ',', '.') }} đ</td>
-                <td>{{ $product->category->name ?? '[N\A]' }}</td>
-                <td>{{ $product->brand->name ?? '[N\A]' }}</td>
-                <td>
-                    @if($product->status)
-                        <span class="badge bg-success">Còn hàng</span>
-                    @else
-                        <span class="badge bg-danger">Hết hàng</span>
-                    @endif
-                </td>
-                <td>
-                    @if($product->is_active)
-                        <span class="badge bg-primary">Kích hoạt</span>
-                    @else
-                        <span class="badge bg-secondary">Chưa kích hoạt</span>
-                    @endif
-                </td>
-                <td>
-                    <a href="{{ route('products.show', $product->id) }}" class="btn btn-info btn-sm" title="Xem">
-                        <i class="fas fa-eye"></i>
-                    </a>
-                
-                    <a href="{{ route('productVariants.create', ['id' => $product->id]) }}" class="btn btn-primary btn-sm" title="Thêm biến thể">
-                        <i class="fas fa-plus"></i>
-                    </a>
-                
-                    <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning btn-sm" title="Sửa">
-                        <i class="fas fa-edit"></i>
-                    </a>
-                
-                    <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này?');">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm" title="Xóa">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </form>
-                </td>
-                
-            </tr>
-            @empty
-            <tr>
-                <td colspan="10" class="text-center">Không có sản phẩm nào.</td>
-            </tr>
-            @endforelse
-        </tbody>
-    </table>
-
-    {{-- Phân trang --}}
-    <div class="d-flex justify-content-center">
-        {{ $products->links() }}
     </div>
 </div>
 @endsection

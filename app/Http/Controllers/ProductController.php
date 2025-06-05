@@ -12,117 +12,69 @@ use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
-    public function index()
+    // Hiển thị danh sách sản phẩm
+    public function index(Request $request)
     {
-        // Sắp xếp theo created_at giảm dần (mới nhất lên đầu)
-        $products = Product::orderByDesc('created_at')->paginate(10);
+        $query = Product::with(['category', 'brand']);
+
+        // Tìm kiếm theo từ khóa nếu có
+        if ($keyword = $request->input('keyword')) {
+            $query->where(function ($q) use ($keyword) {
+                $q->where('name', 'like', "%{$keyword}%")
+                  ->orWhere('code', 'like', "%{$keyword}%")
+                  ->orWhereHas('category', fn($q) => $q->where('name', 'like', "%{$keyword}%"))
+                  ->orWhereHas('brand', fn($q) => $q->where('name', 'like', "%{$keyword}%"));
+            });
+        }
+
+        // Lọc theo trạng thái active nếu có
+        if (!is_null($request->input('is_active'))) {
+            $query->where('is_active', $request->input('is_active'));
+        }
+
+        // Sắp xếp theo tên
+        if ($sort = $request->input('sort')) {
+            $order = $sort === 'az' ? 'asc' : 'desc';
+            $query->orderBy('name', $order);
+        } else {
+            $query->orderByDesc('created_at');
+        }
+
+        $products = $query->paginate(10)->appends($request->all());
+
         return view('admin.products.index', compact('products'));
     }
+
+    // Hiển thị chi tiết sản phẩm
     public function show($id)
-{
-    $product = Product::with(['category', 'brand'])->findOrFail($id);
-    return view('admin.products.show', compact('product'));
-}
+    {
+        $product = Product::with(['category', 'brand'])->findOrFail($id);
+        return view('admin.products.show', compact('product'));
+    }
 
-
+    // Form thêm sản phẩm mới
     public function create()
     {
         $categories = Category::all();
         $brands = Brand::all();
         $colors = Color::all();
         $sizes = Size::all();
-    
-        $lastProduct = Product::where('code', 'like', 'SP%')
-                              ->orderByDesc('id')
-                              ->first();
-    
-        if ($lastProduct) {
-            $lastNumber = (int)substr($lastProduct->code, 2);
-            $newNumber = $lastNumber + 1;
-        } else {
-            $newNumber = 1;
-        }
-    
-        $code = 'SP' . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
-    
+
+        // Tạo mã ngẫu nhiên duy nhất
+        do {
+            $code = (string)random_int(100000, 999999);
+        } while (Product::where('code', $code)->exists());
+
         return view('admin.products.create', compact('categories', 'brands', 'colors', 'sizes', 'code'));
     }
-    
 
-public function store(Request $request)
-{
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'image' => 'nullable|image|max:2048',
-        'price' => 'required|numeric',
-        'description' => 'nullable|string',
-        'status' => 'required|boolean',
-        'is_active' => 'required|boolean',
-        'category_id' => 'required|exists:categories,id',
-        'brand_id' => 'required|exists:brands,id',
-    ]);
-
-    // Lấy mã code sản phẩm lớn nhất hiện tại
-    $lastProduct = Product::where('code', 'like', 'SP%')
-                          ->orderByDesc('id')
-                          ->first();
-
-    if ($lastProduct) {
-        // Lấy phần số sau "SP"
-        $lastNumber = (int)substr($lastProduct->code, 2);
-        $newNumber = $lastNumber + 1;
-    } else {
-        $newNumber = 1; // nếu chưa có sản phẩm nào
-    }
-
-    // Tạo mã mới: "SP" + đệm 0 cho đủ 4 chữ số, ví dụ SP0001
-    $code = 'SP' . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
-
-    $slug = Str::slug($request->name);
-    $imagePath = null;
-
-    if ($request->hasFile('image')) {
-        $imageName = time() . '_' . $request->file('image')->getClientOriginalName();
-        $request->file('image')->move(public_path('uploads/products'), $imageName);
-        $imagePath = 'uploads/products/' . $imageName;
-    }
-
-    Product::create([
-        'code' => $code,
-        'name' => $request->name,
-        'slug' => $slug,
-        'image' => $imagePath,
-        'price' => $request->price,
-        'description' => $request->description,
-        'status' => $request->status,
-        'is_active' => $request->is_active,
-        'category_id' => $request->category_id,
-        'brand_id' => $request->brand_id,
-    ]);
-
-    return redirect()->route('products.index')->with('success', 'Thêm sản phẩm thành công');
-}
-
-
-    public function edit($id)
+    // Lưu sản phẩm mới
+    public function store(Request $request)
     {
-        $product = Product::findOrFail($id);
-        $categories = Category::all();
-        $brands = Brand::all();
-        $colors = Color::all();
-        $sizes = Size::all();
-        return view('admin.products.edit', compact('product', 'categories', 'brands', 'colors', 'sizes'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        $product = Product::findOrFail($id);
-
-        $request->validate([
-            'code' => 'required|string|max:10|unique:products,code,' . $id,
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'image' => 'nullable|image|max:2048',
-            'price' => 'required|numeric',
+            'price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
             'status' => 'required|boolean',
             'is_active' => 'required|boolean',
@@ -130,12 +82,71 @@ public function store(Request $request)
             'brand_id' => 'required|exists:brands,id',
         ]);
 
-        $slug = Str::slug($request->name);
+        // Tạo mã code duy nhất
+        do {
+            $code = (string)random_int(100000, 999999);
+        } while (Product::where('code', $code)->exists());
+
+        $slug = Str::slug($validated['name']);
+        $imagePath = null;
+
+        if ($request->hasFile('image')) {
+            $imageName = time() . '_' . $request->file('image')->getClientOriginalName();
+            $request->file('image')->move(public_path('uploads/products'), $imageName);
+            $imagePath = 'uploads/products/' . $imageName;
+        }
+
+        Product::create([
+            'code' => $code,
+            'name' => $validated['name'],
+            'slug' => $slug,
+            'image' => $imagePath,
+            'price' => $validated['price'],
+            'description' => $validated['description'] ?? null,
+            'status' => $validated['status'],
+            'is_active' => $validated['is_active'],
+            'category_id' => $validated['category_id'],
+            'brand_id' => $validated['brand_id'],
+        ]);
+
+        return redirect()->route('admin.products.index')->with('success', 'Thêm sản phẩm thành công');
+    }
+
+    // Form chỉnh sửa sản phẩm
+    public function edit($id)
+    {
+        $product = Product::findOrFail($id);
+        $categories = Category::all();
+        $brands = Brand::all();
+        $colors = Color::all();
+        $sizes = Size::all();
+
+        return view('admin.products.edit', compact('product', 'categories', 'brands', 'colors', 'sizes'));
+    }
+
+    // Cập nhật sản phẩm
+    public function update(Request $request, $id)
+    {
+        $product = Product::findOrFail($id);
+
+        $validated = $request->validate([
+            'code' => 'required|string|max:20|unique:products,code,' . $id,
+            'name' => 'required|string|max:255',
+            'image' => 'nullable|image|max:2048',
+            'price' => 'required|numeric|min:0',
+            'description' => 'nullable|string',
+            'status' => 'required|boolean',
+            'is_active' => 'required|boolean',
+            'category_id' => 'required|exists:categories,id',
+            'brand_id' => 'required|exists:brands,id',
+        ]);
+
+        $slug = Str::slug($validated['name']);
         $imagePath = $product->image;
 
         if ($request->hasFile('image')) {
-            if ($imagePath && file_exists(public_path($imagePath))) {
-                unlink(public_path($imagePath));
+            if ($imagePath && is_file(public_path($imagePath))) {
+                @unlink(public_path($imagePath));
             }
 
             $imageName = time() . '_' . $request->file('image')->getClientOriginalName();
@@ -144,63 +155,32 @@ public function store(Request $request)
         }
 
         $product->update([
-            'code' => $request->code,
-            'name' => $request->name,
+            'code' => $validated['code'],
+            'name' => $validated['name'],
             'slug' => $slug,
             'image' => $imagePath,
-            'price' => $request->price,
-            'description' => $request->description,
-            'status' => $request->status,
-            'is_active' => $request->is_active,
-            'category_id' => $request->category_id,
-            'brand_id' => $request->brand_id,
+            'price' => $validated['price'],
+            'description' => $validated['description'] ?? null,
+            'status' => $validated['status'],
+            'is_active' => $validated['is_active'],
+            'category_id' => $validated['category_id'],
+            'brand_id' => $validated['brand_id'],
         ]);
 
-        return redirect()->route('products.index')->with('success', 'Cập nhật sản phẩm thành công');
+        return redirect()->route('admin.products.index')->with('success', 'Cập nhật sản phẩm thành công');
     }
 
+    // Xóa sản phẩm
     public function destroy($id)
     {
         $product = Product::findOrFail($id);
 
         if ($product->image && file_exists(public_path($product->image))) {
-            unlink(public_path($product->image));
+            @unlink(public_path($product->image));
         }
 
         $product->delete();
 
-        return redirect()->route('products.index')->with('success', 'Xóa sản phẩm thành công');
-    }
-
-    public function search(Request $request)
-    {
-        $keyword = $request->input('keyword');
-
-        $products = Product::query()
-            ->with(['category', 'brand'])
-            ->where('name', 'like', "%$keyword%")
-            ->orWhere('code', 'like', "%$keyword%")
-            ->orWhereHas('category', fn($q) => $q->where('name', 'like', "%$keyword%"))
-            ->orWhereHas('brand', fn($q) => $q->where('name', 'like', "%$keyword%"))
-            ->paginate(10);
-
-        return view('admin.products.index', compact('products'));
-    }
-
-    public function filter(Request $request)
-    {
-        $query = Product::query();
-
-        if ($request->has('is_active')) {
-            $query->where('is_active', $request->is_active);
-        }
-
-        if ($request->has('sort')) {
-            $query->orderBy('name', $request->sort === 'az' ? 'asc' : 'desc');
-        }
-
-        $products = $query->paginate(10);
-
-        return view('admin.products.index', compact('products'));
+        return redirect()->route('admin.products.index')->with('success', 'Xóa sản phẩm thành công');
     }
 }

@@ -1,34 +1,13 @@
-<div class="row g-4 mb-4">
-  <div class="col-md-3">
-    <div class="card bg-light">
-      <div class="card-body">
-        <h5>Tổng sản phẩm</h5>
-        <p>120</p>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-3">
-    <div class="card bg-light">
-      <div class="card-body">
-        <h5>Đơn hàng</h5>
-        <p>85</p>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-3">
-    <div class="card bg-light">
-      <div class="card-body">
-        <h5>Người dùng</h5>
-        <p>50</p>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-3">
-    <div class="card bg-light">
-      <div class="card-body">
-        <h5>Doanh thu</h5>
-        <p>₫50,000,000</p>
-      </div>
-    </div>
-  </div>
-</div>
+<header class="app-header">
+    <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar"
+      aria-label="Hide Sidebar"></a>
+    <!-- Navbar Right Menu-->
+    <ul class="app-nav">
+
+
+      <!-- User Menu-->
+      <li><a class="app-nav__item" href="/index.html"><i class='bx bx-log-out bx-rotate-180'></i> </a>
+
+      </li>
+    </ul>
+  </header>

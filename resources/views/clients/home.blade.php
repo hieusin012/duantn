@@ -13,7 +13,7 @@
         </div>
         <div class="row">
             @foreach($latestProducts as $product)
-                @include('clients.layouts.partials.product-card', ['product' => $product])
+               
             @endforeach
         </div>
     </div>
