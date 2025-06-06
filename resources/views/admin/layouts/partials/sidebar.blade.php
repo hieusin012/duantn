@@ -10,11 +10,14 @@
     <ul class="app-menu">
       <li><a class="app-menu__item haha" href="phan-mem-ban-hang.html"><i class='app-menu__icon bx bx-cart-alt'></i>
           <span class="app-menu__label">POS Bán Hàng</span></a></li>
-      <li><a class="app-menu__item active" href="{{route('admin.dashboard.index')}}"><i class='app-menu__icon bx bx-tachometer'></i><span
+    
+          <li><a class="app-menu__item " href="{{route('admin.dashboard.index')}}"><i class='app-menu__icon bx bx-tachometer'></i></i> <span
             class="app-menu__label">Bảng điều khiển</span></a></li>
-      <li><a class="app-menu__item " href="{{route('admin.dashboard.index')}}"><i class='app-menu__icon bx bx-id-card'></i> <span
+    
+            <li><a class="app-menu__item " href=""><i class='app-menu__icon bx bx-id-card'></i> <span
             class="app-menu__label">Quản lý nhân viên</span></a></li>
-      <li><a class="app-menu__item" href="{{ route(name: 'admin.users.index') }}"><i class='app-menu__icon bx bx-user-voice'></i><span
+    
+            <li><a class="app-menu__item" href="{{ route(name: 'admin.users.index') }}"><i class='app-menu__icon bx bx-user-voice'></i><span
             class="app-menu__label">Quản lý người dùng</span></a></li>
 
             <li>
@@ -25,10 +28,11 @@
             </li>
             <li>
                   <a class="app-menu__item" href="{{ route(name: 'admin.sizes.index') }}">
-                        <i class='app-menu__icon bx bx-category'></i>
-                        <span class="app-menu__label">Quản lý kích cỡ</span>
+                      <i class='app-menu__icon bx bx-ruler'></i>
+                      <span class="app-menu__label">Quản lý kích cỡ</span>
                   </a>
-            </li>
+              </li>
+              
                 
                 
 
