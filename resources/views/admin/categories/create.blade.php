@@ -1,6 +1,6 @@
 @extends('admin.layouts.index')
 
-@section('title', 'Add Category')
+@section('title', 'Thêm danh mục')
 
 @section('content')
 @if (session('success'))
@@ -13,17 +13,17 @@
 <div class="row">
     <div class="col-md-12">
         <div class="tile">
-            <h3 class="tile-title">Add Category</h3>
+            <h3 class="tile-title">Thêm danh mục</h3>
             <div class="tile-body">
                 <div class="row element-button">
                     <div class="col-sm-2">
-                        <a class="btn btn-add btn-sm" data-toggle="modal" data-target="#addParentCategory"><i class="fas fa-folder-plus"></i> Add Parent Category</a>
+                        <a class="btn btn-add btn-sm" data-toggle="modal" data-target="#addParentCategory"><i class="fas fa-folder-plus"></i> Thêm danh mục chính</a>
                     </div>
                 </div>
                 <form class="row" action="{{ route('admin.categories.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group col-md-3">
-                        <label class="control-label">Category Name</label>
+                        <label class="control-label">Tên danh mục</label>
                         <input class="form-control" type="text" name="name" id="name" value="{{ old('name') }}">
                         @error('name')
                             <span class="text-danger">{{ $message }}</span>
@@ -37,9 +37,9 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="parent_id" class="control-label">Parent Category</label>
+                        <label for="parent_id" class="control-label">Danh mục cha</label>
                         <select class="form-control" name="parent_id" id="parent_id">
-                            <option value="">-- Select Parent Category --</option>
+                            <option value="">-- Chọn danh mục chính --</option>
                             @foreach ($parents as $parent)
                                 <option value="{{ $parent->id }}" {{ old('parent_id') == $parent->id ? 'selected' : '' }}>{{ $parent->name }}</option>
                             @endforeach
@@ -49,16 +49,16 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-12">
-                        <label class="control-label">Category Image</label>
+                        <label class="control-label">Hình ảnh danh mục</label>
                         <div id="myfileupload">
                             <input type="file" id="uploadfile" name="image" onchange="readURL(this);" accept="image/*" />
                         </div>
                         <div id="thumbbox">
                             <img height="450" width="400" alt="Thumb image" id="thumbimage" style="display: none" />
-                            <a class="removeimg" href="javascript:" onclick="clearImage()">Remove Image</a>
+                            <a class="removeimg" href="javascript:" onclick="clearImage()"> Xóa hình ảnh</a>
                         </div>
                         <div id="boxchoice">
-                            <a href="javascript:" class="Choicefile" onclick="document.getElementById('uploadfile').click();"><i class="fas fa-cloud-upload-alt"></i> Choose Image</a>
+                            <a href="javascript:" class="Choicefile" onclick="document.getElementById('uploadfile').click();"><i class="fas fa-cloud-upload-alt"></i> Chọn hình ảnh</a>
                             <p style="clear:both"></p>
                         </div>
                         @error('image')
@@ -66,8 +66,8 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-12">
-                        <button class="btn btn-save" type="submit">Save</button>
-                        <a class="btn btn-cancel" href="{{ route('admin.categories.index') }}">Cancel</a>
+                        <button class="btn btn-save" type="submit">Lưu</button>
+                        <a class="btn btn-cancel" href="{{ route('admin.categories.index') }}">Quay lại</a>
                     </div>
                 </form>
             </div>
@@ -80,7 +80,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add Parent Category</h5>
+                <h5 class="modal-title">Thêm danh mục chính</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -89,7 +89,7 @@
                 <form action="{{ route('admin.categories.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
-                        <label class="control-label">Category Name</label>
+                        <label class="control-label">Tên danh mục</label>
                         <input class="form-control" type="text" name="name" id="modal-name">
                         @error('name')
                             <span class="text-danger">{{ $message }}</span>
@@ -103,14 +103,14 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Category Image</label>
+                        <label class="control-label">Hình ảnh danh mục</label>
                         <input type="file" name="image" accept="image/*" />
                         @error('image')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
-                    <button class="btn btn-save" type="submit">Save</button>
-                    <button class="btn btn-cancel" type="button" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-save" type="submit">Lưu</button>
+                    <button class="btn btn-cancel" type="button" data-dismiss="modal">Quay lại</button>
                 </form>
             </div>
         </div>

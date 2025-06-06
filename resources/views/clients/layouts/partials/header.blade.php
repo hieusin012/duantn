@@ -30,7 +30,7 @@
             @endforeach
         </ul>
     </div>
-            <a href="#" class="text-dark text-decoration-none">Liên hệ</a>
+            <a href="{{route('contact')}}" class="text-dark text-decoration-none">Liên hệ</a>
             
         </nav>
 

@@ -1,4 +1,6 @@
 @extends('clients.layouts.master')
+
+@section('title', 'Liên hệ')
 @section('content')
 <div id="page-content"> 
                 <!--Page Header-->
