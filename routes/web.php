@@ -79,6 +79,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 // Trang client (không nằm trong admin)
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+
 Route::get('/contact', function () {
     return view('clients.contact');
 })->name('contact');;
