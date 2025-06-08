@@ -1,6 +1,6 @@
 @extends('admin.layouts.index')
 
-@section('title', 'Add Category')
+@section('title', 'Thêm danh mục')
 
 @section('content')
 @if (session('success'))

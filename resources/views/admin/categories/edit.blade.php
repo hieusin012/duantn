@@ -1,6 +1,6 @@
 @extends('admin.layouts.index')
 
-@section('title', 'Edit Category')
+@section('title', 'Chỉnh sửa danh mục')
 
 @section('content')
 @if (session('success'))
@@ -66,8 +66,13 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-12">
+<<<<<<< HEAD
+                        <button class="btn btn-save" type="submit">Save</button>
+                        <a class="btn btn-cancel" href="{{ route('admin.categories.index') }}">Cancel</a>
+=======
                         <button class="btn btn-save" type="submit">Lưu</button>
                         <a class="btn btn-cancel" href="{{ route('admin.categories.index') }}">Quay lại</a>
+>>>>>>> 3ca3222fe360990db1371432c56f817073c6a92c
                     </div>
                 </form>
             </div>
@@ -109,4 +114,3 @@ document.getElementById('name').addEventListener('input', function() {
 });
 </script>
 @endsection
-```

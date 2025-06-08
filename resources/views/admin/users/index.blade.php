@@ -1,6 +1,6 @@
 @extends('admin.layouts.index')
 
-@section('title', 'Quản lý kích cỡ')
+@section('title', 'Quản lý người dùng')
 
 @section('content')
 @if(session('success'))
@@ -16,8 +16,8 @@
             <div class="tile-body">
                 <div class="row element-button">
                     <div class="col-sm-2">
-                        <a href="{{ route('admin.sizes.create') }}" class="btn btn-add btn-sm" title="Thêm kích cỡ">
-                            <i class="fas fa-plus"></i> Thêm mới kích cỡ
+                        <a href="{{ route('admin.users.create') }}" class="btn btn-add btn-sm" title="Thêm người dùng">
+                            <i class="fas fa-plus"></i> Thêm người dùng
                         </a>
                     </div>
                     <div class="col-sm-2">
@@ -40,45 +40,49 @@
                     </div>
                 </div>
 
-                <table class="table table-hover table-bordered">
+                <table class="table table-hover table-bordered" id="users-table">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Tên</th>
-                            <th>Ngày tạo</th>
-                            <th>Ngày cập nhật</th>
+                            <th>Họ tên</th>
+                            <th>Email</th>
+                            <th>Điện thoại</th>
+                            <th>Vai trò</th>
+                            <th>Trạng thái</th>
                             <th>Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($sizes as $size)
-                            <tr>
-                                <td>{{ $size->id }}</td>
-                                <td>{{ $size->name }}</td>
-                                <td>{{ $size->created_at }}</td>
-                                <td>{{ $size->updated_at }}</td>
-                                <td>
-                                    <a href="{{ route('admin.sizes.show', $size->id) }}" class="btn btn-info btn-sm" title="Xem">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <a href="{{ route('admin.sizes.edit', $size->id) }}" class="btn btn-primary btn-sm" title="Sửa">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <form action="{{ route('admin.sizes.destroy', $size->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa kích cỡ này không?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-primary btn-sm trash" title="Xóa">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
+                    @foreach($users as $user)
+                        <tr>
+                            <td>{{ $user->id }}</td>
+                            <td>{{ $user->fullname }}</td>
+                            <td>{{ $user->email }}</td>
+                            <td>{{ $user->phone }}</td>
+                            <td>{{ $user->role === 'admin' ? 'Admin' : 'User' }}</td>
+                            <td>{{ $user->status == 1 ? 'Hoạt động' : 'Tạm khóa' }}</td>
+                            <td>
+                                <a href="{{ route('admin.users.show', $user->id) }}" class="btn btn-info btn-sm" title="Xem">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-primary btn-sm" title="Sửa">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa người dùng này không?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-primary btn-sm trash" title="Xóa">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
                     </tbody>
                 </table>
 
                 <div class="pagination">
-                    {{ $sizes->links() }}
+                    {{ $users->links() }}
                 </div>
             </div>
         </div>

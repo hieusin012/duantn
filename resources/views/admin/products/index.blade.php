@@ -14,6 +14,64 @@
     <div class="col-md-12">
         <div class="tile">
             <div class="tile-body">
+                <!-- Filter Form -->
+                <form method="GET" action="{{ route('admin.products.index') }}" class="container-fluid bg-light p-3 rounded shadow-sm mb-3">
+                    <div class="row g-2">
+                        {{-- Dòng 1 --}}
+                        <div class="col-md-3">
+                            <input type="text" name="keyword" class="form-control form-control-sm" placeholder="Tìm theo tên, mã sản phẩm..." value="{{ request('keyword') }}">
+                        </div>
+                        <div class="col-md-3">
+                            <select name="category_id" class="form-select form-select-sm">
+                                <option value="">Tất cả danh mục</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
+                                        {{ $category->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select name="brand_id" class="form-select form-select-sm">
+                                <option value="">Tất cả thương hiệu</option>
+                                @foreach ($brands as $brand)
+                                    <option value="{{ $brand->id }}" {{ request('brand_id') == $brand->id ? 'selected' : '' }}>
+                                        {{ $brand->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select name="status" class="form-select form-select-sm">
+                                <option value="">Tất cả trạng thái</option>
+                                <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Còn hàng</option>
+                                <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Hết hàng</option>
+                            </select>
+                        </div>
+                    </div>
+                
+                    <div class="row g-2 mt-2">
+                        {{-- Dòng 2 --}}
+                        <div class="col-md-3">
+                            <input type="number" name="min_price" class="form-control form-control-sm" placeholder="Giá từ..." value="{{ request('min_price') }}">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" name="max_price" class="form-control form-control-sm" placeholder="Giá đến..." value="{{ request('max_price') }}">
+                        </div>
+                        <div class="col-md-3 d-flex gap-2">
+                            <button type="submit" class="btn btn-warning btn-sm w-100">
+                                <i class="fa fa-filter"></i> Lọc
+                            </button>
+                            <a href="{{ route('admin.products.index') }}" class="btn btn-dark btn-sm w-100">
+                                <i class="fa fa-times"></i> Xóa
+                            </a>
+                        </div>
+                     
+                    </div>
+                </form>
+                
+                
+
                 <div class="row element-button">
                     <div class="col-sm-2">
                         <a class="btn btn-add btn-sm" href="{{ route('admin.products.create') }}" title="Thêm"><i class="fas fa-plus"></i> Tạo mới sản phẩm</a>

@@ -15,7 +15,7 @@ class ProductController extends Controller
     // Hiển thị danh sách sản phẩm
     public function index(Request $request)
     {
-        $query = Product::with(['category', 'brand']);
+        $query = Product::with(['category', 'brand'])->whereNull('deleted_at'); // Respect soft deletes
 
         // Tìm kiếm theo từ khóa nếu có
         if ($keyword = $request->input('keyword')) {
@@ -27,12 +27,30 @@ class ProductController extends Controller
             });
         }
 
+        // Lọc theo danh mục
+        if ($category_id = $request->input('category_id')) {
+            $query->where('category_id', $category_id);
+        }
+
+        // Lọc theo thương hiệu
+        if ($brand_id = $request->input('brand_id')) {
+            $query->where('brand_id', $brand_id);
+        }
+
+        // Lọc theo khoảng giá
+        if ($min_price = $request->input('min_price')) {
+            $query->where('price', '>=', $min_price);
+        }
+        if ($max_price = $request->input('max_price')) {
+            $query->where('price', '<=', $max_price);
+        }
+
         // Lọc theo trạng thái active nếu có
         if (!is_null($request->input('is_active'))) {
             $query->where('is_active', $request->input('is_active'));
         }
 
-        // Sắp xếp theo tên
+        // Sắp xếp theo tên hoặc ngày tạo
         if ($sort = $request->input('sort')) {
             $order = $sort === 'az' ? 'asc' : 'desc';
             $query->orderBy('name', $order);
@@ -40,9 +58,12 @@ class ProductController extends Controller
             $query->orderByDesc('created_at');
         }
 
+        // Lấy danh sách danh mục và thương hiệu cho form lọc
+        $categories = Category::whereNull('deleted_at')->get(); // Respect soft deletes
+        $brands = Brand::whereNull('deleted_at')->get(); // Respect soft deletes
         $products = $query->paginate(10)->appends($request->all());
 
-        return view('admin.products.index', compact('products'));
+        return view('admin.products.index', compact('products', 'categories', 'brands'));
     }
 
     // Hiển thị chi tiết sản phẩm
