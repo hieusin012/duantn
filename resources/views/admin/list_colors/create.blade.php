@@ -30,7 +30,7 @@
                     </div>
                     <div class="form-group col-md-12">
                         <button class="btn btn-save" type="submit">Lưu</button>
-                        <a class="btn btn-cancel" href="{{ route('admin.categories.index') }}">Quay lại</a>
+                        <a class="btn btn-cancel" href="{{ route('admin.colors.index') }}">Quay lại</a>
 
                     </div>
                 </form>
