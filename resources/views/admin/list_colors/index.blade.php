@@ -1,8 +1,7 @@
 @extends('admin.layouts.index')
 
 @section('title', 'Quản lý màu sắc')
-@section('color')
-@endsection
+
 @section('content')
 @if (session('success'))
 <div class="alert alert-success alert-dismissible fade show" role="alert">

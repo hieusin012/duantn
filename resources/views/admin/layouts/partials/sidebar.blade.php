@@ -27,13 +27,23 @@
                   </a>
             </li>
             <li>
+                  <a class="app-menu__item" href="{{ route(name: 'admin.blogs.index') }}">
+                        <i class='app-menu__icon fas fa-newspaper'></i>
+                        <span class="app-menu__label">Quản lý bài viết</span>
+                  </a>
+            </li>
+            <li>
+                  <a class="app-menu__item " href="{{ route(name: 'admin.brands.index') }}"><i class='app-menu__icon fas fa-tag'></i> <span
+                              class="app-menu__label">Quản lý thương hiệu</span></a>
+            </li>
+            <li>
                   <a class="app-menu__item" href="{{ route(name: 'admin.sizes.index') }}">
                         <i class='app-menu__icon bx bx-ruler'></i>
                         <span class="app-menu__label">Quản lý kích cỡ</span>
                   </a>
             </li>
             <li>
-                  <a class="app-menu__item haha" href="{{ route(name: 'admin.colors.index') }}">
+                  <a class="app-menu__item" href="{{ route(name: 'admin.colors.index') }}">
                         <i class="app-menu__icon bx bx-palette"></i>
                         <span class="app-menu__label">Quản lý màu sắc</span>
                   </a>

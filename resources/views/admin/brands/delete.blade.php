@@ -1,5 +1,8 @@
 @extends('admin.layouts.index')
-@section('title', 'Quản lý thương hiệu')
+
+@section('title', 'Dữ liệu đã xóa thương hiệu')
+@section('color')
+@endsection
 @section('content')
 @if (session('success'))
 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -14,25 +17,32 @@
             <div class="tile-body">
                 <div class="row element-button">
                     <div class="col-sm-2">
-                        <a class="btn btn-add btn-sm" href="{{ route('admin.brands.create') }}" title="Thêm"><i class="fas fa-plus"></i> Thêm thương hiệu mới</a>
+                        <a class="btn btn-add btn-sm" href="{{ route('admin.brands.index') }}" title="Thêm"><i class="fas fa-arrow-left"></i>  Quay lại</a>
                     </div>
 
                     <div class="col-sm-2">
-                        <a class="btn btn-danger btn-sm" type="button" title="Xóa" href="{{ route('admin.brands.delete') }}"><i class="fas fa-trash-alt"></i> Dữ liệu đã xóa</a>
+                        <form action="{{ route('admin.colors.all-eliminate') }}" method="POST" style="display:inline-block;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm" title="Xóa tất cả"
+                                onclick="return confirm('Bạn có chắc chắn muốn xóa vĩnh viễn tất cả màu đã xóa mềm?')">
+                                <i class="fas fa-trash-alt"></i>  Xóa tất cả
+                            </button>
+                        </form>
                     </div>
                 </div>
 
-                <table class="table table-hover table-bordered" id="sampleTable">
+                <table class="table table-hover table-bordered " id="sampleTable">
                     <thead>
                         <tr>
                             <th width="10"><input type="checkbox" id="all"></th>
-                            <th class="text-center align-middle">Tên thương hiệu</th>
+                            <th  class="text-center align-middle">Tên thương hiệu</th>
                             <th class="text-center align-middle">Logo</th>
-                            <th class="text-center align-middle">Hành động</th>
+                            <th  class="text-center align-middle">Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($brands as $brand)
+                        @foreach($deletedbrands as $brand)
                         <tr>
                             <td width="10"><input type="checkbox" name="check[]" value="{{ $brand->id }}"></td>
                             <td class="text-center align-middle">{{ $brand->name }}</td>
@@ -44,11 +54,11 @@
                                 @endif
                             </td>
                             <td class="text-center align-middle">
-                                <a class="btn btn-primary btn-sm" href="{{ route('admin.brands.edit', $brand->id) }}" title="Sửa"><i class="fas fa-edit"></i></a>
-                                <form action="{{ route('admin.brands.destroy', $brand->id) }}" method="POST" style="display:inline-block;">
+                                <a class="btn btn-primary btn-sm" href="{{ route('admin.brands.restore', $brand->id) }}" title="Khôi phục"><i class="fas fa-undo"></i></a>
+                                <form action="{{ route('admin.brands.eliminate', $brand->id) }}" method="POST" style="display:inline-block;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                                    <button type="submit" class="btn btn-danger btn-sm" title="Xóa" onclick="return confirm('Bạn có chắc muốn xóa {{ $brand->name }} không ?')"><i class="fas fa-trash-alt"></i></button>
                                 </form>
                             </td>
                         </tr>
