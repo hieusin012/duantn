@@ -1,11 +1,52 @@
 <!--Header-->
-<header class="header py-3 bg-light border-bottom">
-    <div class="container d-flex justify-content-between align-items-center flex-wrap gap-3">
+<style>
+    /* Giảm chiều cao của header */
+.header {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+}
+
+/* Giới hạn chiều rộng và căn giữa nội dung header */
+.header .container-fluid {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+}
+
+/* Giảm kích thước logo */
+.header img {
+    width: 160px !important;   /* hoặc 150px nếu muốn nhỏ hơn */
+    height: auto !important;
+}
+
+/* Giảm khoảng cách giữa các phần tử */
+.header nav a,
+.header .btn {
+    padding: 6px 10px;
+    font-size: 15px;
+}/* Hover cho các mục menu chính */
+.header nav a {
+    color: #000; /* màu mặc định */
+    transition: color 0.3s, border-bottom 0.3s;
+    border-bottom: 2px solid transparent;
+    padding-bottom: 2px;
+}
+
+.header nav a:hover {
+    color:rgb(20, 20, 20); /* màu xanh Bootstrap hoặc tùy chỉnh */
+    border-bottom: 2px solid rgb(0, 0, 0);
+    text-decoration: none;
+}
+
+</style>
+<header class="header py-1 bg-light border-bottom">
+    <div class="container-fluid d-flex justify-content-between align-items-center flex-wrap gap-3 px-4">
 
         {{-- Logo --}}
         <div class="d-flex align-items-center">
             <a href="{{ route('home') }}" class="d-flex align-items-center text-decoration-none">
-                <img src="{{ asset('assets/images/logo.png') }}" alt="Logo" title="Shop" width="120" height="32">
+                <img src="{{ url('custom-assets/logo/logo.png') }}" alt="Logo" width="200" height="82">
             </a>
         </div>
 
