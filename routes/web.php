@@ -7,8 +7,12 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\ProductVariantController;
+
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Response;
+
 use App\Http\Controllers\Client\ClientCategoryController;
-use App\Http\Controllers\ColorController;
+
 
 // Trang Dashboard admin
 
@@ -59,18 +63,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
-
-    //color
-    Route::get('/colors', [ColorController::class, 'index'] )->name('colors.index');
-    Route::get('/colors/create', [ColorController::class, 'create'] )->name('colors.create');
-    Route::post('/colors', [ColorController::class, 'store'] )->name('colors.store');
-    Route::get('/colors/{id}/edit', [ColorController::class, 'edit'] )->name('colors.edit');
-    Route::put('/colors/{id}', [ColorController::class, 'update'] )->name('colors.update');
-    Route::delete('/colors/{id}', [ColorController::class, 'destroy'] )->name('colors.destroy');
-    Route::get('/colors/delete', [ColorController::class, 'delete'])->name('colors.delete');
-    Route::delete('/colors/eliminate/{id}', [ColorController::class, 'eliminate'])->name('colors.eliminate');
-    Route::delete('/colors/all-eliminate', [ColorController::class, 'forceDeleteAll'])->name('colors.all-eliminate');
-    Route::get('/colors/restore/{id}', [ColorController::class, 'restore'])->name('colors.restore');
 });
     
 
