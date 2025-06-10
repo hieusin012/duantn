@@ -34,4 +34,14 @@ class Product extends Model
     }
     public $timestamps = true;
     protected $dates = ['deleted_at'];
+
+    public function images()
+{
+    return $this->hasMany(ProductImage::class);
+}
+public function variants()
+{
+    return $this->hasMany(ProductVariant::class);
+}
+
 }

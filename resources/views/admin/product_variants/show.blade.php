@@ -17,14 +17,14 @@
                         <p><strong>Giá khuyến mãi:</strong> {{ $productVariant->sale_price ? number_format($productVariant->sale_price, 0, ',', '.') : 'N/A' }} đ</p>
                         <p><strong>Số lượng:</strong> {{ $productVariant->quantity }}</p>
                     </div>
-                    <div class="col-md-6">
-                        <p><strong>Ảnh:</strong></p>
-                        @if ($productVariant->image)
-                            <img src="{{ asset($productVariant->image) }}" alt="{{ $productVariant->product->name ?? 'N/A' }}" width="200px;">
+                    <td>
+                        @if ($productVariant->image)Ảnh Sản Phẩm:
+                            <img src="{{ asset('storage/' . $productVariant->image) }}" alt="Ảnh biến thể"
+                                 style="width: 100px; height: 100px; object-fit: cover;">
                         @else
                             <span>Không có ảnh</span>
-                        @endif
-                    </div>
+                        @endif                       
+                    <td>
                 </div>
                 <a href="{{ route('admin.product-variants.index') }}" class="btn btn-secondary">Quay lại</a>
                 <a href="{{ route('admin.product-variants.edit', $productVariant->id) }}" class="btn btn-primary">Sửa</a>

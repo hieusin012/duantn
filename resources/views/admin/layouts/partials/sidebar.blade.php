@@ -13,9 +13,9 @@
 
             <li><a class="app-menu__item " href="{{route('admin.dashboard.index')}}"><i class='app-menu__icon bx bx-tachometer'></i></i> <span
                               class="app-menu__label">Bảng điều khiển</span></a></li>
-
+{{-- 
             <li><a class="app-menu__item " href=""><i class='app-menu__icon bx bx-id-card'></i> <span
-                              class="app-menu__label">Quản lý nhân viên</span></a></li>
+                              class="app-menu__label">Quản lý nhân viên</span></a></li> --}}
 
             <li><a class="app-menu__item" href="{{ route(name: 'admin.users.index') }}"><i class='app-menu__icon bx bx-user-voice'></i><span
                               class="app-menu__label">Quản lý người dùng</span></a></li>
@@ -32,6 +32,15 @@
                         <span class="app-menu__label">Quản lý bài viết</span>
                   </a>
             </li>
+
+            <li>
+                  <a class="app-menu__item" href="{{ route(name: 'admin.banners.index') }}">
+                        <i class='app-menu__icon fas fa-image'></i>
+
+                        <span class="app-menu__label">Quản lý banner</span>
+                  </a>
+            </li>
+
             <li>
                   <a class="app-menu__item " href="{{ route(name: 'admin.brands.index') }}"><i class='app-menu__icon fas fa-tag'></i> <span
                               class="app-menu__label">Quản lý thương hiệu</span></a>

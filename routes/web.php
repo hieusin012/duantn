@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\BannerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\UserController;
@@ -42,7 +44,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
     Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
-
+    //banner
+    Route::get('/banners', [BannerController::class, 'index'])->name('banners.index');
+Route::get('/banners/create', [BannerController::class, 'create'])->name('banners.create');
+Route::post('/banners', [BannerController::class, 'store'])->name('banners.store');
+Route::get('/banners/{banner}', [BannerController::class, 'show'])->name('banners.show');
+Route::get('/banners/{banner}/edit', [BannerController::class, 'edit'])->name('banners.edit');
+Route::put('/banners/{banner}', [BannerController::class, 'update'])->name('banners.update');
+Route::delete('/banners/{banner}', [BannerController::class, 'destroy'])->name('banners.destroy');
+   
     // Sizes
     Route::get('/sizes', [SizeController::class, 'index'])->name('sizes.index');
     Route::get('/sizes/create', [SizeController::class, 'create'])->name('sizes.create');

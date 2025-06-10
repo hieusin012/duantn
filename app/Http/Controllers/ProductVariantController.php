@@ -8,16 +8,17 @@ use App\Models\Color;
 use App\Models\Size;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class ProductVariantController extends Controller
 {
     public function index()
     {
-        $variants = ProductVariant::with(['product', 'color', 'size'])->paginate(10); // Use paginate instead of get
+        $variants = ProductVariant::with(['product', 'color', 'size'])->paginate(10);
         return view('admin.product_variants.index', compact('variants'));
     }
 
-    // Rest of the controller remains unchanged
     public function create()
     {
         $products = Product::all();
@@ -28,24 +29,34 @@ class ProductVariantController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'product_id' => 'required|exists:products,id',
             'color_id' => 'required|exists:colors,id',
             'size_id' => 'required|exists:sizes,id',
-            'price' => 'required|numeric|min:0',
-            'sale_price' => 'nullable|numeric|min:0',
-            'quantity' => 'required|integer|min:0',
-            'image' => 'nullable'
+            'price' => 'required|numeric',
+            'sale_price' => 'nullable|numeric',
+            'quantity' => 'required|integer',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+    
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('product_variants', 'public'); // lưu vào storage/app/public/product_variants
         }
-
-        ProductVariant::create($request->all());
-        return redirect()->route('admin.product-variants.index')->with('success', 'Product variant created successfully.');
+    
+        ProductVariant::create([
+            'product_id' => $request->product_id,
+            'color_id' => $request->color_id,
+            'size_id' => $request->size_id,
+            'price' => $request->price,
+            'sale_price' => $request->sale_price,
+            'quantity' => $request->quantity,
+            'image' => $imagePath
+        ]);
+    
+        return redirect()->route('admin.product-variants.index')->with('success', 'Tạo biến thể thành công');
     }
-
+    
     public function show(ProductVariant $productVariant)
     {
         $productVariant->load(['product', 'color', 'size']);
@@ -62,27 +73,48 @@ class ProductVariantController extends Controller
 
     public function update(Request $request, ProductVariant $productVariant)
     {
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'product_id' => 'required|exists:products,id',
             'color_id' => 'required|exists:colors,id',
             'size_id' => 'required|exists:sizes,id',
-            'price' => 'required|numeric|min:0',
-            'sale_price' => 'nullable|numeric|min:0',
-            'quantity' => 'required|integer|min:0',
-            'image' => 'nullable'
+            'price' => 'required|numeric',
+            'sale_price' => 'nullable|numeric',
+            'quantity' => 'required|integer',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+    
+        if ($request->hasFile('image')) {
+            // Xóa ảnh cũ nếu có
+            if ($productVariant->image) {
+                Storage::disk('public')->delete($productVariant->image);
+            }
+    
+            $imagePath = $request->file('image')->store('product_variants', 'public');
+            $productVariant->image = $imagePath;
         }
-
-        $productVariant->update($request->all());
-        return redirect()->route('admin.product-variants.index')->with('success', 'Product variant updated successfully.');
+    
+        $productVariant->update([
+            'product_id' => $request->product_id,
+            'color_id' => $request->color_id,
+            'size_id' => $request->size_id,
+            'price' => $request->price,
+            'sale_price' => $request->sale_price,
+            'quantity' => $request->quantity
+        ]);
+    
+        $productVariant->save();
+    
+        return redirect()->route('admin.product-variants.index')->with('success', 'Cập nhật thành công');
     }
 
     public function destroy(ProductVariant $productVariant)
     {
+        if ($productVariant->image && Storage::disk('public')->exists($productVariant->image)) {
+            Storage::disk('public')->delete($productVariant->image);
+        }
+
         $productVariant->delete();
-        return redirect()->route('admin.product-variants.index')->with('success', 'Product variant deleted successfully.');
+        return redirect()->route('admin.product-variants.index')
+            ->with('success', 'Product variant deleted successfully.');
     }
 }

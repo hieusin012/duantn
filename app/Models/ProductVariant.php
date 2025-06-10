@@ -17,7 +17,7 @@ class ProductVariant extends Model
         'price',
         'sale_price',
         'quantity',
-        'images'
+        'image'
     ];
     public $timestamps = false;
     protected $dates = ['deleted_at'];
@@ -38,6 +38,10 @@ class ProductVariant extends Model
         public function totalSold()
     {
         return $this->OrderDetail()->sum('quantity');
+    }
+    public function galleries()
+    {
+        return $this->hasMany(ProductGallery::class);
     }
 
 }

@@ -116,7 +116,7 @@
                             <td>{{ $product->name }}</td>
                             <td>
                                 @if ($product->image)
-                                    <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" width="100px;">
+                                    <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" height="80" width="80px;">
                                 @else
                                     <span>Không có ảnh</span>
                                 @endif
