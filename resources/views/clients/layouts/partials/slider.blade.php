@@ -1,4 +1,8 @@
-<div id="mainSlider" class="carousel slide mb-4" data-bs-ride="carousel">
+
+@if (!Request::is('san-pham/*')) 
+    {{-- Slideshow tại đây --}}
+    <div class="slideshow">
+        <div id="mainSlider" class="carousel slide mb-4" data-bs-ride="carousel">
   <div class="carousel-inner">
     <div class="carousel-item active">
       <img src="{{ asset('assets/img/slider/slider4.jpg') }}" class="d-block w-100" alt="Banner 1">
@@ -17,6 +21,8 @@
     <span class="carousel-control-next-icon"></span>
   </button>
 </div>
+    </div>
+@endif
 <!-- <script>
     document.addEventListener("DOMContentLoaded", function () {
         console.log("Slider loaded");

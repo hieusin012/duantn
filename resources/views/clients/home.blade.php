@@ -7,16 +7,25 @@
 
 {{-- Sản phẩm mới nhất --}}
 <section class="section product-section">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">🆕 Sản phẩm mới nhất</h2>
+   <div class="row">
+    @foreach($latestProducts as $product)
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="product-card">
+                <div class="product-img">
+                    <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="img-fluid">
+                </div>
+                <div class="product-info mt-2">
+                    <h5 class="product-title">{{ $product->name }}</h5>
+                    <p class="product-price">{{ number_format($product->price, 0, ',', '.') }} ₫</p>
+              <a href="{{ route('client.products.show', ['id' => $product->id]) }}" class="btn btn-primary">
+    Xem chi tiết</a>
+
+                </div>
+            </div>
         </div>
-        <div class="row">
-            @foreach($latestProducts as $product)
-               
-            @endforeach
-        </div>
-    </div>
+    @endforeach
+</div>
+
 </section>
 
 

@@ -14,22 +14,23 @@
             <a href="{{ route('home') }}" class="text-dark text-decoration-none">Trang chủ</a>
             {{-- Danh mục động --}}
     <div class="dropdown">
-        <a class="text-dark text-decoration-none dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-            Danh mục
-        </a>
-        <ul class="dropdown-menu">
-            @foreach ($headerCategories as $category)
-                <li>
-                    @if(!empty($category->slug))
-                    <a href="{{ route('client.categories.show', ['slug' => $category->slug]) }}">
-                        {{ $category->name }}
-                    </a>
-                @endif
-                
-                </li>
-            @endforeach
-        </ul>
-    </div>
+  <a class="text-dark text-decoration-none dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+    Danh mục
+  </a>
+  <ul class="dropdown-menu">
+     @foreach ($headerCategories as $category)
+    @if (!empty($category->slug))
+        <li>
+            <a class="dropdown-item" 
+               href="{{ route('client.categories.show', ['slug' => $category->slug]) }}">
+                {{ $category->name }}
+            </a>
+        </li>
+    @endif
+@endforeach
+
+  </ul>
+</div>
             <a href="{{route('contact')}}" class="text-dark text-decoration-none">Liên hệ</a>
             
         </nav>

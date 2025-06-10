@@ -11,6 +11,7 @@ use App\Http\Controllers\Client\ClientCategoryController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\Client\ClientProductController;
 
 // Trang Dashboard admin
 
@@ -108,6 +109,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/contact', function () {
     return view('clients.contact');
-})->name('contact');;
-
+})->name('contact');
+Route::prefix('san-pham')->name('client.products.')->group(function () {
+    Route::get('{id}', [ClientProductController::class, 'show'])->name('show');
+});
 Route::get('/danh-muc/{slug}', [ClientCategoryController::class, 'show'])->name('client.categories.show');
+Route::get('/san-pham-moi', [ClientProductController::class, 'index'])->name('products.latest');
