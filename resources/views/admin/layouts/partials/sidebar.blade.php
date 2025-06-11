@@ -33,7 +33,7 @@
                   </a>
             </li>
             <li>
-                  <a class="app-menu__item haha" href="{{ route(name: 'admin.colors.index') }}">
+                  <a class="app-menu__item haha" href="">
                         <i class="app-menu__icon bx bx-palette"></i>
                         <span class="app-menu__label">Quản lý màu sắc</span>
                   </a>
