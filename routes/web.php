@@ -15,6 +15,8 @@ use App\Http\Controllers\Client\ClientCategoryController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\Client\BlogController as ClientBlogController;
+
 
 // Trang Dashboard admin
 
@@ -115,3 +117,7 @@ Route::get('/contact', function () {
 })->name('contact');;
 
 Route::get('/danh-muc/{slug}', [ClientCategoryController::class, 'show'])->name('client.categories.show');
+
+
+Route::get('/blog', [ClientBlogController::class, 'index'])->name('blog.index');
+

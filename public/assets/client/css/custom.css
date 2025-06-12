@@ -1,0 +1,23 @@
+.logo img {
+    max-height: unset !important;
+    height: 80px !important; /* bạn có thể tăng lên 100 nếu muốn */
+    width: auto;
+    object-fit: contain;
+}
+.top-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9998;
+    background-color: #fff;
+    padding: 10px 0;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+}
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08); /* Bóng nhẹ phía dưới */
+}

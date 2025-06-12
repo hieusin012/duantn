@@ -523,6 +523,26 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder { opacity:0.7; -ms-f
 .header-9 .main-menu-outer.is-fixed { background-color: #ffffff; }
 .header-10.is-fixed { background-color: #090909; }
 
+/* .logo-image {
+    height: 80px !important;
+    width: auto;
+    object-fit: contain;
+}
+
+.logo {
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+} */
+ .logo img {
+    max-height: unset !important;
+    height: 80px !important;  /* Hoặc tăng số pixel nếu muốn lớn hơn */
+    width: auto;
+    object-fit: contain;
+}
+
+
 .logo a { display:block; opacity:1; }
 .logo img { display:block; max-width:170px; max-height:39px; }
 
