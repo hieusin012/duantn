@@ -24,7 +24,9 @@
                                 <li class="lvl1 parent dropdown">
                                     <a href="{{ route('blog.index') }}">Blog</a>
                                 </li>
-
+                                <li class="lvl1 parent dropdown">
+                                    <a href="{{ route('clients.contact') }}">Liên hệ</a>
+                                </li>
                             </ul>
                         </nav>
                     </div>
