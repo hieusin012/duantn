@@ -17,11 +17,11 @@
             <div class="tile-body">
                 <div class="row element-button">
                     <div class="col-sm-2">
-                        <a class="btn btn-add btn-sm" href="{{ route('admin.brands.create') }}" title="Thêm"><i class="fas fa-plus"></i> Thêm thương hiệu mới</a>
+                        <a class="btn btn-add btn-sm" href="{{ route('admin.blogs.create') }}" title="Thêm"><i class="fas fa-plus"></i> Thêm bài viết</a>
                     </div>
 
                     <div class="col-sm-2">
-                        <a class="btn btn-danger btn-sm" type="button" title="Xóa" href="{{ route('admin.brands.delete') }}"><i class="fas fa-trash-alt"></i> Dữ liệu đã xóa</a>
+                        <a class="btn btn-danger btn-sm" type="button" title="Xóa" href="{{ route('admin.blogs.delete') }}"><i class="fas fa-trash-alt"></i> Dữ liệu đã xóa</a>
                     </div>
                 </div>
 
