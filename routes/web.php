@@ -113,11 +113,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 // Trang client (không nằm trong admin)
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('/contact', function () {
-    return view('clients.contact');
-})->name('contact');;
+
+
+use App\Http\Controllers\Client\ContactController as ClientContactController;
+
+Route::get('/contact', [ClientContactController::class, 'showForm'])->name('clients.contact');
+Route::post('/contact', [ClientContactController::class, 'handleSubmit'])->name('contact.submit');
+
 
 Route::get('/danh-muc/{slug}', [ClientCategoryController::class, 'show'])->name('client.categories.show');
 
 
 Route::get('/blog', [ClientBlogController::class, 'index'])->name('blog.index');
+
