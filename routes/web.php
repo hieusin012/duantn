@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\UserController;
@@ -69,15 +70,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
     //color
-    Route::get('/colors', [ColorController::class, 'index'] )->name('colors.index');
-    Route::get('/colors/create', [ColorController::class, 'create'] )->name('colors.create');
-    Route::post('/colors', [ColorController::class, 'store'] )->name('colors.store');
-    Route::get('/colors/{id}/edit', [ColorController::class, 'edit'] )->name('colors.edit');
-    Route::put('/colors/{id}', [ColorController::class, 'update'] )->name('colors.update');
-    Route::delete('/colors/{id}', [ColorController::class, 'destroy'] )->name('colors.destroy');
+    Route::get('/colors', [ColorController::class, 'index'])->name('colors.index');
+    Route::get('/colors/create', [ColorController::class, 'create'])->name('colors.create');
+    Route::post('/colors', [ColorController::class, 'store'])->name('colors.store');
+    Route::get('/colors/{id}/edit', [ColorController::class, 'edit'])->name('colors.edit');
+    Route::put('/colors/{id}', [ColorController::class, 'update'])->name('colors.update');
+    Route::delete('/colors/{id}', [ColorController::class, 'destroy'])->name('colors.destroy');
     Route::get('/colors/delete', [ColorController::class, 'delete'])->name('colors.delete');
-    Route::delete('/colors/eliminate/{id}', [ColorController::class, 'eliminate'])->name('colors.eliminate');
     Route::delete('/colors/all-eliminate', [ColorController::class, 'forceDeleteAll'])->name('colors.all-eliminate');
+    Route::delete('/colors/eliminate/{id}', [ColorController::class, 'eliminate'])->name('colors.eliminate');
     Route::get('/colors/restore/{id}', [ColorController::class, 'restore'])->name('colors.restore');
 
     //brands
@@ -94,18 +95,18 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     //Blog
     Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
-    Route::get('/blogs/{blog}', [BlogController::class, 'show'])->name('blogs.show');
     Route::get('/blogs/create', [BlogController::class, 'create'])->name('blogs.create');
     Route::post('/blogs', [BlogController::class, 'store'])->name('blogs.store');
+    Route::get('/blogs/delete', [BlogController::class, 'delete'])->name('blogs.delete');
+    Route::get('/blogs/restore/{id}', [BlogController::class, 'restore'])->name('blogs.restore');
+    Route::delete('/blogs/eliminate/{id}', [BlogController::class, 'eliminate'])->name('blogs.eliminate');
+    Route::delete('/blogs/all-eliminate', [BlogController::class, 'forceDeleteAll'])->name('blogs.all-eliminate');
     Route::get('/blogs/{blog}/edit', [BlogController::class, 'edit'])->name('blogs.edit');
     Route::put('/blogs/{blog}', [BlogController::class, 'update'])->name('blogs.update');
     Route::delete('/blogs/{blog}', [BlogController::class, 'destroy'])->name('blogs.destroy');
-    Route::get('/blogs/delete', [BlogController::class, 'delete'])->name('blogs.delete');
-    Route::delete('/blogs/eliminate/{id}', [BlogController::class, 'eliminate'])->name('blogs.eliminate');
-    Route::delete('/blogs/all-eliminate', [BlogController::class, 'forceDeleteAll'])->name('blogs.all-eliminate');
-    Route::get('/blogs/restore/{id}', [BlogController::class, 'restore'])->name('blogs.restore');
+    Route::get('/blogs/{blog}', [BlogController::class, 'show'])->name('blogs.show');
 });
-    
+
 
 
 
@@ -120,4 +121,3 @@ Route::get('/danh-muc/{slug}', [ClientCategoryController::class, 'show'])->name(
 
 
 Route::get('/blog', [ClientBlogController::class, 'index'])->name('blog.index');
-
