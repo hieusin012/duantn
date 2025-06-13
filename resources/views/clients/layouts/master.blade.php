@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,9 +11,17 @@
     <link rel="stylesheet" href="{{ asset('assets/client/css/style-min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/client/css/responsive.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/client/css/custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/client/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/client/css/style-min.css') }}">
+
+
+
 
     @stack('styles')
 </head>
+
 <body class="template-index index-demo1">
     <div class="page-wrapper">
         @include('clients.layouts.partials.header')
@@ -31,4 +40,5 @@
 
     @stack('scripts')
 </body>
+
 </html>
