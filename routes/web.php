@@ -121,3 +121,7 @@ Route::get('/danh-muc/{slug}', [ClientCategoryController::class, 'show'])->name(
 
 Route::get('/blog', [ClientBlogController::class, 'index'])->name('blog.index');
 
+use App\Http\Controllers\Client\ProductController as ClientProductController;
+
+Route::get('/products', [ClientProductController::class, 'index'])->name('clients.products.index');
+Route::get('/san-pham/{id}', [ClientProductController::class, 'show'])->name('client.products.show'); // nếu muốn có chi tiết sản phẩm

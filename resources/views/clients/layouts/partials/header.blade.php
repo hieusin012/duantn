@@ -13,12 +13,12 @@
                     <div class="col-1 col-sm-1 col-md-1 col-lg-8 align-self-center d-menu-col">
                         <nav class="navigation" id="AccessibleNav">
                             <ul id="siteNav" class="site-nav medium center">
-                                <li class="lvl1 parent dropdown"><a href="#">Home <i class="icon anm anm-angle-down-l"></i></a>
+                                <li class="lvl1 parent dropdown"><a href="{{ route('home') }}">Home <i class="icon anm anm-angle-down-l"></i></a></li>
                                 </li>
                                 <li class="lvl1 parent megamenu"><a href="#">Shop <i class="icon anm anm-angle-down-l"></i></a>
                                 </li>
-                                <li class="lvl1 parent megamenu"><a href="#">Product <i class="icon anm anm-angle-down-l"></i></a>
-                                </li>
+                                <li class="lvl1"><a href="{{ route('clients.products.index') }}">Product<i class="icon anm anm-angle-right-l"></i></a></li>
+
                                 <li class="lvl1 parent dropdown"><a href="#">Pages <i class="icon anm anm-angle-down-l"></i></a>
                                 </li>
                                 <li class="lvl1 parent dropdown">
