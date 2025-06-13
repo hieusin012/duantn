@@ -523,6 +523,26 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder { opacity:0.7; -ms-f
 .header-9 .main-menu-outer.is-fixed { background-color: #ffffff; }
 .header-10.is-fixed { background-color: #090909; }
 
+/* .logo-image {
+    height: 80px !important;
+    width: auto;
+    object-fit: contain;
+}
+
+.logo {
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+} */
+ .logo img {
+    max-height: unset !important;
+    height: 80px !important;  /* Hoặc tăng số pixel nếu muốn lớn hơn */
+    width: auto;
+    object-fit: contain;
+}
+
+
 .logo a { display:block; opacity:1; }
 .logo img { display:block; max-width:170px; max-height:39px; }
 
@@ -820,6 +840,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder { opacity:0.7; -ms-f
 .slideshow-large .slideshow-wrap { height: 700px; }
 .slideshow-xlarge .slideshow-wrap { height: 900px; }
 
+
 .slideshow-wrapper, .slideshow .slide { position:relative; }
 .slideshow .bottom-middle .slideshow-content-in { text-align:center; top:auto; bottom:60px; left:50%; -ms-transform:translateX(-50%); -webkit-transform:translateX(-50%); transform:translateX(-50%); }
 .slideshow .bottom-left .slideshow-content-in { top:auto; left:60px; bottom:60px; -ms-transform:none; -webkit-transform:none; transform:none; }
@@ -1072,7 +1093,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder { opacity:0.7; -ms-f
 .index-demo2 .slideshow .ss-sub-title { font-size: 15px; }
 .index-demo2 .btn, .index-demo2 .btn-primary { color: #ffffff; background-color: #000000; border-color: #000000; }
 .index-demo2 .btn:hover, .index-demo2 .btn-primary:hover,
-.index-demo2 .btn:focus, .index-demo2 .btn-primary:focus { color: #ff; background-color: #333; border-color: #333; }
+/* .index-demo2 .btn:focus, .index-demo2 .btn-primary:focus { color: #ff; background-color: #333; border-color: #333; } */
 .index-demo2 .btn-secondary { color: #ffffff; background-color: #333; border-color: #333; }
 .index-demo2 .btn-secondary:hover,
 .index-demo2 btn-secondary:focus { color: #ffffff; background-color: #000000; border-color: #000000; }
