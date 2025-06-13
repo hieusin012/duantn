@@ -7,8 +7,16 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\ProductVariantController;
+
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Response;
+
 use App\Http\Controllers\Client\ClientCategoryController;
 use App\Http\Controllers\ColorController;
+use App\Http\Controllers\BrandController;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\Client\BlogController as ClientBlogController;
+
 
 // Trang Dashboard admin
 
@@ -71,6 +79,31 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::delete('/colors/eliminate/{id}', [ColorController::class, 'eliminate'])->name('colors.eliminate');
     Route::delete('/colors/all-eliminate', [ColorController::class, 'forceDeleteAll'])->name('colors.all-eliminate');
     Route::get('/colors/restore/{id}', [ColorController::class, 'restore'])->name('colors.restore');
+
+    //brands
+    Route::get('/brands', [BrandController::class, 'index'])->name('brands.index');
+    Route::get('/brands/create', [BrandController::class, 'create'])->name('brands.create');
+    Route::post('/brands', [BrandController::class, 'store'])->name('brands.store');
+    Route::get('/brands/{brand}/edit', [BrandController::class, 'edit'])->name('brands.edit');
+    Route::put('/brands/{brand}', [BrandController::class, 'update'])->name('brands.update');
+    Route::delete('/brands/{brand}', [BrandController::class, 'destroy'])->name('brands.destroy');
+    Route::get('/brands/delete', [BrandController::class, 'delete'])->name('brands.delete');
+    Route::delete('/brands/eliminate/{id}', [BrandController::class, 'eliminate'])->name('brands.eliminate');
+    Route::delete('/brands/all-eliminate', [BrandController::class, 'forceDeleteAll'])->name('brands.all-eliminate');
+    Route::get('/brands/restore/{id}', [BrandController::class, 'restore'])->name('brands.restore');
+
+    //Blog
+    Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
+    Route::get('/blogs/{blog}', [BlogController::class, 'show'])->name('blogs.show');
+    Route::get('/blogs/create', [BlogController::class, 'create'])->name('blogs.create');
+    Route::post('/blogs', [BlogController::class, 'store'])->name('blogs.store');
+    Route::get('/blogs/{blog}/edit', [BlogController::class, 'edit'])->name('blogs.edit');
+    Route::put('/blogs/{blog}', [BlogController::class, 'update'])->name('blogs.update');
+    Route::delete('/blogs/{blog}', [BlogController::class, 'destroy'])->name('blogs.destroy');
+    Route::get('/blogs/delete', [BlogController::class, 'delete'])->name('blogs.delete');
+    Route::delete('/blogs/eliminate/{id}', [BlogController::class, 'eliminate'])->name('blogs.eliminate');
+    Route::delete('/blogs/all-eliminate', [BlogController::class, 'forceDeleteAll'])->name('blogs.all-eliminate');
+    Route::get('/blogs/restore/{id}', [BlogController::class, 'restore'])->name('blogs.restore');
 });
     
 
@@ -85,3 +118,11 @@ Route::get('/contact', function () {
 })->name('contact');;
 
 Route::get('/danh-muc/{slug}', [ClientCategoryController::class, 'show'])->name('client.categories.show');
+
+
+Route::get('/blog', [ClientBlogController::class, 'index'])->name('blog.index');
+
+use App\Http\Controllers\Client\ProductController as ClientProductController;
+
+Route::get('/products', [ClientProductController::class, 'index'])->name('clients.products.index');
+Route::get('/san-pham/{id}', [ClientProductController::class, 'show'])->name('client.products.show'); // nếu muốn có chi tiết sản phẩm
