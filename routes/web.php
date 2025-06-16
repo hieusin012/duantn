@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\UserController;
@@ -69,12 +70,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
     //color
-    Route::get('/colors', [ColorController::class, 'index'] )->name('colors.index');
-    Route::get('/colors/create', [ColorController::class, 'create'] )->name('colors.create');
-    Route::post('/colors', [ColorController::class, 'store'] )->name('colors.store');
-    Route::get('/colors/{id}/edit', [ColorController::class, 'edit'] )->name('colors.edit');
-    Route::put('/colors/{id}', [ColorController::class, 'update'] )->name('colors.update');
-    Route::delete('/colors/{id}', [ColorController::class, 'destroy'] )->name('colors.destroy');
+    Route::get('/colors', [ColorController::class, 'index'])->name('colors.index');
+    Route::get('/colors/create', [ColorController::class, 'create'])->name('colors.create');
+    Route::post('/colors', [ColorController::class, 'store'])->name('colors.store');
+    Route::get('/colors/{id}/edit', [ColorController::class, 'edit'])->name('colors.edit');
+    Route::put('/colors/{id}', [ColorController::class, 'update'])->name('colors.update');
+    Route::delete('/colors/{id}', [ColorController::class, 'destroy'])->name('colors.destroy');
     Route::get('/colors/delete', [ColorController::class, 'delete'])->name('colors.delete');
     Route::delete('/colors/eliminate/{id}', [ColorController::class, 'eliminate'])->name('colors.eliminate');
     Route::delete('/colors/all-eliminate', [ColorController::class, 'forceDeleteAll'])->name('colors.all-eliminate');
@@ -105,7 +106,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::delete('/blogs/all-eliminate', [BlogController::class, 'forceDeleteAll'])->name('blogs.all-eliminate');
     Route::get('/blogs/restore/{id}', [BlogController::class, 'restore'])->name('blogs.restore');
 });
-    
+
 
 
 
@@ -119,9 +120,15 @@ Route::get('/contact', function () {
 Route::get('/danh-muc/{slug}', [ClientCategoryController::class, 'show'])->name('client.categories.show');
 
 
-Route::get('/blog', [ClientBlogController::class, 'index'])->name('blog.index');
+Route::get('/blog', [ClientBlogController::class, 'blog']);
 
 use App\Http\Controllers\Client\ProductController as ClientProductController;
 
 Route::get('/products', [ClientProductController::class, 'index'])->name('clients.products.index');
 Route::get('/san-pham/{id}', [ClientProductController::class, 'show'])->name('client.products.show'); // nếu muốn có chi tiết sản phẩm
+Route::prefix('products')->name('client.products.')->group(function () {
+    Route::get('/', [ClientProductController::class, 'index'])->name('index');
+    Route::get('/search', [ClientProductController::class, 'search'])->name('search');
+    Route::get('/{id}', [ClientProductController::class, 'show'])->name('show');
+});
+Route::get('/products/search', [ClientProductController::class, 'search'])->name('clients.products.search');
