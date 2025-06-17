@@ -45,6 +45,16 @@
                             <input type="text" name="keyword" class="form-control me-2" placeholder="Tìm kiếm người dùng..." value="{{ request('keyword') }}">
                             <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
                         </form>
+                        <form method="GET" action="{{ route('admin.users.index') }}" class="mb-3 d-inline-block">
+                            @if(request('keyword'))
+                                <input type="hidden" name="keyword" value="{{ request('keyword') }}">
+                            @endif
+                            <select name="role" class="form-control d-inline-block w-auto" onchange="this.form.submit()">
+                                <option value="">-- Tất cả vai trò --</option>
+                                <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                                <option value="member" {{ request('role') == 'member' ? 'selected' : '' }}>User</option>
+                            </select>
+                        </form>
                     </div>
                 </div>
                 <table class="table table-hover table-bordered" id="users-table">

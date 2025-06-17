@@ -23,7 +23,10 @@ class UserController extends Controller
                 ->orWhere('phone', 'like', "%{$keyword}%");
             });
         }
-
+        if ($request->filled('role')) {
+            $query->where('role', $request->role);
+        }
+        
         $users = $query->orderBy('created_at', 'desc')->paginate(10);
         return view('admin.users.index', compact('users'));
     }
