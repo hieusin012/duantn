@@ -120,22 +120,26 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 
 // Trang client (không nằm trong admin)
+use App\Http\Controllers\Client\ProductController as ClientProductController;
+use App\Http\Controllers\Client\ContactController as ClientContactController;
+
+
+
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 
-use App\Http\Controllers\Client\ContactController as ClientContactController;
 
+//contact
 Route::get('/contact', [ClientContactController::class, 'showForm'])->name('clients.contact');
 Route::post('/contact', [ClientContactController::class, 'handleSubmit'])->name('contact.submit');
 
-
+//category
 Route::get('/danh-muc/{slug}', [ClientCategoryController::class, 'show'])->name('client.categories.show');
 
+//blog
+Route::get('/blog', [ClientBlogController::class, 'blog'])->name('clients.blog');
 
-Route::get('/blog', [ClientBlogController::class, 'blog']);
-
-use App\Http\Controllers\Client\ProductController as ClientProductController;
-
+//products
 Route::get('/products', [ClientProductController::class, 'index'])->name('clients.products.index');
 Route::get('/san-pham/{id}', [ClientProductController::class, 'show'])->name('client.products.show'); // nếu muốn có chi tiết sản phẩm
 Route::prefix('products')->name('client.products.')->group(function () {
