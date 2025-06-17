@@ -6,8 +6,17 @@
 
 
       <!-- User Menu-->
-      <li><a class="app-nav__item" href="/index.html"><i class='bx bx-log-out bx-rotate-180'></i> </a>
+      <li>
+        <a href="{{ route('logout') }}" 
+          onclick="event.preventDefault(); document.getElementById('logout-form').submit();" 
+          class="app-nav__item" 
+          title="Logout">
+          <i class='bx bx-log-out bx-rotate-180'></i>
+        </a>
 
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+          @csrf
+        </form>
       </li>
     </ul>
   </header>
