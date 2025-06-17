@@ -11,11 +11,26 @@ use App\Http\Requests\UpdateUserRequest;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::orderBy('created_at', 'desc')->paginate(10);
+        $query = User::query();
+
+        if ($request->filled('keyword')) {
+            $keyword = $request->keyword;
+            $query->where(function ($q) use ($keyword) {
+                $q->where('fullname', 'like', "%{$keyword}%")
+                ->orWhere('email', 'like', "%{$keyword}%")
+                ->orWhere('phone', 'like', "%{$keyword}%");
+            });
+        }
+        if ($request->filled('role')) {
+            $query->where('role', $request->role);
+        }
+        
+        $users = $query->orderBy('created_at', 'desc')->paginate(10);
         return view('admin.users.index', compact('users'));
     }
+
 
     public function create()
     {
