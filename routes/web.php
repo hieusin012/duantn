@@ -18,10 +18,20 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Client\BlogController as ClientBlogController;
 
+use App\Http\Controllers\AuthController;
+
+// Đăng nhập, đăng ký khi truy cập vào đường dẫn admin: http://127.0.0.1:8000/admin
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
 
 // Trang Dashboard admin
 
 // Nhóm route admin
+// Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(function () { // Nếu dùng bảo vệ url http: 127.0.0.1:8000/admin thì bỏ cmt dòng này. Cmt lại dòng dưới.
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
@@ -125,3 +135,4 @@ Route::get('/danh-muc/{slug}', [ClientCategoryController::class, 'show'])->name(
 
 
 Route::get('/blog', [ClientBlogController::class, 'index'])->name('blog.index');
+
