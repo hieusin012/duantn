@@ -17,7 +17,7 @@
                                 </li>
                                 <li class="lvl1 parent megamenu"><a href="#">Shop <i class="icon anm anm-angle-down-l"></i></a>
                                 </li>
-                                <li class="lvl1"><a href="{{ route('clients.products.index') }}">Product<i class="icon anm anm-angle-right-l"></i></a></li>
+                                <li class="lvl1"><a href="">Product<i class="icon anm anm-angle-right-l"></i></a></li>
 
                                 <li class="lvl1 parent dropdown"><a href="#">Pages <i class="icon anm anm-angle-down-l"></i></a>
                                 </li>

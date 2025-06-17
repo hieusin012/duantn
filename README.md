@@ -3,7 +3,7 @@
 **Bước 1:**
 Sử dụng git clone để clone dự án
 ```bash
-git clone https://github.com/NamKiem29/xuongthuchanh.git
+git clone https://github.com/hieusin012/duantn.git
 ```
 
 **Bước 2:**

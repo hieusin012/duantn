@@ -39,7 +39,14 @@
                         <a class="btn btn-delete btn-sm" type="button" title="Delete All"><i class="fas fa-trash-alt"></i> Xóa tất cả</a>
                     </div>
                 </div>
-
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <form action="{{ route('admin.users.index') }}" method="GET" class="mb-3 d-flex">
+                            <input type="text" name="keyword" class="form-control me-2" placeholder="Tìm kiếm người dùng..." value="{{ request('keyword') }}">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+                        </form>
+                    </div>
+                </div>
                 <table class="table table-hover table-bordered" id="users-table">
                     <thead>
                         <tr>
