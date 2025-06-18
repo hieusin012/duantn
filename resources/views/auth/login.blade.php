@@ -7,7 +7,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-5">
             <div class="card shadow p-4">
-                <h2 class="text-center mb-4">Đăng nhập</h2>
+                <h2 class="text-center mb-4">Đăng nhập tài khoản</h2>
 
                 @if(session('error'))
                     <div class="alert alert-danger text-center">
