@@ -30,25 +30,29 @@
                         <label class="control-label">Nội dung:</label>
                         <textarea class="form-control" name="content" id="mota"></textarea>
                         @error('content')
-                            <span class="text-danger">{{ $message }}</span>
+                        <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
 
-
+                    <div class="form-group col-md-4">
+                        <label for="slug">Slug:</label>
+                        <input type="text" class="form-control" name="slug" value="{{ old('slug') }}">
+                        @error('slug')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
                     <div class="form-group col-md-4">
                         <label for="fullname">Danh mục:</label>
-                        <select class="form-control" name="category">
+                        <select class="form-control" name="category_id">
                             <option value="">Chọn danh mục</option>
                             @foreach($categories as $category)
                             <option value="{{ $category->id }}" {{ (isset($user) && $user->category_id == $category->id) ? 'selected' : '' }}>{{ $category->name }}</option>
                             @endforeach
                         </select>
-                        @error('category')<span class="text-danger">{{ $message }}</span>@enderror
+                        @error('category_id')<span class="text-danger">{{ $message }}</span>@enderror
                     </div>
 
                     <div class="form-group col-md-4">
                         <label for="user_id">Người viết:</label>
-                        <select class="form-control" name="user">
+                        <select class="form-control" name="user_id">
                             <option value="">Chọn người viết</option>
                             @foreach($users as $user)
                             <option value="{{ $user->id }}" {{ (isset($blog) && $blog->user_id == $user->id) ? 'selected' : '' }}>
@@ -59,19 +63,14 @@
                         @error('user_id')<span class="text-danger">{{ $message }}</span>@enderror
                     </div>
 
-
-
-
-
-
                     <div class="form-group col-md-12">
                         <label class="control-label">Ảnh minh họa</label>
                         <div id="myfileupload">
                             <input type="file" id="uploadfile" name="image" onchange="readURL(this);" accept="image/*" />
                         </div>
                         <div id="thumbbox">
-                            @if(!empty($blogs->image))
-                            <img id="thumbimage" src="{{ asset('storage/' . $blogs->image) }}" height="200" />
+                            @if(!empty(old('image')))
+                            <img height="200" id="thumbimage" src="{{ asset('storage/' . old('image')) }}" />
                             @else
                             <img height="200" id="thumbimage" style="display: none;" />
                             @endif
@@ -82,7 +81,7 @@
                                 <i class="fas fa-cloud-upload-alt"></i> Chọn hình ảnh
                             </a>
                         </div>
-                        @error('avatar')
+                        @error('image')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
@@ -92,7 +91,7 @@
 
                     <div class="form-group col-md-12">
                         <button class="btn btn-save" type="submit">Lưu</button>
-                        <a class="btn btn-cancel" href="{{ route('admin.users.index') }}">Quay lại</a>
+                        <a class="btn btn-cancel" href="{{ route('admin.blogs.index') }}">Quay lại</a>
                     </div>
 
                 </form>

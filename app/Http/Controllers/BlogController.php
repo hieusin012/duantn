@@ -36,18 +36,23 @@ class BlogController extends Controller
             'content' => 'required|string',
             'slug' => 'required|string|max:255|unique:blogs,slug',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'status' => 'boolean',
             'category_id' => 'required|exists:categories,id',
             'user_id' => 'required|exists:users,id',
         ]);
 
-        $data = $request->only(['title', 'content', 'slug', 'status', 'category_id', 'user_id']);
+       $data = [
+            'title' => $request->title,
+            'content' => $request->content,
+            'slug' => $request->slug,
+            'status' => $request->status == 1,
+            'category_id' => $request->category_id,
+            'user_id' => $request->user_id,
+        ];
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('blogs', 'public');
         }
-
         Blog::create($data);
-        return redirect()->route('blogs.index')->with('success', 'Blog created successfully!');
+        return redirect()->route('admin.blogs.index')->with('success', 'Thêm bài viết thành công!');
     }
     public function destroy($id)
     {
@@ -57,8 +62,6 @@ class BlogController extends Controller
     }
     public function delete()
     {
-        var_dump('hello');
-        die;
         $blogs = Blog::onlyTrashed()->get();
         return view('admin.blogs.delete', compact('blogs'));
     }
