@@ -16,7 +16,7 @@
                             <div class="col-12 col-sm-12 col-md-12 col-lg-12 d-flex justify-content-between align-items-center">
                                 <div class="page-title"><h1>Liên hệ</h1></div>
                                 <!--Breadcrumbs-->
-                                <div class="breadcrumbs"><a href="index.html" title="Back to the home page">Home</a><span class="title"><i class="icon anm anm-angle-right-l"></i>Pages</span><span class="main-title fw-bold"><i class="icon anm anm-angle-right-l"></i>Contact Us Style2</span></div>
+                                <div class="breadcrumbs"><a href="index.html" title="Back to the home page">Home</a><span class="title"><i class="icon anm anm-angle-right-l"></i>Liên hệ</span></div>
                                 <!--End Breadcrumbs-->
                             </div>
                         </div>
@@ -36,7 +36,7 @@
                                     </div>
                                     <div class="icon-box-content">
                                         <h3 class="icon-box-title mb-2">E-mail Address</h3>
-                                        <p><a href="mailto:contact@example.com">contact@example.com</a></p>
+                                        <p><a href="mailto:hieundph52771@gmail.com">hieundph52771@gmail.com</a></p>
                                     </div>
                                 </div>
                             </div>
@@ -47,7 +47,7 @@
                                     </div>
                                     <div class="icon-box-content">
                                         <h3 class="icon-box-title mb-2">Phone Number</h3>
-                                        <p><a href="tel:401234567890">(+86) 123 456 7890</a></p>
+                                        <p><a href="tel:401234567890">(+84) 123 456 7890</a></p>
                                     </div>
                                 </div>
                             </div>

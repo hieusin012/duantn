@@ -136,10 +136,3 @@ Route::get('/danh-muc/{slug}', [ClientCategoryController::class, 'show'])->name(
 
 Route::get('/blog', [ClientBlogController::class, 'index'])->name('blog.index');
 
-use App\Http\Controllers\Client\ProductController as ClientProductController;
-
-Route::prefix('san-pham')->name('clients.products.')->group(function () {
-    Route::get('/', [ClientProductController::class, 'index'])->name('index');
-    Route::get('/{id}', [ClientProductController::class, 'show'])->name('show');
-});
-
