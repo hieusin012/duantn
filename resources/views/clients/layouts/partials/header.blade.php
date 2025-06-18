@@ -17,7 +17,7 @@
                                 </li>
                                 <li class="lvl1 parent megamenu"><a href="#">Shop <i class="icon anm anm-angle-down-l"></i></a>
                                 </li>
-                                <li class="lvl1"><a href="{{ route('clients.products.index') }}">Product<i class="icon anm anm-angle-right-l"></i></a></li>
+                                <li class="lvl1"><a href="">Product<i class="icon anm anm-angle-right-l"></i></a></li>
 
                                 <li class="lvl1 parent dropdown"><a href="#">Pages <i class="icon anm anm-angle-down-l"></i></a>
                                 </li>
@@ -129,7 +129,7 @@
                         </div>
                         <!--End Search-->
                         <!--Account-->
-                        <div class="account-parent iconset">
+                        {{-- <div class="account-parent iconset">
                             <div class="account-link" title="Account"><i class="hdr-icon icon anm anm-user-al"></i></div>
                             <div id="accountBox">
                                 <div class="customer-links">
@@ -143,8 +143,39 @@
                                     </ul>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <!--End Account-->
+
+                        <!--Account 2-->
+                        <div class="account-parent iconset">
+                            <div class="account-link" title="Account"><i class="hdr-icon icon anm anm-user-al"></i></div>
+                            <div id="accountBox">
+                                <div class="customer-links">
+                                    <ul class="m-0">
+                                        @guest
+                                            <li><a href="{{ route('login') }}"><i class="icon anm anm-sign-in-al"></i>Sign In</a></li>
+                                            <li><a href="{{ route('register') }}"><i class="icon anm anm-user-al"></i>Register</a></li>
+                                        @endguest
+
+                                        @auth
+                                            <li><a href="#"><i class="icon anm anm-user-cil"></i>{{ Auth::user()->fullname }}</a></li>
+                                            <li><a href="#"><i class="icon anm anm-user-al"></i>My Account</a></li>
+                                            <li><a href="#"><i class="icon anm anm-heart-l"></i>Wishlist</a></li>
+                                            <li><a href="#"><i class="icon anm anm-random-r"></i>Compare</a></li>
+                                            <li>
+                                                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                                    <i class="icon anm anm-sign-out-al"></i>Sign out
+                                                </a>
+                                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                                    @csrf
+                                                </form>
+                                            </li>
+                                        @endauth
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!--End Account 2-->
                         <!--Wishlist-->
                         <div class="wishlist-link iconset" title="Wishlist"><a href="wishlist-style1.html"><i class="hdr-icon icon anm anm-heart-l"></i><span class="wishlist-count">0</span></a></div>
                         <!--End Wishlist-->
