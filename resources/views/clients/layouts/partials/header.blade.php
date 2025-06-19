@@ -110,7 +110,8 @@
 
                                         @auth
                                             <li><a href="#"><i class="icon anm anm-user-cil"></i>{{ Auth::user()->fullname }}</a></li>
-                                            <li><a href="#"><i class="icon anm anm-user-al"></i>My Account</a></li>
+                                            <li><a href="{{ route('profile.show') }}"><i class="icon anm anm-user-al"></i>My Account</a></li>
+                                            <li><a href="{{ route('profile.edit') }}"><i class="icon anm anm-edit"></i>Edit Profile</a></li>
                                             <li><a href="#"><i class="icon anm anm-heart-l"></i>Wishlist</a></li>
                                             <li><a href="#"><i class="icon anm anm-random-r"></i>Compare</a></li>
                                             <li>

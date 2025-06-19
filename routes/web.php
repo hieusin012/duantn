@@ -20,8 +20,9 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Client\BlogController as ClientBlogController;
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfileController;
 
-// Đăng nhập, đăng ký khi truy cập vào đường dẫn admin: http://127.0.0.1:8000/admin
+// Auth
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
@@ -32,8 +33,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Trang Dashboard admin
 
 // Nhóm route admin
-Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(function () { 
-//Route::prefix('admin')->name('admin.')->group(function () {
+// Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(function () { 
+Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
 
@@ -160,4 +161,13 @@ Route::get('/blog', [ClientBlogController::class, 'blog'])->name('clients.blog')
 
 // Trang danh sách sản phẩm
 Route::get('/products', [ClientProductController::class, 'index'])->name('client.products.index');
+
+
+
+// Xem/Sửa hồ sơ cá nhân
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+});
 
