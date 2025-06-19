@@ -39,7 +39,24 @@
                         <a class="btn btn-delete btn-sm" type="button" title="Delete All"><i class="fas fa-trash-alt"></i> Xóa tất cả</a>
                     </div>
                 </div>
-
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <form action="{{ route('admin.users.index') }}" method="GET" class="mb-3 d-flex">
+                            <input type="text" name="keyword" class="form-control me-2" placeholder="Tìm kiếm người dùng..." value="{{ request('keyword') }}">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+                        </form>
+                        <form method="GET" action="{{ route('admin.users.index') }}" class="mb-3 d-inline-block">
+                            @if(request('keyword'))
+                                <input type="hidden" name="keyword" value="{{ request('keyword') }}">
+                            @endif
+                            <select name="role" class="form-control d-inline-block w-auto" onchange="this.form.submit()">
+                                <option value="">-- Tất cả vai trò --</option>
+                                <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                                <option value="member" {{ request('role') == 'member' ? 'selected' : '' }}>User</option>
+                            </select>
+                        </form>
+                    </div>
+                </div>
                 <table class="table table-hover table-bordered" id="users-table">
                     <thead>
                         <tr>

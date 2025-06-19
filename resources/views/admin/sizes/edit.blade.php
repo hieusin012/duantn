@@ -21,10 +21,10 @@
                     </div>
 
                     <button type="submit" class="btn btn-save btn-sm">
-                        <i class="fas fa-save"></i> Cập nhật
+                        Cập nhật
                     </button>
                     <a href="{{ route('admin.sizes.index') }}" class="btn btn-cancel btn-sm">
-                        <i class="fas fa-undo"></i> Quay lại
+                        Quay lại
                     </a>
                 </form>
             </div>

@@ -1,6 +1,6 @@
 @extends('admin.layouts.index')
 
-@section('title', isset($user) ? 'Cập nhật người dùng' : 'Thêm người dùng')
+@section('title', 'Thêm bài viết')
 
 @section('content')
 
@@ -17,26 +17,50 @@
         <div class="tile">
             <h3 class="tile-title">Thêm bài viết</h3>
             <div class="tile-body">
-                <form class="row" action="" method="POST" enctype="multipart/form-data">
+                <form class="row" action="{{ route('admin.blogs.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    @if(isset($user)) @method('PUT') @endif
 
                     <div class="form-group col-md-4">
-                        <label for="fullname">Tiêu đề</label>
-                        <input type="text" class="form-control" name="fullname" value="">
-                        @error('fullname')<span class="text-danger">{{ $message }}</span>@enderror
+                        <label for="title">Tiêu đề:</label>
+                        <input type="text" class="form-control" name="title" value="">
+                        @error('title')<span class="text-danger">{{ $message }}</span>@enderror
                     </div>
 
                     <div class="form-group col-md-12">
-                        <label for="introduction">Nội dung</label>
-                        <textarea name="introduction" rows="3" class="form-control">{{ old('introduction', $user->introduction ?? '') }}</textarea>
-                        @error('introduction')<span class="text-danger">{{ $message }}</span>@enderror
+                        <label class="control-label">Nội dung:</label>
+                        <textarea class="form-control" name="content" id="mota"></textarea>
+                        @error('content')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="form-group col-md-4">
-                        <label for="fullname">Tiêu đề</label>
-                        <input type="text" class="form-control" name="fullname" value="">
-                        @error('fullname')<span class="text-danger">{{ $message }}</span>@enderror
+                        <label for="slug">Slug:</label>
+                        <input type="text" class="form-control" name="slug" value="{{ old('slug') }}">
+                        @error('slug')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="fullname">Danh mục:</label>
+                        <select class="form-control" name="category_id">
+                            <option value="">Chọn danh mục</option>
+                            @foreach($categories as $category)
+                            <option value="{{ $category->id }}" {{ (isset($user) && $user->category_id == $category->id) ? 'selected' : '' }}>{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('category_id')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label for="user_id">Người viết:</label>
+                        <select class="form-control" name="user_id">
+                            <option value="">Chọn người viết</option>
+                            @foreach($users as $user)
+                            <option value="{{ $user->id }}" {{ (isset($blog) && $blog->user_id == $user->id) ? 'selected' : '' }}>
+                                {{ $user->fullname }}
+                            </option>
+                            @endforeach
+                        </select>
+                        @error('user_id')<span class="text-danger">{{ $message }}</span>@enderror
                     </div>
 
                     <div class="form-group col-md-12">
@@ -45,8 +69,8 @@
                             <input type="file" id="uploadfile" name="image" onchange="readURL(this);" accept="image/*" />
                         </div>
                         <div id="thumbbox">
-                            @if(!empty($user->avatar))
-                            <img id="thumbimage" src="{{ asset('storage/' . $user->avatar) }}" height="200" />
+                            @if(!empty(old('image')))
+                            <img height="200" id="thumbimage" src="{{ asset('storage/' . old('image')) }}" />
                             @else
                             <img height="200" id="thumbimage" style="display: none;" />
                             @endif
@@ -57,7 +81,7 @@
                                 <i class="fas fa-cloud-upload-alt"></i> Chọn hình ảnh
                             </a>
                         </div>
-                        @error('avatar')
+                        @error('image')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
@@ -67,7 +91,7 @@
 
                     <div class="form-group col-md-12">
                         <button class="btn btn-save" type="submit">Lưu</button>
-                        <a class="btn btn-cancel" href="{{ route('admin.users.index') }}">Quay lại</a>
+                        <a class="btn btn-cancel" href="{{ route('admin.blogs.index') }}">Quay lại</a>
                     </div>
 
                 </form>

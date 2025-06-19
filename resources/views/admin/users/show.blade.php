@@ -9,7 +9,7 @@
             <h3 class="tile-title">Chi tiết người dùng</h3>
 
             <a href="{{ route('admin.users.index') }}" class="btn btn-cancel btn-sm mb-3">
-                <i class="fas fa-undo"></i> Quay lại danh sách
+                Quay lại danh sách
             </a>
 
             <div class="tile-body">

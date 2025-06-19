@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\BannerController;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\UserController;
@@ -9,14 +9,32 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\ProductVariantController;
+
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Response;
+
 use App\Http\Controllers\Client\ClientCategoryController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\Client\BlogController as ClientBlogController;
+
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BannerController;
+use App\Http\Controllers\ProfileController;
+
+// Auth
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
 
 // Trang Dashboard admin
 
 // Nhóm route admin
+// Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(function () { 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
@@ -73,15 +91,21 @@ Route::delete('/banners/{banner}', [BannerController::class, 'destroy'])->name('
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
     //color
-    Route::get('/colors', [ColorController::class, 'index'] )->name('colors.index');
-    Route::get('/colors/create', [ColorController::class, 'create'] )->name('colors.create');
-    Route::post('/colors', [ColorController::class, 'store'] )->name('colors.store');
-    Route::get('/colors/{id}/edit', [ColorController::class, 'edit'] )->name('colors.edit');
-    Route::put('/colors/{id}', [ColorController::class, 'update'] )->name('colors.update');
-    Route::delete('/colors/{id}', [ColorController::class, 'destroy'] )->name('colors.destroy');
+    Route::get('/colors', [ColorController::class, 'index'])->name('colors.index');
+    Route::get('/colors/create', [ColorController::class, 'create'])->name('colors.create');
+    Route::post('/colors', [ColorController::class, 'store'])->name('colors.store');
+    Route::get('/colors/{id}/edit', [ColorController::class, 'edit'])->name('colors.edit');
+    Route::put('/colors/{id}', [ColorController::class, 'update'])->name('colors.update');
+    Route::delete('/colors/{id}', [ColorController::class, 'destroy'])->name('colors.destroy');
+    Route::get('/colors', [ColorController::class, 'index'])->name('colors.index');
+    Route::get('/colors/create', [ColorController::class, 'create'])->name('colors.create');
+    Route::post('/colors', [ColorController::class, 'store'])->name('colors.store');
+    Route::get('/colors/{id}/edit', [ColorController::class, 'edit'])->name('colors.edit');
+    Route::put('/colors/{id}', [ColorController::class, 'update'])->name('colors.update');
+    Route::delete('/colors/{id}', [ColorController::class, 'destroy'])->name('colors.destroy');
     Route::get('/colors/delete', [ColorController::class, 'delete'])->name('colors.delete');
-    Route::delete('/colors/eliminate/{id}', [ColorController::class, 'eliminate'])->name('colors.eliminate');
     Route::delete('/colors/all-eliminate', [ColorController::class, 'forceDeleteAll'])->name('colors.all-eliminate');
+    Route::delete('/colors/eliminate/{id}', [ColorController::class, 'eliminate'])->name('colors.eliminate');
     Route::get('/colors/restore/{id}', [ColorController::class, 'restore'])->name('colors.restore');
 
     //brands
@@ -98,26 +122,61 @@ Route::delete('/banners/{banner}', [BannerController::class, 'destroy'])->name('
 
     //Blog
     Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
-    Route::get('/blogs/{blog}', [BlogController::class, 'show'])->name('blogs.show');
     Route::get('/blogs/create', [BlogController::class, 'create'])->name('blogs.create');
     Route::post('/blogs', [BlogController::class, 'store'])->name('blogs.store');
+    Route::get('/blogs/delete', [BlogController::class, 'delete'])->name('blogs.delete');
+    Route::get('/blogs/restore/{id}', [BlogController::class, 'restore'])->name('blogs.restore');
+    Route::delete('/blogs/eliminate/{id}', [BlogController::class, 'eliminate'])->name('blogs.eliminate');
+    Route::delete('/blogs/all-eliminate', [BlogController::class, 'forceDeleteAll'])->name('blogs.all-eliminate');
     Route::get('/blogs/{blog}/edit', [BlogController::class, 'edit'])->name('blogs.edit');
     Route::put('/blogs/{blog}', [BlogController::class, 'update'])->name('blogs.update');
     Route::delete('/blogs/{blog}', [BlogController::class, 'destroy'])->name('blogs.destroy');
-    Route::get('/blogs/delete', [BlogController::class, 'delete'])->name('blogs.delete');
-    Route::delete('/blogs/eliminate/{id}', [BlogController::class, 'eliminate'])->name('blogs.eliminate');
-    Route::delete('/blogs/all-eliminate', [BlogController::class, 'forceDeleteAll'])->name('blogs.all-eliminate');
-    Route::get('/blogs/restore/{id}', [BlogController::class, 'restore'])->name('blogs.restore');
+    Route::get('/blogs/{blog}', [BlogController::class, 'show'])->name('blogs.show');
 });
-    
+
+
 
 
 
 
 // Trang client (không nằm trong admin)
-Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('/contact', function () {
-    return view('clients.contact');
-})->name('contact');;
+use App\Http\Controllers\Client\ProductController as ClientProductController;
+use App\Http\Controllers\Client\ContactController as ClientContactController;
 
+
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+// Tìm kiếm sản phẩm
+Route::get('/products/search', [ClientProductController::class, 'search'])->name('client.products.search');
+
+
+Route::get('/products/search', [ClientProductController::class, 'search'])->name('clients.products.search');
+
+// Trang chi tiết sản phẩm (dùng slug để SEO tốt hơn)// Trang chi tiết sản phẩm (dùng slug)
+Route::get('san-pham/{slug}', [ClientProductController::class, 'show'])->name('client.products.show');
+
+
+//contact
+Route::get('/contact', [ClientContactController::class, 'showForm'])->name('clients.contact');
+Route::post('/contact', [ClientContactController::class, 'handleSubmit'])->name('contact.submit');
+
+//category
 Route::get('/danh-muc/{slug}', [ClientCategoryController::class, 'show'])->name('client.categories.show');
+
+//blog
+Route::get('/blog', [ClientBlogController::class, 'blog'])->name('clients.blog');
+
+//products
+
+// Trang danh sách sản phẩm
+Route::get('/products', [ClientProductController::class, 'index'])->name('client.products.index');
+
+
+
+// Xem/Sửa hồ sơ cá nhân
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+});
+

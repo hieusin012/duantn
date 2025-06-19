@@ -1,3 +1,9 @@
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
 @extends('clients.layouts.master')
 
 @section('title', 'Liên hệ')
@@ -8,9 +14,9 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-12 col-sm-12 col-md-12 col-lg-12 d-flex justify-content-between align-items-center">
-                                <div class="page-title"><h1>Contact Us Style2</h1></div>
+                                <div class="page-title"><h1>Liên hệ</h1></div>
                                 <!--Breadcrumbs-->
-                                <div class="breadcrumbs"><a href="index.html" title="Back to the home page">Home</a><span class="title"><i class="icon anm anm-angle-right-l"></i>Pages</span><span class="main-title fw-bold"><i class="icon anm anm-angle-right-l"></i>Contact Us Style2</span></div>
+                                <div class="breadcrumbs"><a href="index.html" title="Back to the home page">Home</a><span class="title"><i class="icon anm anm-angle-right-l"></i>Liên hệ</span></div>
                                 <!--End Breadcrumbs-->
                             </div>
                         </div>
@@ -30,7 +36,7 @@
                                     </div>
                                     <div class="icon-box-content">
                                         <h3 class="icon-box-title mb-2">E-mail Address</h3>
-                                        <p><a href="mailto:contact@example.com">contact@example.com</a></p>
+                                        <p><a href="mailto:hieundph52771@gmail.com">hieundph52771@gmail.com</a></p>
                                     </div>
                                 </div>
                             </div>
@@ -41,7 +47,7 @@
                                     </div>
                                     <div class="icon-box-content">
                                         <h3 class="icon-box-title mb-2">Phone Number</h3>
-                                        <p><a href="tel:401234567890">(+40) 123 456 7890</a></p>
+                                        <p><a href="tel:401234567890">(+84) 123 456 7890</a></p>
                                     </div>
                                 </div>
                             </div>
@@ -82,50 +88,29 @@
                                         <p>You can contact us any way that is convenient for you.</p>
                                     </div>
 
-                                    <form action="https://www.annimexweb.com/items/hema/php/ajax_sendmail.php" name="contactus" method="post" id="contact-form" class="contact-form">	
-                                        <div class="form-row">
-                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                                <div class="form-group">
-                                                    <input type="text" id="ContactFormName" name="name" class="form-control" placeholder="Name" />
-                                                    <span class="error_msg" id="name_error"></span>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">                               
-                                                <div class="form-group">
-                                                    <input type="email" id="ContactFormEmail" name="email" class="form-control" placeholder="Email" />
-                                                    <span class="error_msg" id="email_error"></span>
-                                                </div>
-                                            </div>
+                                    
+                                    <form action="{{ route('contact.submit') }}" method="POST">
+                                        @csrf
+
+                                        <div class="mb-3">
+                                            <label for="name">Họ tên</label>
+                                            <input type="text" class="form-control" name="name" value="{{ old('name') }}">
+                                            @error('name') <div class="text-danger">{{ $message }}</div> @enderror
                                         </div>
-                                        <div class="form-row">
-                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="tel" id="ContactFormPhone" name="phone" pattern="[0-9\-]*" placeholder="Phone Number"  />
-                                                </div>
-                                            </div>
-                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                                <div class="form-group">
-                                                    <input type="text" id="ContactSubject" name="subject" class="form-control" placeholder="Subject" />
-                                                    <span class="error_msg" id="subject_error"></span>
-                                                </div>
-                                            </div>
+
+                                        <div class="mb-3">
+                                            <label for="email">Email</label>
+                                            <input type="email" class="form-control" name="email" value="{{ old('email') }}">
+                                            @error('email') <div class="text-danger">{{ $message }}</div> @enderror
                                         </div>
-                                        <div class="form-row">
-                                            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                                                <div class="form-group">
-                                                    <textarea id="ContactFormMessage" name="message" class="form-control" rows="6" placeholder="Message"></textarea>
-                                                    <span class="error_msg" id="message_error"></span>
-                                                </div>
-                                            </div>  
+
+                                        <div class="mb-3">
+                                            <label for="message">Nội dung</label>
+                                            <textarea class="form-control" name="message" rows="5">{{ old('message') }}</textarea>
+                                            @error('message') <div class="text-danger">{{ $message }}</div> @enderror
                                         </div>
-                                        <div class="form-row">
-                                            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                                                <div class="form-group mailsendbtn mb-0 w-100">	
-                                                    <input class="btn btn-lg" type="submit" name="contactus" value="Send Message" />
-                                                    <div class="loading"><img class="img-fluid" src="assets/images/icons/ajax-loader.gif" alt="loading"></div>
-                                                </div>
-                                            </div>
-                                        </div>
+
+                                        <button type="submit" class="btn btn-primary">Gửi liên hệ</button>
                                     </form>
                                     <div class="response-msg"></div>
                                 </div>
