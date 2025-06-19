@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+
+
 class Product extends Model
 {
     use SoftDeletes;
@@ -33,20 +35,4 @@ class Product extends Model
     {
         return $this->belongsTo(Brand::class);
     }
-<<<<<<< HEAD
-    public $timestamps = true;
-    protected $dates = ['deleted_at'];
-
-    public function images()
-{
-    return $this->hasMany(ProductImage::class);
 }
-public function variants()
-{
-    return $this->hasMany(ProductVariant::class);
-}
-
-}
-=======
-}
->>>>>>> c891f63255b42f263df1fca0b75bc03410d2398b
