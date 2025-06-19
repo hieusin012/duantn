@@ -8,18 +8,11 @@
                 <div class="product-box position-relative">
                     <!-- Product Image -->
                     <div class="product-image">
-                        <a href="{{ route('client.products.show', $product->id) }}" class="product-img rounded-3">
+                        <a href="{{ route('client.products.show', ['slug' => $product->slug]) }}">
                             <img class="blur-up lazyloaded"
                                  src="{{ asset($product->image ?? 'assets/images/placeholder.jpg') }}"
                                  alt="{{ $product->name }}" width="625" height="808">
                         </a>
-
-                        <!-- Sale Label -->
-                        <!-- @if ($product->status === 1)
-                            <div class="product-labels">
-                                <span class="lbl on-sale">Sale</span>
-                            </div>
-                        @endif -->
 
                         <!-- Hover Buttons -->
                         <div class="button-set style1">
@@ -41,12 +34,11 @@
                     <!-- Product Details -->
                     <div class="product-details">
                         <div class="product-name">
-                            <a href="{{ route('client.products.show', $product->id) }}">{{ $product->name }}</a>
+                            <a href="{{ route('client.products.show', ['slug' => $product->slug]) }}">
+                                {{ $product->name }}
+                            </a>
                         </div>
                         <div class="product-price">
-                            @if ($product->original_price > $product->price)
-                                <span class="price old-price">{{ number_format($product->original_price, 0, ',', '.') }}đ</span>
-                            @endif
                             <span class="price">{{ number_format($product->price, 0, ',', '.') }}đ</span>
                         </div>
                         <div class="product-review">
@@ -55,17 +47,6 @@
                             @endfor
                             <span class="caption hidden ms-1">{{ $product->reviews_count ?? 3 }} Reviews</span>
                         </div>
-
-                        <!-- Color Swatches -->
-                        <ul class="variants-clr swatches">
-                            @foreach ($product->colors ?? [] as $color)
-                                <li class="swatch medium radius">
-                                    <span class="swatchLbl" data-bs-toggle="tooltip" title="{{ $color->name }}">
-                                        <img src="{{ asset($color->image ?? 'assets/images/placeholder.jpg') }}" alt="{{ $color->name }}" width="625" height="808">
-                                    </span>
-                                </li>
-                            @endforeach
-                        </ul>
                     </div>
                 </div>
             </div>
@@ -78,3 +59,19 @@
     </div>
 </div>
 @endsection
+
+<script>
+    // Khi trang kết quả tìm kiếm load xong, reset form tìm kiếm
+    window.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('search-form');
+        if (form) {
+            const inputs = form.querySelectorAll('input[type="text"], input[type="number"], select');
+            inputs.forEach(input => {
+                // Chỉ reset nếu không phải là input chọn từ lịch sử (ẩn)
+                if (input.name !== '_token') {
+                    input.value = '';
+                }
+            });
+        }
+    });
+</script>
