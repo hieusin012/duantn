@@ -23,11 +23,13 @@ class ProductController extends Controller
         return view('clients.products.index', compact('products', 'categories', 'brands'));
     }
 
-    public function show($id)
-    {
-        $product = Product::findOrFail($id);
-        return view('clients.products.show', compact('product'));
-    }
+    public function show($slug)
+{
+    $product = Product::where('slug', $slug)->firstOrFail();
+    $productImages = $product->galleries;
+    return view('clients.products.show', compact('product'));
+}
+
 
     /**
      * Handle product search by name, category, brand, and price range.

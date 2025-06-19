@@ -8,18 +8,11 @@
                 <div class="product-box position-relative">
                     <!-- Product Image -->
                     <div class="product-image">
-                        <a href="{{ route('client.products.show', $product->id) }}" class="product-img rounded-3">
+                        <a href="{{ route('client.products.show', ['slug' => $product->slug]) }}">
                             <img class="blur-up lazyloaded"
                                  src="{{ asset($product->image ?? 'assets/images/placeholder.jpg') }}"
                                  alt="{{ $product->name }}" width="625" height="808">
                         </a>
-
-                        <!-- Sale Label -->
-                        <!-- @if ($product->status === 1)
-                            <div class="product-labels">
-                                
-                            </div>
-                        @endif -->
 
                         <!-- Hover Buttons -->
                         <div class="button-set style1">
@@ -41,7 +34,9 @@
                     <!-- Product Details -->
                     <div class="product-details">
                         <div class="product-name">
-                            <a href="{{ route('client.products.show', $product->id) }}">{{ $product->name }}</a>
+                            <a href="{{ route('client.products.show', ['slug' => $product->slug]) }}">
+                                {{ $product->name }}
+                            </a>
                         </div>
                         <div class="product-price">
                             <span class="price">{{ number_format($product->price, 0, ',', '.') }}đ</span>
@@ -64,6 +59,7 @@
     </div>
 </div>
 @endsection
+
 <script>
     // Khi trang kết quả tìm kiếm load xong, reset form tìm kiếm
     window.addEventListener('DOMContentLoaded', () => {

@@ -134,9 +134,16 @@ use App\Http\Controllers\Client\ProductController as ClientProductController;
 use App\Http\Controllers\Client\ContactController as ClientContactController;
 
 
-
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
+// Tìm kiếm sản phẩm
+Route::get('/products/search', [ClientProductController::class, 'search'])->name('client.products.search');
+
+
+Route::get('/products/search', [ClientProductController::class, 'search'])->name('clients.products.search');
+
+// Trang chi tiết sản phẩm (dùng slug để SEO tốt hơn)// Trang chi tiết sản phẩm (dùng slug)
+Route::get('san-pham/{slug}', [ClientProductController::class, 'show'])->name('client.products.show');
 
 
 //contact
@@ -150,11 +157,7 @@ Route::get('/danh-muc/{slug}', [ClientCategoryController::class, 'show'])->name(
 Route::get('/blog', [ClientBlogController::class, 'blog'])->name('clients.blog');
 
 //products
-Route::get('/products', [ClientProductController::class, 'index'])->name('clients.products.index');
-Route::get('/san-pham/{id}', [ClientProductController::class, 'show'])->name('client.products.show'); // nếu muốn có chi tiết sản phẩm
-Route::prefix('products')->name('client.products.')->group(function () {
-    Route::get('/', [ClientProductController::class, 'index'])->name('index');
-    Route::get('/search', [ClientProductController::class, 'search'])->name('search');
-    Route::get('/{id}', [ClientProductController::class, 'show'])->name('show');
-});
-Route::get('/products/search', [ClientProductController::class, 'search'])->name('clients.products.search');
+
+// Trang danh sách sản phẩm
+Route::get('/products', [ClientProductController::class, 'index'])->name('client.products.index');
+

@@ -2,26 +2,27 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasFactory, SoftDeletes;
-    
+    use SoftDeletes;
+
     protected $fillable = [
-        'code',
-        'name',
-        'slug',
-        'image',
-        'price',
-        'description',
-        'status',
-        'is_active',
-        'category_id',
-        'brand_id'
+        'code', 'name', 'slug', 'image', 'price', 'description',
+        'status', 'is_active', 'views', 'category_id', 'brand_id'
     ];
+
+    public function galleries()
+    {
+        return $this->hasMany(ProductGallery::class, 'product_id');
+    }
+
+    public function variants()
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
 
     public function category()
     {
@@ -32,6 +33,4 @@ class Product extends Model
     {
         return $this->belongsTo(Brand::class);
     }
-    public $timestamps = true;
-    protected $dates = ['deleted_at'];
 }
