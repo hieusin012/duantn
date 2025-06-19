@@ -17,11 +17,11 @@
             <div class="tile-body">
                 <div class="row element-button">
                     <div class="col-sm-2">
-                        <a class="btn btn-add btn-sm" href="{{ route('admin.blogs.create') }}" title="Thêm"><i class="fas fa-plus"></i> Quay lại</a>
+                        <a class="btn btn-add btn-sm" href="{{ route('admin.blogs.index') }}" title="Thêm">Quay lại</a>
                     </div>
 
                     <div class="col-sm-2">
-                        <a class="btn btn-danger btn-sm" type="button" title="Xóa" href="{{ route('admin.blogs.delete') }}"><i class="fas fa-trash-alt"></i> Dữ liệu đã xóa</a>
+                        <a class="btn btn-danger btn-sm" type="button" title="Xóa" href="{{ route('admin.blogs.delete') }}"><i class="fas fa-trash-alt"></i>Xóa tất cả</a>
                     </div>
                 </div>
 
@@ -76,7 +76,7 @@
 
                 <!-- Pagination Links -->
                 <div class="pagination">
-                    {{ $blogs->links() }}
+                    
                 </div>
             </div>
         </div>
