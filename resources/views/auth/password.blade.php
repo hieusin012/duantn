@@ -7,7 +7,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-5">
             <div class="card shadow p-4">
-                <h2 class="text-center mb-4">Đăng nhập tài khoản</h2>
+                <h2 class="text-center mb-4">Nhập email để lấy lại mật khẩu</h2>
 
                 @if(session('error'))
                     <div class="alert alert-danger text-center">
@@ -15,7 +15,7 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('login.post') }}">
+                <form method="POST" action="{{ route('password.email') }}">
                     @csrf
 
                     <div class="mb-3">
@@ -28,26 +28,13 @@
                         @enderror
                     </div>
 
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Mật khẩu:</label>
-                        <input type="password" id="password" name="password"
-                            class="form-control @error('password') is-invalid @enderror"
-                            placeholder="Nhập mật khẩu...">
-                        @error('password')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="form-check mb-3">
-                        <a href="{{ route('forgot-password') }}" class="float-end">Quên mật khẩu?</a>
-                    </div>
-
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">Đăng nhập</button>
+                        <button type="submit" class="btn btn-primary">Gửi Email</button>
                     </div>
                 </form>
 
                 <div class="text-center mt-3">
-                    <p>Bạn chưa có tài khoản? <a href="{{ route('register') }}">Đăng ký</a></p>
+                    <p><a href="{{ route('login') }}" class="text-primary">Đăng nhập</a>   -----hoặc-----   <a href="{{ route('register') }}" class="text-primary">Đăng ký</a></p>
                 </div>
             </div>
         </div>
