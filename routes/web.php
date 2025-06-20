@@ -34,6 +34,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/forgot-password', [ForgetPasswordController::class, 'showForgotPassword'])->name('forgot-password');
 Route::post('/forgot-password', [ForgetPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 Route::get('/reset-password/{token}', [ForgetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [ForgetPasswordController::class, 'resetPassword'])->name('password.update');
+
 
 
 // Trang Dashboard admin
