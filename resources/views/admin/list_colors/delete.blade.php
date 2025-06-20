@@ -17,19 +17,19 @@
             <div class="tile-body">
                 <div class="row element-button">
                     <div class="col-sm-2">
-                        <a class="btn btn-add btn-sm" href="{{ route('admin.colors.index') }}" title="Thêm"><i class="fas fa-arrow-left"></i>  Quay lại</a>
+                        <a class="btn btn-add btn-sm" href="{{ route('admin.colors.index') }}" title="Thêm"><i class="fas fa-arrow-left"></i> Quay lại</a>
                     </div>
 
-                    <div class="col-sm-2">
-                        <form action="{{ route('admin.colors.all-eliminate') }}" method="POST" style="display:inline-block;">
-                            @csrf
-                            @method('DELETE')
+                    <form action="{{ route('admin.colors.all-eliminate') }}" method="POST" style="display:inline-block;">
+                        @csrf
+                        @method('DELETE')
+                        <div class="col-sm-2">
                             <button type="submit" class="btn btn-danger btn-sm" title="Xóa tất cả"
                                 onclick="return confirm('Bạn có chắc chắn muốn xóa vĩnh viễn tất cả màu đã xóa mềm?')">
-                                <i class="fas fa-trash-alt"></i>  Xóa tất cả
+                                <i class="fas fa-trash-alt"></i> Xóa tất cả
                             </button>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
                 </div>
 
                 <table class="table table-hover table-bordered" id="sampleTable">

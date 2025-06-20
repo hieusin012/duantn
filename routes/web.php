@@ -34,8 +34,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Trang Dashboard admin
 
 // Nhóm route admin
-// Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(function () { 
-Route::prefix('admin')->name('admin.')->group(function () {
+
+ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(function () { // Nếu dùng bảo vệ url http: 127.0.0.1:8000/admin thì bỏ cmt dòng này. Cmt lại dòng dưới.
+//Route::prefix('admin')->name('admin.')->group(function () {
+
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
 
@@ -94,30 +96,25 @@ Route::delete('/banners/{banner}', [BannerController::class, 'destroy'])->name('
     Route::get('/colors', [ColorController::class, 'index'])->name('colors.index');
     Route::get('/colors/create', [ColorController::class, 'create'])->name('colors.create');
     Route::post('/colors', [ColorController::class, 'store'])->name('colors.store');
-    Route::get('/colors/{id}/edit', [ColorController::class, 'edit'])->name('colors.edit');
-    Route::put('/colors/{id}', [ColorController::class, 'update'])->name('colors.update');
-    Route::delete('/colors/{id}', [ColorController::class, 'destroy'])->name('colors.destroy');
-    Route::get('/colors', [ColorController::class, 'index'])->name('colors.index');
-    Route::get('/colors/create', [ColorController::class, 'create'])->name('colors.create');
-    Route::post('/colors', [ColorController::class, 'store'])->name('colors.store');
-    Route::get('/colors/{id}/edit', [ColorController::class, 'edit'])->name('colors.edit');
-    Route::put('/colors/{id}', [ColorController::class, 'update'])->name('colors.update');
-    Route::delete('/colors/{id}', [ColorController::class, 'destroy'])->name('colors.destroy');
     Route::get('/colors/delete', [ColorController::class, 'delete'])->name('colors.delete');
     Route::delete('/colors/all-eliminate', [ColorController::class, 'forceDeleteAll'])->name('colors.all-eliminate');
     Route::delete('/colors/eliminate/{id}', [ColorController::class, 'eliminate'])->name('colors.eliminate');
     Route::get('/colors/restore/{id}', [ColorController::class, 'restore'])->name('colors.restore');
+    Route::delete('/colors/{id}', [ColorController::class, 'destroy'])->name('colors.destroy');
+    Route::get('/colors/{id}/edit', [ColorController::class, 'edit'])->name('colors.edit');
+    Route::put('/colors/{id}', [ColorController::class, 'update'])->name('colors.update');
+    
 
     //brands
     Route::get('/brands', [BrandController::class, 'index'])->name('brands.index');
     Route::get('/brands/create', [BrandController::class, 'create'])->name('brands.create');
     Route::post('/brands', [BrandController::class, 'store'])->name('brands.store');
-    Route::get('/brands/{brand}/edit', [BrandController::class, 'edit'])->name('brands.edit');
-    Route::put('/brands/{brand}', [BrandController::class, 'update'])->name('brands.update');
-    Route::delete('/brands/{brand}', [BrandController::class, 'destroy'])->name('brands.destroy');
     Route::get('/brands/delete', [BrandController::class, 'delete'])->name('brands.delete');
     Route::delete('/brands/eliminate/{id}', [BrandController::class, 'eliminate'])->name('brands.eliminate');
     Route::delete('/brands/all-eliminate', [BrandController::class, 'forceDeleteAll'])->name('brands.all-eliminate');
+    Route::delete('/brands/{brand}', [BrandController::class, 'destroy'])->name('brands.destroy');
+    Route::get('/brands/{brand}/edit', [BrandController::class, 'edit'])->name('brands.edit');
+    Route::put('/brands/{brand}', [BrandController::class, 'update'])->name('brands.update');
     Route::get('/brands/restore/{id}', [BrandController::class, 'restore'])->name('brands.restore');
 
     //Blog

@@ -12,16 +12,26 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->foreignId('brand_id')->nullable()->constrained('brands');
+            // Xoá foreign key cũ trước
+            $table->dropForeign(['brand_id']);
+
+            // Tạo lại với onDelete cascade
+            $table->foreign('brand_id')
+                ->references('id')
+                ->on('brands')
+                ->onDelete('cascade');
         });
     }
-    
+
     public function down(): void
     {
         Schema::table('products', function (Blueprint $table) {
+            // Rollback về trạng thái ban đầu (không cascade)
             $table->dropForeign(['brand_id']);
-            $table->dropColumn('brand_id');
+
+            $table->foreign('brand_id')
+                ->references('id')
+                ->on('brands');
         });
     }
-    
 };

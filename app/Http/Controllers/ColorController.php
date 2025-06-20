@@ -74,10 +74,11 @@ class ColorController extends Controller
     // Xóa vĩnh viễn tất cả màu đã xóa mềm
     public function forceDeleteAll()
     { 
-        var_dump('Xóa vĩnh viễn tất cả màu đã xóa mềm');
-        die;
-        Color::onlyTrashed()->forceDelete();
-        return redirect()->back()->with('success', 'Đã xóa vĩnh viễn tất cả màu đã bị xóa mềm.');
+        $deletedColors = Color::onlyTrashed()->get();
+        foreach ($deletedColors as $color) {
+            $color->forceDelete();
+        }
+        return redirect()->route('admin.colors.delete')->with('success', 'Xóa vĩnh viễn tất cả màu thành công!');
         
     }
 
