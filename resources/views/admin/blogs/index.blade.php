@@ -2,7 +2,7 @@
 @php
     use Illuminate\Support\Str;
 @endphp
-@section('title', 'Quản lý thương hiệu')
+@section('title', 'Quản lý bài viết')
 @section('content')
 @if (session('success'))
 <div class="alert alert-success alert-dismissible fade show" role="alert">

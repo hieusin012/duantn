@@ -21,11 +21,11 @@
                     </div>
 
                     <div class="col-sm-2">
-                        <form action="{{ route('admin.colors.all-eliminate') }}" method="POST" style="display:inline-block;">
+                        <form action="{{ route('admin.brands.all-eliminate') }}" method="POST" style="display:inline-block;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm" title="Xóa tất cả"
-                                onclick="return confirm('Bạn có chắc chắn muốn xóa vĩnh viễn tất cả màu đã xóa mềm?')">
+                                onclick="return confirm('Bạn có chắc chắn muốn xóa vĩnh viễn tất cả thương hiệu đã xóa mềm?')">
                                 <i class="fas fa-trash-alt"></i>  Xóa tất cả
                             </button>
                         </form>

@@ -80,5 +80,13 @@ class BrandController extends Controller
         $brand->forceDelete();
         return redirect()->route('admin.brands.index')->with('success', 'Xóa vĩnh viễn thương hiệu thành công!');
     }
+    public function forceDeleteAll()
+    {
+        $deletedBrands = Brand::onlyTrashed()->get();
+        foreach ($deletedBrands as $brand) {
+            $brand->forceDelete();
+        }
+        return redirect()->route('admin.brands.delete')->with('success', 'Xóa vĩnh viễn tất cả thương hiệu thành công!');
+    }
     
 }

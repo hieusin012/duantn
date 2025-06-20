@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Blog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BlogController extends Controller
 {
@@ -54,6 +55,42 @@ class BlogController extends Controller
         Blog::create($data);
         return redirect()->route('admin.blogs.index')->with('success', 'Thêm bài viết thành công!');
     }
+    public function edit($id)
+    {
+        $blog = Blog::findOrFail($id);
+        $categories = \App\Models\Category::all();
+        $users = \App\Models\User::all();
+        return view('admin.blogs.edit', compact('blog', 'categories', 'users'));
+    }
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'slug' => 'required|string|max:255|unique:blogs,slug,' . $id,
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'category_id' => 'required|exists:categories,id',
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        $blog = Blog::findOrFail($id);
+        $data = [
+            'title' => $request->title,
+            'content' => $request->content,
+            'slug' => $request->slug,
+            'status' => $request->status == 1,
+            'category_id' => $request->category_id,
+            'user_id' => $request->user_id,
+        ];
+        if ($request->hasFile('image')) {
+            if ($blog->image) {
+                Storage::disk('public')->delete($blog->image);
+            }
+            $data['image'] = $request->file('image')->store('blogs', 'public');
+        }
+        $blog->update($data);
+        return redirect()->route('admin.blogs.index')->with('success', 'Cập nhật bài viết thành công!');
+    }
     public function destroy($id)
     {
         $blog = Blog::findOrFail($id);
@@ -64,5 +101,31 @@ class BlogController extends Controller
     {
         $blogs = Blog::onlyTrashed()->get();
         return view('admin.blogs.delete', compact('blogs'));
+    }
+    public function restore($id)
+    {
+        $blog = Blog::withTrashed()->findOrFail($id);
+        $blog->restore();
+        return redirect()->route('admin.blogs.index')->with('success', 'Khôi phục bài viết thành công!');
+    }
+    public function eliminate($id)
+    {
+        $blog = Blog::withTrashed()->findOrFail($id);
+        if ($blog->image) {
+            Storage::disk('public')->delete($blog->image);
+        }
+        $blog->forceDelete();
+        return redirect()->route('admin.blogs.delete')->with('success', 'Xóa vĩnh viễn bài viết thành công!');
+    }
+    public function forceDeleteAll()
+    {
+        $blogs = Blog::onlyTrashed()->get();
+        foreach ($blogs as $blog) {
+            if ($blog->image) {
+                Storage::disk('public')->delete($blog->image);
+            }
+            $blog->forceDelete();
+        }
+        return redirect()->route('admin.blogs.delete')->with('success', 'Xóa vĩnh viễn tất cả bài viết thành công!');
     }
 }
