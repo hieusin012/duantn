@@ -21,6 +21,7 @@ use App\Http\Controllers\Client\BlogController as ClientBlogController;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BannerController;
+use App\Http\Controllers\Client\ChangePasswordController;
 use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\Client\ForgetPasswordController;
@@ -182,5 +183,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile/change-password', [ChangePasswordController::class, 'showChangePasswordForm'])->name('profile.change-password.form');
+    Route::post('/profile/update-password', [ChangePasswordController::class, 'changePassword'])->name('profile.update-password');
 });
 
