@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers\Client;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,27 +22,22 @@ class ChangePasswordController extends Controller
     {
         $request->validate([
             'current_password' => ['required', 'string'],
-            'new_password' => ['required', 'confirmed', PasswordRule::min(6)->mixedCase()->numbers()],
+            'new_password' => ['required', 'string', 'different:current_password', PasswordRule::min(6)->mixedCase()->numbers(), 'confirmed'],
             'new_password_confirmation' => ['required', 'string'],
         ], [
             'current_password.required' => 'Vui lòng nhập mật khẩu hiện tại.',
             'new_password.required' => 'Vui lòng nhập mật khẩu mới.',
-            'new_password.confirmed' => 'Mật khẩu mới và xác nhận mật khẩu không khớp.',
-            'new_password_confirmation.required' => 'Vui lòng xác nhận mật khẩu mới.',
             'new_password.min' => 'Mật khẩu mới phải có ít nhất 6 ký tự.',
-            'new_password.mixedCase' => 'Mật khẩu mới phải bao gồm chữ hoa và chữ thường.',
+            'new_password_confirmation.required' => 'Vui lòng xác nhận mật khẩu mới.',
+            'new_password.confirmed' => 'Mật khẩu mới và xác nhận không khớp.',
         ]);
-
+        /** @var \App\Models\User $user */
         $user = Auth::user();
-
         if (!Hash::check($request->current_password, $user->password)) {
             return back()->withErrors(['current_password' => 'Mật khẩu hiện tại không chính xác.']);
         }
-
         $user->password = Hash::make($request->new_password);
-        dd($user);
         $user->save();
-
         return redirect()->route('profile.show')->with('success', 'Đổi mật khẩu thành công!');
     }
 }
