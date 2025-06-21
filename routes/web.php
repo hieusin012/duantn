@@ -25,6 +25,7 @@ use App\Http\Controllers\Client\ChangePasswordController;
 use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\Client\ForgetPasswordController;
+use App\Http\Controllers\ThongKeController;
 
 // Auth
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -186,4 +187,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile/change-password', [ChangePasswordController::class, 'showChangePasswordForm'])->name('profile.change-password.form');
     Route::post('/profile/update-password', [ChangePasswordController::class, 'changePassword'])->name('profile.update-password');
 });
+
+
+// Thống kê sản phẩm theo danh mục
+Route::get('/admin/thong-ke/san-pham', [ThongKeController::class, 'index'])->name('admin.thongke.index');
+Route::get('/admin/thong-ke/data', [ThongKeController::class, 'getData'])->name('admin.thongke.data');
+
+
 

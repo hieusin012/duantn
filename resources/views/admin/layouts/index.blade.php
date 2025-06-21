@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{{-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -135,4 +135,94 @@
   </script>
 </body>
 
+</html> --}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Quản trị Admin</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Main CSS-->
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/admin/css/main.css') }}">
+
+  <!-- Boxicons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+
+  <!-- jQuery Confirm -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+
+  <!-- SweetAlert -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+</head>
+
+<body onload="time()" class="app sidebar-mini rtl">
+  <!-- Navbar -->
+  @include('admin.layouts.partials.header')
+
+  <!-- Sidebar -->
+  <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+  @include('admin.layouts.partials.sidebar')
+
+  <!-- Main content -->
+  <main class="app-content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="app-title">
+          <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="#"><b>@yield('title')</b></a>
+            </li>
+          </ul>
+          <div id="clock"></div>
+        </div>
+      </div>
+    </div>
+
+    @yield('content')
+
+    @include('admin.layouts.partials.footer')
+  </main>
+
+  <!-- JS: jQuery, Bootstrap, Chart.js -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Clock Script -->
+  <script type="text/javascript">
+    function time() {
+      var today = new Date();
+      var weekday = ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
+      var day = weekday[today.getDay()];
+      var dd = today.getDate();
+      var mm = today.getMonth() + 1;
+      var yyyy = today.getFullYear();
+      var h = today.getHours();
+      var m = today.getMinutes();
+      var s = today.getSeconds();
+      m = checkTime(m);
+      s = checkTime(s);
+      var nowTime = h + " giờ " + m + " phút " + s + " giây";
+      if (dd < 10) dd = '0' + dd;
+      if (mm < 10) mm = '0' + mm;
+      var todayStr = day + ', ' + dd + '/' + mm + '/' + yyyy;
+      document.getElementById("clock").innerHTML = '<span class="date">' + todayStr + ' - ' + nowTime + '</span>';
+      setTimeout(time, 1000);
+    }
+
+    function checkTime(i) {
+      return (i < 10) ? "0" + i : i;
+    }
+  </script>
+
+  <!-- Yield scripts from children views -->
+  @yield('scripts')
+</body>
 </html>
