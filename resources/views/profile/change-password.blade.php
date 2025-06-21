@@ -14,16 +14,16 @@
 
                         {{-- Họ tên --}}
                         <div class="input-group mb-3">
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Nhập mật khẩu hiện tại" required>
+                            <input type="password" class="form-control" id="password" name="current_password" placeholder="Nhập mật khẩu hiện tại" required>
                             <button class="btn btn-outline-secondary" type="button" onclick="togglePassword()">👁</button>
-                            @error('password')
+                            @error('current_password')
                                 <div class="invalid-feedback d-block">
                                     {{ $message }}
                                 </div>
                             @enderror
                         </div>
                         <div class="input-group mb-3">
-                            <input type="password" class="form-control" id="new-password" name="password" placeholder="Nhập mật khẩu mới" required>
+                            <input type="password" class="form-control" id="new-password" name="new_password" placeholder="Nhập mật khẩu mới" required>
                             <button class="btn btn-outline-secondary" type="button" onclick="NewPassword()">👁</button>
                             @error('new_password')
                                 <div class="invalid-feedback d-block">
@@ -32,9 +32,9 @@
                             @enderror
                         </div>
                         <div class="input-group mb-3">
-                            <input type="password" class="form-control" id="change-password" name="password" placeholder="Xác nhận mật khẩu" required>
+                            <input type="password" class="form-control" id="change-password" name="new_password_confirmation" placeholder="Xác nhận mật khẩu" required>
                             <button class="btn btn-outline-secondary" type="button" onclick="ChangePassword()">👁</button>
-                            @error('change_password')
+                            @error('new_password_confirmation')
                                 <div class="invalid-feedback d-block">
                                     {{ $message }}
                                 </div>
@@ -63,7 +63,7 @@ function NewPassword() {
   input.type = input.type === "password" ? "text" : "password";
 }
 function ChangePassword() {
-  const input = document.getElementById("chang-password");
+  const input = document.getElementById("change-password");
   input.type = input.type === "password" ? "text" : "password";
 }
 </script>
