@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
             @if(session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
+            <div class="alert alert-success">{{ session('success') }}</div>
             @endif
 
             <div class="card shadow-sm border-0">
@@ -16,11 +16,11 @@
                     {{-- Avatar trái --}}
                     <div class="col-md-4 text-center">
                         @if($user->avatar)
-                            <img src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar" class="img-fluid rounded-circle mb-3" style="max-width: 180px;">
+                        <img src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar" class="img-fluid rounded-circle mb-3" style="max-width: 180px;">
                         @else
-                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center" style="width: 180px; height: 180px;">
-                                <span class="text-muted">Chưa có ảnh</span>
-                            </div>
+                        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center" style="width: 180px; height: 180px;">
+                            <span class="text-muted">Chưa có ảnh</span>
+                        </div>
                         @endif
                     </div>
 
@@ -61,9 +61,18 @@
                             </tr>
                         </table>
 
-                        <a href="{{ route('profile.edit') }}" class="btn btn-outline-primary mt-3">
-                            <i class="bi bi-pencil-square"></i> Chỉnh sửa hồ sơ
-                        </a>
+                        <div class="row">
+                            <div class="col text-start">
+                                <a href="{{ route('profile.edit') }}" class="btn btn-outline-primary mt-3">
+                                    <i class="bi bi-pencil-square"></i> Chỉnh sửa hồ sơ
+                                </a>
+                            </div>
+                            <div class="col text-end">
+                                <a href="{{ route('profile.change-password.form') }}" class="btn btn-outline-danger mt-3 ms-auto">
+                                    <i class="bi bi-pencil-square"></i> Đổi mật khẩu
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
