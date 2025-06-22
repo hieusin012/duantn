@@ -71,6 +71,12 @@
                         <span class="app-menu__label">Quản lý sản phẩm thuộc tính</span>
                   </a>
             </li>
+            <li>
+                  <a class="app-menu__item" href="{{ route('admin.thongke.index') }}">
+                        <i class="app-menu__icon bx bx-bar-chart-alt"></i>
+                        <span class="app-menu__label">Thống kê sản phẩm</span>
+                  </a>
+            </li>
 
 
             <li><a class="app-menu__item" href="table-data-oder.html"><i class='app-menu__icon bx bx-task'></i><span
