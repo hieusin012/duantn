@@ -21,10 +21,13 @@ use App\Http\Controllers\Client\BlogController as ClientBlogController;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BannerController;
+use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\ChangePasswordController;
 use App\Http\Controllers\ProfileController;
 
+
 use App\Http\Controllers\Client\ForgetPasswordController;
+use App\Http\Controllers\ThongKeController;
 
 // Auth
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -43,8 +46,8 @@ Route::post('/reset-password', [ForgetPasswordController::class, 'resetPassword'
 
 // Nhóm route admin
 
- Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(function () { // Nếu dùng bảo vệ url http: 127.0.0.1:8000/admin thì bỏ cmt dòng này. Cmt lại dòng dưới.
-//Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(function () { // Nếu dùng bảo vệ url http: 127.0.0.1:8000/admin thì bỏ cmt dòng này. Cmt lại dòng dưới.
+    //Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
@@ -74,13 +77,13 @@ Route::post('/reset-password', [ForgetPasswordController::class, 'resetPassword'
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
     //banner
     Route::get('/banners', [BannerController::class, 'index'])->name('banners.index');
-Route::get('/banners/create', [BannerController::class, 'create'])->name('banners.create');
-Route::post('/banners', [BannerController::class, 'store'])->name('banners.store');
-Route::get('/banners/{banner}', [BannerController::class, 'show'])->name('banners.show');
-Route::get('/banners/{banner}/edit', [BannerController::class, 'edit'])->name('banners.edit');
-Route::put('/banners/{banner}', [BannerController::class, 'update'])->name('banners.update');
-Route::delete('/banners/{banner}', [BannerController::class, 'destroy'])->name('banners.destroy');
-   
+    Route::get('/banners/create', [BannerController::class, 'create'])->name('banners.create');
+    Route::post('/banners', [BannerController::class, 'store'])->name('banners.store');
+    Route::get('/banners/{banner}', [BannerController::class, 'show'])->name('banners.show');
+    Route::get('/banners/{banner}/edit', [BannerController::class, 'edit'])->name('banners.edit');
+    Route::put('/banners/{banner}', [BannerController::class, 'update'])->name('banners.update');
+    Route::delete('/banners/{banner}', [BannerController::class, 'destroy'])->name('banners.destroy');
+
     // Sizes
     Route::get('/sizes', [SizeController::class, 'index'])->name('sizes.index');
     Route::get('/sizes/create', [SizeController::class, 'create'])->name('sizes.create');
@@ -111,7 +114,7 @@ Route::delete('/banners/{banner}', [BannerController::class, 'destroy'])->name('
     Route::delete('/colors/{id}', [ColorController::class, 'destroy'])->name('colors.destroy');
     Route::get('/colors/{id}/edit', [ColorController::class, 'edit'])->name('colors.edit');
     Route::put('/colors/{id}', [ColorController::class, 'update'])->name('colors.update');
-    
+
 
     //brands
     Route::get('/brands', [BrandController::class, 'index'])->name('brands.index');
@@ -176,6 +179,15 @@ Route::get('/blog', [ClientBlogController::class, 'blog'])->name('clients.blog')
 // Trang danh sách sản phẩm
 Route::get('/products', [ClientProductController::class, 'index'])->name('client.products.index');
 
+//cart
+Route::middleware('auth')->group(function () {
+    Route::get('/cart', [CartController::class, 'index'])->name('client.cart');
+    Route::post('/cart/add', [CartController::class, 'addToCart'])->name('client.cart.add');
+    Route::post('/cart/update', [CartController::class, 'updateCart'])->name('client.cart.update');
+    Route::delete('/cart/remove/{productId}', [CartController::class, 'removeFromCart'])->name('client.cart.remove');
+});
+
+
 
 
 // Xem/Sửa hồ sơ cá nhân
@@ -186,4 +198,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile/change-password', [ChangePasswordController::class, 'showChangePasswordForm'])->name('profile.change-password.form');
     Route::post('/profile/update-password', [ChangePasswordController::class, 'changePassword'])->name('profile.update-password');
 });
+
+
+
+// Thống kê sản phẩm theo danh mục
+Route::get('/admin/thong-ke/san-pham', [ThongKeController::class, 'index'])->name('admin.thongke.index');
+Route::get('/admin/thong-ke/data', [ThongKeController::class, 'getData'])->name('admin.thongke.data');
+
+
+
 
