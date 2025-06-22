@@ -1,4 +1,3 @@
-{{-- resources/views/admin/thongke/index.blade.php --}}
 @extends('admin.layouts.index')
 
 @section('title', 'Thống kê sản phẩm theo danh mục')
