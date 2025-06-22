@@ -28,8 +28,13 @@ class ProductController extends Controller
         $product = Product::with(['galleries', 'variants', 'category', 'brand'])
             ->where('slug', $slug)
             ->firstOrFail();
+        $relatedProducts = Product::where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->latest()
+            ->take(15)
+            ->get();
         $productImages = $product->galleries;
-        return view('clients.products.show', compact('product', 'productImages'));
+        return view('clients.products.show', compact('product', 'productImages', 'relatedProducts'));
     }
 
 
