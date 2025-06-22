@@ -79,13 +79,15 @@
                                 <td>{{ $variant->quantity }}</td>
                                                             
                                 <td>
-                                    @if ($variant->image)
-                                        <img src="{{ asset('storage/' . $variant->image) }}" alt="Ảnh biến thể"
+                                    @if ($variant->images)
+                                        <img src="{{ asset('storage/' . $variant->images) }}" alt="Ảnh biến thể"
                                              style="width: 80px; height: 80px; object-fit: cover;">
                                     @else
                                         <span>Không có ảnh</span>
-                                    @endif                       
+                                    @endif      
+                                </td>                 
                                 <td>
+                
                                     <a href="{{ route('admin.product-variants.show', $variant->id) }}"
                                        class="btn btn-primary btn-sm" title="Xem chi tiết">
                                         <i class="fas fa-eye"></i>

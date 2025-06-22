@@ -4,7 +4,7 @@
         <div class="row">
             <!--Logo-->
             <div class="logo col-5 col-sm-3 col-md-3 col-lg-2 align-self-center">
-                <a class="logoImg" href="{{ url('/') }}">
+                <a class="logoImg" href="{{ route('home') }}" title="SPORTBAY" rel="home">
                     <img src="{{ asset('assets/client/images/logo.png') }}" alt="SPORTBAY" class="logo-image" />
                 </a>
             </div>
@@ -18,9 +18,9 @@
                         <li class="lvl1"><a href="{{ route('client.products.index') }}">Product<i class="icon anm anm-angle-down-l"></i></a></li>
                         <li class="lvl1 parent dropdown"><a href="#">Pages <i class="icon anm anm-angle-down-l"></i></a></li>
                         <li class="lvl1 parent dropdown"><a href="{{ route('clients.blog') }}">Blog</a></li>
-                             <li class="lvl1 parent dropdown">
-                                    <a href="{{ route('clients.contact') }}">Liên hệ</a>
-                                </li>
+                        <li class="lvl1 parent dropdown">
+                            <a href="{{ route('clients.contact') }}">Liên hệ</a>
+                        </li>
                     </ul>
                 </nav>
             </div>
@@ -97,43 +97,45 @@
                 </div> --}}
                 <!--End Account-->
 
-                        <!--Account 2-->
-                        <div class="account-parent iconset">
-                            <div class="account-link" title="Account"><i class="hdr-icon icon anm anm-user-al"></i></div>
-                            <div id="accountBox">
-                                <div class="customer-links">
-                                    <ul class="m-0">
-                                        @guest
-                                            <li><a href="{{ route('login') }}"><i class="icon anm anm-sign-in-al"></i>Sign In</a></li>
-                                            <li><a href="{{ route('register') }}"><i class="icon anm anm-user-al"></i>Register</a></li>
-                                        @endguest
+                <!--Account 2-->
+                <div class="account-parent iconset">
+                    <div class="account-link" title="Account"><i class="hdr-icon icon anm anm-user-al"></i></div>
+                    <div id="accountBox">
+                        <div class="customer-links">
+                            <ul class="m-0">
+                                @guest
+                                <li><a href="{{ route('login') }}"><i class="icon anm anm-sign-in-al"></i>Sign In</a></li>
+                                <li><a href="{{ route('register') }}"><i class="icon anm anm-user-al"></i>Register</a></li>
+                                @endguest
 
-                                        @auth
-                                            <li><a href="#"><i class="icon anm anm-user-cil"></i>{{ Auth::user()->fullname }}</a></li>
-                                            <li><a href="{{ route('profile.show') }}"><i class="icon anm anm-user-al"></i>My Account</a></li>
-                                            <li><a href="{{ route('profile.edit') }}"><i class="icon anm anm-edit"></i>Edit Profile</a></li>
-                                            <li><a href="#"><i class="icon anm anm-heart-l"></i>Wishlist</a></li>
-                                            <li><a href="#"><i class="icon anm anm-random-r"></i>Compare</a></li>
-                                            <li>
-                                                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                                    <i class="icon anm anm-sign-out-al"></i>Sign out
-                                                </a>
-                                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                                    @csrf
-                                                </form>
-                                            </li>
-                                        @endauth
-                                    </ul>
-                                </div>
-                            </div>
+                                @auth
+                                <li><a href="#"><i class="icon anm anm-user-cil"></i>{{ Auth::user()->fullname }}</a></li>
+                                <li><a href="{{ route('profile.show') }}"><i class="icon anm anm-user-al"></i>My Account</a></li>
+                                <li><a href="{{ route('profile.edit') }}"><i class="icon anm anm-edit"></i>Edit Profile</a></li>
+                                <li><a href="#"><i class="icon anm anm-heart-l"></i>Wishlist</a></li>
+                                <li><a href="#"><i class="icon anm anm-random-r"></i>Compare</a></li>
+                                <li>
+                                    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        <i class="icon anm anm-sign-out-al"></i>Sign out
+                                    </a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form>
+                                </li>
+                                @endauth
+                            </ul>
                         </div>
-                        <!--End Account 2-->
+                    </div>
+                </div>
+                <!--End Account 2-->
                 <!--Wishlist-->
                 <div class="wishlist-link iconset" title="Wishlist"><a href="wishlist-style1.html"><i class="hdr-icon icon anm anm-heart-l"></i><span class="wishlist-count">0</span></a></div>
                 <!--End Wishlist-->
                 <!--Minicart-->
                 <div class="header-cart iconset" title="Cart">
-                    <a href="#;" class="header-cart btn-minicart clr-none" data-bs-toggle="offcanvas" data-bs-target="#minicart-drawer"><i class="hdr-icon icon anm anm-cart-l"></i><span class="cart-count">2</span></a>
+                    <a href="{{ route('client.cart') }}" class="header-cart btn-minicart clr-none">
+                        <i class="hdr-icon icon anm anm-cart-l"></i><span class="cart-count">{{ session('cart') ? array_sum(array_column(session('cart'), 'quantity')) : 0 }}</span>
+                    </a>
                 </div>
                 <!--End Minicart-->
                 <!--Mobile Toggle-->
