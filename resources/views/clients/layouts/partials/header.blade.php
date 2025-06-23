@@ -80,6 +80,7 @@
                                 @endguest
 
                                 @auth
+
                                 {{-- Sửa route nếu muốn có trang profile tổng quan cho user --}}
                                 <li><a href="{{ route('client.profile.show') }}"><i class="icon anm anm-user-cil"></i>{{ Auth::user()->fullname }}</a></li> 
                                 {{-- Sửa route từ profile.show THÀNH client.profile.show --}}
@@ -88,6 +89,13 @@
                                 <li><a href="{{ route('client.profile.edit') }}"><i class="icon anm anm-edit"></i>Edit Profile</a></li>
                                 <li><a href="#"><i class="icon anm anm-heart-l"></i>Wishlist</a></li> {{-- Sửa route nếu có --}}
                                 <li><a href="#"><i class="icon anm anm-random-r"></i>Compare</a></li> {{-- Sửa route nếu có --}}
+
+                                <li><a href="#"><i class="icon anm anm-user-cil"></i>{{ Auth::user()->fullname }}</a></li>
+                                <li><a href="{{ route('profile.show') }}"><i class="icon anm anm-user-al"></i>My Account</a></li>
+                                <li><a href="{{ route('profile.edit') }}"><i class="icon anm anm-edit"></i>Edit Profile</a></li>
+                                <li><a href="{{ route('wishlist.index') }}"><i class="icon anm anm-heart-l"></i>Wishlist</a></li>
+                                <li><a href="#"><i class="icon anm anm-random-r"></i>Compare</a></li>
+
                                 <li>
                                     <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         <i class="icon anm anm-sign-out-al"></i>Sign out
@@ -101,7 +109,21 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="wishlist-link iconset" title="Wishlist"><a href="wishlist-style1.html"><i class="hdr-icon icon anm anm-heart-l"></i><span class="wishlist-count">0</span></a></div>
+
+                <!--End Account 2-->
+                <!-- Wishlist -->
+                <div class="wishlist-link iconset" title="Wishlist">
+                    <a href="{{ route('wishlist.index') }}">
+                        <i class="hdr-icon icon anm anm-heart-l"></i>
+                        <span class="wishlist-count">{{ auth()->check() ? auth()->user()->wishlists()->count() : 0 }}</span>
+                    </a>
+                </div>
+
+                <!-- End Wishlist -->
+                <!--Minicart-->
+
                 <div class="header-cart iconset" title="Cart">
                     {{-- Sửa route từ client.cart THÀNH client.cart --}}
                     <a href="{{ route('client.cart') }}" class="header-cart btn-minicart clr-none">

@@ -21,4 +21,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'birthday' => 'date',
     ];
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
 }
