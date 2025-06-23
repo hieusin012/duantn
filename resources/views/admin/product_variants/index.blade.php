@@ -79,8 +79,8 @@
                                 <td>{{ $variant->quantity }}</td>
                                                             
                                 <td>
-                                    @if ($variant->images)
-                                        <img src="{{ asset('storage/' . $variant->images) }}" alt="Ảnh biến thể"
+                                    @if ($variant->image)
+                                        <img src="{{ asset('storage/' . $variant->image) }}" alt="Ảnh biến thể"
                                              style="width: 80px; height: 80px; object-fit: cover;">
                                     @else
                                         <span>Không có ảnh</span>
