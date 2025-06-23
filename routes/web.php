@@ -1,6 +1,7 @@
 <?php
 
 
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\UserController;
@@ -18,6 +19,9 @@ use App\Http\Controllers\ColorController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Client\BlogController as ClientBlogController;
+use App\Http\Controllers\Client\ProductController as ClientProductController;
+use App\Http\Controllers\Client\ContactController as ClientContactController;
+
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BannerController;
@@ -93,6 +97,15 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     Route::put('/sizes/{size}', [SizeController::class, 'update'])->name('sizes.update');
     Route::delete('/sizes/{size}', [SizeController::class, 'destroy'])->name('sizes.destroy');
 
+     //
+     Route::resource('vouchers', App\Http\Controllers\VoucherController::class);
+     
+
+
+    
+
+   
+
 
     // Users
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
@@ -128,6 +141,8 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     Route::put('/brands/{brand}', [BrandController::class, 'update'])->name('brands.update');
     Route::get('/brands/restore/{id}', [BrandController::class, 'restore'])->name('brands.restore');
 
+    Route::resource('shiptypes', \App\Http\Controllers\ShipTypeController::class);
+    Route::resource('orders', App\Http\Controllers\OrderController::class);
     //Blog
     Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
     Route::get('/blogs/create', [BlogController::class, 'create'])->name('blogs.create');
@@ -140,7 +155,11 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     Route::put('/blogs/{blog}', [BlogController::class, 'update'])->name('blogs.update');
     Route::delete('/blogs/{blog}', [BlogController::class, 'destroy'])->name('blogs.destroy');
     Route::get('/blogs/{blog}', [BlogController::class, 'show'])->name('blogs.show');
-});
+    
+// Thống kê sản phẩm theo danh mục
+  });
+     
+
 
 
 
@@ -148,8 +167,6 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
 
 
 // Trang client (không nằm trong admin)
-use App\Http\Controllers\Client\ProductController as ClientProductController;
-use App\Http\Controllers\Client\ContactController as ClientContactController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -197,13 +214,14 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/profile/change-password', [ChangePasswordController::class, 'showChangePasswordForm'])->name('profile.change-password.form');
     Route::post('/profile/update-password', [ChangePasswordController::class, 'changePassword'])->name('profile.update-password');
+
 });
-
-
-
-// Thống kê sản phẩm theo danh mục
 Route::get('/admin/thong-ke/san-pham', [ThongKeController::class, 'index'])->name('admin.thongke.index');
 Route::get('/admin/thong-ke/data', [ThongKeController::class, 'getData'])->name('admin.thongke.data');
+   
+
+
+
 
 
 

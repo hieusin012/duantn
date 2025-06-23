@@ -8,7 +8,7 @@ use App\Models\Category;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class ClientProductController extends Controller
 {
     public function index()
     {
