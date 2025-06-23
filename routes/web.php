@@ -143,6 +143,15 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
 });
 
 
+use App\Http\Controllers\WishlistController;
+
+Route::middleware('auth')->group(function () {
+    Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+    Route::delete('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove')->middleware('auth');
+
+});
+Route::middleware('auth')->get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+
 
 
 
@@ -152,7 +161,7 @@ use App\Http\Controllers\Client\ProductController as ClientProductController;
 use App\Http\Controllers\Client\ContactController as ClientContactController;
 
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 // Tìm kiếm sản phẩm
 Route::get('/products/search', [ClientProductController::class, 'search'])->name('client.products.search');

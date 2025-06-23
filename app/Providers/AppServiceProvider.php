@@ -7,6 +7,8 @@ use App\Models\Brand;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Wishlist;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,18 +24,24 @@ class AppServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      */
 
-public function boot()
-{
-    // Kích hoạt phân trang Bootstrap
-    Paginator::useBootstrap();
+    public function boot()
+    {
+        // Kích hoạt phân trang Bootstrap
+        Paginator::useBootstrap();
 
-    // Truyền dữ liệu cho header.blade.php
-    View::composer('clients.layouts.partials.header', function ($view) {
-        $headerCategories = Category::whereNull('parent_id')->orderBy('name')->get();
-        $brands = Brand::whereNull('deleted_at')->orderBy('name')->get();
+        // Truyền dữ liệu cho header.blade.php
+        View::composer('clients.layouts.partials.header', function ($view) {
+            $headerCategories = Category::whereNull('parent_id')->orderBy('name')->get();
+            $brands = Brand::whereNull('deleted_at')->orderBy('name')->get();
 
-        $view->with('headerCategories', $headerCategories);
-        $view->with('brands', $brands);
-    });
-}
+            $wishlistCount = 0;
+            if (Auth::check()) {
+                $wishlistCount = Wishlist::where('user_id', Auth::id())->count();
+            }
+
+            $view->with('headerCategories', $headerCategories);
+            $view->with('brands', $brands);
+            $view->with('wishlistCount', $wishlistCount);
+        });
+    }
 }

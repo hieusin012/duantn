@@ -39,6 +39,8 @@
     <script src="{{ asset('assets/client/js/main.js') }}"></script>
 
     @stack('scripts')
+    @yield('scripts')
+
 </body>
 
 </html>
