@@ -28,6 +28,7 @@ use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\Client\ForgetPasswordController;
 use App\Http\Controllers\ThongKeController;
+use App\Http\Controllers\WishlistController;
 
 // Auth
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -143,7 +144,7 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
 });
 
 
-use App\Http\Controllers\WishlistController;
+
 
 Route::middleware('auth')->group(function () {
     Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
