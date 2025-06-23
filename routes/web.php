@@ -32,7 +32,16 @@ use App\Http\Controllers\Client\ClientCategoryController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 
+
 // Auth Routes
+
+
+use App\Http\Controllers\Client\ForgetPasswordController;
+use App\Http\Controllers\ThongKeController;
+use App\Http\Controllers\WishlistController;
+
+// Auth
+
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
@@ -153,8 +162,32 @@ Route::delete('/blogs/eliminate/{id}', [AdminBlogController::class, 'eliminate']
 // Client Routes
 Route::get('/', [HomeController::class, 'index'])->name('client.home');
 
+
 // Products Client
 Route::get('/products', [ClientProductController::class, 'index'])->name('client.products.index');
+
+
+
+Route::middleware('auth')->group(function () {
+    Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+    Route::delete('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove')->middleware('auth');
+
+});
+Route::middleware('auth')->get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+
+
+
+
+
+// Trang client (không nằm trong admin)
+use App\Http\Controllers\Client\ProductController as ClientProductController;
+use App\Http\Controllers\Client\ContactController as ClientContactController;
+
+
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+// Tìm kiếm sản phẩm
+
 Route::get('/products/search', [ClientProductController::class, 'search'])->name('client.products.search');
 Route::get('san-pham/{slug}', [ClientProductController::class, 'show'])->name('client.products.show');
 
