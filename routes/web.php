@@ -145,7 +145,7 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
 
 
 
-
+// Yêu thích sản phẩm
 Route::middleware('auth')->group(function () {
     Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
     Route::delete('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove')->middleware('auth');
