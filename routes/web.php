@@ -1,11 +1,8 @@
 <?php
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 407ec50612706ecace453e0286821527219c5074
 use Illuminate\Support\Facades\Route;
+
+// Admin Controllers
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
@@ -13,35 +10,27 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\BrandController;
-<<<<<<< HEAD
-use App\Http\Controllers\BlogController;
-use App\Http\Controllers\Client\BlogController as ClientBlogController;
-use App\Http\Controllers\Client\ProductController as ClientProductController;
-use App\Http\Controllers\Client\ContactController as ClientContactController;
-
-=======
->>>>>>> 407ec50612706ecace453e0286821527219c5074
-
-// Controllers cho Admin (nếu BlogController này là cho Admin, không phải Client)
-use App\Http\Controllers\BlogController as AdminBlogController; 
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\ThongKeController;
+use App\Http\Controllers\BlogController as AdminBlogController;
+use App\Http\Controllers\VoucherController;
+use App\Http\Controllers\ShipTypeController;
+use App\Http\Controllers\orderController;
+use App\Http\Controllers\productVariantController;
 
-
-// Controllers cho Client
+// Client Controllers
 use App\Http\Controllers\Client\HomeController;
-use App\Http\Controllers\Client\ProductController as ClientProductController; // Alias để tránh xung đột với ProductController admin
+use App\Http\Controllers\Client\ProductController as ClientProductController;
 use App\Http\Controllers\Client\ContactController as ClientContactController;
-use App\Http\Controllers\Client\ClientCategoryController;
 use App\Http\Controllers\Client\BlogController as ClientBlogController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\ChangePasswordController;
 use App\Http\Controllers\Client\ForgetPasswordController;
+use App\Http\Controllers\Client\ClientCategoryController;
 
-// Controllers chung (Auth, Profile - nếu chúng không nằm trong Client namespace)
+// Auth and Profile Controllers
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
-
 
 // Auth Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -54,9 +43,8 @@ Route::post('/forgot-password', [ForgetPasswordController::class, 'sendResetLink
 Route::get('/reset-password/{token}', [ForgetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password', [ForgetPasswordController::class, 'resetPassword'])->name('password.update');
 
-
 // Admin Routes
-Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(function () {
+Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
     // Products Admin
@@ -102,21 +90,10 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     Route::put('/sizes/{size}', [SizeController::class, 'update'])->name('sizes.update');
     Route::delete('/sizes/{size}', [SizeController::class, 'destroy'])->name('sizes.destroy');
 
-<<<<<<< HEAD
-     //
-     Route::resource('vouchers', App\Http\Controllers\VoucherController::class);
-     
+    // Vouchers Admin
+    Route::resource('vouchers', VoucherController::class);// 
 
-
-    
-
-   
-
-
-    // Users
-=======
     // Users Admin
->>>>>>> 407ec50612706ecace453e0286821527219c5074
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
@@ -149,28 +126,13 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     Route::put('/brands/{brand}', [BrandController::class, 'update'])->name('brands.update');
     Route::get('/brands/restore/{id}', [BrandController::class, 'restore'])->name('brands.restore');
 
-<<<<<<< HEAD
-    Route::resource('shiptypes', \App\Http\Controllers\ShipTypeController::class);
-    Route::resource('orders', App\Http\Controllers\OrderController::class);
-    //Blog
-    Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
-    Route::get('/blogs/create', [BlogController::class, 'create'])->name('blogs.create');
-    Route::post('/blogs', [BlogController::class, 'store'])->name('blogs.store');
-    Route::get('/blogs/delete', [BlogController::class, 'delete'])->name('blogs.delete');
-    Route::get('/blogs/restore/{id}', [BlogController::class, 'restore'])->name('blogs.restore');
-    Route::delete('/blogs/eliminate/{id}', [BlogController::class, 'eliminate'])->name('blogs.eliminate');
-    Route::delete('/blogs/all-eliminate', [BlogController::class, 'forceDeleteAll'])->name('blogs.all-eliminate');
-    Route::get('/blogs/{blog}/edit', [BlogController::class, 'edit'])->name('blogs.edit');
-    Route::put('/blogs/{blog}', [BlogController::class, 'update'])->name('blogs.update');
-    Route::delete('/blogs/{blog}', [BlogController::class, 'destroy'])->name('blogs.destroy');
-    Route::get('/blogs/{blog}', [BlogController::class, 'show'])->name('blogs.show');
-    
-// Thống kê sản phẩm theo danh mục
-  });
-     
+    // Ship Types Admin
+    Route::resource('shiptypes', ShipTypeController::class);
 
-=======
-    // Blog Admin (sử dụng AdminBlogController)
+    // Orders Admin
+    Route::resource('orders', OrderController::class);
+
+    // Blog Admin
     Route::get('/blogs', [AdminBlogController::class, 'index'])->name('blogs.index');
     Route::get('/blogs/create', [AdminBlogController::class, 'create'])->name('blogs.create');
     Route::post('/blogs', [AdminBlogController::class, 'store'])->name('blogs.store');
@@ -183,52 +145,25 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     Route::delete('/blogs/{blog}', [AdminBlogController::class, 'destroy'])->name('blogs.destroy');
     Route::get('/blogs/{blog}', [AdminBlogController::class, 'show'])->name('blogs.show');
 
-    // Thống kê sản phẩm theo danh mục Admin
+    // Statistics Admin
     Route::get('/thong-ke/san-pham', [ThongKeController::class, 'index'])->name('thongke.index');
     Route::get('/thong-ke/data', [ThongKeController::class, 'getData'])->name('thongke.data');
 });
->>>>>>> 407ec50612706ecace453e0286821527219c5074
-
 
 // Client Routes
-// Trang chủ (Chỉ một định nghĩa route cho trang chủ Client)
 Route::get('/', [HomeController::class, 'index'])->name('client.home');
 
 // Products Client
-Route::get('/products', [ClientProductController::class, 'index'])->name('client.products.index'); // Trang danh sách sản phẩm
-Route::get('/products/search', [ClientProductController::class, 'search'])->name('client.products.search'); // Tìm kiếm sản phẩm
-Route::get('san-pham/{slug}', [ClientProductController::class, 'show'])->name('client.products.show'); // Trang chi tiết sản phẩm
+Route::get('/products', [ClientProductController::class, 'index'])->name('client.products.index');
+Route::get('/products/search', [ClientProductController::class, 'search'])->name('client.products.search');
+Route::get('san-pham/{slug}', [ClientProductController::class, 'show'])->name('client.products.show');
+
+// Categories Client
+Route::get('/danh-muc/{slug}', [ClientCategoryController::class, 'show'])->name('client.categories.show');
 
 // Contact Client
 Route::get('/contact', [ClientContactController::class, 'showForm'])->name('client.contact');
 Route::post('/contact', [ClientContactController::class, 'handleSubmit'])->name('client.contact.submit');
-
-<<<<<<< HEAD
-
-// Trang client (không nằm trong admin)
-
-
-Route::get('/', [HomeController::class, 'index'])->name('home');
-
-// Tìm kiếm sản phẩm
-Route::get('/products/search', [ClientProductController::class, 'search'])->name('client.products.search');
-
-
-Route::get('/products/search', [ClientProductController::class, 'search'])->name('clients.products.search');
-
-// Trang chi tiết sản phẩm (dùng slug để SEO tốt hơn)// Trang chi tiết sản phẩm (dùng slug)
-Route::get('san-pham/{slug}', [ClientProductController::class, 'show'])->name('client.products.show');
-
-
-//contact
-Route::get('/contact', [ClientContactController::class, 'showForm'])->name('clients.contact');
-Route::post('/contact', [ClientContactController::class, 'handleSubmit'])->name('contact.submit');
-
-//category
-=======
-// Categories Client
->>>>>>> 407ec50612706ecace453e0286821527219c5074
-Route::get('/danh-muc/{slug}', [ClientCategoryController::class, 'show'])->name('client.categories.show');
 
 // Blog Client
 Route::prefix('blog')->group(function () {
@@ -236,7 +171,7 @@ Route::prefix('blog')->group(function () {
     Route::get('/{slug}', [ClientBlogController::class, 'show'])->name('client.blogs.show');
 });
 
-// Cart Client (yêu cầu xác thực)
+// Cart Client (requires authentication)
 Route::middleware('auth')->group(function () {
     Route::get('/cart', [CartController::class, 'index'])->name('client.cart');
     Route::post('/cart/add', [CartController::class, 'addToCart'])->name('client.cart.add');
@@ -244,31 +179,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/cart/remove/{productId}', [CartController::class, 'removeFromCart'])->name('client.cart.remove');
 });
 
-// Profile Client (yêu cầu xác thực)
-Route::middleware(['auth'])->group(function () {
-<<<<<<< HEAD
-    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-    Route::get('/profile/change-password', [ChangePasswordController::class, 'showChangePasswordForm'])->name('profile.change-password.form');
-    Route::post('/profile/update-password', [ChangePasswordController::class, 'changePassword'])->name('profile.update-password');
-
-});
-Route::get('/admin/thong-ke/san-pham', [ThongKeController::class, 'index'])->name('admin.thongke.index');
-Route::get('/admin/thong-ke/data', [ThongKeController::class, 'getData'])->name('admin.thongke.data');
-   
-
-
-
-
-
-
-
-=======
+// Profile Client (requires authentication)
+Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('client.profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('client.profile.edit');
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('client.profile.update');
     Route::get('/profile/change-password', [ChangePasswordController::class, 'showChangePasswordForm'])->name('client.profile.change-password.form');
     Route::post('/profile/update-password', [ChangePasswordController::class, 'changePassword'])->name('client.profile.update-password');
 });
->>>>>>> 407ec50612706ecace453e0286821527219c5074
