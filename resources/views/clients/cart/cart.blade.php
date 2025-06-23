@@ -41,17 +41,11 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @php
-                                            $total = 0;
-                                        @endphp
-                                        @foreach($cart as $id => $item)
-                                        @php
-                                            $total += $item['price'] * $item['quantity'];
-                                        @endphp
+                                        
                                         <tr class="cart-row cart-flex position-relative">
                                             <td class="cart-delete text-center small-hide"><a href="#" class="cart-remove remove-icon position-static" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove to Cart"><i class="icon anm anm-times-r"></i></a></td>
                                             <td class="cart-image cart-flex-item">
-                                                <a href="product-layout1.html"><img src="{{ asset('uploads/' . $item['image']) }}" width="100"></a>
+                                                <a href="product-layout1.html"><img src="" width="100"></a>
                                             </td>
                                             <td class="cart-meta small-text-left cart-flex-item">
                                                 <div class="list-view-item-title">
@@ -81,7 +75,7 @@
                                                 <span class="money fw-500">$198.00</span>
                                             </td>
                                         </tr>  
-                                        @endforeach                                     
+                                                        
                                     </tbody>
                                     <tfoot>
                                         <tr>

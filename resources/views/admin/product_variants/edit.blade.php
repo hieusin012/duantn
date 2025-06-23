@@ -18,7 +18,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('product-variants.update', $productVariant->id) }}" method="POST">
+                <form action="{{ route('admin.product-variants.update', $productVariant->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="form-group">
@@ -62,10 +62,10 @@
                     </div>
                     <div class="form-group">
                         <label for="image">Ảnh</label>
-                        <input type="text" name="image" class="form-control" value="{{ old('image', $productVariant->image) }}">
+                        <input type="file" name="image" class="form-control" value="{{ old('image', $productVariant->image) }}">
                     </div>
                     <button type="submit" class="btn btn-primary">Cập nhật</button>
-                    <a href="{{ route('product-variants.index') }}" class="btn btn-secondary">Hủy</a>
+                    <a href="{{ route('admin.product-variants.index') }}" class="btn btn-secondary">Hủy</a>
                 </form>
             </div>
         </div>
