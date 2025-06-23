@@ -4,6 +4,7 @@
         <div class="row">
             <!--Logo-->
             <div class="logo col-5 col-sm-3 col-md-3 col-lg-2 align-self-center">
+               
                 <a class="logoImg" href="{{ route('home') }}" title="SPORTBAY" rel="home">
                     <img src="{{ asset('assets/client/images/logo.png') }}" alt="SPORTBAY" class="logo-image" />
                 </a>
@@ -13,14 +14,16 @@
             <div class="col-1 col-sm-1 col-md-1 col-lg-8 align-self-center d-menu-col">
                 <nav class="navigation" id="AccessibleNav">
                     <ul id="siteNav" class="site-nav medium center">
-                        <li class="lvl1 parent dropdown"><a href="{{ route('home') }}">Home <i class="icon anm anm-angle-down-l"></i></a></li>
-                        <li class="lvl1 parent megamenu"><a href="#">Abous Us <i class="icon anm anm-angle-down-l"></i></a></li>
-                        <li class="lvl1"><a href="{{ route('client.products.index') }}">Product<i class="icon anm anm-angle-down-l"></i></a></li>
-                        <li class="lvl1 parent dropdown"><a href="#">Pages <i class="icon anm anm-angle-down-l"></i></a></li>
-                        <li class="lvl1 parent dropdown"><a href="{{ route('clients.blog') }}">Blog</a></li>
-                        <li class="lvl1 parent dropdown">
-                            <a href="{{ route('clients.contact') }}">Liên hệ</a>
+                        <li class="lvl1 parent dropdown"><a href="{{ route('home') }}">Trang chủ</a></li>                       
+                        <li class="lvl1"><a href="{{ route('client.products.index') }}">Danh mục sản phẩm
+                            <i class="icon anm anm-angle-down-l"></i></a>
                         </li>
+                        <li class="lvl1 parent dropdown"><a href="#">HOT DEAL <i class="icon anm anm-angle-down-l"></i></a></li>
+                        <li class="lvl1 parent dropdown"><a href="{{ route('clients.blog') }}">Blog</a></li>
+                             <li class="lvl1 parent dropdown">
+                                    <a href="{{ route('clients.contact') }}">Liên hệ</a>
+                                </li>
+                        <li class="lvl1 parent megamenu"><a href="#">Abous Us</a></li>
                     </ul>
                 </nav>
             </div>

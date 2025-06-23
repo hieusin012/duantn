@@ -87,7 +87,7 @@
                     <form method="post" action="#" class="product-form product-form-border hidedropdown">
                         <div class="product-swatches-option">
                             <div class="product-item swatches-image w-100 mb-4 swatch-0 option1" data-option-index="0">
-                                <label class="label d-flex align-items-center">Màu sắc:<span class="slVariant ms-1 fw-bold">Xanh</span></label>
+                                <label class="label d-flex align-items-center">Color:<span class="slVariant ms-1 fw-bold">Xanh</span></label>
                                 <ul class="variants-clr swatches d-flex-center pt-1 clearfix">
                                     <li class="swatch x-large available active blue"><span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top" title="Xanh"></span></li>
                                     <li class="swatch x-large available black"><span class="swatchLbl" data-bs-toggle="tooltip" data-bs-placement="top" title="Đen"></span></li>

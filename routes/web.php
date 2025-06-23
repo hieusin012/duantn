@@ -152,7 +152,7 @@ use App\Http\Controllers\Client\ProductController as ClientProductController;
 use App\Http\Controllers\Client\ContactController as ClientContactController;
 
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Tìm kiếm sản phẩm
 Route::get('/products/search', [ClientProductController::class, 'search'])->name('client.products.search');

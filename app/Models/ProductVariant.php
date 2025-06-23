@@ -17,7 +17,7 @@ class ProductVariant extends Model
         'price',
         'sale_price',
         'quantity',
-        'images'
+        'image'
     ];
     public $timestamps = false;
     protected $dates = ['deleted_at'];

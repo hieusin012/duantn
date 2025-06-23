@@ -75,7 +75,7 @@
                                                 <span class="money fw-500">$198.00</span>
                                             </td>
                                         </tr>  
-                                                                            
+                                                        
                                     </tbody>
                                     <tfoot>
                                         <tr>
