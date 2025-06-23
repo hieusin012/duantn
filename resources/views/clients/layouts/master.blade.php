@@ -11,8 +11,6 @@
     <link rel="stylesheet" href="{{ asset('assets/client/css/style-min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/client/css/responsive.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/client/css/custom.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/client/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/client/css/style-min.css') }}">
 

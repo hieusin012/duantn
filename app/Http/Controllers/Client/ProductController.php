@@ -34,7 +34,8 @@ class ProductController extends Controller
             ->take(15)
             ->get();
         $productImages = $product->galleries;
-        return view('clients.products.show', compact('product', 'productImages', 'relatedProducts'));
+        $variants = $product->variants;
+        return view('clients.products.show', compact('product', 'productImages', 'relatedProducts', 'variants'));
     }
 
 
