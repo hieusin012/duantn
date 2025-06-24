@@ -105,6 +105,12 @@
             <li><a class="app-menu__item {{ request()->is('table-data-banned*') ? 'active' : '' }}" href="table-data-banned.html"><i class='app-menu__icon bx bx-run'></i><span
                               class="app-menu__label">Quản lý nội bộ
                         </span></a></li>
+            <li>
+            <a class="app-menu__item {{ request()->routeIs('admin.comments.*') ? 'active' : '' }}" href="{{ route('admin.comments.index') }}">
+                  <i class='app-menu__icon fas fa-comments'></i>
+                  <span class="app-menu__label">Quản lý bình luận</span>
+            </a>
+            </li>
             <li><a class="app-menu__item {{ request()->is('table-data-money*') ? 'active' : '' }}" href="table-data-money.html"><i class='app-menu__icon bx bx-dollar'></i><span
                               class="app-menu__label">Bảng kê lương</span></a></li>
             <li><a class="app-menu__item {{ request()->is('quan-ly-bao-cao*') ? 'active' : '' }}" href="quan-ly-bao-cao.html"><i
