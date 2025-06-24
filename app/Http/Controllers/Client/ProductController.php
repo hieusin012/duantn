@@ -12,10 +12,12 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::where('is_active', 1)
+        $products = Product::with('wishlists') // để kiểm tra đã thích hay chưa
+            ->where('is_active', 1)
             ->whereNull('deleted_at')
             ->latest()
             ->paginate(12);
+
 
         $categories = Category::whereNull('deleted_at')->get();
         $brands = Brand::whereNull('deleted_at')->get();
@@ -34,7 +36,8 @@ class ProductController extends Controller
             ->take(15)
             ->get();
         $productImages = $product->galleries;
-        return view('clients.products.show', compact('product', 'productImages', 'relatedProducts'));
+        $variants = $product->variants;
+        return view('clients.products.show', compact('product', 'productImages', 'relatedProducts', 'variants'));
     }
 
 
@@ -48,8 +51,10 @@ class ProductController extends Controller
     {
 
 
-        $query = Product::where('is_active', 1)
+        $query = Product::with('wishlists')
+            ->where('is_active', 1)
             ->whereNull('deleted_at');
+
 
         // Search by name
         $search = $request->input('search');

@@ -3245,3 +3245,35 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder { opacity:0.7; -ms-f
 }
 .fadeInUp { -webkit-animation-name: fadeInUp; animation-name: fadeInUp; }
 
+/* Đảm bảo khoảng cách giữa quantity và các nút */
+.product-action {
+    gap: 1rem; /* Khoảng cách giữa các phần tử con */
+}
+
+.product-form-quantity {
+    flex-shrink: 0; /* Ngăn quantity bị co lại quá mức */
+    margin-right: 1rem !important; /* Đảm bảo khoảng cách cố định */
+}
+
+.product-form-submit {
+    flex-grow: 1; /* Cho phép nút giãn ra nhưng không lấn sang quantity */
+    margin-left: 1rem !important; /* Đảm bảo khoảng cách giữa các nút */
+}
+
+/* Điều chỉnh trên màn hình nhỏ */
+@media (max-width: 768px) {
+    .product-action {
+        flex-direction: column; /* Chuyển thành cột trên màn hình nhỏ */
+        gap: 0.5rem; /* Giảm khoảng cách trên mobile */
+    }
+
+    .product-form-quantity,
+    .product-form-submit {
+        margin: 0 !important; /* Xóa margin trên mobile */
+        width: 100%; /* Đảm bảo chiếm toàn bộ chiều rộng */
+    }
+
+    .product-form-submit .btn {
+        width: 100%; /* Nút chiếm toàn bộ chiều rộng trên mobile */
+    }
+}

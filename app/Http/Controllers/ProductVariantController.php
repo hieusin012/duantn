@@ -36,14 +36,14 @@ class ProductVariantController extends Controller
             'price' => 'required|numeric',
             'sale_price' => 'nullable|numeric',
             'quantity' => 'required|integer',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'image' => 'nullable|max:2048'
         ]);
-    
+
         $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('product_variants', 'public'); // lưu vào storage/app/public/product_variants
         }
-    
+
         ProductVariant::create([
             'product_id' => $request->product_id,
             'color_id' => $request->color_id,
@@ -53,10 +53,10 @@ class ProductVariantController extends Controller
             'quantity' => $request->quantity,
             'image' => $imagePath
         ]);
-    
+
         return redirect()->route('admin.product-variants.index')->with('success', 'Tạo biến thể thành công');
     }
-    
+
     public function show(ProductVariant $productVariant)
     {
         $productVariant->load(['product', 'color', 'size']);
@@ -80,32 +80,33 @@ class ProductVariantController extends Controller
             'price' => 'required|numeric',
             'sale_price' => 'nullable|numeric',
             'quantity' => 'required|integer',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'image' => 'nullable|image'
         ]);
-    
+
+        $data = $request->only([
+            'product_id',
+            'color_id',
+            'size_id',
+            'price',
+            'sale_price',
+            'quantity',
+        ]);
+
+        // Xử lý ảnh
         if ($request->hasFile('image')) {
-            // Xóa ảnh cũ nếu có
+            // Xoá ảnh cũ nếu có
             if ($productVariant->image) {
                 Storage::disk('public')->delete($productVariant->image);
             }
-    
-            $imagePath = $request->file('image')->store('product_variants', 'public');
-            $productVariant->image = $imagePath;
+
+            $data['image'] = $request->file('image')->store('product_variants', 'public');
         }
-    
-        $productVariant->update([
-            'product_id' => $request->product_id,
-            'color_id' => $request->color_id,
-            'size_id' => $request->size_id,
-            'price' => $request->price,
-            'sale_price' => $request->sale_price,
-            'quantity' => $request->quantity
-        ]);
-    
-        $productVariant->save();
-    
+
+        $productVariant->update($data);
+
         return redirect()->route('admin.product-variants.index')->with('success', 'Cập nhật thành công');
     }
+
 
     public function destroy(ProductVariant $productVariant)
     {

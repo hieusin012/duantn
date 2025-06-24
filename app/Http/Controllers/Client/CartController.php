@@ -19,7 +19,7 @@ class CartController extends Controller
             'status' => 0
         ])->first();
 
-        return view('client.cart.index', compact('cart'));
+        return view('clients.cart.cart', compact('cart'));
     }
 
     // Thêm sản phẩm vào giỏ hàng
