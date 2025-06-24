@@ -127,7 +127,7 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     Route::delete('/colors/{id}', [ColorController::class, 'destroy'])->name('colors.destroy');
     Route::get('/colors/{id}/edit', [ColorController::class, 'edit'])->name('colors.edit');
     Route::put('/colors/{id}', [ColorController::class, 'update'])->name('colors.update');
-
+//
 
     //brands
     Route::get('/brands', [BrandController::class, 'index'])->name('brands.index');
