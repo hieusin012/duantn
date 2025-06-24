@@ -7,6 +7,29 @@
     .btn-check:checked+.color-label {
         border: 3px solid black !important;
     }
+
+    @keyframes bounce {
+
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-5px);
+        }
+    }
+
+    .cart-bounce {
+        animation: bounce 0.5s ease;
+    }
+    .color-swatch {
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+}
 </style>
 @endpush
 
@@ -117,18 +140,10 @@
                     <!-- End Product Details -->
 
                     <!-- Product Form -->
-<<<<<<< HEAD
-=======
-
->>>>>>> 10d152920aa8862cae991357178b2d128b0fcd8a
-                    <form method="post" action="{{ route('client.cart.add') }}" class="product-form product-form-border hidedropdown">
+                    <form method="post" action="{{ route('client.cart.add') }}" id="add-to-cart-form" class="product-form product-form-border hidedropdown">
                         @csrf
                         <input type="hidden" name="product_id" value="{{ $product->id }}">
                         <!-- Swatches -->
-<<<<<<< HEAD
-=======
-
->>>>>>> 10d152920aa8862cae991357178b2d128b0fcd8a
                         <div class="product-swatches-option">
                             <!-- Swatches Color -->
                             <div class="product-item swatches-image w-100 mb-4 swatch-0 option1" data-option-index="0">
@@ -149,9 +164,9 @@
                                             data-color-name="{{ $color->name }}">
 
                                         <label
-                                            class="btn border p-2 color-label"
+                                            class="btn border p-2 color-swatch"
                                             for="color-{{ $color->id }}"
-                                            style="width: 40px; height: 40px; background-color: #{{ $color->color_code }};"
+                                            data-color-code="{{ $color->color_code }}"
                                             title="{{ $color->name }}">
                                         </label>
                                         @endforeach
@@ -183,15 +198,15 @@
                             <div class="product-form-quantity d-flex-center">
                                 <div class="qtyField">
                                     <a class="qtyBtn minus" href="#;"><i class="icon anm anm-minus-r"></i></a>
-                                    <input type="text" name="quantity" value="1" class="product-form-input qty" />
+                                    <input type="number" name="quantity" value="1" class="product-form-input qty" />
                                     <a class="qtyBtn plus" href="#;"><i class="icon anm anm-plus-r"></i></a>
                                 </div>
                             </div>
                             <!-- End Product Quantity -->
                             <!-- Product Add -->
                             <div class="product-form-submit addcart fl-1 ms-3">
-                                <button type="submit" name="add" class="btn btn-secondary product-form-cart-submit">
-                                   <span>Thêm vào giỏ hàng</span>
+                                <button type="submit" id="add-to-cart-btn" class="btn btn-primary">
+                                    Thêm vào giỏ hàng
                                 </button>
                             </div>
                     </form>
@@ -240,10 +255,6 @@
                 <!-- End Product Info -->
             </div>
         </div>
-<<<<<<< HEAD
-=======
-
->>>>>>> 10d152920aa8862cae991357178b2d128b0fcd8a
     </div>
     <!--Product Content-->
 
@@ -713,7 +724,6 @@
 
 </div>
 <script>
-    
     const radios = document.querySelectorAll('input[name="color_id"]');
     const selectedName = document.getElementById('selectedColorName');
 
@@ -722,6 +732,39 @@
             const name = this.getAttribute('data-color-name');
             selectedName.textContent = name;
         });
+    });
+
+    document.querySelector('.product-form-cart-submit').addEventListener('click', function(e) {
+        e.preventDefault();
+
+        const form = this.closest('form');
+        const formData = new FormData(form);
+
+        fetch("{{ route('client.cart.add') }}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: formData
+            })
+
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Cập nhật số trên icon giỏ hàng
+                    document.getElementById('cart-count').innerText = data.total_quantity;
+
+                    // Thêm hiệu ứng nhảy
+                    const cartIcon = document.getElementById('cart-count');
+                    cartIcon.classList.add('cart-bounce');
+
+                    setTimeout(() => {
+                        cartIcon.classList.remove('cart-bounce');
+                    }, 500);
+                } else {
+                    alert(data.message || 'Thêm vào giỏ hàng thất bại');
+                }
+            });
     });
 </script>
 @endsection
@@ -763,6 +806,14 @@
 
         // Initialize Lightbox
         $('.lightboximages a').fancybox();
+    });
+</script>
+<script>
+    document.querySelectorAll('.color-swatch').forEach(function(el) {
+        const color = el.getAttribute('data-color-code');
+        if (color) {
+            el.style.backgroundColor = `#${color}`;
+        }
     });
 </script>
 
