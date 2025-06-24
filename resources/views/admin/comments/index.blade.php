@@ -15,6 +15,8 @@
                 <th>Người dùng</th>
                 <th>Sản phẩm</th>
                 <th>Nội dung</th>
+                <th>Đánh giá</th>
+                <th>Trạng thái</th>
                 <th>Ngày bình luận</th>
                 <th>Thao tác</th>
             </tr>
@@ -26,6 +28,14 @@
                 <td>{{ $comment->user->name ?? 'Không xác định' }}</td>
                 <td>{{ $comment->product->name ?? 'Không xác định' }}</td>
                 <td>{{ $comment->content }}</td>
+                <td>{{ $comment->rating ?? 'Không có' }}</td>
+                <td>
+                    @if($comment->status == 1)
+                        <span class="badge bg-success">Hiển thị</span>
+                    @else
+                        <span class="badge bg-secondary">Ẩn</span>
+                    @endif
+                </td>
                 <td>{{ $comment->created_at->format('d/m/Y') }}</td>
                 <td>
                     <a href="{{ route('comments.edit', $comment->id) }}" class="btn btn-sm btn-warning">Sửa</a>
@@ -37,7 +47,7 @@
                 </td>
             </tr>
         @empty
-            <tr><td colspan="6">Không có bình luận nào.</td></tr>
+            <tr><td colspan="8">Không có bình luận nào.</td></tr>
         @endforelse
         </tbody>
     </table>

@@ -36,12 +36,13 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'product_id' => 'required|exists:products,id',
-            'content' => 'required|string|min:3',
-        ]);
+    'content' => 'required|string',
+    'rating' => 'nullable|integer|min:1|max:5',
+    'status' => 'required|boolean',
+]);
 
-        Comment::create($request->only(['user_id', 'product_id', 'content']));
+Comment::create($request->only(['user_id', 'product_id', 'content', 'rating', 'status']));
+
 
         return redirect()->route('comments.index')->with('success', 'Đã thêm bình luận.');
     }

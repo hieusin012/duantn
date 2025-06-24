@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('admin.layouts.index')
 
 @section('content')
 <div class="container mt-4">
@@ -43,6 +43,19 @@
         <div class="mb-3">
             <label for="content" class="form-label">Nội dung</label>
             <textarea name="content" id="content" class="form-control" rows="4" required>{{ old('content', $comment->content) }}</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="rating" class="form-label">Đánh giá (1-5)</label>
+            <input type="number" name="rating" id="rating" class="form-control" min="1" max="5" value="{{ old('rating', $comment->rating) }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="status" class="form-label">Trạng thái</label>
+            <select name="status" id="status" class="form-select">
+                <option value="1" {{ $comment->status == 1 ? 'selected' : '' }}>Hiển thị</option>
+                <option value="0" {{ $comment->status == 0 ? 'selected' : '' }}>Ẩn</option>
+            </select>
         </div>
 
         <button type="submit" class="btn btn-success">Cập nhật</button>
