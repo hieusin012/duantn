@@ -1,45 +1,41 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 
-// Admin Controllers
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\ProductVariantController;
+
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Response;
+
+use App\Http\Controllers\Client\ClientCategoryController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\BrandController;
-use App\Http\Controllers\BannerController;
-use App\Http\Controllers\ThongKeController;
-use App\Http\Controllers\BlogController as AdminBlogController;
-use App\Http\Controllers\VoucherController;
-use App\Http\Controllers\ShipTypeController;
-use App\Http\Controllers\orderController;
-use App\Http\Controllers\productVariantController;
-
-// Client Controllers
-use App\Http\Controllers\Client\HomeController;
-use App\Http\Controllers\Client\ProductController as ClientProductController;
-use App\Http\Controllers\Client\ContactController as ClientContactController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Client\BlogController as ClientBlogController;
+
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BannerController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\ChangePasswordController;
-use App\Http\Controllers\Client\ForgetPasswordController;
-use App\Http\Controllers\Client\ClientCategoryController;
-
-// Auth and Profile Controllers
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Client\ClientProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WishlistController;
 
+
 // Auth Routes
 
+use App\Http\Controllers\Client\ForgetPasswordController;
+use App\Http\Controllers\ThongKeController;
 
 
 
 // Auth
-
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
@@ -50,27 +46,32 @@ Route::post('/forgot-password', [ForgetPasswordController::class, 'sendResetLink
 Route::get('/reset-password/{token}', [ForgetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password', [ForgetPasswordController::class, 'resetPassword'])->name('password.update');
 
-// Admin Routes
-Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(function () {
+// Trang Dashboard admin
+
+// Nhóm route admin
+
+Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(function () { // Nếu dùng bảo vệ url http: 127.0.0.1:8000/admin thì bỏ cmt dòng này. Cmt lại dòng dưới.
+    //Route::prefix('admin')->name('admin.')->group(function () {
+
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
-    // Products Admin
+
+    // Product
     Route::prefix('products')->group(function () {
         Route::get('/', [ProductController::class, 'index'])->name('products.index');
         Route::get('/create-products', [ProductController::class, 'create'])->name('products.create');
         Route::post('/create', [ProductController::class, 'store'])->name('products.store');
         Route::get('/show/{id}', [ProductController::class, 'show'])->name('products.show');
         Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('products.edit');
-Route::put('/edit/{id}', [ProductController::class, 'update'])->name('products.update');
-        Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+        Route::put('/edit/{id}', [ProductController::class, 'update'])->name('products.update');
+Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
         Route::get('/search', [ProductController::class, 'search'])->name('products.search');
         Route::get('/filter', [ProductController::class, 'filter'])->name('products.filter');
     });
 
-    // Product Variants Admin
+    // Product Variants
     Route::resource('product-variants', ProductVariantController::class);
-
-    // Categories Admin
+    // Categories
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
     Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
     Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
@@ -78,8 +79,7 @@ Route::put('/edit/{id}', [ProductController::class, 'update'])->name('products.u
     Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
     Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
-
-    // Banners Admin
+    //banner
     Route::get('/banners', [BannerController::class, 'index'])->name('banners.index');
     Route::get('/banners/create', [BannerController::class, 'create'])->name('banners.create');
     Route::post('/banners', [BannerController::class, 'store'])->name('banners.store');
@@ -88,7 +88,7 @@ Route::put('/edit/{id}', [ProductController::class, 'update'])->name('products.u
     Route::put('/banners/{banner}', [BannerController::class, 'update'])->name('banners.update');
     Route::delete('/banners/{banner}', [BannerController::class, 'destroy'])->name('banners.destroy');
 
-    // Sizes Admin
+    // Sizes
     Route::get('/sizes', [SizeController::class, 'index'])->name('sizes.index');
     Route::get('/sizes/create', [SizeController::class, 'create'])->name('sizes.create');
     Route::post('/sizes', [SizeController::class, 'store'])->name('sizes.store');
@@ -97,19 +97,17 @@ Route::put('/edit/{id}', [ProductController::class, 'update'])->name('products.u
     Route::put('/sizes/{size}', [SizeController::class, 'update'])->name('sizes.update');
     Route::delete('/sizes/{size}', [SizeController::class, 'destroy'])->name('sizes.destroy');
 
-    // Vouchers Admin
-    Route::resource('vouchers', VoucherController::class);// 
 
-    // Users Admin
+    // Users
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
-Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
+    Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
-    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
-    // Colors Admin
+    //color
     Route::get('/colors', [ColorController::class, 'index'])->name('colors.index');
     Route::get('/colors/create', [ColorController::class, 'create'])->name('colors.create');
     Route::post('/colors', [ColorController::class, 'store'])->name('colors.store');
@@ -121,7 +119,8 @@ Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show')
     Route::get('/colors/{id}/edit', [ColorController::class, 'edit'])->name('colors.edit');
     Route::put('/colors/{id}', [ColorController::class, 'update'])->name('colors.update');
 
-    // Brands Admin
+
+    //brands
     Route::get('/brands', [BrandController::class, 'index'])->name('brands.index');
     Route::get('/brands/create', [BrandController::class, 'create'])->name('brands.create');
     Route::post('/brands', [BrandController::class, 'store'])->name('brands.store');
@@ -133,39 +132,22 @@ Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show')
     Route::put('/brands/{brand}', [BrandController::class, 'update'])->name('brands.update');
     Route::get('/brands/restore/{id}', [BrandController::class, 'restore'])->name('brands.restore');
 
-    // Ship Types Admin
-    Route::resource('shiptypes', ShipTypeController::class);
-
-    // Orders Admin
-    Route::resource('orders', OrderController::class);
-
-    // Blog Admin
-    Route::get('/blogs', [AdminBlogController::class, 'index'])->name('blogs.index');
-    Route::get('/blogs/create', [AdminBlogController::class, 'create'])->name('blogs.create');
-    Route::post('/blogs', [AdminBlogController::class, 'store'])->name('blogs.store');
-    Route::get('/blogs/delete', [AdminBlogController::class, 'delete'])->name('blogs.delete');
-    Route::get('/blogs/restore/{id}', [AdminBlogController::class, 'restore'])->name('blogs.restore');
-Route::delete('/blogs/eliminate/{id}', [AdminBlogController::class, 'eliminate'])->name('blogs.eliminate');
-    Route::delete('/blogs/all-eliminate', [AdminBlogController::class, 'forceDeleteAll'])->name('blogs.all-eliminate');
-    Route::get('/blogs/{blog}/edit', [AdminBlogController::class, 'edit'])->name('blogs.edit');
-    Route::put('/blogs/{blog}', [AdminBlogController::class, 'update'])->name('blogs.update');
-    Route::delete('/blogs/{blog}', [AdminBlogController::class, 'destroy'])->name('blogs.destroy');
-    Route::get('/blogs/{blog}', [AdminBlogController::class, 'show'])->name('blogs.show');
-
-    // Statistics Admin
-    Route::get('/thong-ke/san-pham', [ThongKeController::class, 'index'])->name('thongke.index');
-    Route::get('/thong-ke/data', [ThongKeController::class, 'getData'])->name('thongke.data');
+    //Blog
+    Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
+    Route::get('/blogs/create', [BlogController::class, 'create'])->name('blogs.create');
+    Route::post('/blogs', [BlogController::class, 'store'])->name('blogs.store');
+    Route::get('/blogs/delete', [BlogController::class, 'delete'])->name('blogs.delete');
+    Route::get('/blogs/restore/{id}', [BlogController::class, 'restore'])->name('blogs.restore');
+    Route::delete('/blogs/eliminate/{id}', [BlogController::class, 'eliminate'])->name('blogs.eliminate');
+    Route::delete('/blogs/all-eliminate', [BlogController::class, 'forceDeleteAll'])->name('blogs.all-eliminate');
+    Route::get('/blogs/{blog}/edit', [BlogController::class, 'edit'])->name('blogs.edit');
+    Route::put('/blogs/{blog}', [BlogController::class, 'update'])->name('blogs.update');
+Route::delete('/blogs/{blog}', [BlogController::class, 'destroy'])->name('blogs.destroy');
+    Route::get('/blogs/{blog}', [BlogController::class, 'show'])->name('blogs.show');
 });
 
-// Client Routes
-Route::get('/', [HomeController::class, 'index'])->name('client.home');
 
-
-// Products Client
-Route::get('/products', [ClientProductController::class, 'index'])->name('client.products.index');
-
-
-
+// Yêu thích sản phẩm
 Route::middleware('auth')->group(function () {
     Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
     Route::delete('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove')->middleware('auth');
@@ -184,24 +166,31 @@ Route::middleware('auth')->get('/wishlist', [WishlistController::class, 'index']
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 // Tìm kiếm sản phẩm
-
 Route::get('/products/search', [ClientProductController::class, 'search'])->name('client.products.search');
+
+
+Route::get('/products/search', [ClientProductController::class, 'search'])->name('clients.products.search');
+
+// Trang chi tiết sản phẩm (dùng slug để SEO tốt hơn)// Trang chi tiết sản phẩm (dùng slug)
 Route::get('san-pham/{slug}', [ClientProductController::class, 'show'])->name('client.products.show');
 
-// Categories Client
+
+//contact
+// Route::get('/contact', [ClientContactController::class, 'showForm'])->name('clients.contact');
+// Route::post('/contact', [ClientContactController::class, 'handleSubmit'])->name('contact.submit');
+
+//category
 Route::get('/danh-muc/{slug}', [ClientCategoryController::class, 'show'])->name('client.categories.show');
 
-// Contact Client
-Route::get('/contact', [ClientContactController::class, 'showForm'])->name('client.contact');
-Route::post('/contact', [ClientContactController::class, 'handleSubmit'])->name('client.contact.submit');
+//blog
+Route::get('/blog', [ClientBlogController::class, 'blog'])->name('clients.blog');
 
-// Blog Client
-Route::prefix('blog')->group(function () {
-    Route::get('/', [ClientBlogController::class, 'index'])->name('client.blogs.index');
-    Route::get('/{slug}', [ClientBlogController::class, 'show'])->name('client.blogs.show');
-});
+//products
 
-// Cart Client (requires authentication)
+// Trang danh sách sản phẩm
+Route::get('/products', [ClientProductController::class, 'index'])->name('client.products.index');
+
+//cart
 Route::middleware('auth')->group(function () {
     Route::get('/cart', [CartController::class, 'index'])->name('client.cart');
     Route::post('/cart/add', [CartController::class, 'addToCart'])->name('client.cart.add');
@@ -209,11 +198,19 @@ Route::middleware('auth')->group(function () {
     Route::delete('/cart/remove/{productId}', [CartController::class, 'removeFromCart'])->name('client.cart.remove');
 });
 
-// Profile Client (requires authentication)
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'show'])->name('client.profile.show');
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('client.profile.edit');
-    Route::post('/profile/update', [ProfileController::class, 'update'])->name('client.profile.update');
-    Route::get('/profile/change-password', [ChangePasswordController::class, 'showChangePasswordForm'])->name('client.profile.change-password.form');
-Route::post('/profile/update-password', [ChangePasswordController::class, 'changePassword'])->name('client.profile.update-password');
+
+
+
+// Xem/Sửa hồ sơ cá nhân
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile/change-password', [ChangePasswordController::class, 'showChangePasswordForm'])->name('profile.change-password.form');
+    Route::post('/profile/update-password', [ChangePasswordController::class, 'changePassword'])->name('profile.update-password');
 });
+
+
+// Thống kê sản phẩm theo danh mục
+Route::get('/admin/thong-ke/san-pham', [ThongKeController::class, 'index'])->name('admin.thongke.index');
+Route::get('/admin/thong-ke/data', [ThongKeController::class, 'getData'])->name('admin.thongke.data');
