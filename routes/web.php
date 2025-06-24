@@ -23,17 +23,12 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\ChangePasswordController;
-use App\Http\Controllers\Client\ClientProductController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\WishlistController;
 
-
-// Auth Routes
 
 use App\Http\Controllers\Client\ForgetPasswordController;
 use App\Http\Controllers\ThongKeController;
-
-
+use App\Http\Controllers\WishlistController;
 
 // Auth
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -45,6 +40,8 @@ Route::get('/forgot-password', [ForgetPasswordController::class, 'showForgotPass
 Route::post('/forgot-password', [ForgetPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 Route::get('/reset-password/{token}', [ForgetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password', [ForgetPasswordController::class, 'resetPassword'])->name('password.update');
+
+
 
 // Trang Dashboard admin
 
@@ -104,7 +101,7 @@ Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('pro
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
     Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
-    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
 Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
     //color
@@ -141,10 +138,11 @@ Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.
     Route::delete('/blogs/eliminate/{id}', [BlogController::class, 'eliminate'])->name('blogs.eliminate');
     Route::delete('/blogs/all-eliminate', [BlogController::class, 'forceDeleteAll'])->name('blogs.all-eliminate');
     Route::get('/blogs/{blog}/edit', [BlogController::class, 'edit'])->name('blogs.edit');
-    Route::put('/blogs/{blog}', [BlogController::class, 'update'])->name('blogs.update');
+Route::put('/blogs/{blog}', [BlogController::class, 'update'])->name('blogs.update');
 Route::delete('/blogs/{blog}', [BlogController::class, 'destroy'])->name('blogs.destroy');
     Route::get('/blogs/{blog}', [BlogController::class, 'show'])->name('blogs.show');
 });
+
 
 
 // Yêu thích sản phẩm
@@ -160,30 +158,33 @@ Route::middleware('auth')->get('/wishlist', [WishlistController::class, 'index']
 
 
 // Trang client (không nằm trong admin)
+use App\Http\Controllers\Client\ProductController as ClientProductController;
+use App\Http\Controllers\Client\ContactController as ClientContactController;
 
 
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+// Sửa trong web.php
+Route::get('/', [HomeController::class, 'index'])->name('client.home'); // Sửa 'home' thành 'client.home'
 
 // Tìm kiếm sản phẩm
 Route::get('/products/search', [ClientProductController::class, 'search'])->name('client.products.search');
 
-
-Route::get('/products/search', [ClientProductController::class, 'search'])->name('clients.products.search');
 
 // Trang chi tiết sản phẩm (dùng slug để SEO tốt hơn)// Trang chi tiết sản phẩm (dùng slug)
 Route::get('san-pham/{slug}', [ClientProductController::class, 'show'])->name('client.products.show');
 
 
 //contact
-// Route::get('/contact', [ClientContactController::class, 'showForm'])->name('clients.contact');
-// Route::post('/contact', [ClientContactController::class, 'handleSubmit'])->name('contact.submit');
+Route::get('/contact', [ClientContactController::class, 'showForm'])->name('client.contact');
+Route::post('/contact', [ClientContactController::class, 'handleSubmit'])->name('contact.submit');
 
 //category
 Route::get('/danh-muc/{slug}', [ClientCategoryController::class, 'show'])->name('client.categories.show');
 
 //blog
-Route::get('/blog', [ClientBlogController::class, 'blog'])->name('clients.blog');
+Route::get('/blog', [ClientBlogController::class, 'index'])->name('client.blog'); // Sửa từ clients.blog
+Route::get('/blog/{slug}', [App\Http\Controllers\Client\BlogController::class, 'show'])->name('client.blogs.show');
+
 
 //products
 
@@ -206,7 +207,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-    Route::get('/profile/change-password', [ChangePasswordController::class, 'showChangePasswordForm'])->name('profile.change-password.form');
+Route::get('/profile/change-password', [ChangePasswordController::class, 'showChangePasswordForm'])->name('profile.change-password.form');
     Route::post('/profile/update-password', [ChangePasswordController::class, 'changePassword'])->name('profile.update-password');
 });
 
