@@ -19,9 +19,17 @@
                         <a href="#" class="btn-icon quickview" data-bs-toggle="tooltip" title="Quick View">
                             <i class="icon anm anm-search-plus-l"></i>
                         </a>
-                        <a href="#" class="btn-icon wishlist" data-bs-toggle="tooltip" title="Add to Wishlist">
+                        {{-- <a href="#" class="btn-icon wishlist" data-bs-toggle="tooltip" title="Add to Wishlist">
                             <i class="icon anm anm-heart-l"></i>
+                        </a> --}}
+                        <a href="javascript:void(0);" 
+                        class="btn-icon wishlist-toggle" 
+                        data-id="{{ $product->id }}" 
+                        data-bs-toggle="tooltip" 
+                        title="Add to Wishlist">
+                            <i class="icon anm anm-heart {{ auth()->check() && $product->wishlists->where('user_id', auth()->id())->count() ? 'text-danger' : '' }}"></i>
                         </a>
+
                         <a href="#" class="btn-icon compare" data-bs-toggle="tooltip" title="Add to Compare">
                             <i class="icon anm anm-random-r"></i>
                         </a>
@@ -60,7 +68,7 @@
     </div>
 </div>
 @endsection
-
+@section('scripts')
 <script>
     // Khi trang kết quả tìm kiếm load xong, reset form tìm kiếm
     window.addEventListener('DOMContentLoaded', () => {
@@ -75,4 +83,88 @@
             });
         }
     });
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.wishlist-toggle').forEach(button => {
+            button.addEventListener('click', function () {
+                const productId = this.dataset.id;
+                const token = '{{ csrf_token() }}';
+                const icon = this.querySelector('i');
+
+                fetch("{{ route('wishlist.toggle') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': token
+                    },
+                    body: JSON.stringify({ product_id: productId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'added') {
+                        icon.classList.remove('anm-heart-l');
+                        icon.classList.add('anm-heart', 'text-danger');
+                        this.setAttribute('title', 'Bỏ yêu thích');
+                    } else {
+                        icon.classList.remove('anm-heart', 'text-danger');
+                        icon.classList.add('anm-heart-l');
+                        this.setAttribute('title', 'Thêm vào yêu thích');
+                        this.closest('.col-md-3')?.remove();
+                    }
+                    const wishlistCountEl = document.querySelector('.wishlist-count');
+                    if (wishlistCountEl) {
+                        wishlistCountEl.textContent = data.count;
+                    }
+                });
+
+            });
+        });
+    });
 </script>
+@endsection
+
+
+{{-- Gộp lại script --}}
+
+{{-- @section('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Reset tìm kiếm khi trang load
+        const form = document.getElementById('search-form');
+        if (form) {
+            const inputs = form.querySelectorAll('input[type="text"], input[type="number"], select');
+            inputs.forEach(input => {
+                if (input.name !== '_token') {
+                    input.value = '';
+                }
+            });
+        }
+
+        // Wishlist toggle
+        document.querySelectorAll('.wishlist-toggle').forEach(button => {
+            button.addEventListener('click', function () {
+                const productId = this.dataset.id;
+                const token = '{{ csrf_token() }}';
+                const icon = this.querySelector('i');
+
+                fetch("{{ route('wishlist.toggle') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': token
+                    },
+                    body: JSON.stringify({ product_id: productId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'added') {
+                        icon.classList.add('text-danger');
+                    } else {
+                        icon.classList.remove('text-danger');
+                    }
+                });
+            });
+        });
+    });
+</script>
+@endsection --}}
+

@@ -34,6 +34,21 @@
             </li>
 
             <li>
+                  <a class="app-menu__item {{ request()->routeIs('admin.vouchers*') ? 'active' : '' }}" href="{{ route('admin.vouchers.index') }}">
+                      <i class='app-menu__icon fas fa-ticket-alt'></i> {{-- hoặc 'fa-gift' --}}
+                      <span class="app-menu__label">Quản lý Vouchers</span>
+                  </a>
+              </li>
+              
+              <li>
+                  <a class="app-menu__item {{ request()->routeIs('admin.orders*') ? 'active' : '' }}" href="{{ route('admin.orders.index') }}">
+                      <i class='app-menu__icon fas fa-shopping-cart'></i> {{-- hoặc 'fa-box' --}}
+                      <span class="app-menu__label">Quản lý Đơn Hàng</span>
+                  </a>
+              </li>
+              
+
+            <li>
                   <a class="app-menu__item {{ request()->routeIs('admin.banners.*') ? 'active' : '' }}" href="{{ route(name: 'admin.banners.index') }}">
                         <i class='app-menu__icon fas fa-image'></i>
 
@@ -78,12 +93,24 @@
                   </a>
             </li>
 
+            <li>
+                  <a class="app-menu__item {{ request()->routeIs('admin.shiptypes*') ? 'active' : '' }}" href="{{ route('admin.shiptypes.index') }}">
+                      <i class="app-menu__icon fa fa-shipping-fast"></i>
+                      <span class="app-menu__label">Quản Lí Shipper</span>
+                  </a>
+              </li>
+              
 
-            <li><a class="app-menu__item {{ request()->is('table-data-oder*') ? 'active' : '' }}" href="table-data-oder.html"><i class='app-menu__icon bx bx-task'></i><span
-                              class="app-menu__label">Quản lý đơn hàng</span></a></li>
+
             <li><a class="app-menu__item {{ request()->is('table-data-banned*') ? 'active' : '' }}" href="table-data-banned.html"><i class='app-menu__icon bx bx-run'></i><span
                               class="app-menu__label">Quản lý nội bộ
                         </span></a></li>
+            <li>
+            <a class="app-menu__item {{ request()->routeIs('admin.comments.*') ? 'active' : '' }}" href="{{ route('admin.comments.index') }}">
+                  <i class='app-menu__icon fas fa-comments'></i>
+                  <span class="app-menu__label">Quản lý bình luận</span>
+            </a>
+            </li>
             <li><a class="app-menu__item {{ request()->is('table-data-money*') ? 'active' : '' }}" href="table-data-money.html"><i class='app-menu__icon bx bx-dollar'></i><span
                               class="app-menu__label">Bảng kê lương</span></a></li>
             <li><a class="app-menu__item {{ request()->is('quan-ly-bao-cao*') ? 'active' : '' }}" href="quan-ly-bao-cao.html"><i

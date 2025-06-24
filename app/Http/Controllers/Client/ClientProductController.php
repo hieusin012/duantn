@@ -1,3 +1,4 @@
+// app/Http/Controllers/Client/ProductController.php
 <?php
 
 namespace App\Http\Controllers\Client;
@@ -8,7 +9,7 @@ use App\Models\Category;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class ClientProductController extends Controller
 {
     public function index()
     {
@@ -24,34 +25,37 @@ class ProductController extends Controller
     }
 
     public function show($slug)
-{
-    $product = Product::with(['productGalleries', 'reviews'])
-        ->where('slug', $slug)
-        ->firstOrFail();
+    {
+        $product = Product::with(['galleries', 'variants.color', 'variants.size', 'brand', 'category'])
+            ->where('slug', $slug)
+            ->where('is_active', 1)
+            ->whereNull('deleted_at')
+            ->firstOrFail();
 
-    $productImages = $product->productGalleries; // lấy danh sách ảnh phụ
-    $averageRating = optional($product->reviews)->avg('rating'); // tính trung bình đánh giá an toàn
+        $productImages = $product->galleries; // Lấy danh sách ảnh phụ
 
-    return view('clients.products.show', compact('product', 'productImages', 'averageRating'));
-}
+        // Lấy sản phẩm liên quan (cùng danh mục, trừ sản phẩm hiện tại)
+        $relatedProducts = Product::with(['brand', 'galleries'])
+            ->where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->where('is_active', 1)
+            ->whereNull('deleted_at')
+            ->take(5)
+            ->get();
 
+        return view('clients.products.show', compact('product', 'productImages', 'relatedProducts'));
+    }
 
-
-    /**
-     * Handle product search by name and category.
-     */
     public function search(Request $request)
     {
         $query = Product::query()
             ->where('is_active', 1)
             ->whereNull('deleted_at');
 
-        // Search by product name
         if ($request->has('search') && !empty($request->input('search'))) {
             $query->where('name', 'like', '%' . $request->input('search') . '%');
         }
 
-        // Filter by category, including subcategories
         if ($request->has('category') && $request->input('category') != 0) {
             $categoryId = $request->input('category');
             $categoryIds = Category::where('is_active', 1)
@@ -66,17 +70,14 @@ class ProductController extends Controller
             $query->whereIn('category_id', $categoryIds);
         }
 
-        // Filter by brand
         if ($request->filled('brand')) {
             $query->where('brand_id', $request->input('brand'));
         }
 
-        // Filter by min price
         if ($request->filled('min_price')) {
             $query->where('price', '>=', $request->input('min_price'));
         }
 
-        // Filter by max price
         if ($request->filled('max_price')) {
             $query->where('price', '<=', $request->input('max_price'));
         }
@@ -90,21 +91,9 @@ class ProductController extends Controller
         return view('clients.products.index', compact('products', 'categories', 'brands'));
     }
 
-    /**
-     * Get product images - adjust based on your image storage structure
-     */
     public function getProductImages($product)
     {
-        // Nếu bạn có trường gallery hoặc images trong database
-        if (isset($product->gallery) && !empty($product->gallery)) {
-            return json_decode($product->gallery, true);
-        }
-        
-        // Hoặc nếu bạn có bảng riêng cho images
-        // return $product->images()->get();
-        
-        // Tạm thời return array mặc định với image chính
-        return [
+        return $product->galleries->pluck('image')->toArray() ?: [
             $product->image ?? 'assets/images/products/default.jpg'
         ];
     }

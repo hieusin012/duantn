@@ -30,6 +30,7 @@
                 </div>
                 <!--End Alert msg-->
 
+
                 <!--Cart Form-->
                 <form action="#" method="post" class="cart-table table-bottom-brd">
                     @if ($cart && $cart->items->count())
@@ -96,7 +97,6 @@
                     @endif
                 </form>
                 <!--End Cart Form-->
-
                 <!--Note with Shipping estimates-->
                 <div class="row my-4 pt-3">
                     <div class="col-12 col-sm-12 col-md-12 col-lg-6 mb-12 cart-col">

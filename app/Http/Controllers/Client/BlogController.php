@@ -4,11 +4,20 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Blog;
+
 
 class BlogController extends Controller
 {
-    public function blog()
+    public function index()
     {
-        return view('clients.blog'); // trỏ đến view hiển thị blog
+        $blogs = Blog::orderBy('created_at', 'desc')->paginate(6);
+        return view('clients.blogs.index', compact('blogs')); // SỬA TỪ 'client.blogs.index' thành 'clients.blogs.index'
+    }
+    public function show($slug)
+    {
+        return view('clients.blog');
+        $blog = Blog::where('slug', $slug)->firstOrFail();
+        return view('clients.blogs.show', compact('blog')); // SỬA TỪ 'client.blogs.show' thành 'clients.blogs.show'
     }
 }
