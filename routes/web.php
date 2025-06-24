@@ -31,14 +31,12 @@ use App\Http\Controllers\Client\ClientCategoryController;
 // Auth and Profile Controllers
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
-
+use App\Http\Controllers\WishlistController;
 
 // Auth Routes
 
 
-use App\Http\Controllers\Client\ForgetPasswordController;
-use App\Http\Controllers\ThongKeController;
-use App\Http\Controllers\WishlistController;
+
 
 // Auth
 
@@ -180,8 +178,7 @@ Route::middleware('auth')->get('/wishlist', [WishlistController::class, 'index']
 
 
 // Trang client (không nằm trong admin)
-use App\Http\Controllers\Client\ProductController as ClientProductController;
-use App\Http\Controllers\Client\ContactController as ClientContactController;
+
 
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
