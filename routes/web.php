@@ -1,33 +1,38 @@
 <?php
 
 
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Response;
+use App\Http\Controllers\BrandController;
+
+use App\Http\Controllers\ColorController;
+use App\Http\Controllers\BannerController;
+
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ThongKeController;
+use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\CategoryController;
+
+use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\ProductVariantController;
 
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Response;
 
-use App\Http\Controllers\Client\ClientCategoryController;
-use App\Http\Controllers\ColorController;
-use App\Http\Controllers\BrandController;
-use App\Http\Controllers\BlogController;
-use App\Http\Controllers\Client\BlogController as ClientBlogController;
-
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\BannerController;
-use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\ChangePasswordController;
-use App\Http\Controllers\ProfileController;
-
-
+use App\Http\Controllers\Client\ClientCategoryController;
 use App\Http\Controllers\Client\ForgetPasswordController;
-use App\Http\Controllers\ThongKeController;
+
+use App\Http\Controllers\CommentController;
+
+
 
 // Auth
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -60,7 +65,7 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
         Route::get('/show/{id}', [ProductController::class, 'show'])->name('products.show');
         Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('products.edit');
         Route::put('/edit/{id}', [ProductController::class, 'update'])->name('products.update');
-        Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
         Route::get('/search', [ProductController::class, 'search'])->name('products.search');
         Route::get('/filter', [ProductController::class, 'filter'])->name('products.filter');
     });
@@ -93,6 +98,9 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     Route::put('/sizes/{size}', [SizeController::class, 'update'])->name('sizes.update');
     Route::delete('/sizes/{size}', [SizeController::class, 'destroy'])->name('sizes.destroy');
 
+    // vouchers
+    Route::resource('vouchers', VoucherController::class);
+
 
     // Users
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
@@ -101,7 +109,7 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
-    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
     //color
     Route::get('/colors', [ColorController::class, 'index'])->name('colors.index');
@@ -128,6 +136,8 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     Route::put('/brands/{brand}', [BrandController::class, 'update'])->name('brands.update');
     Route::get('/brands/restore/{id}', [BrandController::class, 'restore'])->name('brands.restore');
 
+    Route::resource('shiptypes', \App\Http\Controllers\ShipTypeController::class);
+    Route::resource('orders', App\Http\Controllers\OrderController::class);
     //Blog
     Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
     Route::get('/blogs/create', [BlogController::class, 'create'])->name('blogs.create');
@@ -140,39 +150,63 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     Route::put('/blogs/{blog}', [BlogController::class, 'update'])->name('blogs.update');
     Route::delete('/blogs/{blog}', [BlogController::class, 'destroy'])->name('blogs.destroy');
     Route::get('/blogs/{blog}', [BlogController::class, 'show'])->name('blogs.show');
+
+    //comment
+     Route::resource('comments', CommentController::class);
 });
 
+
+
+// Yêu thích sản phẩm
+Route::middleware('auth')->group(function () {
+    Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+    Route::delete('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove')->middleware('auth');
+
+});
+Route::middleware('auth')->get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
 
 
 
 
 
 // Trang client (không nằm trong admin)
-use App\Http\Controllers\Client\ProductController as ClientProductController;
+use App\Http\Controllers\Client\BlogController as ClientBlogController;
 use App\Http\Controllers\Client\ContactController as ClientContactController;
+use App\Http\Controllers\Client\ProductController as ClientProductController;
 
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+
+// Sửa trong web.php
+Route::get('/', [HomeController::class, 'index'])->name('client.home'); // Sửa 'home' thành 'client.home'
+
 
 // Tìm kiếm sản phẩm
 Route::get('/products/search', [ClientProductController::class, 'search'])->name('client.products.search');
 
 
-Route::get('/products/search', [ClientProductController::class, 'search'])->name('clients.products.search');
+// Route::get('/products/search', [ClientProductController::class, 'search'])->name('clients.products.search');
+
 
 // Trang chi tiết sản phẩm (dùng slug để SEO tốt hơn)// Trang chi tiết sản phẩm (dùng slug)
 Route::get('san-pham/{slug}', [ClientProductController::class, 'show'])->name('client.products.show');
 
 
 //contact
-Route::get('/contact', [ClientContactController::class, 'showForm'])->name('clients.contact');
+Route::get('/contact', [ClientContactController::class, 'showForm'])->name('client.contact');
 Route::post('/contact', [ClientContactController::class, 'handleSubmit'])->name('contact.submit');
 
 //category
 Route::get('/danh-muc/{slug}', [ClientCategoryController::class, 'show'])->name('client.categories.show');
 
 //blog
-Route::get('/blog', [ClientBlogController::class, 'blog'])->name('clients.blog');
+
+
+
+Route::get('/blog', [ClientBlogController::class, 'index'])->name('client.blog'); // Sửa từ clients.blog
+Route::get('/blog/{slug}', [App\Http\Controllers\Client\BlogController::class, 'show'])->name('client.blogs.show');
+
+
 
 //products
 
@@ -200,11 +234,6 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-
 // Thống kê sản phẩm theo danh mục
 Route::get('/admin/thong-ke/san-pham', [ThongKeController::class, 'index'])->name('admin.thongke.index');
 Route::get('/admin/thong-ke/data', [ThongKeController::class, 'getData'])->name('admin.thongke.data');
-
-
-
-

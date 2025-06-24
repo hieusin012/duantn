@@ -33,7 +33,7 @@ class AuthController extends Controller
             if (Auth::user()->role === 'admin') {
                 return redirect()->intended('/admin');
             } else {
-                return redirect('/home');
+                return redirect('/');
             }
         }
 
@@ -88,7 +88,7 @@ class AuthController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/home');
+        return redirect('/');
     }
     
 }
