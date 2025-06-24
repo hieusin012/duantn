@@ -1,34 +1,34 @@
 <?php
 
 
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Response;
+use App\Http\Controllers\BrandController;
+
+use App\Http\Controllers\ColorController;
+use App\Http\Controllers\BannerController;
+
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ThongKeController;
+use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\CategoryController;
+
+use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\ProductVariantController;
 
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Response;
 
-use App\Http\Controllers\Client\ClientCategoryController;
-use App\Http\Controllers\ColorController;
-use App\Http\Controllers\BrandController;
-use App\Http\Controllers\BlogController;
-use App\Http\Controllers\Client\BlogController as ClientBlogController;
-
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\BannerController;
-use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\ChangePasswordController;
-use App\Http\Controllers\ProfileController;
-
-
+use App\Http\Controllers\Client\ClientCategoryController;
 use App\Http\Controllers\Client\ForgetPasswordController;
-use App\Http\Controllers\ThongKeController;
-use App\Http\Controllers\WishlistController;
 
 // Auth
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -94,6 +94,9 @@ Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('pro
     Route::put('/sizes/{size}', [SizeController::class, 'update'])->name('sizes.update');
     Route::delete('/sizes/{size}', [SizeController::class, 'destroy'])->name('sizes.destroy');
 
+    // vouchers
+    Route::resource('vouchers', VoucherController::class);
+
 
     // Users
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
@@ -129,6 +132,8 @@ Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.
     Route::put('/brands/{brand}', [BrandController::class, 'update'])->name('brands.update');
     Route::get('/brands/restore/{id}', [BrandController::class, 'restore'])->name('brands.restore');
 
+    Route::resource('shiptypes', \App\Http\Controllers\ShipTypeController::class);
+    Route::resource('orders', App\Http\Controllers\OrderController::class);
     //Blog
     Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
     Route::get('/blogs/create', [BlogController::class, 'create'])->name('blogs.create');
@@ -139,7 +144,7 @@ Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.
     Route::delete('/blogs/all-eliminate', [BlogController::class, 'forceDeleteAll'])->name('blogs.all-eliminate');
     Route::get('/blogs/{blog}/edit', [BlogController::class, 'edit'])->name('blogs.edit');
     Route::put('/blogs/{blog}', [BlogController::class, 'update'])->name('blogs.update');
-Route::delete('/blogs/{blog}', [BlogController::class, 'destroy'])->name('blogs.destroy');
+    Route::delete('/blogs/{blog}', [BlogController::class, 'destroy'])->name('blogs.destroy');
     Route::get('/blogs/{blog}', [BlogController::class, 'show'])->name('blogs.show');
 });
 
@@ -158,15 +163,17 @@ Route::middleware('auth')->get('/wishlist', [WishlistController::class, 'index']
 
 
 // Trang client (không nằm trong admin)
-use App\Http\Controllers\Client\ProductController as ClientProductController;
+use App\Http\Controllers\Client\BlogController as ClientBlogController;
 use App\Http\Controllers\Client\ContactController as ClientContactController;
+use App\Http\Controllers\Client\ProductController as ClientProductController;
 
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+// Route::get('/', [HomeController::class, 'index'])->name('client.home');
+Route::get('/', [HomeController::class, 'index'])->name('client.home');
+
 
 // Tìm kiếm sản phẩm
 Route::get('/products/search', [ClientProductController::class, 'search'])->name('client.products.search');
-
 
 Route::get('/products/search', [ClientProductController::class, 'search'])->name('clients.products.search');
 
@@ -182,7 +189,8 @@ Route::post('/contact', [ClientContactController::class, 'handleSubmit'])->name(
 Route::get('/danh-muc/{slug}', [ClientCategoryController::class, 'show'])->name('client.categories.show');
 
 //blog
-Route::get('/blog', [ClientBlogController::class, 'blog'])->name('clients.blog');
+Route::get('/blog', [ClientBlogController::class, 'index'])->name('clients.blog');
+Route::get('/blog/{slug}', [ClientBlogController::class, 'show'])->name('client.blogs.show');
 
 //products
 
