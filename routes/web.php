@@ -27,6 +27,7 @@ use App\Http\Controllers\ProfileController;
 
 
 use App\Http\Controllers\Client\ForgetPasswordController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ThongKeController;
 
 // Auth
@@ -140,6 +141,9 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     Route::put('/blogs/{blog}', [BlogController::class, 'update'])->name('blogs.update');
     Route::delete('/blogs/{blog}', [BlogController::class, 'destroy'])->name('blogs.destroy');
     Route::get('/blogs/{blog}', [BlogController::class, 'show'])->name('blogs.show');
+
+    //comment
+     Route::resource('comments', CommentController::class);
 });
 
 
