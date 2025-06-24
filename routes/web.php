@@ -27,6 +27,7 @@ use App\Http\Controllers\ProfileController;
 
 
 use App\Http\Controllers\Client\ForgetPasswordController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ThongKeController;
 use App\Http\Controllers\WishlistController;
 
@@ -141,6 +142,9 @@ Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.
     Route::put('/blogs/{blog}', [BlogController::class, 'update'])->name('blogs.update');
 Route::delete('/blogs/{blog}', [BlogController::class, 'destroy'])->name('blogs.destroy');
     Route::get('/blogs/{blog}', [BlogController::class, 'show'])->name('blogs.show');
+
+    //comment
+     Route::resource('comments', CommentController::class);
 });
 
 
