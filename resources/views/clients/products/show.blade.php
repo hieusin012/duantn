@@ -1,40 +1,69 @@
 @section('title', $product->name)
 @extends('clients.layouts.master')
+@section('title', $product->name)
 
 @push('styles')
 <style>
     .btn-check:checked+.color-label {
         border: 3px solid black !important;
     }
+
+    @keyframes bounce {
+
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-5px);
+        }
+    }
+
+    .cart-bounce {
+        animation: bounce 0.5s ease;
+    }
+    .color-swatch {
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+}
 </style>
 @endpush
 
 @section('content')
 <div id="page-content">
-    <!-- Page Header -->
-    <div class="container">
-        <div class="breadcrumbs-wrapper">
-            <nav class="breadcrumbs">
-                <a href="{{ url('/') }}">Trang chủ</a> >
-                <span class="main-title fw-bold">{{ $product->name }}</span>
-            </nav>
+    <!--Page Header-->
+    <div class="page-header text-center">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                    <!--Breadcrumbs-->
+                    <div class="breadcrumbs"><a href="index.html" title="Back to the home page">Home</a><span class="main-title fw-bold"><i class="icon anm anm-angle-right-l"></i>Chi tiết sản phẩm</span></div>
+                    <!--End Breadcrumbs-->
+                </div>
+            </div>
         </div>
     </div>
+    <!--End Page Header-->
 
-    <!-- Main Content -->
+    <!--Main Content-->
     <div class="container">
-        <div class="product-single section">
+        <!--Product Content-->
+        <div class="product-single">
             <div class="row">
-                <!-- Product Image -->
-                <div class="col-lg-6 col-md-6 col-sm-12 product-layout-img mb-4 mb-md-0">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-12 product-layout-img mb-4 mb-md-0">
                     <div class="product-sticky-style">
+                        <!-- Product Horizontal -->
                         <div class="product-details-img product-thumb-left-style d-flex justify-content-center">
                             <!-- Product Thumb -->
                             <div class="product-thumb thumb-left">
                                 <div id="gallery" class="product-thumb-vertical h-100">
                                     @foreach($product->galleries as $image)
-                                    <a data-image="{{ asset('storage/' . $image->image) }}" data-zoom-image="{{ asset('storage/' . $image->image) }}" class="slick-slide">
-                                        <img class="blur-up lazyload rounded-0" data-src="{{ asset('storage/' . $image->image) }}" src="{{ asset('storage/' . $image->image) }}" alt="{{ $product->name }}" />
+                                    <a data-image="{{ asset('storage/' . $image->image) }}" data-zoom-image="{{ asset('storage/' . $image->image) }}" class="slick-slide slick-cloned active">
+                                        <img class="blur-up lazyload rounded-0" data-src="{{ asset('storage/' . $image->image) }}" src="{{ asset('storage/' . $image->image) }}" alt="product" width="625" height="808" />
                                     </a>
                                     @endforeach
                                 </div>
@@ -43,62 +72,80 @@
 
                             <!-- Product Main -->
                             <div class="zoompro-wrap product-zoom-right rounded-0">
-                                <div class="zoompro-span">
-                                    <img id="zoompro" class="zoompro rounded-0" src="{{ asset($product->image) }}" data-zoom-image="{{ asset($product->image) }}" alt="{{ $product->name }}" />
-                                </div>
+                                <!-- Product Image -->
+
+                                <div class="zoompro-span"><img id="zoompro" class="zoompro rounded-0" src="{{ asset($product->image) }}" data-zoom-image="assets/images/products/product2.jpg" alt="product" width="625" height="808" /></div>
+                                <!-- End Product Image -->
                             </div>
                             <!-- End Product Main -->
                         </div>
+                        <!-- End Product Horizontal -->
 
                         <!-- Social Sharing -->
                         <div class="social-sharing d-flex-center justify-content-center mt-3 mt-md-4 lh-lg">
-                            <span class="sharing-lbl fw-600">Chia sẻ :</span>
+                            <span class="sharing-lbl fw-600">Share :</span>
                             <a href="#" class="d-flex-center btn btn-link btn--share share-facebook"><i class="icon anm anm-facebook-f"></i><span class="share-title">Facebook</span></a>
-                            <a href="#" class="d-flex-center btn btn-link btn--share share-twitter"><i class="icon anm anm-twitter"></i><span class="share-title">Twitter</span></a>
-                            <a href="#" class="d-flex-center btn btn-link btn--share share-pinterest"><i class="icon anm anm-pinterest-p"></i><span class="share-title">Pinterest</span></a>
+                            <a href="#" class="d-flex-center btn btn-link btn--share share-twitter"><i class="icon anm anm-twitter"></i><span class="share-title">Tweet</span></a>
+                            <a href="#" class="d-flex-center btn btn-link btn--share share-pinterest"><i class="icon anm anm-pinterest-p"></i> <span class="share-title">Pin it</span></a>
+                            <a href="#" class="d-flex-center btn btn-link btn--share share-linkedin"><i class="icon anm anm-linkedin-in"></i><span class="share-title">Linkedin</span></a>
+                            <a href="#" class="d-flex-center btn btn-link btn--share share-email"><i class="icon anm anm-envelope-l"></i><span class="share-title">Email</span></a>
                         </div>
+                        <!-- End Social Sharing -->
                     </div>
                 </div>
 
-                <!-- Product Info -->
-                <div class="col-lg-6 col-md-6 col-sm-12 product-layout-info">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-12 product-layout-info">
+                    <!-- Product Details -->
                     <div class="product-single-meta">
                         <div class="product-main-subtitle mb-3 d-flex-center">
-                            <div class="product-labels"><span class="lbl pr-label1 mb-0">Bán chạy</span></div>
+                            <div class="product-labels position-static d-inline-flex"><span class="lbl pr-label1 mb-0">Best seller</span></div>
+                            <span class="label-text ms-2 d-none">in Fashion</span>
                         </div>
                         <h2 class="product-main-title">{{ $product->name }}</h2>
+                        <!-- Product Reviews -->
                         <div class="product-review d-flex-center mb-3">
-                            <div class="reviewStar d-flex-center"><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star-o"></i><span class="caption ms-2">{{ rand(10, 30) }} Lượt đánh giá</span></div>
-                            <a class="reviewLink d-flex-center" href="#reviews">Viết đánh giá</a>
+                            <div class="reviewStar d-flex-center"><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star-o"></i><span class="caption ms-2">24 Lượt đánh giá</span></div>
+                            <a class="reviewLink d-flex-center" href="#reviews">Write a Review</a>
                         </div>
+                        <!-- End Product Reviews -->
+                        <!-- Product Price -->
                         <div class="product-price d-flex-center my-3">
                             <span class="price">{{ number_format($product->price, 0, ',', '.') }} VNĐ</span>
                         </div>
-                        <div class="sort-description mb-3">{{ $product->description ?? 'Lorem Ipsum là văn bản giả được sử dụng trong ngành in ấn và thiết kế.' }}</div>
-                        <div class="product-availability p-0 m-0 mb-3">
+                        <!-- End Product Price -->
+                        <!-- Sort Description -->
+                        <div class="sort-description mb-3">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum</div>
+                        <!-- End Sort Description -->
+                        <!--Product Availability-->
+                        <div class="product-availability p-0 m-0 mb-3 position-static col-lg-9">
                             <div class="lh-1 d-flex justify-content-between">
-                                <div class="text-sold fw-600">Còn <strong class="text-link">{{ $product->quantity ?? 16 }}</strong> sản phẩm!</div>
+                                <div class="text-sold fw-600">Currently, <strong class="text-link">16</strong> items are in stock!</div>
                             </div>
                             <div class="progress">
-                                <div class="progress-bar w-{{ min(100, ($product->quantity / ($product->quantity + 10)) * 100) }}%" role="progressbar" aria-valuenow="{{ min(100, ($product->quantity / ($product->quantity + 10)) * 100) }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar w-75" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                         </div>
-                        <div class="orderMsg d-flex-center mb-3">
+                        <!--End Product Availability-->
+                        <!-- Product Sold -->
+                        <div class="orderMsg d-flex-center mb-3" data-user="23" data-time="24">
                             <i class="icon anm anm-medapps"></i>
-                            <p class="m-0"><strong class="items">{{ rand(5, 10) }}</strong> Đã bán trong <strong class="time">{{ rand(10, 24) }}</strong> giờ</p>
-                            <p id="quantity_message" class="ms-2 ps-2 border-start">Còn <span class="items fw-bold">{{ $product->quantity - rand(1, 5) }}</span> sản phẩm!</p>
+                            <p class="m-0"><strong class="items">8</strong> Sold in last <strong class="time">14</strong> hours</p>
+                            <p id="quantity_message" class="ms-2 ps-2 border-start">Hurry up! only <span class="items fw-bold">4</span> products left in stock!</p>
                         </div>
-                        <div class="userViewMsg featureText mb-2"><i class="icon anm anm-eye-r"></i><b class="uersView">{{ rand(10, 30) }}</b> Người đang xem</div>
+                        <!-- End Product Sold -->
+                        <!-- Product Info -->
+                        <div class="userViewMsg featureText mb-2" data-user="20" data-time="11000"><i class="icon anm anm-eye-r"></i><b class="uersView">21</b> People are Looking for this Product</div>
+                        <!-- End Product Info -->
                     </div>
+                    <!-- End Product Details -->
 
                     <!-- Product Form -->
-
-                    <form method="post" action="{{ route('client.cart.add') }}" class="product-form product-form-border hidedropdown">
+                    <form method="post" action="{{ route('client.cart.add') }}" id="add-to-cart-form" class="product-form product-form-border hidedropdown">
                         @csrf
                         <input type="hidden" name="product_id" value="{{ $product->id }}">
                         <!-- Swatches -->
-
                         <div class="product-swatches-option">
+                            <!-- Swatches Color -->
                             <div class="product-item swatches-image w-100 mb-4 swatch-0 option1" data-option-index="0">
                                 <div class="mb-3">
                                     <label class="form-label d-block">
@@ -117,15 +164,17 @@
                                             data-color-name="{{ $color->name }}">
 
                                         <label
-                                            class="btn border p-2 color-label"
+                                            class="btn border p-2 color-swatch"
                                             for="color-{{ $color->id }}"
-                                            style="width: 40px; height: 40px; background-color: #{{ $color->color_code }};"
+                                            data-color-code="{{ $color->color_code }}"
                                             title="{{ $color->name }}">
                                         </label>
                                         @endforeach
                                     </div>
                                 </div>
                             </div>
+                            <!-- End Swatches Color -->
+                            <!-- Swatches Size -->
                             <div class="product-item swatches-size w-100 mb-4 swatch-1 option2" data-option-index="1">
                                 <div class="mb-3">
                                     <label class="form-label">Chọn size:</label>
@@ -139,21 +188,25 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- End Swatches Size -->
                         </div>
+                        <!-- End Swatches -->
+
+                        <!-- Product Action -->
                         <div class="product-action w-100 d-flex-wrap my-3 my-md-4">
                             <!-- Product Quantity -->
-                            <div class="product-form-quantity d-flex-center me-3">
+                            <div class="product-form-quantity d-flex-center">
                                 <div class="qtyField">
                                     <a class="qtyBtn minus" href="#;"><i class="icon anm anm-minus-r"></i></a>
-                                    <input type="text" name="quantity" value="1" class="product-form-input qty" />
+                                    <input type="number" name="quantity" value="1" class="product-form-input qty" />
                                     <a class="qtyBtn plus" href="#;"><i class="icon anm anm-plus-r"></i></a>
                                 </div>
                             </div>
                             <!-- End Product Quantity -->
                             <!-- Product Add -->
                             <div class="product-form-submit addcart fl-1 ms-3">
-                                <button type="submit" name="add" class="btn btn-secondary product-form-cart-submit">
-                                   <span>Thêm vào giỏ hàng</span>
+                                <button type="submit" id="add-to-cart-btn" class="btn btn-primary">
+                                    Thêm vào giỏ hàng
                                 </button>
                             </div>
                     </form>
@@ -202,7 +255,6 @@
                 <!-- End Product Info -->
             </div>
         </div>
-
     </div>
     <!--Product Content-->
 
@@ -672,7 +724,6 @@
 
 </div>
 <script>
-    
     const radios = document.querySelectorAll('input[name="color_id"]');
     const selectedName = document.getElementById('selectedColorName');
 
@@ -682,6 +733,39 @@
             selectedName.textContent = name;
         });
     });
+
+    document.querySelector('.product-form-cart-submit').addEventListener('click', function(e) {
+        e.preventDefault();
+
+        const form = this.closest('form');
+        const formData = new FormData(form);
+
+        fetch("{{ route('client.cart.add') }}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: formData
+            })
+
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Cập nhật số trên icon giỏ hàng
+                    document.getElementById('cart-count').innerText = data.total_quantity;
+
+                    // Thêm hiệu ứng nhảy
+                    const cartIcon = document.getElementById('cart-count');
+                    cartIcon.classList.add('cart-bounce');
+
+                    setTimeout(() => {
+                        cartIcon.classList.remove('cart-bounce');
+                    }, 500);
+                } else {
+                    alert(data.message || 'Thêm vào giỏ hàng thất bại');
+                }
+            });
+    });
 </script>
 @endsection
 
@@ -690,29 +774,46 @@
 <script src="{{ asset('assets/js/slick.min.js') }}"></script>
 <script>
     $(document).ready(function() {
+        // Initialize Zoom
         $('#zoompro').zoom();
+
+        // Initialize Thumb Slider
         $('#gallery').slick({
             slidesToShow: 5,
             slidesToScroll: 1,
             infinite: true,
             arrows: true,
             responsive: [{
-                breakpoint: 1024,
-                settings: {
-                    slidesToShow: 4
+                    breakpoint: 1024,
+                    settings: {
+                        slidesToShow: 4
+                    }
+                },
+                {
+                    breakpoint: 600,
+                    settings: {
+                        slidesToShow: 3
+                    }
+                },
+                {
+                    breakpoint: 480,
+                    settings: {
+                        slidesToShow: 2
+                    }
                 }
-            }, {
-                breakpoint: 600,
-                settings: {
-                    slidesToShow: 3
-                }
-            }, {
-                breakpoint: 480,
-                settings: {
-                    slidesToShow: 2
-                }
-            }]
+            ]
         });
+
+        // Initialize Lightbox
+        $('.lightboximages a').fancybox();
+    });
+</script>
+<script>
+    document.querySelectorAll('.color-swatch').forEach(function(el) {
+        const color = el.getAttribute('data-color-code');
+        if (color) {
+            el.style.backgroundColor = `#${color}`;
+        }
     });
 </script>
 
