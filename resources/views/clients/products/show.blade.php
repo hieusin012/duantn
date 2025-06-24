@@ -117,10 +117,18 @@
                     <!-- End Product Details -->
 
                     <!-- Product Form -->
+<<<<<<< HEAD
+=======
+
+>>>>>>> 10d152920aa8862cae991357178b2d128b0fcd8a
                     <form method="post" action="{{ route('client.cart.add') }}" class="product-form product-form-border hidedropdown">
                         @csrf
                         <input type="hidden" name="product_id" value="{{ $product->id }}">
                         <!-- Swatches -->
+<<<<<<< HEAD
+=======
+
+>>>>>>> 10d152920aa8862cae991357178b2d128b0fcd8a
                         <div class="product-swatches-option">
                             <!-- Swatches Color -->
                             <div class="product-item swatches-image w-100 mb-4 swatch-0 option1" data-option-index="0">
@@ -149,7 +157,6 @@
                                         @endforeach
                                     </div>
                                 </div>
-
                             </div>
                             <!-- End Swatches Color -->
                             <!-- Swatches Size -->
@@ -184,7 +191,7 @@
                             <!-- Product Add -->
                             <div class="product-form-submit addcart fl-1 ms-3">
                                 <button type="submit" name="add" class="btn btn-secondary product-form-cart-submit">
-                                    <span>Thêm vào giỏ hàng</span>
+                                   <span>Thêm vào giỏ hàng</span>
                                 </button>
                             </div>
                     </form>
@@ -233,6 +240,10 @@
                 <!-- End Product Info -->
             </div>
         </div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 10d152920aa8862cae991357178b2d128b0fcd8a
     </div>
     <!--Product Content-->
 
@@ -279,10 +290,12 @@
                                     <img class="rounded-0 w-100 d-block blur-up lazyload" data-src="assets/images/content/product-detail-img-1.jpg" src="assets/images/content/product-detail-img-1.jpg" alt="image" width="550" height="660" />
                                     <i class="icon anm anm-play-cir"></i>
                                 </a>
+
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
             <!--End Description-->
 
@@ -570,6 +583,7 @@
                                         </div>
                                         <b class="head-font">Feature Availability</b>
                                         <p class="spr-review-body">The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33</p>
+
                                     </div>
                                 </div>
                             </div>
@@ -612,6 +626,7 @@
                                 <input type="submit" class="btn btn-primary spr-button spr-button-primary" value="Submit Review" />
                             </div>
                         </form>
+
                     </div>
                 </div>
             </div>
@@ -663,6 +678,7 @@
                             <!--End Compare Button-->
                         </div>
                         <!--End Product Button-->
+
                     </div>
                     <!-- End Product Image -->
                     <!-- Start Product Details -->
@@ -694,6 +710,7 @@
     </div>
 </section>
 <!--End Related Products-->
+
 </div>
 <script>
     
