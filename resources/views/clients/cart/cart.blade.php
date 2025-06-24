@@ -11,7 +11,7 @@
                         <h1>Trang giỏ hàng của bạn</h1>
                     </div>
                     <!--Breadcrumbs-->
-                    <div class="breadcrumbs"><a href="{{ route('home') }}" title="Back to the home page">Home</a><span class="main-title"><i class="icon anm anm-angle-right-l"></i>Giỏ hàng của bạn</span></div>
+                    <div class="breadcrumbs"><a href="{{ route('client.home') }}" title="Back to the home page">Home</a><span class="main-title"><i class="icon anm anm-angle-right-l"></i>Giỏ hàng của bạn</span></div>
                     <!--End Breadcrumbs-->
                 </div>
             </div>
