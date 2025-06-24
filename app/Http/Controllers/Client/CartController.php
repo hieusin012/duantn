@@ -77,7 +77,7 @@ class CartController extends Controller
             ]);
         }
         if ($request->ajax()) {
-            $totalQuantity = $cart->items()->sum('quantity');
+            $totalQuantity = $cart->items()->count();
 
             return response()->json([
                 'success' => true,

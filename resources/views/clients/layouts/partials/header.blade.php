@@ -122,7 +122,10 @@
                 <div class="header-cart iconset" title="Cart">
                     <a href="{{ route('client.cart') }}" class="header-cart btn-minicart clr-none">
                         <i class="hdr-icon icon anm anm-cart-l"></i>
-                        <span class="cart-count bg-danger text-white">{{ $cartItemCount ?? 0 }}</span>
+                        <span class="cart-count">
+                            {{ Auth::check() ? \App\Models\Cart::where('user_id', Auth::id())->where('status', 0)->first()?->items()->count() ?? 0 : 0 }}
+                        </span>
+
                     </a>
                 </div>
                 <button type="button" class="iconset pe-0 menu-icon js-mobile-nav-toggle mobile-nav--open d-lg-none" title="Menu"><i class="hdr-icon icon anm anm-times-l"></i><i class="hdr-icon icon anm anm-bars-r"></i></button>
