@@ -16,6 +16,7 @@ class BlogController extends Controller
     }
     public function show($slug)
     {
+        return view('clients.blog');
         $blog = Blog::where('slug', $slug)->firstOrFail();
         return view('clients.blogs.show', compact('blog')); // SỬA TỪ 'client.blogs.show' thành 'clients.blogs.show'
     }
