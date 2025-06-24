@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Cart;
 use App\Models\Product;
+use App\Models\ProductVariant;
 
 class CartController extends Controller
 {
@@ -18,8 +19,12 @@ class CartController extends Controller
             'user_id' => Auth::id(),
             'status' => 0
         ])->first();
+        $products = Product::where('is_active', 1)
+            ->whereNull('deleted_at')
+            ->latest()
+            ->paginate(12);
 
-        return view('clients.cart.cart', compact('cart'));
+        return view('clients.cart.cart', compact('cart', 'products'));
     }
 
     // Thêm sản phẩm vào giỏ hàng
@@ -27,36 +32,53 @@ class CartController extends Controller
     {
         $request->validate([
             'product_id' => 'required|exists:products,id',
-            'variant_id' => 'nullable|exists:product_variants,id',
+            'color_id' => 'required|exists:colors,id',
+            'size_id' => 'required|exists:sizes,id',
+            'quantity' => 'required|integer|min:1'
         ]);
+
         $user = Auth::user();
 
-        // Lấy hoặc tạo giỏ hàng hiện tại
+        // Lấy đúng biến thể từ product_id + color_id + size_id
+        $variant = ProductVariant::where('product_id', $request->product_id)
+            ->where('color_id', $request->color_id)
+            ->where('size_id', $request->size_id)
+            ->first();
+
+        if (!$variant) {
+            return back()->with('error', 'Không tìm thấy biến thể phù hợp.');
+        }
+
+        // Tạo hoặc lấy giỏ hàng
         $cart = Cart::firstOrCreate([
             'user_id' => $user->id,
-            'status' => 0
+            'status' => 0, // trạng thái "chưa thanh toán"
         ]);
-
-        // Kiểm tra item đã có chưa
-        $item = $cart->items()->where('product_id', $request->product_id)
-            ->where('variant_id', $request->variant_id)
+        $price = $variant->sale_price ?? $variant->price;
+        
+        if (is_null($price)) {
+            return back()->with('error', 'Không thể thêm sản phẩm chưa có giá.');
+        }
+        // Kiểm tra xem biến thể đã có trong giỏ hàng chưa
+        $item = $cart->items()
+            ->where('product_id', $request->product_id)
+            ->where('variant_id', $variant->id)
             ->first();
 
         if ($item) {
-            $item->increment('quantity');
+            $item->increment('quantity', $request->quantity);
         } else {
-            $product = Product::findOrFail($request->product_id);
-
             $cart->items()->create([
-                'product_id' => $product->id,
-                'variant_id' => $request->variant_id,
-                'quantity' => 1,
-                'price_at_purchase' => $product->price
+                'product_id' => $request->product_id,
+                'variant_id' => $variant->id,
+                'quantity' => $request->quantity,
+                'price_at_purchase' => $price,
             ]);
         }
 
-        return redirect()->route('client.cart')->with('success', 'Đã thêm vào giỏ hàng!');
+        return redirect()->route('client.cart')->with('success', 'Sản phẩm đã được thêm vào giỏ hàng!');
     }
+
 
 
     // Cập nhật giỏ hàng

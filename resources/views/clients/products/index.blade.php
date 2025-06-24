@@ -37,14 +37,11 @@
                 </div>
 
                 <!-- Product Details -->
-                <div class="product-details">
+                <div class="product-details text-center">
                     <div class="product-name">
-                        <a href="{{ route('client.products.show', ['slug' => $product->slug]) }}">
+                        <a href="{{ route('client.products.show', ['slug' => $product->slug]) }}" class="text-decoration-none text-primary fw-bold fw-semibold fs-6">
                             {{ $product->name }}
                         </a>
-                    </div>
-                    <div class="product-price">
-                        <span class="price">{{ number_format($product->price, 0, ',', '.') }}đ</span>
                     </div>
                     <div class="product-review">
                         @for ($i = 1; $i <= 5; $i++)
@@ -52,17 +49,13 @@
                             @endfor
                             <span class="caption hidden ms-1">{{ $product->reviews_count ?? 3 }} Reviews</span>
                     </div>
+                    <div class=" product-price mb-1 ">
+                        <span class="price text-danger fw-bold fs-5">{{ number_format($product->price, 0, ',', '.') }} VNĐ</span>
+                    </div>
+                    
 
                 </div>
-                <div class="text-center">
-                    <form action="{{ route('client.cart.add') }}" method="POST" class="d-inline">
-                        @csrf
-                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                        <button type="submit" class="btn btn-primary" data-bs-toggle="tooltip" title="Add to Cart">
-                            <i class="icon anm anm-cart-l me-2"></i> Thêm vào giỏ hàng
-                        </button>
-                    </form>
-                </div>
+                
             </div>
 
         </div>

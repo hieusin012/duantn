@@ -27,18 +27,40 @@ class ProductController extends Controller
 
     public function show($slug)
     {
-        $product = Product::with(['galleries', 'variants', 'category', 'brand'])
-            ->where('slug', $slug)
-            ->firstOrFail();
+        $product = Product::where('slug', $slug)->firstOrFail();
+
+        $product->load([
+            'galleries',
+            'category',
+            'brand',
+            'variants' => function ($q) {
+                $q->withTrashed()->with(['color', 'size']);
+            }
+        ]);
+
         $relatedProducts = Product::where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
             ->latest()
             ->take(15)
             ->get();
+
         $productImages = $product->galleries;
         $variants = $product->variants;
-        return view('clients.products.show', compact('product', 'productImages', 'relatedProducts', 'variants'));
+
+        $colors = $product->variants->pluck('color')->unique('id')->values();
+        $sizes = $product->variants->pluck('size')->unique('id')->values();
+
+        return view('clients.products.show', compact(
+            'product',
+            'productImages',
+            'relatedProducts',
+            'variants',
+            'colors',
+            'sizes'
+        ));
     }
+
+
 
 
     /**
