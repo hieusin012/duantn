@@ -162,27 +162,29 @@ use App\Http\Controllers\Client\ProductController as ClientProductController;
 use App\Http\Controllers\Client\ContactController as ClientContactController;
 
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+// Sửa trong web.php
+Route::get('/', [HomeController::class, 'index'])->name('client.home'); // Sửa 'home' thành 'client.home'
 
 // Tìm kiếm sản phẩm
 Route::get('/products/search', [ClientProductController::class, 'search'])->name('client.products.search');
 
-
-Route::get('/products/search', [ClientProductController::class, 'search'])->name('clients.products.search');
 
 // Trang chi tiết sản phẩm (dùng slug để SEO tốt hơn)// Trang chi tiết sản phẩm (dùng slug)
 Route::get('san-pham/{slug}', [ClientProductController::class, 'show'])->name('client.products.show');
 
 
 //contact
-Route::get('/contact', [ClientContactController::class, 'showForm'])->name('clients.contact');
+Route::get('/contact', [ClientContactController::class, 'showForm'])->name('client.contact');
 Route::post('/contact', [ClientContactController::class, 'handleSubmit'])->name('contact.submit');
 
 //category
 Route::get('/danh-muc/{slug}', [ClientCategoryController::class, 'show'])->name('client.categories.show');
 
 //blog
-Route::get('/blog', [ClientBlogController::class, 'blog'])->name('clients.blog');
+Route::get('/blog', [ClientBlogController::class, 'index'])->name('client.blog'); // Sửa từ clients.blog
+Route::get('/blog/{slug}', [App\Http\Controllers\Client\BlogController::class, 'show'])->name('client.blogs.show');
+
 
 //products
 
