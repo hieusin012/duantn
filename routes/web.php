@@ -18,11 +18,12 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ThongKeController;
 use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\CategoryController;
-
+use App\Http\Controllers\Client\ApplyVoucherController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CartItemController;
+
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\ProductVariantController;
 
@@ -174,9 +175,7 @@ Route::middleware('auth')->get('/wishlist', [WishlistController::class, 'index']
 use App\Http\Controllers\Client\BlogController as ClientBlogController;
 use App\Http\Controllers\Client\ContactController as ClientContactController;
 use App\Http\Controllers\Client\ProductController as ClientProductController;
-
-
-
+use App\Http\Controllers\Client\VoucherController as ClientVoucherController;
 
 // Sửa trong web.php
 Route::get('/', [HomeController::class, 'index'])->name('client.home'); // Sửa 'home' thành 'client.home'
@@ -225,6 +224,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/cart/{id}/restore', [CartItemController::class, 'restore'])->name('client.cart.restore');
     Route::delete('/cart-items/force-delete-selected', [CartItemController::class, 'forceDeleteSelected'])->name('client.cart.forceDeleteSelected');
     Route::post('/cart-items/restore-selected', [CartItemController::class, 'restoreSelected'])->name('client.cart.restoreSelected');
+    //mã giảm giá
+    Route::post('/cart/apply-voucher', [ApplyVoucherController::class, 'applyVoucher'])->name('client.cart.applyVoucher');
 });
 
 
