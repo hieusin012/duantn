@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
+    //
     // Hiển thị danh sách bình luận
     public function index(Request $request)
     {
