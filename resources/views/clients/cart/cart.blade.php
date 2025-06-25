@@ -26,12 +26,12 @@
             <div class="col-12 col-sm-12 col-md-12 col-lg-8 main-col">
                 @if(session('success'))
                 <div class="alert alert-success py-2 alert-dismissible fade show cart-alert" role="alert">
-                     {{ session('success') }}
+                    {{ session('success') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 @elseif(session('error'))
                 <div class="alert alert-danger py-2 alert-dismissible fade show cart-alert" role="alert">
-                     {{ session('error') }}
+                    {{ session('error') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 @endif
@@ -41,11 +41,11 @@
                 <!--Cart Form-->
                 <form action="{{ route('client.cart.update') }}" method="post" class="cart-table table-bottom-brd">
                     @csrf
-                    @if ($cart && $cart->items->count())
+
                     <table class="table align-middle">
                         <thead class="cart-row cart-header small-hide position-relative">
                             <tr>
-                                <th class="action">&nbsp;</th>
+                                <th class="action"><input type="checkbox" id="select-all" ></th>
                                 <th colspan="2" class="text-start">Sản phẩm</th>
                                 <th class="text-center">Giá</th>
                                 <th class="text-center">Số lượng</th>
@@ -54,6 +54,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @if ($cart && $cart->items->count())
                             @foreach ($cart->items as $item)
                             <tr class="cart-row cart-flex position-relative">
                                 <td class="cart-delete text-center small-hide">
@@ -99,24 +100,27 @@
                                     </button>
                                 </td>
                             </tr>
-                            
                             @endforeach
+                            @else
+                            <tr  class="cart-row cart-flex position-relative">
+                                <td colspan="7" class="text-center">
+                            <div class="alert alert-info text-center" role="alert">
+                                <strong>Giỏ hàng của bạn đang trống!</strong> Hãy thêm sản phẩm vào giỏ hàng để tiếp tục mua sắm.
+                            </div>
+                            </tr>
+                            @endif
                         </tbody>
                         <tfoot>
                             <tr>
                                 <td colspan="3" class="text-start"><a href="{{ route('client.products.index') }}" class="btn btn-outline-secondary btn-sm cart-continue"><i class="icon anm anm-angle-left-r me-2 d-none"></i> Tiếp tục mua sắm</a></td>
                                 <td colspan="3" class="text-end">
-                                    
+                                    <a href="{{ route('client.cart.hasdelete') }}" class="btn btn-outline-secondary btn-sm cart-continue"><i class="icon anm anm-angle-left-r me-2 d-none"></i>Sản phẩm đã xóa</a>
                                     <button type="submit" name="update" class="btn btn-secondary btn-sm cart-continue ms-2"> Cập nhật giỏ hàng</button>
                                 </td>
                             </tr>
                         </tfoot>
                     </table>
-                    @else
-                    <div class="alert alert-info text-center" role="alert">
-                        <strong>Giỏ hàng của bạn đang trống!</strong> Hãy thêm sản phẩm vào giỏ hàng để tiếp tục mua sắm.
-                    </div>
-                    @endif
+
 
                 </form>
                 @foreach ($cart->items as $item)
@@ -125,7 +129,7 @@
                     @method('DELETE')
                 </form>
                 @endforeach
-                 
+
                 <!--End Cart Form-->
                 <!--Note with Shipping estimates-->
                 <div class="row my-4 pt-3">
@@ -186,8 +190,8 @@
                 <div class="cart-info sidebar-sticky">
                     <div class="cart-order-detail cart-col">
                         <div class="row g-0 border-bottom pb-2">
-                            <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Tổng tiền</strong></span>
-                            <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span class="money"></span></span>
+                            <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Tổng tiền</strong> </span>
+                            <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span class="money">@if(session('total_price')) {{ number_format(session('total_price')) }} VNĐ @else 0 VNĐ @endif</span></span>
                         </div>
                         <div class="row g-0 border-bottom py-2">
                             <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Mã giảm giá</strong></span>
@@ -292,5 +296,11 @@
     </section>
     <!--End Related Products-->
 </div>
-
+<script>
+    document.getElementById('select-all').addEventListener('change', function () {
+        document.querySelectorAll('input[name="selected[]"]').forEach(cb => {
+            cb.checked = this.checked;
+        });
+    });
+</script>
 @endsection

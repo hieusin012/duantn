@@ -22,6 +22,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\CartItemController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\ProductVariantController;
 
@@ -51,8 +52,8 @@ Route::post('/reset-password', [ForgetPasswordController::class, 'resetPassword'
 
 // Nhóm route admin
 
-Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(function () { // Nếu dùng bảo vệ url http: 127.0.0.1:8000/admin thì bỏ cmt dòng này. Cmt lại dòng dưới.
-    //Route::prefix('admin')->name('admin.')->group(function () {
+//Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(function () { // Nếu dùng bảo vệ url http: 127.0.0.1:8000/admin thì bỏ cmt dòng này. Cmt lại dòng dưới.
+    Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
@@ -219,6 +220,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/cart/add', [CartController::class, 'addToCart'])->name('client.cart.add');
     Route::post('/cart/update', [CartController::class, 'updateCart'])->name('client.cart.update');
     Route::delete('/cart/remove/{productId}', [CartController::class, 'removeFromCart'])->name('client.cart.remove');
+    Route::get('/cart/hasdelete', [CartItemController::class, 'hasDeleted'])->name('client.cart.hasdelete');
+    Route::delete('/cart/{id}/force-delete', [CartItemController::class, 'forceDelete'])->name('client.cart.forceDelete');
+    Route::patch('/cart/{id}/restore', [CartItemController::class, 'restore'])->name('client.cart.restore');
+    Route::delete('/cart-items/force-delete-selected', [CartItemController::class, 'forceDeleteSelected'])->name('client.cart.forceDeleteSelected');
+    Route::post('/cart-items/restore-selected', [CartItemController::class, 'restoreSelected'])->name('client.cart.restoreSelected');
 });
 
 
