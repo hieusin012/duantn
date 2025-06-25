@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             <div class="logo col-5 col-sm-3 col-md-3 col-lg-2 align-self-center">
-               
+
                 <a class="logoImg" href="{{ route('client.home') }}" title="SPORTBAY" rel="home">
                     <img src="{{ asset('assets/client/images/logo.png') }}" alt="SPORTBAY" class="logo-image" />
                 </a>
@@ -10,15 +10,15 @@
             <div class="col-1 col-sm-1 col-md-1 col-lg-8 align-self-center d-menu-col">
                 <nav class="navigation" id="AccessibleNav">
                     <ul id="siteNav" class="site-nav medium center">
-                        <li class="lvl1 parent dropdown"><a href="{{ route('client.home') }}">Trang chủ</a></li>                       
+                        <li class="lvl1 parent dropdown"><a href="{{ route('client.home') }}">Trang chủ</a></li>
                         <li class="lvl1"><a href="{{ route('client.products.index') }}">Danh mục sản phẩm
-                            <i class="icon anm anm-angle-down-l"></i></a>
+                                <i class="icon anm anm-angle-down-l"></i></a>
                         </li>
                         <li class="lvl1 parent dropdown"><a href="#">HOT DEAL <i class="icon anm anm-angle-down-l"></i></a></li>
                         <li class="lvl1 parent dropdown"><a href="{{ route('client.blog') }}">Blog</a></li>
-                             <li class="lvl1 parent dropdown">
-                                    <a href="{{ route('client.contact') }}">Liên hệ</a>
-                                </li>
+                        <li class="lvl1 parent dropdown">
+                            <a href="{{ route('client.contact') }}">Liên hệ</a>
+                        </li>
                         <li class="lvl1 parent megamenu"><a href="#">Abous Us</a></li>
                     </ul>
                 </nav>
@@ -67,7 +67,7 @@
                             </div>
                         </div>
                     </div>
-                    </div>
+                </div>
                 {{-- <div class="account-parent iconset">
                     <div class="account-link" title="Account"><i class="hdr-icon icon anm anm-user-al"></i></div>
                     <div id="accountBox">
@@ -77,7 +77,7 @@
                                 <li><a href="register.html"><i class="icon anm anm-user-al"></i>Register</a></li>
                                 <li><a href="my-account.html"><i class="icon anm anm-user-cil"></i>My Account</a></li>
                                 <li><a href="wishlist-style1.html"><i class="icon anm anm-heart-l"></i>Wishlist</a></li>
-<li><a href="compare-style1.html"><i class="icon anm anm-random-r"></i>Compare</a></li>
+                                <li><a href="compare-style1.html"><i class="icon anm anm-random-r"></i>Compare</a></li>
                                 <li><a href="login.html"><i class="icon anm anm-sign-out-al"></i>Sign out</a></li>
                             </ul>
                         </div>
@@ -120,12 +120,16 @@
                 </div>
 
                 <div class="header-cart iconset" title="Cart">
-<a href="{{ route('client.cart') }}" class="header-cart btn-minicart clr-none">
-                        <i class="hdr-icon icon anm anm-cart-l"></i><span class="cart-count">{{ session('cart') ? array_sum(array_column(session('cart'), 'quantity')) : 0 }}</span>
+                    <a href="{{ route('client.cart') }}" class="header-cart btn-minicart clr-none">
+                        <i class="hdr-icon icon anm anm-cart-l"></i>
+                        <span class="cart-count">
+                            {{ Auth::check() ? \App\Models\Cart::where('user_id', Auth::id())->where('status', 0)->first()?->items()->count() ?? 0 : 0 }}
+                        </span>
+
                     </a>
                 </div>
                 <button type="button" class="iconset pe-0 menu-icon js-mobile-nav-toggle mobile-nav--open d-lg-none" title="Menu"><i class="hdr-icon icon anm anm-times-l"></i><i class="hdr-icon icon anm anm-bars-r"></i></button>
-                </div>
             </div>
+        </div>
     </div>
 </header>

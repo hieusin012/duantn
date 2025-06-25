@@ -24,78 +24,112 @@
         <div class="row">
             <!--Cart Content-->
             <div class="col-12 col-sm-12 col-md-12 col-lg-8 main-col">
+                @if(session('success'))
                 <div class="alert alert-success py-2 alert-dismissible fade show cart-alert" role="alert">
-                    <i class="align-middle icon anm anm-truck icon-large me-2"></i><strong class="text-uppercase">Congratulations!</strong> You've got free shipping!
+                    {{ session('success') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
+                @elseif(session('error'))
+                <div class="alert alert-danger py-2 alert-dismissible fade show cart-alert" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
                 <!--End Alert msg-->
 
 
                 <!--Cart Form-->
-                <form action="#" method="post" class="cart-table table-bottom-brd">
-                    @if ($cart && $cart->items->count())
+                <form action="{{ route('client.cart.update') }}" method="post" class="cart-table table-bottom-brd">
+                    @csrf
+
                     <table class="table align-middle">
                         <thead class="cart-row cart-header small-hide position-relative">
                             <tr>
-                                <th class="action">&nbsp;</th>
+                                <th class="action"><input type="checkbox" id="select-all" ></th>
                                 <th colspan="2" class="text-start">Sản phẩm</th>
                                 <th class="text-center">Giá</th>
                                 <th class="text-center">Số lượng</th>
                                 <th class="text-center">Tổng tiền</th>
+                                <th class="text-center">Xóa</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @if ($cart && $cart->items->count())
                             @foreach ($cart->items as $item)
                             <tr class="cart-row cart-flex position-relative">
-                                <td class="cart-delete text-center small-hide"><a href="#" class="cart-remove remove-icon position-static" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove to Cart"><i class="icon anm anm-times-r"></i></a></td>
+                                <td class="cart-delete text-center small-hide">
+                                    <input type="checkbox" name="selected[]" value="{{ $item->id }}" class="cart-checkbox" />
+
+                                </td>
                                 <td class="cart-image cart-flex-item">
                                     <a href="product-layout1.html"><img
                                             src="{{ $item->variant->image ? asset('storage/' . $item->variant->image) : asset('images/no-image.jpg') }}"
-                                            width="100"
-                                            alt="{{ $item->product->name }}"></a>
+                                            width="60" hight="60" class="rounded" alt="{{ $item->product->name }}"></a>
+
                                 </td>
                                 <td class="cart-meta small-text-left cart-flex-item">
                                     <div class="list-view-item-title">
                                         <a href="product-layout1.html">{{ $item->product->name }}</a>
                                     </div>
                                     <div class="cart-meta-text">
-                                        Color: {{ $item->variant->color->name ?? '—' }}<br>Size: {{ $item->variant->size->name ?? '—' }}<br>Qty: 2
+                                        Color: {{ $item->variant->color->name ?? '—' }}<br>Size: {{ $item->variant->size->name ?? '—' }}<br>Qty: {{ $item->quantity }}
                                     </div>
                                     <div class="cart-price d-md-none">
                                         <span class="money fw-500">$99.00</span>
                                     </div>
                                 </td>
                                 <td class="cart-price cart-flex-item text-center small-hide">
-                                    <span class="money">{{ number_format($item->price_at_purchase) }}</span>
+                                    <span class="money">{{ number_format($item->price_at_purchase) }} VNĐ</span>
                                 </td>
                                 <td class="cart-update-wrapper cart-flex-item text-end text-md-center">
                                     <div class="cart-qty d-flex justify-content-end justify-content-md-center">
                                         <div class="qtyField">
                                             <a class="qtyBtn minus" href="#;"><i class="icon anm anm-minus-r"></i></a>
-                                            <input class="cart-qty-input qty" type="text" name="updates[]" value="1" pattern="[0-9]*" />
+                                            <input class="cart-qty-input qty" type="number" name="quantity[{{ $item->id }}]" value="{{ $item->quantity }}" pattern="[0-9]*" />
                                             <a class="qtyBtn plus" href="#;"><i class="icon anm anm-plus-r"></i></a>
                                         </div>
                                     </div>
                                     <a href="#" title="Remove" class="removeMb d-md-none d-inline-block text-decoration-underline mt-2 me-3">Remove</a>
                                 </td>
                                 <td class="cart-price cart-flex-item text-center small-hide">
-                                    <span class="money fw-500">{{ number_format($item->price_at_purchase * $item->quantity) }}</span>
+                                    <span class="money fw-500">{{ number_format($item->price_at_purchase * $item->quantity) }} VNĐ</span>
+                                </td>
+                                <td class="cart-delete text-center small-hide">
+                                    <button type="button" onclick="document.getElementById('delete-form-{{ $item->id }}').submit(); " title="Xóa">
+                                        <i class="icon anm anm-times-r"></i>
+                                    </button>
                                 </td>
                             </tr>
                             @endforeach
+                            @else
+                            <tr  class="cart-row cart-flex position-relative">
+                                <td colspan="7" class="text-center">
+                            <div class="alert alert-info text-center" role="alert">
+                                <strong>Giỏ hàng của bạn đang trống!</strong> Hãy thêm sản phẩm vào giỏ hàng để tiếp tục mua sắm.
+                            </div>
+                            </tr>
+                            @endif
                         </tbody>
                         <tfoot>
                             <tr>
                                 <td colspan="3" class="text-start"><a href="{{ route('client.products.index') }}" class="btn btn-outline-secondary btn-sm cart-continue"><i class="icon anm anm-angle-left-r me-2 d-none"></i> Tiếp tục mua sắm</a></td>
                                 <td colspan="3" class="text-end">
-                                    <button type="submit" name="clear" class="btn btn-outline-secondary btn-sm small-hide"><i class="icon anm anm-times-r me-2 d-none"></i> Xóa giỏ hàng</button>
-                                    <button type="submit" name="update" class="btn btn-secondary btn-sm cart-continue ms-2"><i class="icon anm anm-sync-ar me-2 d-none"></i> Cập nhật giỏ hàng</button>
+                                    <a href="{{ route('client.cart.hasdelete') }}" class="btn btn-outline-secondary btn-sm cart-continue"><i class="icon anm anm-angle-left-r me-2 d-none"></i>Sản phẩm đã xóa</a>
+                                    <button type="submit" name="update" class="btn btn-secondary btn-sm cart-continue ms-2"> Cập nhật giỏ hàng</button>
                                 </td>
                             </tr>
                         </tfoot>
                     </table>
-                    @endif
+
+
                 </form>
+                @foreach ($cart->items as $item)
+                <form id="delete-form-{{ $item->id }}" action="{{ route('client.cart.remove', $item->id) }}" method="POST" style="display: none;">
+                    @csrf
+                    @method('DELETE')
+                </form>
+                @endforeach
+
                 <!--End Cart Form-->
                 <!--Note with Shipping estimates-->
                 <div class="row my-4 pt-3">
@@ -156,8 +190,8 @@
                 <div class="cart-info sidebar-sticky">
                     <div class="cart-order-detail cart-col">
                         <div class="row g-0 border-bottom pb-2">
-                            <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Tổng tiền</strong></span>
-                            <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span class="money">$226.00</span></span>
+                            <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Tổng tiền</strong> </span>
+                            <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span class="money">@if(session('total_price')) {{ number_format(session('total_price')) }} VNĐ @else 0 VNĐ @endif</span></span>
                         </div>
                         <div class="row g-0 border-bottom py-2">
                             <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Mã giảm giá</strong></span>
@@ -262,4 +296,11 @@
     </section>
     <!--End Related Products-->
 </div>
+<script>
+    document.getElementById('select-all').addEventListener('change', function () {
+        document.querySelectorAll('input[name="selected[]"]').forEach(cb => {
+            cb.checked = this.checked;
+        });
+    });
+</script>
 @endsection
