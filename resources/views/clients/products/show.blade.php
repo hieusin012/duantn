@@ -169,7 +169,6 @@
                                             value="{{ $color->id }}"
                                             autocomplete="off"
                                             data-color-name="{{ $color->name }}">
-
                                         <label
                                             class="btn border p-2 color-swatch"
                                             for="color-{{ $color->id }}"

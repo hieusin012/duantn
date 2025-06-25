@@ -38,9 +38,7 @@
                         <tr>
                             <td width="10"><input type="checkbox" name="check[]" value="{{ $color->id }}"></td>
                             <td>{{ $color->name }}</td>
-                            <td>
-                                <div style="width: 30px; height: 30px; background-color: {{ $color->color_code }}; border: 1px solid #ccc; border-radius: 4px;" title="{{ $color->color_code }}"></div>
-                            </td>
+                            <td>{{ $color->color_code }}</td>
                             <td>
                                 <a class="btn btn-primary btn-sm" href="{{ route('admin.colors.edit', $color->id) }}" title="Sửa"><i class="fas fa-edit"></i></a>
                                 <form action="{{ route('admin.colors.destroy', $color->id) }}" method="POST" style="display:inline-block;">
@@ -52,7 +50,6 @@
                         </tr>
                         @endforeach
                     </tbody>
-                    
                 </table>
                 <!-- Pagination Links -->
                 <div class="pagination">

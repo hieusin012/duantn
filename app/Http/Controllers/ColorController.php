@@ -17,26 +17,20 @@ class ColorController extends Controller
     {
         return view('admin.list_colors.create');
     }
-
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:50',
-            'color_code' => ['required', 'string', 'regex:/^#([A-Fa-f0-9]{6})$/'],
-        ], [
-            'color_code.regex' => 'Mã màu phải đúng định dạng HEX, ví dụ: #FF0000',
+            'color_code' => 'required|string|max:7',
         ]);
 
         $data = [
             'name' => $request->name,
-            'color_code' => strtoupper($request->color_code), // chuẩn hóa viết hoa
+            'color_code' => $request->color_code,
         ];
-
         Color::create($data);
-
         return redirect()->route('admin.colors.index')->with('success', 'Thêm màu thành công!');
     }
-
     public function edit($id)
     {
         $colors = Color::findOrFail($id);
@@ -47,15 +41,13 @@ class ColorController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:50',
-            'color_code' => ['required', 'string', 'regex:/^#([A-Fa-f0-9]{6})$/'],
-        ], [
-            'color_code.regex' => 'Mã màu phải đúng định dạng HEX, ví dụ: #FF0000',
+            'color_code' => 'required|string|max:7',
         ]);
 
         $color = Color::findOrFail($id);
         $color->update([
             'name' => $request->name,
-            'color_code' => strtoupper($request->color_code),
+            'color_code' => $request->color_code,
         ]);
 
         return redirect()->route('admin.colors.index')->with('success', 'Cập nhật màu thành công!');
@@ -67,13 +59,11 @@ class ColorController extends Controller
         $color->delete();
         return redirect()->route('admin.colors.index')->with('success', 'Xóa màu thành công!');
     }
-
     public function delete()
     {
         $deletedColors = Color::onlyTrashed()->get();
         return view('admin.list_colors.delete', compact('deletedColors'));
     }
-
     public function eliminate($id)
     {
         $color = Color::withTrashed()->findOrFail($id);
@@ -81,6 +71,7 @@ class ColorController extends Controller
         return redirect()->route('admin.colors.delete')->with('success', 'Xóa màu vĩnh viễn thành công!');
     }
 
+    // Xóa vĩnh viễn tất cả màu đã xóa mềm
     public function forceDeleteAll()
     { 
         $deletedColors = Color::onlyTrashed()->get();
@@ -88,6 +79,7 @@ class ColorController extends Controller
             $color->forceDelete();
         }
         return redirect()->route('admin.colors.delete')->with('success', 'Xóa vĩnh viễn tất cả màu thành công!');
+        
     }
 
     public function restore($id)
