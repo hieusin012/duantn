@@ -100,7 +100,7 @@
                   </a>
               </li>
               
-
+                  
 
             <li><a class="app-menu__item {{ request()->is('table-data-banned*') ? 'active' : '' }}" href="table-data-banned.html"><i class='app-menu__icon bx bx-run'></i><span
                               class="app-menu__label">Quản lý nội bộ
