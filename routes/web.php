@@ -18,11 +18,12 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ThongKeController;
 use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\CategoryController;
-
+use App\Http\Controllers\Client\ApplyVoucherController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CartItemController;
+
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\ProductVariantController;
 
@@ -52,8 +53,8 @@ Route::post('/reset-password', [ForgetPasswordController::class, 'resetPassword'
 
 // Nhóm route admin
 
-//Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(function () { // Nếu dùng bảo vệ url http: 127.0.0.1:8000/admin thì bỏ cmt dòng này. Cmt lại dòng dưới.
-    Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(function () { // Nếu dùng bảo vệ url http: 127.0.0.1:8000/admin thì bỏ cmt dòng này. Cmt lại dòng dưới.
+    // Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
@@ -66,7 +67,7 @@ Route::post('/reset-password', [ForgetPasswordController::class, 'resetPassword'
         Route::get('/show/{id}', [ProductController::class, 'show'])->name('products.show');
         Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('products.edit');
         Route::put('/edit/{id}', [ProductController::class, 'update'])->name('products.update');
-Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+        Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
         Route::get('/search', [ProductController::class, 'search'])->name('products.search');
         Route::get('/filter', [ProductController::class, 'filter'])->name('products.filter');
     });
@@ -110,7 +111,7 @@ Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('pro
     Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
-Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
     //color
     Route::get('/colors', [ColorController::class, 'index'])->name('colors.index');
@@ -174,9 +175,7 @@ Route::middleware('auth')->get('/wishlist', [WishlistController::class, 'index']
 use App\Http\Controllers\Client\BlogController as ClientBlogController;
 use App\Http\Controllers\Client\ContactController as ClientContactController;
 use App\Http\Controllers\Client\ProductController as ClientProductController;
-
-
-
+use App\Http\Controllers\Client\VoucherController as ClientVoucherController;
 
 // Sửa trong web.php
 Route::get('/', [HomeController::class, 'index'])->name('client.home'); // Sửa 'home' thành 'client.home'
@@ -225,6 +224,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/cart/{id}/restore', [CartItemController::class, 'restore'])->name('client.cart.restore');
     Route::delete('/cart-items/force-delete-selected', [CartItemController::class, 'forceDeleteSelected'])->name('client.cart.forceDeleteSelected');
     Route::post('/cart-items/restore-selected', [CartItemController::class, 'restoreSelected'])->name('client.cart.restoreSelected');
+    //mã giảm giá
+    Route::post('/cart/apply-voucher', [ApplyVoucherController::class, 'applyVoucher'])->name('client.cart.applyVoucher');
 });
 
 

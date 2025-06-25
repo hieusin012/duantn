@@ -1,5 +1,9 @@
 @extends('clients.layouts.master')
 @section('title', 'Giỏ hàng')
+@section('meta')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+@endsection
+
 @section('content')
 <div id="page-content">
     <!--Page Header-->
@@ -45,7 +49,7 @@
                     <table class="table align-middle">
                         <thead class="cart-row cart-header small-hide position-relative">
                             <tr>
-                                <th class="action"><input type="checkbox" id="select-all" ></th>
+                                <th class="action"><input type="checkbox" id="select-all"></th>
                                 <th colspan="2" class="text-start">Sản phẩm</th>
                                 <th class="text-center">Giá</th>
                                 <th class="text-center">Số lượng</th>
@@ -102,11 +106,11 @@
                             </tr>
                             @endforeach
                             @else
-                            <tr  class="cart-row cart-flex position-relative">
+                            <tr class="cart-row cart-flex position-relative">
                                 <td colspan="7" class="text-center">
-                            <div class="alert alert-info text-center" role="alert">
-                                <strong>Giỏ hàng của bạn đang trống!</strong> Hãy thêm sản phẩm vào giỏ hàng để tiếp tục mua sắm.
-                            </div>
+                                    <div class="alert alert-info text-center" role="alert">
+                                        <strong>Giỏ hàng của bạn đang trống!</strong> Hãy thêm sản phẩm vào giỏ hàng để tiếp tục mua sắm.
+                                    </div>
                             </tr>
                             @endif
                         </tbody>
@@ -142,13 +146,14 @@
                     </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-6 mb-12 cart-col">
                         <div class="cart-discount">
-                            <h5>Discount Codes</h5>
-                            <form action="#" method="post">
+                            <h5>Mã giảm giá</h5>
+                            <form id="voucher-form" data-url="{{ route('client.cart.applyVoucher') }}">
                                 <div class="form-group">
-                                    <label for="address_zip">Enter your coupon code if you have one.</label>
+                                    <label for="voucher_code">Nhập mã giảm giá:</label>
+                                    <div id="voucher-result"></div>
                                     <div class="input-group0">
-                                        <input class="form-control" type="text" name="coupon" required />
-                                        <input type="submit" class="btn text-nowrap mt-3" value="Apply Coupon" />
+                                        <input class="form-control" type="text" id="voucher_code" name="voucher_code" placeholder="Nhập mã..." required />
+                                        <button type="submit" class="btn text-nowrap mt-3">Áp dụng</button>
                                     </div>
                                 </div>
                             </form>
@@ -191,11 +196,11 @@
                     <div class="cart-order-detail cart-col">
                         <div class="row g-0 border-bottom pb-2">
                             <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Tổng tiền</strong> </span>
-                            <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span class="money">@if(session('total_price')) {{ number_format(session('total_price')) }} VNĐ @else 0 VNĐ @endif</span></span>
+                            <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span class="money" id="total-price">@if(session('total_price')) {{ number_format(session('total_price')) }} VNĐ @else 0 VNĐ @endif</span></span>
                         </div>
                         <div class="row g-0 border-bottom py-2">
                             <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Mã giảm giá</strong></span>
-                            <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span class="money">-$25.00</span></span>
+                            <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span class="money" id="discount-amount" class="mt-2"> 0 VNĐ</span></span>
                         </div>
                         <div class="row g-0 border-bottom py-2">
                             <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Thuế</strong></span>
@@ -207,7 +212,7 @@
                         </div>
                         <div class="row g-0 pt-2">
                             <span class="col-6 col-sm-6 cart-subtotal-title fs-6"><strong>Tổng số tiền</strong></span>
-                            <span class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary"><b class="money">$311.00</b></span>
+                            <span class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary"><b class="money" id="total-after-discount">@if(session('total_price')) {{ number_format(session('total_price')) }} VNĐ @else 0 VNĐ @endif</b></span>
                         </div>
 
                         <p class="cart-shipping mt-3">Phí vận chuyển &amp; thuế được tính trước khi thanh toán</p>
@@ -297,10 +302,71 @@
     <!--End Related Products-->
 </div>
 <script>
-    document.getElementById('select-all').addEventListener('change', function () {
+    document.getElementById('select-all').addEventListener('change', function() {
         document.querySelectorAll('input[name="selected[]"]').forEach(cb => {
             cb.checked = this.checked;
         });
     });
+
+  
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('voucher-form');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const code = document.getElementById('voucher_code').value.trim();
+            if (!code) {
+                alert('Vui lòng nhập mã giảm giá');
+                return;
+            }
+
+            fetch("{{ route('client.cart.applyVoucher') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ voucher_code: code })
+            })
+            .then(async res => {
+                const data = await res.json();
+
+                if (!res.ok) {
+                    document.getElementById('voucher-result').innerHTML = `
+                        <div class="alert alert-danger">${data.message || 'Có lỗi xảy ra'}</div>`;
+                    return;
+                }
+
+                // ✅ Thành công
+                document.getElementById('voucher-result').innerHTML = `
+                    <div class="alert alert-success">
+                        ${data.message}<br>
+                        Giảm giá: <strong>${parseInt(data.discount).toLocaleString()} VNĐ</strong>
+                    </div>`;
+
+                // ✅ Cập nhật số tiền
+                const totalElement = document.getElementById('total-price');
+                const discountElement = document.getElementById('discount-amount');
+                const afterDiscountElement = document.getElementById('total-after-discount');
+
+                if (totalElement && discountElement && afterDiscountElement) {
+                    const totalRaw = totalElement.innerText.replace(/[^\d]/g, '');
+                    const total = parseInt(totalRaw);
+                    const discount = parseInt(data.discount);
+                    const afterDiscount = total - discount;
+
+                    discountElement.innerText = `-${discount.toLocaleString()} VNĐ`;
+                    afterDiscountElement.innerHTML = `<span class="text-danger">${afterDiscount.toLocaleString()} VNĐ</span>`;
+                }
+            })
+            .catch(error => {
+                console.error('Lỗi fetch:', error);
+                document.getElementById('voucher-result').innerHTML = `
+                    <div class="alert alert-danger">Lỗi kết nối máy chủ!</div>`;
+            });
+        });
+    });
 </script>
+
 @endsection
