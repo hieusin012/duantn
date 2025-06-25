@@ -37,9 +37,9 @@ class ForgetPasswordController extends Controller
             $request->only('email')
         );
         if ($status === Password::RESET_LINK_SENT) {
-            return back()->with('status', __($status));
+            return back()->with('status', __($status))->with('success', 'Vui lòng kiểm tra email của bạn.');
         }
-        return back()->withErrors(['email' => __($status)]);
+        return back()->withErrors(['email' => __($status)])->with('error', 'Không thể gửi link đặt lại mật khẩu. Vui lòng thử lại sau.');
     }
     public function showResetForm(Request $request, $token = null)
     {
@@ -80,7 +80,7 @@ class ForgetPasswordController extends Controller
         );
 
         if ($status === Password::PASSWORD_RESET) {
-            return redirect()->route('login')->with('status', __($status));
+            return redirect()->route('login')->with('status', __($status))->with('success', 'Mật khẩu đã được đặt lại thành công! Vui lòng đăng nhập với mật khẩu mới.');
         }
 
         return back()->withErrors(['email' => __($status)]);
