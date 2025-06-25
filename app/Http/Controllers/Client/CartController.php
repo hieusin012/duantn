@@ -66,6 +66,7 @@ class CartController extends Controller
             ->where('variant_id', $variant->id)
             ->first();
 
+            
         if ($item) {
             $item->increment('quantity', $request->quantity);
         } else {
