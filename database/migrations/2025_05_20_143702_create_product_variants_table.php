@@ -21,7 +21,7 @@ return new class extends Migration
             $table->date('sale_start_date')->nullable();
             $table->date('sale_end_date')->nullable();
             $table->integer('quantity');
-            $table->text('images')->nullable(); // lưu JSON array ảnh
+            $table->string('image')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

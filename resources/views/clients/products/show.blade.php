@@ -23,13 +23,20 @@
     .cart-bounce {
         animation: bounce 0.5s ease;
     }
+
     .color-swatch {
-    width: 40px;
-    height: 40px;
-    border-radius: 4px;
-    cursor: pointer;
-    display: inline-block;
-}
+        width: 40px;
+        height: 40px;
+        border-radius: 4px;
+        cursor: pointer;
+        display: inline-block;
+    }
+
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
 </style>
 @endpush
 
@@ -61,8 +68,8 @@
                             <!-- Product Thumb -->
                             <div class="product-thumb thumb-left">
                                 <div id="gallery" class="product-thumb-vertical h-100">
-                                    @foreach($product->galleries as $image)
-                                    <a data-image="{{ asset('storage/' . $image->image) }}" data-zoom-image="{{ asset('storage/' . $image->image) }}" class="slick-slide slick-cloned active">
+                                    @foreach($product->variants as $image)
+                                    <a data-image="{{ asset('storage/' . $image->image) }}" data-zoom-image="{{ asset('storage/' . $image->image) }}" href="{{ asset('storage/' . $image->image) }}" class="product-thumb-image">
                                         <img class="blur-up lazyload rounded-0" data-src="{{ asset('storage/' . $image->image) }}" src="{{ asset('storage/' . $image->image) }}" alt="product" width="625" height="808" />
                                     </a>
                                     @endforeach
@@ -74,7 +81,7 @@
                             <div class="zoompro-wrap product-zoom-right rounded-0">
                                 <!-- Product Image -->
 
-                                <div class="zoompro-span"><img id="zoompro" class="zoompro rounded-0" src="{{ asset($product->image) }}" data-zoom-image="assets/images/products/product2.jpg" alt="product" width="625" height="808" /></div>
+                                <div class="zoompro-span"><img id="zoompro" class="zoompro rounded-0 img-thumbnail rounded shadow" src="{{ asset($product->image) }}" data-zoom-image="assets/images/products/product2.jpg" alt="product" width="625" height="808" /></div>
                                 <!-- End Product Image -->
                             </div>
                             <!-- End Product Main -->
@@ -196,10 +203,14 @@
                         <div class="product-action w-100 d-flex-wrap my-3 my-md-4">
                             <!-- Product Quantity -->
                             <div class="product-form-quantity d-flex-center">
-                                <div class="qtyField">
-                                    <a class="qtyBtn minus" href="#;"><i class="icon anm anm-minus-r"></i></a>
-                                    <input type="number" name="quantity" value="1" class="product-form-input qty" />
-                                    <a class="qtyBtn plus" href="#;"><i class="icon anm anm-plus-r"></i></a>
+                                <div class="input-group input-group-sm w-auto">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                                        –
+                                    </button>
+                                    <input type="number" name="quantity" value="1" min="1" class="form-control text-center" style="max-width: 80px;" />
+                                    <button class="btn btn-outline-secondary" type="button" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                                        +
+                                    </button>
                                 </div>
                             </div>
                             <!-- End Product Quantity -->
