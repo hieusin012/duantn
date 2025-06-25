@@ -112,6 +112,7 @@ class CartController extends Controller
         if (empty($selectedItems)) {
             return back()->with('error', 'Vui lòng chọn ít nhất một sản phẩm để cập nhật.');
         }
+        $totalPrice = 0;
         $totalQuantity = 0;
         foreach ($cart->items as $item) {
             if (in_array($item->id, $selectedItems)) {
@@ -122,13 +123,14 @@ class CartController extends Controller
                     $item->update(['quantity' => $quantity]);
                 }
                 $totalQuantity += $quantity;
-            } 
+                $totalPrice += $item->price_at_purchase * $quantity;
+            }
         }
         if ($totalQuantity === 0) {
             $cart->delete(); // Xóa giỏ hàng nếu không còn sản phẩm nào
             return redirect()->route('client.cart')->with('success', 'Giỏ hàng đã được cập nhật và trống.');
         }
-        return redirect()->route('client.cart')->with('success', 'Giỏ hàng đã được cập nhật thành công!');
+        return redirect()->route('client.cart')->with('success', 'Giỏ hàng đã được cập nhật thành công!')->with(['total_price' => $totalPrice,]);
     }
 
     // Xóa sản phẩm khỏi giỏ hàng
@@ -150,4 +152,5 @@ class CartController extends Controller
 
         return back()->with('success', 'Đã xóa sản phẩm khỏi giỏ hàng.');
     }
+    
 }
