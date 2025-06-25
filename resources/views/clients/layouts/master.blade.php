@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    @yield('meta')
     <title>@yield('title', 'SportBay')</title>
 
     <link rel="shortcut icon" href="{{ asset('assets/client/images/favicon.png') }}" />
