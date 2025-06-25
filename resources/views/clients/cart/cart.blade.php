@@ -24,15 +24,23 @@
         <div class="row">
             <!--Cart Content-->
             <div class="col-12 col-sm-12 col-md-12 col-lg-8 main-col">
+                @if(session('success'))
                 <div class="alert alert-success py-2 alert-dismissible fade show cart-alert" role="alert">
-                    <i class="align-middle icon anm anm-truck icon-large me-2"></i><strong class="text-uppercase">Congratulations!</strong> You've got free shipping!
+                     {{ session('success') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
+                @elseif(session('error'))
+                <div class="alert alert-danger py-2 alert-dismissible fade show cart-alert" role="alert">
+                     {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
                 <!--End Alert msg-->
 
 
                 <!--Cart Form-->
-                <form action="#" method="post" class="cart-table table-bottom-brd">
+                <form action="{{ route('client.cart.update') }}" method="post" class="cart-table table-bottom-brd">
+                    @csrf
                     @if ($cart && $cart->items->count())
                     <table class="table align-middle">
                         <thead class="cart-row cart-header small-hide position-relative">
@@ -42,15 +50,14 @@
                                 <th class="text-center">Giá</th>
                                 <th class="text-center">Số lượng</th>
                                 <th class="text-center">Tổng tiền</th>
+                                <th class="text-center">Xóa</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($cart->items as $item)
                             <tr class="cart-row cart-flex position-relative">
                                 <td class="cart-delete text-center small-hide">
-                                    <button type="button" onclick="document.getElementById('delete-form-{{ $item->id }}').submit(); " title="Xóa">
-                                        <i class="icon anm anm-times-r"></i>
-                                    </button>
+                                    <input type="checkbox" name="selected[]" value="{{ $item->id }}" class="cart-checkbox" />
 
                                 </td>
                                 <td class="cart-image cart-flex-item">
@@ -77,7 +84,7 @@
                                     <div class="cart-qty d-flex justify-content-end justify-content-md-center">
                                         <div class="qtyField">
                                             <a class="qtyBtn minus" href="#;"><i class="icon anm anm-minus-r"></i></a>
-                                            <input class="cart-qty-input qty" type="text" name="updates[]" value="{{ $item->quantity }}" pattern="[0-9]*" />
+                                            <input class="cart-qty-input qty" type="number" name="quantity[{{ $item->id }}]" value="{{ $item->quantity }}" pattern="[0-9]*" />
                                             <a class="qtyBtn plus" href="#;"><i class="icon anm anm-plus-r"></i></a>
                                         </div>
                                     </div>
@@ -85,6 +92,11 @@
                                 </td>
                                 <td class="cart-price cart-flex-item text-center small-hide">
                                     <span class="money fw-500">{{ number_format($item->price_at_purchase * $item->quantity) }} VNĐ</span>
+                                </td>
+                                <td class="cart-delete text-center small-hide">
+                                    <button type="button" onclick="document.getElementById('delete-form-{{ $item->id }}').submit(); " title="Xóa">
+                                        <i class="icon anm anm-times-r"></i>
+                                    </button>
                                 </td>
                             </tr>
                             
@@ -94,8 +106,8 @@
                             <tr>
                                 <td colspan="3" class="text-start"><a href="{{ route('client.products.index') }}" class="btn btn-outline-secondary btn-sm cart-continue"><i class="icon anm anm-angle-left-r me-2 d-none"></i> Tiếp tục mua sắm</a></td>
                                 <td colspan="3" class="text-end">
-                                    <button type="submit" name="clear" class="btn btn-outline-secondary btn-sm small-hide"><i class="icon anm anm-times-r me-2 d-none"></i> Xóa giỏ hàng</button>
-                                    <button type="submit" name="update" class="btn btn-secondary btn-sm cart-continue ms-2"><i class="icon anm anm-sync-ar me-2 d-none"></i> Cập nhật giỏ hàng</button>
+                                    
+                                    <button type="submit" name="update" class="btn btn-secondary btn-sm cart-continue ms-2"> Cập nhật giỏ hàng</button>
                                 </td>
                             </tr>
                         </tfoot>
@@ -175,7 +187,7 @@
                     <div class="cart-order-detail cart-col">
                         <div class="row g-0 border-bottom pb-2">
                             <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Tổng tiền</strong></span>
-                            <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span class="money">{{ number_format($item->price_at_purchase * $item->quantity) }} VNĐ</span></span>
+                            <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span class="money"></span></span>
                         </div>
                         <div class="row g-0 border-bottom py-2">
                             <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Mã giảm giá</strong></span>
