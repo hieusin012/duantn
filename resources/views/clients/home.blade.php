@@ -113,3 +113,56 @@
 </div>
 
 @endsection
+@section('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Kích hoạt tooltip lần đầu
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        const tooltipList = tooltipTriggerList.map(function (el) {
+            return new bootstrap.Tooltip(el);
+        });
+
+        // Wishlist toggle
+        document.querySelectorAll('.wishlist-toggle').forEach(button => {
+            button.addEventListener('click', function () {
+                const productId = this.dataset.id;
+                const token = '{{ csrf_token() }}';
+                const icon = this.querySelector('i');
+                const span = this.querySelector('span');
+
+                fetch("{{ route('wishlist.toggle') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': token
+                    },
+                    body: JSON.stringify({ product_id: productId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Cập nhật giao diện
+                    if (data.status === 'added') {
+                        icon.classList.add('text-danger');
+                        if (span) span.textContent = 'Đã yêu thích';
+                        this.setAttribute('title', 'Bỏ yêu thích');
+                    } else {
+                        icon.classList.remove('text-danger');
+                        if (span) span.textContent = 'Thêm vào yêu thích';
+                        this.setAttribute('title', 'Thêm vào yêu thích');
+                    }
+
+                    // Cập nhật tooltip mới
+                    bootstrap.Tooltip.getInstance(this)?.dispose(); // Xóa tooltip cũ
+                    new bootstrap.Tooltip(this); // Tạo lại tooltip
+
+                    // Cập nhật số lượng
+                    const wishlistCountEl = document.querySelector('.wishlist-count');
+                    if (wishlistCountEl) {
+                        wishlistCountEl.textContent = data.count;
+                    }
+                });
+            });
+        });
+    });
+</script>
+@endsection
