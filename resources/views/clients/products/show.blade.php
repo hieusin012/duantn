@@ -161,22 +161,21 @@
                                 
                                     <div class="d-flex flex-wrap gap-2">
                                         @foreach ($colors as $color)
-                                            <input
-                                                type="radio"
-                                                class="btn-check"
-                                                name="color_id"
-                                                id="color-{{ $color->id }}"
-                                                value="{{ $color->id }}"
-                                                autocomplete="off"
-                                                data-color-name="{{ $color->name }}">
-                                
-                                            <label
-                                                class="btn border p-2 color-swatch"
-                                                for="color-{{ $color->id }}"
-                                                style="background-color: {{ $color->color_code }}; width: 32px; height: 32px; border-radius: 50%;"
-                                                title="{{ $color->name }}">
-                                            </label>
-                                        @endforeach
+                                        <input
+                                            type="radio"
+                                            class="btn-check"
+                                            name="color_id"
+                                            id="color-{{ $color->id }}"
+                                            value="{{ $color->id }}"
+                                            autocomplete="off"
+                                            data-color-name="{{ $color->name }}">
+                                        <label
+                                            class="btn border p-2 color-swatch"
+                                            for="color-{{ $color->id }}"
+                                            style="background-color: {{ $color->color_code }}; width: 32px; height: 32px; border-radius: 50%;"
+                                            title="{{ $color->name }}">
+                                        </label>
+                                    @endforeach
                                     </div>
                                 </div>
                                 
