@@ -25,7 +25,7 @@
     <div class="page-wrapper">
         @include('clients.layouts.partials.header')
         @yield('banner')
-
+        
         @yield('content')
 
         @include('clients.layouts.partials.footer')
