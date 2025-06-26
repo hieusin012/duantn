@@ -37,35 +37,79 @@
         -webkit-appearance: none;
         margin: 0;
     }
+
+    /* Styles for the star rating input */
+.rating-stars {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Adjust spacing between stars */
+    direction: ltr; /* Ensure left-to-right order */
+}
+
+.rating-stars input[type="radio"] {
+    display: none; /* Hide the radio buttons */
+}
+
+.rating-stars label {
+    cursor: pointer;
+    font-size: 24px; /* Adjust star size */
+    color: #ccc; /* Default star color (empty) */
+}
+
+/* Color for selected/hovered stars and their preceding stars */
+.rating-stars label:hover,
+.rating-stars label:hover ~ label,
+.rating-stars input[type="radio"]:checked ~ label {
+    color: #ffc107; /* Yellow/gold for filled stars */
+}
+
+/* Special rule to ensure selected stars stay yellow when mouseout occurs on an unselected star */
+/* This specific rule ensures that if you click on 3 stars, and then hover over 1 star, only 1 star lights up,
+   but when you move out, it correctly reverts to 3 stars being lit. */
+.rating-stars input[type="radio"]:checked + label,
+.rating-stars input[type="radio"]:checked + label ~ label {
+    color: #ffc107;
+}
+
+/* When a label is hovered, or its associated radio is checked, set its color */
+.rating-stars label:hover i,
+.rating-stars input[type="radio"]:checked + label i {
+    color: #ffc107;
+}
+/* All stars before the hovered one should also be colored */
+.rating-stars label:hover ~ label i {
+    color: #ffc107;
+}
+
+/* Ensure empty state when not hovered and not checked */
+.rating-stars label i {
+    color: #ccc;
+}
+/* Override for selected stars */
+.rating-stars input[type="radio"]:checked + label i,
+.rating-stars input[type="radio"]:checked + label ~ label i {
+    color: #ffc107;
+}
 </style>
 @endpush
 
 @section('content')
 <div id="page-content">
-    <!--Page Header-->
     <div class="page-header text-center">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                    <!--Breadcrumbs-->
                     <div class="breadcrumbs"><a href="index.html" title="Back to the home page">Home</a><span class="main-title fw-bold"><i class="icon anm anm-angle-right-l"></i>Chi tiết sản phẩm</span></div>
-                    <!--End Breadcrumbs-->
                 </div>
             </div>
         </div>
     </div>
-    <!--End Page Header-->
-
-    <!--Main Content-->
     <div class="container">
-        <!--Product Content-->
         <div class="product-single">
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12 col-12 product-layout-img mb-4 mb-md-0">
                     <div class="product-sticky-style">
-                        <!-- Product Horizontal -->
                         <div class="product-details-img product-thumb-left-style d-flex justify-content-center">
-                            <!-- Product Thumb -->
                             <div class="product-thumb thumb-left">
                                 <div id="gallery" class="product-thumb-vertical h-100">
                                     @foreach($product->variants as $image)
@@ -75,20 +119,10 @@
                                     @endforeach
                                 </div>
                             </div>
-                            <!-- End Product Thumb -->
-
-                            <!-- Product Main -->
                             <div class="zoompro-wrap product-zoom-right rounded-0">
-                                <!-- Product Image -->
-
                                 <div class="zoompro-span"><img id="zoompro" class="zoompro rounded-0 img-thumbnail rounded shadow" src="{{ asset($product->image) }}" data-zoom-image="assets/images/products/product2.jpg" alt="product" width="625" height="808" /></div>
-                                <!-- End Product Image -->
                             </div>
-                            <!-- End Product Main -->
                         </div>
-                        <!-- End Product Horizontal -->
-
-                        <!-- Social Sharing -->
                         <div class="social-sharing d-flex-center justify-content-center mt-3 mt-md-4 lh-lg">
                             <span class="sharing-lbl fw-600">Share :</span>
                             <a href="#" class="d-flex-center btn btn-link btn--share share-facebook"><i class="icon anm anm-facebook-f"></i><span class="share-title">Facebook</span></a>
@@ -97,33 +131,24 @@
                             <a href="#" class="d-flex-center btn btn-link btn--share share-linkedin"><i class="icon anm anm-linkedin-in"></i><span class="share-title">Linkedin</span></a>
                             <a href="#" class="d-flex-center btn btn-link btn--share share-email"><i class="icon anm anm-envelope-l"></i><span class="share-title">Email</span></a>
                         </div>
-                        <!-- End Social Sharing -->
                     </div>
                 </div>
 
                 <div class="col-lg-6 col-md-6 col-sm-12 col-12 product-layout-info">
-                    <!-- Product Details -->
                     <div class="product-single-meta">
                         <div class="product-main-subtitle mb-3 d-flex-center">
                             <div class="product-labels position-static d-inline-flex"><span class="lbl pr-label1 mb-0">Best seller</span></div>
                             <span class="label-text ms-2 d-none">in Fashion</span>
                         </div>
                         <h2 class="product-main-title">{{ $product->name }}</h2>
-                        <!-- Product Reviews -->
                         <div class="product-review d-flex-center mb-3">
                             <div class="reviewStar d-flex-center"><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star-o"></i><span class="caption ms-2">24 Lượt đánh giá</span></div>
                             <a class="reviewLink d-flex-center" href="#reviews">Write a Review</a>
                         </div>
-                        <!-- End Product Reviews -->
-                        <!-- Product Price -->
                         <div class="product-price d-flex-center my-3">
                             <span class="price">{{ number_format($product->price, 0, ',', '.') }} VNĐ</span>
                         </div>
-                        <!-- End Product Price -->
-                        <!-- Sort Description -->
                         <div class="sort-description mb-3">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum</div>
-                        <!-- End Sort Description -->
-                        <!--Product Availability-->
                         <div class="product-availability p-0 m-0 mb-3 position-static col-lg-9">
                             <div class="lh-1 d-flex justify-content-between">
                                 <div class="text-sold fw-600">Currently, <strong class="text-link">16</strong> items are in stock!</div>
@@ -132,27 +157,17 @@
                                 <div class="progress-bar w-75" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                         </div>
-                        <!--End Product Availability-->
-                        <!-- Product Sold -->
                         <div class="orderMsg d-flex-center mb-3" data-user="23" data-time="24">
                             <i class="icon anm anm-medapps"></i>
                             <p class="m-0"><strong class="items">8</strong> Sold in last <strong class="time">14</strong> hours</p>
                             <p id="quantity_message" class="ms-2 ps-2 border-start">Hurry up! only <span class="items fw-bold">4</span> products left in stock!</p>
                         </div>
-                        <!-- End Product Sold -->
-                        <!-- Product Info -->
                         <div class="userViewMsg featureText mb-2" data-user="20" data-time="11000"><i class="icon anm anm-eye-r"></i><b class="uersView">21</b> People are Looking for this Product</div>
-                        <!-- End Product Info -->
                     </div>
-                    <!-- End Product Details -->
-
-                    <!-- Product Form -->
                     <form method="post" action="{{ route('client.cart.add') }}" id="add-to-cart-form" class="product-form product-form-border hidedropdown">
                         @csrf
                         <input type="hidden" name="product_id" value="{{ $product->id }}">
-                        <!-- Swatches -->
                         <div class="product-swatches-option">
-                            <!-- Swatches Color -->
                             <div class="product-item swatches-image w-100 mb-4 swatch-0 option1" data-option-index="0">
                                 <div class="mb-3">
                                     <label class="form-label d-block">
@@ -180,8 +195,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- End Swatches Color -->
-                            <!-- Swatches Size -->
                             <div class="product-item swatches-size w-100 mb-4 swatch-1 option2" data-option-index="1">
                                 <div class="mb-3">
                                     <label class="form-label">Chọn size:</label>
@@ -195,13 +208,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- End Swatches Size -->
                         </div>
-                        <!-- End Swatches -->
-
-                        <!-- Product Action -->
                         <div class="product-action w-100 d-flex-wrap my-3 my-md-4">
-                            <!-- Product Quantity -->
                             <div class="product-form-quantity d-flex-center">
                                 <div class="input-group input-group-sm w-auto">
                                     <button class="btn btn-outline-secondary" type="button" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
@@ -213,37 +221,24 @@
                                     </button>
                                 </div>
                             </div>
-                            <!-- End Product Quantity -->
-                            <!-- Product Add -->
                             <div class="product-form-submit addcart fl-1 ms-3">
                                 <button type="submit" id="add-to-cart-btn" class="btn btn-primary">
                                     Thêm vào giỏ hàng
                                 </button>
                             </div>
                     </form>
-                    <!-- Product Add -->
-                    <!-- Product Buy -->
                     <div class="product-form-submit buyit fl-1 ms-3">
                         <button type="submit" class="btn btn-primary proceed-to-checkout">
                             <span>Mua ngay</span>
                         </button>
                     </div>
-                    <!-- End Product Buy -->
                 </div>
-                <!-- End Product Action -->
-
-                <!-- Product Info link -->
                 <p class="infolinks d-flex-center justify-content-between">
                     <a class="text-link wishlist" href="wishlist-style1.html"><i class="icon anm anm-heart-l me-2"></i> <span>Add to Wishlist</span></a>
                     <a class="text-link compare" href="compare-style1.html"><i class="icon anm anm-sync-ar me-2"></i> <span>Add to Compare</span></a>
                     <a href="#shippingInfo-modal" class="text-link shippingInfo" data-bs-toggle="modal" data-bs-target="#shippingInfo_modal"><i class="icon anm anm-paper-l-plane me-2"></i> <span>Delivery &amp; Returns</span></a>
                     <a href="#productInquiry-modal" class="text-link emaillink me-0" data-bs-toggle="modal" data-bs-target="#productInquiry_modal"><i class="icon anm anm-question-cil me-2"></i> <span>Enquiry</span></a>
                 </p>
-                <!-- End Product Info link -->
-
-                <!-- End Product Form -->
-
-                <!-- Product Info -->
                 <div class="product-info">
                     <div class="freeShipMsg featureText mb-2"><i class="icon anm anm-shield-check-r"></i> Bảo hành thương hiệu <b class="freeShip">1 năm</b></div>
                     <div class="freeShipMsg featureText mb-2"><i class="icon anm anm-sync-ar"></i><b class="freeShip">30</b> Day Return Policy</div>
@@ -257,19 +252,12 @@
                     <p class="product-type">Danh mục:<span class="text">{{ $product->category->name }}</span></p>
                     <p class="product-sku">Mã sản phẩm:<span class="text">{{ $product->code }}</span></p>
                 </div>
-                <!-- End Product Info -->
-
-                <!-- Product Info -->
                 <div class="freeShipMsg featureText mt-3" data-price="199"><i class="icon anm anm-truck-r"></i>Spent <b class="freeShip"><span class="money" data-currency-usd="$199.00" data-currency="USD">$199.00</span></b> More for Free shipping</div>
                 <div class="shippingMsg featureText mb-0"><i class="icon anm anm-clock-r"></i>Estimated Delivery Between <b id="fromDate">Wed, May 1</b> and <b id="toDate">Tue, May 7</b>.</div>
                 <div class="trustseal-img mt-3 mt-md-4"><img src="assets/images/icons/powerby-cards.jpg" alt="powerby cards" width="470" /></div>
-                <!-- End Product Info -->
             </div>
         </div>
     </div>
-    <!--Product Content-->
-
-    <!--Product Nav-->
     <a href="product-layout1.html" class="product-nav prev-pro clr-none d-flex-center justify-content-between" title="Previous Product">
         <span class="details">
             <span class="name">Oxford Cuban Shirt</span>
@@ -284,9 +272,6 @@
             <span class="price">$128</span>
         </span>
     </a>
-    <!--End Product Nav-->
-
-    <!--Product Tabs-->
     <div class="tabs-listing section pb-0">
         <ul class="product-tabs list-unstyled d-flex-wrap border-bottom d-none d-md-flex">
             <li rel="description" class="active"><a class="tablink">Mô tả</a></li>
@@ -297,7 +282,6 @@
         </ul>
 
         <div class="tab-container">
-            <!--Description-->
             <h3 class="tabs-ac-style d-md-none active" rel="description">Mô tả</h3>
             <div id="description" class="tab-content">
                 <div class="product-description">
@@ -319,9 +303,6 @@
                 </div>
 
             </div>
-            <!--End Description-->
-
-            <!--Additional Information-->
             <h3 class="tabs-ac-style d-md-none" rel="additionalInformation">Additional Information</h3>
             <div id="additionalInformation" class="tab-content">
                 <div class="product-description">
@@ -355,9 +336,6 @@
                     </div>
                 </div>
             </div>
-            <!--End Additional Information-->
-
-            <!--Size Chart-->
             <h3 class="tabs-ac-style d-md-none" rel="size-chart">Size Chart</h3>
             <div id="size-chart" class="tab-content">
                 <h4 class="mb-2">Ready to Wear Clothing</h4>
@@ -488,9 +466,6 @@
                     </table>
                 </div>
             </div>
-            <!--End Size Chart-->
-
-            <!--Shipping &amp; Return-->
             <h3 class="tabs-ac-style d-md-none" rel="shipping-return">Shipping &amp; Return</h3>
             <div id="shipping-return" class="tab-content">
                 <h4 class="pb-1">Shipping &amp; Return</h4>
@@ -507,9 +482,6 @@
                 <h4 class="pt-1">Special Financing</h4>
                 <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage.</p>
             </div>
-            <!--End Shipping &amp; Return-->
-
-            <!--Review-->
             <h3 class="tabs-ac-style d-md-none" rel="reviews">Review</h3>
             <div id="reviews" class="tab-content">
                 <div class="row">
@@ -652,10 +624,8 @@
                     </div>
                 </div>
             </div>
-            <!--End Review-->
         </div>
     </div>
-    <!--End Product Tabs-->
 </div>
 @auth
 <div class="container mt-4">
@@ -663,15 +633,15 @@
     <form action="{{ route('client.comments.store') }}" method="POST">
         @csrf
         <input type="hidden" name="product_id" value="{{ $product->id }}">
-        
+
         <div class="mb-3">
             <label for="rating">Đánh giá sao (tùy chọn):</label>
-            <select class="form-select w-auto" name="rating">
-                <option value="">-- Chọn sao --</option>
-                @for ($i = 5; $i >= 1; $i--)
-                    <option value="{{ $i }}">{{ $i }} sao</option>
-                @endfor
-            </select>
+            <div class="rating-stars" id="ratingStars">
+                @for ($i = 1; $i <= 5; $i++)
+                    <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}">
+                    <label for="star{{ $i }}"><i class="icon anm anm-star-o"></i></label>
+                    @endfor
+            </div>
         </div>
 
         <div class="mb-3">
@@ -692,26 +662,23 @@
     <h3>Đánh giá sản phẩm</h3>
 
     @forelse($product->comments()->latest()->get() as $comment)
-        <div class="border rounded p-3 mb-3">
-            <strong>{{ $comment->user->name ?? 'Khách' }}</strong>
-            <p class="mb-1 text-muted">{{ $comment->created_at->format('d/m/Y H:i') }}</p>
-            @if($comment->rating)
-                <p>
-                    @for($i = 1; $i <= 5; $i++)
-                        <i class="icon anm {{ $i <= $comment->rating ? 'anm-star' : 'anm-star-o' }}"></i>
-                    @endfor
-                </p>
-            @endif
-            <p>{{ $comment->content }}</p>
-        </div>
+    <div class="border rounded p-3 mb-3">
+        <strong>{{ $comment->user->name ?? 'Khách' }}</strong>
+        <p class="mb-1 text-muted">{{ $comment->created_at->format('d/m/Y H:i') }}</p>
+        @if($comment->rating)
+        <p>
+            @for($i = 1; $i <= 5; $i++)
+                <i class="icon anm {{ $i <= $comment->rating ? 'anm-star' : 'anm-star-o' }}"></i>
+                @endfor
+        </p>
+        @endif
+        <p>{{ $comment->content }}</p>
+    </div>
     @empty
-        <p>Chưa có đánh giá nào cho sản phẩm này.</p>
+    <p>Chưa có đánh giá nào cho sản phẩm này.</p>
     @endforelse
 </div>
 
-<!--End Main Content-->
-
-<!--Related Products-->
 <section class="section product-slider pb-0">
     <div class="container">
         <div class="section-header">
@@ -719,72 +686,42 @@
             <h2>Sản phẩm liên quan</h2>
         </div>
 
-        <!--Product Grid-->
         <div class="product-slider-4items gp10 arwOut5 grid-products">
             @foreach($relatedProducts as $product)
             <div class="item col-item">
                 <div class="product-box">
-                    <!-- Start Product Image -->
                     <div class="product-image">
-                        <!-- Start Product Image -->
                         <a href="{{ route('client.products.show', $product->slug) }}" class="product-img rounded-0"><img class="rounded-0 blur-up lazyload" src="{{ asset($product->image) }}" alt="Product" title="Product" width="625" height="808" /></a>
-                        <!-- End Product Image -->
-                        <!-- Product label -->
                         <div class="product-labels"><span class="lbl on-sale">Sale</span></div>
-                        <!-- End Product label -->
-                        <!--Product Button-->
                         <div class="button-set style1">
-                            <!--Cart Button-->
                             <a href="#quickshop-modal" class="btn-icon addtocart quick-shop-modal" data-bs-toggle="modal" data-bs-target="#quickshop_modal">
                                 <span class="icon-wrap d-flex-justify-center h-100 w-100" data-bs-toggle="tooltip" data-bs-placement="left" title="Quick Shop"><i class="icon anm anm-cart-l"></i><span class="text">Quick Shop</span></span>
                             </a>
-                            <!--End Cart Button-->
-                            <!--Quick View Button-->
                             <a href="#quickview-modal" class="btn-icon quickview quick-view-modal" data-bs-toggle="modal" data-bs-target="#quickview_modal">
                                 <span class="icon-wrap d-flex-justify-center h-100 w-100" data-bs-toggle="tooltip" data-bs-placement="left" title="Quick View"><i class="icon anm anm-search-plus-l"></i><span class="text">Quick View</span></span>
                             </a>
-                            <!--End Quick View Button-->
-                            <!--Wishlist Button-->
                             <a href="wishlist-style2.html" class="btn-icon wishlist" data-bs-toggle="tooltip" data-bs-placement="left" title="Add To Wishlist"><i class="icon anm anm-heart-l"></i><span class="text">Add To Wishlist</span></a>
-                            <!--End Wishlist Button-->
-                            <!--Compare Button-->
                             <a href="compare-style2.html" class="btn-icon compare" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Compare"><i class="icon anm anm-random-r"></i><span class="text">Add to Compare</span></a>
-                            <!--End Compare Button-->
                         </div>
-                        <!--End Product Button-->
-
                     </div>
-                    <!-- End Product Image -->
-                    <!-- Start Product Details -->
                     <div class="product-details text-left text-center">
-                        <!-- Product Name -->
                         <div class="product-name">
                             <a href="product-layout1.html" class="text-decoration-none text-primary fw-bold fw-semibold fs-6">{{ $product->name }}</a>
                         </div>
-                        <!-- End Product Name -->
-                        <!-- Product Review -->
                         <div class="product-review">
                             <i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star-o"></i>
                             <span class="caption hidden ms-1">3 Reviews</span>
                         </div>
-                        <!-- End Product Review -->
-                        <!-- Product Price -->
                         <div class="product-price">
                             <span class="price old-price">$114.00</span><span class="price text-danger fw-bold fs-5">{{ number_format($product->price, 0, ',', '.') }} VNĐ</span>
                         </div>
-                        <!-- End Product Price -->
-
                     </div>
-                    <!-- End product details -->
                 </div>
             </div>
             @endforeach
         </div>
-        <!--End Product Grid-->
     </div>
 </section>
-<!--End Related Products-->
-
 </div>
 <script>
     const radios = document.querySelectorAll('input[name="color_id"]');
@@ -829,6 +766,77 @@
                 }
             });
     });
+    // JavaScript for star rating functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const ratingStarsContainer = document.getElementById('ratingStars');
+    if (!ratingStarsContainer) return;
+
+    const radioInputs = ratingStarsContainer.querySelectorAll('input[type="radio"]');
+    const labels = ratingStarsContainer.querySelectorAll('label');
+
+    // Function to update the visual state of stars based on which radio is checked
+    function updateStarDisplay() {
+        radioInputs.forEach((radio) => {
+            const label = document.querySelector(`label[for="${radio.id}"]`);
+            if (label) {
+                // Remove 'selected' class from all labels initially
+                label.classList.remove('selected');
+                // Remove filled star class from all icons initially
+                label.querySelector('i').classList.remove('anm-star');
+                label.querySelector('i').classList.add('anm-star-o');
+            }
+        });
+
+        // Add 'selected' class to the checked radio's label and preceding labels
+        const checkedRadio = ratingStarsContainer.querySelector('input[name="rating"]:checked');
+        if (checkedRadio) {
+            const checkedValue = parseInt(checkedRadio.value);
+            labels.forEach((label, index) => {
+                const starValue = parseInt(label.getAttribute('for').replace('star', ''));
+                if (starValue <= checkedValue) {
+                    label.classList.add('selected'); // Add selected class to label
+                    label.querySelector('i').classList.remove('anm-star-o');
+                    label.querySelector('i').classList.add('anm-star');
+                }
+            });
+        }
+    }
+
+    // Event listeners for radio buttons (click event)
+    radioInputs.forEach(radio => {
+        radio.addEventListener('change', function() {
+            // No need to explicitly set currentRating here, as CSS handles checked state
+            updateStarDisplay(); // Update display after a radio button is checked
+        });
+    });
+
+    // Event listeners for labels (hover effects - handled primarily by CSS now)
+    // We still keep the mouseout for consistency in case of complex interactions
+    labels.forEach((label) => {
+        label.addEventListener('mouseover', function() {
+            const hoverValue = parseInt(this.getAttribute('for').replace('star', ''));
+            // Manually add hover effect if CSS isn't fully robust for complex scenarios
+            labels.forEach((lbl) => {
+                const starValue = parseInt(lbl.getAttribute('for').replace('star', ''));
+                if (starValue <= hoverValue) {
+                    lbl.querySelector('i').classList.remove('anm-star-o');
+                    lbl.querySelector('i').classList.add('anm-star');
+                } else {
+                    lbl.querySelector('i').classList.remove('anm-star');
+                    lbl.querySelector('i').classList.add('anm-star-o');
+                }
+            });
+        });
+
+        label.addEventListener('mouseout', function() {
+            // Revert to the checked state
+            updateStarDisplay();
+        });
+    });
+
+    // Initialize display on page load
+    updateStarDisplay();
+});
 </script>
 @endsection
 
