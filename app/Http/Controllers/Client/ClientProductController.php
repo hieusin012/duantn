@@ -1,4 +1,3 @@
-// app/Http/Controllers/Client/ProductController.php
 <?php
 
 namespace App\Http\Controllers\Client;
@@ -7,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
+use App\Models\ProductVariant;
+use App\Models\Color;
 use Illuminate\Http\Request;
 
 class ClientProductController extends Controller
@@ -14,9 +15,9 @@ class ClientProductController extends Controller
     public function index()
     {
         $products = Product::where('is_active', 1)
-                        ->whereNull('deleted_at')
-                        ->latest()
-                        ->paginate(12);
+            ->whereNull('deleted_at')
+            ->latest()
+            ->paginate(12);
 
         $categories = Category::whereNull('deleted_at')->get();
         $brands = Brand::whereNull('deleted_at')->get();
@@ -32,9 +33,16 @@ class ClientProductController extends Controller
             ->whereNull('deleted_at')
             ->firstOrFail();
 
-        $productImages = $product->galleries; // Lấy danh sách ảnh phụ
+        $productImages = $product->galleries;
 
-        // Lấy sản phẩm liên quan (cùng danh mục, trừ sản phẩm hiện tại)
+        // ✅ Lấy color_id từ các biến thể
+        $variantColorIds = $product->variants->pluck('color_id')->filter()->unique();
+
+        // ✅ Truy vấn bảng colors từ color_id của product_variants
+        $colors = Color::whereIn('id', $variantColorIds)
+            ->whereNull('deleted_at')
+            ->get();
+
         $relatedProducts = Product::with(['brand', 'galleries'])
             ->where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
@@ -43,7 +51,8 @@ class ClientProductController extends Controller
             ->take(5)
             ->get();
 
-        return view('clients.products.show', compact('product', 'productImages', 'relatedProducts'));
+        // ✅ Truyền biến colors xuống view
+        return view('clients.products.show', compact('product', 'productImages', 'relatedProducts', 'colors'));
     }
 
     public function search(Request $request)

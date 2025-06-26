@@ -158,42 +158,28 @@
                                     <label class="form-label d-block">
                                         Chọn màu: <strong id="selectedColorName">Chưa chọn</strong>
                                     </label>
-
+                                
                                     <div class="d-flex flex-wrap gap-2">
                                         @foreach ($colors as $color)
-                                        <input
-                                            type="radio"
-                                            class="btn-check"
-                                            name="color_id"
-                                            id="color-{{ $color->id }}"
-                                            value="{{ $color->id }}"
-                                            autocomplete="off"
-                                            data-color-name="{{ $color->name }}">
-
-                                        <label
-                                            class="btn border p-2 color-swatch"
-                                            for="color-{{ $color->id }}"
-                                            data-color-code="{{ $color->color_code }}"
-                                            title="{{ $color->name }}">
-                                        </label>
+                                            <input
+                                                type="radio"
+                                                class="btn-check"
+                                                name="color_id"
+                                                id="color-{{ $color->id }}"
+                                                value="{{ $color->id }}"
+                                                autocomplete="off"
+                                                data-color-name="{{ $color->name }}">
+                                
+                                            <label
+                                                class="btn border p-2 color-swatch"
+                                                for="color-{{ $color->id }}"
+                                                style="background-color: {{ $color->color_code }}; width: 32px; height: 32px; border-radius: 50%;"
+                                                title="{{ $color->name }}">
+                                            </label>
                                         @endforeach
                                     </div>
                                 </div>
-                            </div>
-                            <!-- End Swatches Color -->
-                            <!-- Swatches Size -->
-                            <div class="product-item swatches-size w-100 mb-4 swatch-1 option2" data-option-index="1">
-                                <div class="mb-3">
-                                    <label class="form-label">Chọn size:</label>
-                                    <div class="d-flex flex-wrap gap-2">
-                                        @foreach ($sizes as $size)
-                                        <input type="radio" class="btn-check" name="size_id" id="size-{{ $size->id }}" value="{{ $size->id }}" autocomplete="off">
-                                        <label class="btn btn-outline-warning" for="size-{{ $size->id }}">
-                                            {{ $size->name }}
-                                        </label>
-                                        @endforeach
-                                    </div>
-                                </div>
+                                
                             </div>
                             <!-- End Swatches Size -->
                         </div>
@@ -827,5 +813,14 @@
         }
     });
 </script>
+<style>
+    .color-swatch {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+</style>
 
 @endsection
