@@ -125,7 +125,6 @@
                         </tfoot>
                     </table>
 
-
                 </form>
                 @if ($cart && $cart->items)
                 @foreach ($cart->items as $item)

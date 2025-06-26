@@ -86,5 +86,30 @@
         @endforeach
     </div>
 </div>
+<div class="container py-4">
+    <h2 class="text-center mb-4">Bài viết mới nhất</h2>
+    <div class="row">
+        @foreach ($blogs as $blog)
+        <div class="col-md-4 col-12 mb-4">
+            <div class="card h-100 shadow-sm border-0">
+                <a href="{{ route('client.blogs.show', $blog->slug) }}">
+                    <img src="{{ asset('storage/' . $blog->image) }}" class="card-img-top" alt="{{ $blog->title }}" style="height: 200px; object-fit: cover;">
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">
+                        <a href="{{ route('client.blogs.show', $blog->slug) }}" class="text-decoration-none text-dark">
+                            {{ $blog->title }}
+                        </a>
+                    </h5>
+                    <p class="text-muted mb-2">
+                        {{ $blog->created_at->format('d/m/Y') }}
+                    </p>
+                    <a href="{{ route('client.blogs.show', $blog->slug) }}" class="btn btn-outline-primary btn-sm">Xem chi tiết</a>
+                </div>
+            </div>
+        </div>
+        @endforeach
+    </div>
+</div>
 
 @endsection
