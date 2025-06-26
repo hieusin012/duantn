@@ -1,4 +1,3 @@
-// app/Http/Controllers/Client/ProductController.php
 <?php
 
 namespace App\Http\Controllers\Client;

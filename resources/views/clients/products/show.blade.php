@@ -169,6 +169,7 @@
                                             value="{{ $color->id }}"
                                             autocomplete="off"
                                             data-color-name="{{ $color->name }}">
+
                                         <label
                                             class="btn border p-2 color-swatch"
                                             for="color-{{ $color->id }}"
@@ -822,7 +823,7 @@
     document.querySelectorAll('.color-swatch').forEach(function(el) {
         const color = el.getAttribute('data-color-code');
         if (color) {
-            el.style.backgroundColor = `${color}`;
+            el.style.backgroundColor = `#${color}`;
         }
     });
 </script>
