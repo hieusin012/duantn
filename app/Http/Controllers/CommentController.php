@@ -6,6 +6,8 @@ use App\Models\Comment;
 use App\Models\User;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class CommentController extends Controller
 {
@@ -76,4 +78,22 @@ Comment::create($request->only(['user_id', 'product_id', 'content', 'rating', 's
         $comment->delete();
         return redirect()->route('comments.index')->with('success', 'Xóa bình luận thành công.');
     }
+    public function storeClient(Request $request)
+{
+    $request->validate([
+        'product_id' => 'required|exists:products,id',
+        'content' => 'required|string|min:3',
+        'rating' => 'nullable|integer|min:1|max:5',
+    ]);
+
+    Comment::create([
+        'user_id' => Auth::id(),
+        'product_id' => $request->product_id,
+        'content' => $request->content,
+        'rating' => $request->rating,
+        'status' => true, // nếu cần duyệt thì set false
+    ]);
+
+    return redirect()->back()->with('success', 'Bình luận đã được gửi.');
+}
 }

@@ -190,7 +190,8 @@ Route::get('/products/search', [ClientProductController::class, 'search'])->name
 
 // Trang chi tiết sản phẩm (dùng slug để SEO tốt hơn)// Trang chi tiết sản phẩm (dùng slug)
 Route::get('san-pham/{slug}', [ClientProductController::class, 'show'])->name('client.products.show');
-
+// comment
+Route::post('/comments/client-store', [CommentController::class, 'storeClient'])->name('client.comments.store')->middleware('auth');
 
 //contact
 Route::get('/contact', [ClientContactController::class, 'showForm'])->name('client.contact');

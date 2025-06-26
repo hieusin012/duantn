@@ -657,6 +657,58 @@
     </div>
     <!--End Product Tabs-->
 </div>
+@auth
+<div class="container mt-4">
+    <h4>Gửi đánh giá của bạn</h4>
+    <form action="{{ route('client.comments.store') }}" method="POST">
+        @csrf
+        <input type="hidden" name="product_id" value="{{ $product->id }}">
+        
+        <div class="mb-3">
+            <label for="rating">Đánh giá sao (tùy chọn):</label>
+            <select class="form-select w-auto" name="rating">
+                <option value="">-- Chọn sao --</option>
+                @for ($i = 5; $i >= 1; $i--)
+                    <option value="{{ $i }}">{{ $i }} sao</option>
+                @endfor
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="content">Nội dung *</label>
+            <textarea name="content" class="form-control" required rows="3"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Gửi bình luận</button>
+    </form>
+</div>
+@else
+<div class="container mt-4">
+    <p>Vui lòng <a href="{{ route('login') }}">đăng nhập</a> để bình luận.</p>
+</div>
+@endauth
+
+<div class="container mt-5">
+    <h3>Đánh giá sản phẩm</h3>
+
+    @forelse($product->comments()->latest()->get() as $comment)
+        <div class="border rounded p-3 mb-3">
+            <strong>{{ $comment->user->name ?? 'Khách' }}</strong>
+            <p class="mb-1 text-muted">{{ $comment->created_at->format('d/m/Y H:i') }}</p>
+            @if($comment->rating)
+                <p>
+                    @for($i = 1; $i <= 5; $i++)
+                        <i class="icon anm {{ $i <= $comment->rating ? 'anm-star' : 'anm-star-o' }}"></i>
+                    @endfor
+                </p>
+            @endif
+            <p>{{ $comment->content }}</p>
+        </div>
+    @empty
+        <p>Chưa có đánh giá nào cho sản phẩm này.</p>
+    @endforelse
+</div>
+
 <!--End Main Content-->
 
 <!--Related Products-->
