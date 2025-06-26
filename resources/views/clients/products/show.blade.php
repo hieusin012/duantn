@@ -809,7 +809,7 @@
     document.querySelectorAll('.color-swatch').forEach(function(el) {
         const color = el.getAttribute('data-color-code');
         if (color) {
-            el.style.backgroundColor = `#${color}`;
+            el.style.backgroundColor = `${color}`;
         }
     });
 </script>
