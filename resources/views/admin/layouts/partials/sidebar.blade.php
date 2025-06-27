@@ -24,7 +24,7 @@
             <li><a class="app-menu__item" href="#"><i class='app-menu__icon bx bx-id-card'></i> <span
                               class="app-menu__label">Quản lý nhân viên</span></a></li> --}}
 
-            <li><a class="app-menu__item {{ request()->routeIs('admin.users.*') ? 'active' : '' }}" href="{{ route(name: 'admin.users.index') }}"><i class='app-menu__icon bx bx-user-voice'></i><span
+            <li><a class="app-menu__item {{ request()->routeIs('admin.users.*') ? 'active' : '' }}" href="{{ route(name: 'admin.users.index') }}"><i class='app-menu__icon bx bx-group'></i><span
                               class="app-menu__label">Quản lý người dùng</span></a></li>
 
             <li>
@@ -106,7 +106,14 @@
                         <span class="app-menu__label">Quản Lí Shipper</span>
                   </a>
             </li>
-
+              
+            <li>
+                  <a class="app-menu__item {{ request()->routeIs('admin.suppliers*') ? 'active' : '' }}" href="{{ route('admin.suppliers.index') }}">
+                      <i class="app-menu__icon fa fa-building"></i>
+                      <span class="app-menu__label">Quản lí nhà cung cấp</span>
+                  </a>
+            </li>
+                  
 
 
             <li><a class="app-menu__item {{ request()->is('table-data-banned*') ? 'active' : '' }}" href="table-data-banned.html"><i class='app-menu__icon bx bx-run'></i><span
