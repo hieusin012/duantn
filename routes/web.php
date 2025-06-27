@@ -34,7 +34,7 @@ use App\Http\Controllers\Client\ForgetPasswordController;
 
 use App\Http\Controllers\CommentController;
 
-
+use App\Http\Controllers\SupplierController;
 
 // Auth
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -155,6 +155,19 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
 
     //comment
      Route::resource('comments', CommentController::class);
+});
+
+
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    // Resource CRUD
+    Route::resource('suppliers', SupplierController::class)->except(['show']);
+    // Thêm các route quản lý dữ liệu đã xóa
+    Route::get('suppliers/trash', [SupplierController::class, 'trash'])->name('suppliers.trash'); // Trang danh sách đã xóa
+    Route::get('suppliers/trash', [SupplierController::class, 'trash'])->name('suppliers.delete');
+    Route::post('suppliers/{id}/restore', [SupplierController::class, 'restore'])->name('suppliers.restore'); // Khôi phục
+    Route::delete('suppliers/{id}/eliminate', [SupplierController::class, 'eliminate'])->name('suppliers.eliminate'); // Xóa vĩnh viễn
+    Route::delete('suppliers/all/eliminate', [SupplierController::class, 'eliminateAll'])->name('suppliers.all-eliminate'); // Xóa tất cả
 });
 
 
