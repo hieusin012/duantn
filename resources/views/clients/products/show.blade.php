@@ -234,7 +234,14 @@
                     </div>
                 </div>
                 <p class="infolinks d-flex-center justify-content-between">
-                    <a class="text-link wishlist" href="wishlist-style1.html"><i class="icon anm anm-heart-l me-2"></i> <span>Add to Wishlist</span></a>
+                    <a href="javascript:void(0);"
+                    class="text-link wishlist wishlist-toggle"
+                    data-id="{{ $product->id }}"
+                    data-bs-toggle="tooltip"
+                    title="{{ auth()->check() && $product->wishlists->where('user_id', auth()->id())->count() ? 'Bỏ yêu thích' : 'Thêm vào yêu thích' }}">
+                        <i class="icon anm anm-heart {{ auth()->check() && $product->wishlists->where('user_id', auth()->id())->count() ? 'text-danger' : '' }} me-1"></i>
+                        <span>{{ auth()->check() && $product->wishlists->where('user_id', auth()->id())->count() ? 'Đã yêu thích' : 'Thêm vào yêu thích' }}</span>
+                    </a>
                     <a class="text-link compare" href="compare-style1.html"><i class="icon anm anm-sync-ar me-2"></i> <span>Add to Compare</span></a>
                     <a href="#shippingInfo-modal" class="text-link shippingInfo" data-bs-toggle="modal" data-bs-target="#shippingInfo_modal"><i class="icon anm anm-paper-l-plane me-2"></i> <span>Delivery &amp; Returns</span></a>
                     <a href="#productInquiry-modal" class="text-link emaillink me-0" data-bs-toggle="modal" data-bs-target="#productInquiry_modal"><i class="icon anm anm-question-cil me-2"></i> <span>Enquiry</span></a>
@@ -659,8 +666,9 @@
 @endauth
 
 <div class="container mt-5">
+    
     <h3>Đánh giá sản phẩm</h3>
-
+    
     @forelse($product->comments()->latest()->get() as $comment)
     <div class="border rounded p-3 mb-3">
         <strong>{{ $comment->user->name ?? 'Khách' }}</strong>
@@ -883,9 +891,47 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.color-swatch').forEach(function(el) {
         const color = el.getAttribute('data-color-code');
         if (color) {
-            el.style.backgroundColor = `#${color}`;
+            el.style.backgroundColor = `${color}`;
         }
     });
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.wishlist-toggle').forEach(button => {
+        button.addEventListener('click', function () {
+            const productId = this.dataset.id;
+            const token = '{{ csrf_token() }}';
+            const icon = this.querySelector('i');
+            const span = this.querySelector('span');
+
+            fetch("{{ route('wishlist.toggle') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': token
+                },
+                body: JSON.stringify({ product_id: productId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'added') {
+                    icon.classList.add('text-danger');
+                    this.setAttribute('title', 'Bỏ yêu thích');
+                    if (span) span.textContent = 'Đã yêu thích';
+                } else {
+                    icon.classList.remove('text-danger');
+                    this.setAttribute('title', 'Thêm vào yêu thích');
+                    if (span) span.textContent = 'Thêm vào yêu thích';
+                }
+
+                const wishlistCountEl = document.querySelector('.wishlist-count');
+                if (wishlistCountEl) {
+                    wishlistCountEl.textContent = data.count;
+                }
+            });
+        });
+    });
+});
 </script>
 
 @endsection

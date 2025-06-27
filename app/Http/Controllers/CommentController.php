@@ -47,7 +47,7 @@ class CommentController extends Controller
 Comment::create($request->only(['user_id', 'product_id', 'content', 'rating', 'status']));
 
 
-        return redirect()->route('comments.index')->with('success', 'Đã thêm bình luận.');
+        return redirect()->route('admin.comments.index')->with('success', 'Đã thêm bình luận.');
     }
 
     // Hiển thị form chỉnh sửa
@@ -69,14 +69,14 @@ Comment::create($request->only(['user_id', 'product_id', 'content', 'rating', 's
 
         $comment->update($request->only(['user_id', 'product_id', 'content']));
 
-        return redirect()->route('comments.index')->with('success', 'Cập nhật thành công.');
+        return redirect()->route('admin.comments.index')->with('success', 'Cập nhật thành công.');
     }
 
     // Xóa bình luận
     public function destroy(Comment $comment)
     {
         $comment->delete();
-        return redirect()->route('comments.index')->with('success', 'Xóa bình luận thành công.');
+        return redirect()->route('admin.comments.index')->with('success', 'Xóa bình luận thành công.');
     }
     public function storeClient(Request $request)
 {
