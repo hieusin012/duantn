@@ -23,6 +23,8 @@ use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CartItemController;
+use App\Http\Controllers\MessageController;
+
 
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\ProductVariantController;
@@ -154,7 +156,7 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     Route::get('/blogs/{blog}', [BlogController::class, 'show'])->name('blogs.show');
 
     //comment
-     Route::resource('comments', CommentController::class);
+    Route::resource('comments', CommentController::class);
 });
 
 
@@ -176,7 +178,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
     Route::delete('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove')->middleware('auth');
-
 });
 Route::middleware('auth')->get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
 
@@ -242,6 +243,22 @@ Route::middleware('auth')->group(function () {
     //mã giảm giá
     Route::post('/cart/apply-voucher', [ApplyVoucherController::class, 'applyVoucher'])->name('client.cart.applyVoucher');
 });
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/admin/chat', [MessageController::class, 'index'])->name('admin.chat');
+    Route::get('/admin/chat/messages/{userId}', [MessageController::class, 'fetchMessages']);
+    Route::post('/admin/chat/send', [MessageController::class, 'sendMessage']);
+});
+// routes/web.php
+Route::middleware('auth')->group(function () {
+    Route::get('/chat', [MessageController::class, 'userChatView']);
+    Route::get('/chat/messages', [MessageController::class, 'userFetchMessages']);
+    Route::post('/chat/send', [MessageController::class, 'userSendMessage']);
+});
+
+
+
 
 
 
