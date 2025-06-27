@@ -13,6 +13,12 @@ class Comment extends Model {
     'status'
 ];
 
+    // Add this cast to ensure 'rating' is always treated as an integer
+    protected $casts = [
+        'rating' => 'integer',
+        'status' => 'boolean', // It's good practice to cast booleans as well
+    ];
+
 
     public function user() {
         return $this->belongsTo(User::class);
@@ -22,4 +28,3 @@ class Comment extends Model {
         return $this->belongsTo(Product::class);
     }
 }
-

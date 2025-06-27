@@ -127,7 +127,7 @@
     <div class="page-wrapper">
         @include('clients.layouts.partials.header')
         @yield('banner')
-
+        
         @yield('content')
         <!-- Nút Chatbot -->
         <div id="chatbot-icon" onclick="toggleChat()">

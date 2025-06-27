@@ -125,14 +125,15 @@
                         </tfoot>
                     </table>
 
-
                 </form>
+                @if ($cart && $cart->items)
                 @foreach ($cart->items as $item)
                 <form id="delete-form-{{ $item->id }}" action="{{ route('client.cart.remove', $item->id) }}" method="POST" style="display: none;">
                     @csrf
                     @method('DELETE')
                 </form>
                 @endforeach
+                @endif
 
                 <!--End Cart Form-->
                 <!--Note with Shipping estimates-->

@@ -36,7 +36,7 @@ class BlogController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'slug' => 'required|string|max:255|unique:blogs,slug',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'category_id' => 'required|exists:categories,id',
             'user_id' => 'required|exists:users,id',
         ]);
@@ -68,7 +68,7 @@ class BlogController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'slug' => 'required|string|max:255|unique:blogs,slug,' . $id,
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'category_id' => 'required|exists:categories,id',
             'user_id' => 'required|exists:users,id',
         ]);

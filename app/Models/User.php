@@ -25,5 +25,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Wishlist::class);
     }
+    public function blogs()
+{
+    return $this->hasMany(\App\Models\Blog::class, 'user_id');
+}
+
 
 }
