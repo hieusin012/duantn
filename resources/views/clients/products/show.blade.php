@@ -666,8 +666,9 @@
 @endauth
 
 <div class="container mt-5">
+    
     <h3>Đánh giá sản phẩm</h3>
-
+    
     @forelse($product->comments()->latest()->get() as $comment)
     <div class="border rounded p-3 mb-3">
         <strong>{{ $comment->user->name ?? 'Khách' }}</strong>
