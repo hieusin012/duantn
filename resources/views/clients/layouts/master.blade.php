@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @yield('meta')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'SportBay')</title>
 
     <link rel="shortcut icon" href="{{ asset('assets/client/images/favicon.png') }}" />
@@ -19,16 +20,20 @@
 
 
     @stack('styles')
+    
 </head>
 
 <body class="template-index index-demo1">
     <div class="page-wrapper">
         @include('clients.layouts.partials.header')
         @yield('banner')
-        
-        @yield('content')
 
+        @yield('content')
+        
+
+        @include('clients.layouts.partials.chat')
         @include('clients.layouts.partials.footer')
+
     </div>
 
     <script src="{{ asset('assets/client/js/vendor/jquery-3.6.0.min.js') }}"></script>
@@ -36,10 +41,10 @@
     <script src="{{ asset('assets/client/js/vendor/slick.min.js') }}"></script>
     <script src="{{ asset('assets/client/js/plugins.js') }}"></script>
     <script src="{{ asset('assets/client/js/main.js') }}"></script>
+    
 
     @stack('scripts')
     @yield('scripts')
-
 </body>
 
 </html>
