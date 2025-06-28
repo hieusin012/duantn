@@ -1,9 +1,9 @@
 <aside class="app-sidebar">
-      <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="{{ asset('assets/admin/ckeditor/samples/img/logo.png') }}" width="50px"
+      <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="{{ asset('assets/admin/ckeditor/samples/img/logo.png') }}" width="150px"
                   alt="User Image">
             <div>
                   <p class="app-sidebar__user-name"><b>ADMIN</b></p>
-                  <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
+                  <p class="app-sidebar__user-designation">Trang quản lý</p>
             </div>
       </div>
       <hr>

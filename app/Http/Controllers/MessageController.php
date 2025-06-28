@@ -50,50 +50,35 @@ class MessageController extends Controller
 
 
     // chat của client
-
-    public function userChatView()
+    public function send(Request $request)
     {
-        return view('client.chat');
+        $from = Auth::id();
+        $admin = \App\Models\User::where('role', 'admin')->first();
+        $to = $admin?->id;
+
+
+        Message::create([
+            'from_user_id' => $from,
+            'to_user_id' => $to,
+            'message' => $request->message,
+        ]);
+
+        return response()->json(['status' => 'ok']);
     }
 
-    public function userFetchMessages()
+    public function fetch()
     {
-        $adminId = 1; // Hoặc lấy theo role admin trong hệ thống của bạn
         $userId = Auth::id();
+        $admin = \App\Models\User::where('role', 'admin')->first();
+        $adminId = $admin?->id;
 
-        $messages = Message::where(function ($q) use ($adminId, $userId) {
-            $q->where('from_user_id', $userId)
-                ->where('to_user_id', $adminId);
-        })->orWhere(function ($q) use ($adminId, $userId) {
-            $q->where('from_user_id', $adminId)
-                ->where('to_user_id', $userId);
+        // Lấy tất cả tin giữa user và admin
+        $messages = Message::where(function ($q) use ($userId, $adminId) {
+            $q->where('from_user_id', $userId)->where('to_user_id', $adminId);
+        })->orWhere(function ($q) use ($userId, $adminId) {
+            $q->where('from_user_id', $adminId)->where('to_user_id', $userId);
         })->orderBy('created_at')->get();
 
-        // Thêm thông tin người gửi vào mỗi tin nhắn
-        $messages = $messages->map(function ($msg) use ($adminId) {
-            $msg->sender = $msg->from_user_id == $adminId ? 'admin' : 'user';
-            return $msg;
-        });
-
         return response()->json($messages);
-    }
-
-    public function userSendMessage(Request $request)
-    {
-        $request->validate([
-            'message' => 'required|string'
-        ]);
-
-        $adminId = 1;
-        $userId = Auth::id();
-
-        $message = Message::create([
-            'from_user_id' => $userId,
-            'to_user_id' => $adminId,
-            'message' => $request->message,
-            'sender' => 'user'
-        ]);
-
-        return response()->json($message);
     }
 }
