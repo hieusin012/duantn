@@ -117,6 +117,7 @@
         height: 28px;
         border-radius: 50%;
         object-fit: cover;
+        border: 1px solid black;
     }
 
     #chat-messages {
@@ -131,8 +132,10 @@
         width: 28px;
         height: 28px;
         object-fit: cover;
+
     }
 </style>
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
 <!-- Nút Chatbot -->
 <div id="chatbot-icon" onclick="toggleChat()">
@@ -142,29 +145,30 @@
 <!-- Khung Chat -->
 <!-- Khung Chat -->
 <div id="chatbox" class="chatbox flex-column" style="display: none;">
-    <div id="chat-header">Yêu cần hỗ trợ!</div>
+    <div id="chat-header"> <img src="{{ asset('assets/client/images/garena.png') }}" class="me-2" alt="" width="35" style="border: 1px solid black; border-radius: 50%;">
+        <span>Rất hân hạnh được hỗ trợ !</span>
+    </div>
     <div id="chat-body">
         <div id="chat-messages" class="mb-2">
-            <div class="message bot-message">
-                chào tôi có thể giúp gì được cho bạn?
-            </div>
+            <div class="message bot-message">Xin chào quý khách. Vui lòng đăng nhập để được tư vấn !</div>
         </div>
-        <form id="chat-form">
+        <form id="chat-form" onsubmit="return false;">
             <input type="text" id="chat-input" autocomplete="off" placeholder="Nhập tin nhắn..." required />
             <button type="submit">Gửi</button>
         </form>
     </div>
 </div>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const form = document.getElementById('chat-form');
         const input = document.getElementById('chat-input');
         const messages = document.getElementById('chat-messages');
-        
-        const myUserId = Number('{{ Auth::id() }}'); // 👈 Lấy ID người dùng hiện tại từ Laravel
+
+        const myUserId = Number("{{ Auth::id() ?? 0 }}");
+
 
         // Gửi tin nhắn
-        form.addEventListener('submit', async function (e) {
+        form.addEventListener('submit', async function(e) {
             e.preventDefault();
             const text = input.value.trim();
             if (!text) return;
@@ -175,7 +179,9 @@
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 },
-                body: JSON.stringify({ message: text })
+                body: JSON.stringify({
+                    message: text
+                })
             });
 
             input.value = '';
@@ -189,7 +195,7 @@
             messages.innerHTML = ''; // Xóa tin cũ
 
             data.forEach(msg => {
-                const isMe = string(msg.from_user_id) === string(myUserId);
+                const isMe = Number(msg.from_user_id) === myUserId;
 
                 const wrapper = document.createElement('div');
                 wrapper.className = `message-wrapper ${isMe ? 'user-wrapper' : 'bot-wrapper'}`;
@@ -200,7 +206,7 @@
 
                 if (!isMe) {
                     const avatar = document.createElement('img');
-                    avatar.src = 'https://i.pravatar.cc/28?img=5';
+                    avatar.src = 'https://avatars.githubusercontent.com/u/194822486?s=280&v=4';
                     avatar.className = 'avatar';
                     wrapper.appendChild(avatar);
                 }

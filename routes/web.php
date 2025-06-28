@@ -157,9 +157,17 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
 
     //comment
     Route::resource('comments', CommentController::class);
+
+
+    
 });
 
-
+// Chatbx admin
+Route::middleware('auth')->group(function () {
+    Route::get('/admin/chat', [MessageController::class, 'index'])->name('admin.chat');
+    Route::get('/admin/chat/messages/{userId}', [MessageController::class, 'fetchMessages']);
+    Route::post('/admin/chat/send', [MessageController::class, 'sendMessage']);
+});
 
 Route::prefix('admin')->name('admin.')->group(function () {
     // Resource CRUD
@@ -245,17 +253,10 @@ Route::middleware('auth')->group(function () {
 });
 
 
-Route::middleware('auth')->group(function () {
-    Route::get('/admin/chat', [MessageController::class, 'index'])->name('admin.chat');
-    Route::get('/admin/chat/messages/{userId}', [MessageController::class, 'fetchMessages']);
-    Route::post('/admin/chat/send', [MessageController::class, 'sendMessage']);
-});
-// routes/web.php
-Route::middleware('auth')->group(function () {
-    Route::get('/chat', [MessageController::class, 'userChatView']);
-    Route::get('/chat/messages', [MessageController::class, 'userFetchMessages']);
-    Route::post('/chat/send', [MessageController::class, 'userSendMessage']);
-});
+    // chat client
+    Route::post('/chat/send', [MessageController::class, 'send']);
+    Route::get('/chat/fetch', [MessageController::class, 'fetch']);
+
 
 
 
