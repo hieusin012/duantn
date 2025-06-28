@@ -32,7 +32,7 @@
                     <div class="col-md-6">
                         <strong>Ảnh sản phẩm:</strong><br>
                         @if ($product->image)
-                            <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="img-fluid rounded" width="400">
+                            <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" height="80" width="80px;">
                         @else
                             <p>Không có ảnh</p>
                         @endif

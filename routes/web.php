@@ -180,6 +180,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::delete('suppliers/all/eliminate', [SupplierController::class, 'eliminateAll'])->name('suppliers.all-eliminate'); // Xóa tất cả
 });
 
+Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
+    Route::resource('imports', \App\Http\Controllers\ImportController::class);
+});
 
 
 // Yêu thích sản phẩm
