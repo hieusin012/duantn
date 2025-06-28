@@ -16,7 +16,8 @@
                     {{-- Avatar trái --}}
                     <div class="col-md-4 text-center">
                         @if($user->avatar)
-                        <img src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar" class="img-fluid rounded-circle mb-3" style="max-width: 180px;">
+                        {{-- <img src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar" class="img-fluid rounded-circle mb-3" style="max-width: 180px;"> --}}
+                        <img src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar" class="rounded-circle mb-3" style="width: 200px; height: 200px; object-fit: cover;">
                         @else
                         <div class="bg-light rounded-circle d-flex align-items-center justify-content-center" style="width: 180px; height: 180px;">
                             <span class="text-muted">Chưa có ảnh</span>

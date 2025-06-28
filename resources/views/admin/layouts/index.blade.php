@@ -225,5 +225,6 @@
 
   <!-- Yield scripts from children views -->
   @yield('scripts')
+  @stack('scripts')
 </body>
 </html>

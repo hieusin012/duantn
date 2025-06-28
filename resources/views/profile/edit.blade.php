@@ -22,7 +22,8 @@
                         <div class="mb-3">
                             <label class="form-label">Ảnh đại diện</label><br>
                             @if($user->avatar)
-                                <img src="{{ asset('storage/' . $user->avatar) }}" width="100" height="100" class="rounded-circle">
+                                {{-- <img src="{{ asset('storage/' . $user->avatar) }}" width="100" height="100" class="rounded-circle"> --}}
+                                <img src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar" class="rounded-circle mb-3" style="width: 200px; height: 200px; object-fit: cover;">
                             @else
                                 <i>Chưa có ảnh</i>
                             @endif
