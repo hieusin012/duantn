@@ -23,7 +23,7 @@
             <select name="user_id" id="user_id" class="form-select" disabled>
                 @foreach($users as $user)
                     <option value="{{ $user->id }}" {{ $user->id == $comment->user_id ? 'selected' : '' }}>
-                        {{ $user->name }}
+                        {{ $user->fullname }}
                     </option>
                 @endforeach
             </select>
@@ -97,7 +97,7 @@
                         <select name="user_id" class="form-control" disabled>
                             @foreach($users as $user)
                                 <option value="{{ $user->id }}" {{ $user->id == $comment->user_id ? 'selected' : '' }}>
-                                    {{ $user->name }}
+                                    {{ $user->fullname }}
                                 </option>
                             @endforeach
                         </select>
@@ -126,7 +126,7 @@
 
                     <div class="form-group col-md-6">
                         <label class="control-label">Đánh giá (1-5)</label>
-<input type="number" name="rating" min="1" max="5" class="form-control" value="{{ old('rating', $comment->rating) }}">
+                        <input type="number" name="rating" min="1" max="5" class="form-control" value="{{ old('rating', $comment->rating) }}">
                         @error('rating')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror

@@ -33,6 +33,20 @@ class ImportController extends Controller
             'products.*.product_id' => 'required|exists:products,id',
             'products.*.quantity' => 'required|integer|min:1',
             'products.*.price' => 'required|numeric|min:0',
+        ], [
+            'supplier_id.required' => 'Vui lòng chọn nhà cung cấp.',
+            'supplier_id.exists' => 'Nhà cung cấp không tồn tại.',
+            'products.required' => 'Vui lòng thêm ít nhất một sản phẩm.',
+            'products.array' => 'Danh sách sản phẩm không hợp lệ.',
+            'products.min' => 'Cần ít nhất một sản phẩm.',
+            'products.*.product_id.required' => 'Vui lòng chọn sản phẩm.',
+            'products.*.product_id.exists' => 'Sản phẩm không hợp lệ.',
+            'products.*.quantity.required' => 'Vui lòng nhập số lượng.',
+            'products.*.quantity.integer' => 'Số lượng phải là số nguyên.',
+            'products.*.quantity.min' => 'Số lượng phải lớn hơn 0.',
+            'products.*.price.required' => 'Vui lòng nhập giá nhập.',
+            'products.*.price.numeric' => 'Giá nhập phải là số.',
+            'products.*.price.min' => 'Giá nhập phải lớn hơn hoặc bằng 0.',
         ]);
 
         DB::beginTransaction();
@@ -93,6 +107,20 @@ class ImportController extends Controller
             'products.*.product_id' => 'required|exists:products,id',
             'products.*.quantity' => 'required|integer|min:1',
             'products.*.price' => 'required|numeric|min:0',
+        ], [
+            'supplier_id.required' => 'Vui lòng chọn nhà cung cấp.',
+            'supplier_id.exists' => 'Nhà cung cấp không tồn tại.',
+            'products.required' => 'Vui lòng thêm ít nhất một sản phẩm.',
+            'products.array' => 'Danh sách sản phẩm không hợp lệ.',
+            'products.min' => 'Cần ít nhất một sản phẩm.',
+            'products.*.product_id.required' => 'Vui lòng chọn sản phẩm.',
+            'products.*.product_id.exists' => 'Sản phẩm không hợp lệ.',
+            'products.*.quantity.required' => 'Vui lòng nhập số lượng.',
+            'products.*.quantity.integer' => 'Số lượng phải là số nguyên.',
+            'products.*.quantity.min' => 'Số lượng phải lớn hơn 0.',
+            'products.*.price.required' => 'Vui lòng nhập giá nhập.',
+            'products.*.price.numeric' => 'Giá nhập phải là số.',
+            'products.*.price.min' => 'Giá nhập phải lớn hơn hoặc bằng 0.',
         ]);
 
         DB::beginTransaction();
