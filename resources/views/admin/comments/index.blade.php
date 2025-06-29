@@ -25,7 +25,7 @@
         @forelse($comments as $comment)
             <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>{{ $comment->user->name ?? 'Không xác định' }}</td>
+                <td>{{ $comment->user->fullname ?? 'Không xác định' }}</td>
                 <td>{{ $comment->product->name ?? 'Không xác định' }}</td>
                 <td>{{ $comment->content }}</td>
                 <td>{{ $comment->rating ?? 'Không có' }}</td>
@@ -105,7 +105,7 @@
                         @forelse($comments as $comment)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $comment->user->name ?? 'Không xác định' }}</td>
+                                <td>{{ $comment->user->fullname ?? 'Không xác định' }}</td>
                                 <td>{{ $comment->product->name ?? 'Không xác định' }}</td>
                                 <td>{{ $comment->content }}</td>
                                 <td>{{ $comment->rating ?? 'Không có' }}</td>
@@ -116,7 +116,7 @@
                                         <span class="badge bg-secondary">Ẩn</span>
                                     @endif
                                 </td>
-<td>{{ $comment->created_at->format('d/m/Y') }}</td>
+                                <td>{{ $comment->created_at->format('d/m/Y') }}</td>
                                 <td>
                                     <a href="{{ route('admin.comments.edit', $comment->id) }}" class="btn btn-primary btn-sm" title="Sửa">
                                         <i class="fas fa-edit"></i>

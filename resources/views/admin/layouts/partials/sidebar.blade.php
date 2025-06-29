@@ -1,9 +1,9 @@
 <aside class="app-sidebar">
-      <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="{{ asset('assets/admin/ckeditor/samples/img/logo.png') }}" width="50px"
+      <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="{{ asset('assets/admin/ckeditor/samples/img/logo.png') }}" width="150px"
                   alt="User Image">
             <div>
                   <p class="app-sidebar__user-name"><b>ADMIN</b></p>
-                  <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
+                  <p class="app-sidebar__user-designation">Trang quản lý</p>
             </div>
       </div>
       <hr>
@@ -113,18 +113,27 @@
                       <span class="app-menu__label">Quản lí nhà cung cấp</span>
                   </a>
             </li>
-                  
+            <li>
+                  <a class="app-menu__item {{ request()->routeIs('admin.imports*') ? 'active' : '' }}" href="{{ route('admin.imports.index') }}">
+                      <i class="app-menu__icon fa fa-receipt"></i>
+                      <span class="app-menu__label">Quản lí nhập hàng</span>
+                  </a>
+            </li>     
 
-
-            <li><a class="app-menu__item {{ request()->is('table-data-banned*') ? 'active' : '' }}" href="table-data-banned.html"><i class='app-menu__icon bx bx-run'></i><span
-                              class="app-menu__label">Quản lý nội bộ
-                        </span></a></li>
             <li>
                   <a class="app-menu__item {{ request()->routeIs('admin.comments.*') ? 'active' : '' }}" href="{{ route('admin.comments.index') }}">
                         <i class='app-menu__icon fas fa-comments'></i>
                         <span class="app-menu__label">Quản lý bình luận</span>
                   </a>
             </li>
+
+            <li>  
+                  <a class="app-menu__item {{ request()->is('table-data-banned*') ? 'active' : '' }}" href="table-data-banned.html">
+                        <i class='app-menu__icon bx bx-run'></i>
+                        <span class="app-menu__label">Quản lý nội bộ</span>
+                  </a>
+            </li>
+
             <li><a class="app-menu__item {{ request()->is('table-data-money*') ? 'active' : '' }}" href="table-data-money.html"><i class='app-menu__icon bx bx-dollar'></i><span
                               class="app-menu__label">Bảng kê lương</span></a></li>
             <li><a class="app-menu__item {{ request()->is('quan-ly-bao-cao*') ? 'active' : '' }}" href="quan-ly-bao-cao.html"><i
