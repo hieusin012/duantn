@@ -159,6 +159,8 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     Route::resource('comments', CommentController::class);
 
 
+    //xóa đoạn chat
+    Route::delete('/chat/delete-conversation/{userId}', [MessageController::class, 'deleteConversationWithUser'])->name('chat.deleteConversation');
     
 });
 

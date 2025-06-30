@@ -145,7 +145,7 @@
 <!-- Khung Chat -->
 <!-- Khung Chat -->
 <div id="chatbox" class="chatbox flex-column" style="display: none;">
-    <div id="chat-header"> <img src="{{ asset('assets/client/images/garena.png') }}" class="me-2" alt="" width="35" style="border: 1px solid black; border-radius: 50%;">
+    <div id="chat-header"> <img src="{{ asset('assets/client/images/favicon.png') }}" class="me-2" alt="" width="35" style="border: 1px solid black; border-radius: 50%;">
         <span>Rất hân hạnh được hỗ trợ !</span>
     </div>
     <div id="chat-body">
@@ -206,7 +206,7 @@
 
                 if (!isMe) {
                     const avatar = document.createElement('img');
-                    avatar.src = 'https://avatars.githubusercontent.com/u/194822486?s=280&v=4';
+                    avatar.src = "{{ asset('assets/client/images/favicon.png') }}";
                     avatar.className = 'avatar';
                     wrapper.appendChild(avatar);
                 }

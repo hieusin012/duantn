@@ -71,3 +71,79 @@
     object-position: top;
     border-radius: 6px;
 }
+/* Điều chỉnh khoảng cách giữa ảnh sản phẩm và thông tin bên phải */
+.product-details-img.product-thumb-left-style {
+    padding-right: 30px; /* Tăng khoảng cách bên phải của khối ảnh */
+}
+
+/* Điều chỉnh khoảng cách giữa các phần tử trong khối thông tin sản phẩm */
+.product-single-meta .product-review {
+    margin-bottom: 20px; /* Khoảng cách dưới phần đánh giá sản phẩm */
+}
+
+.product-single-meta .product-price {
+    margin-top: 20px; /* Khoảng cách trên phần giá sản phẩm */
+    margin-bottom: 20px; /* Khoảng cách dưới phần giá sản phẩm */
+}
+
+.product-single-meta .sort-description {
+    margin-bottom: 25px; /* Khoảng cách dưới phần mô tả ngắn */
+}
+
+/* Điều chỉnh khoảng cách giữa các khối chính trong phần thông tin */
+.product-form.product-form-border {
+    margin-top: 30px; /* Khoảng cách trên form sản phẩm */
+    margin-bottom: 30px; /* Khoảng cách dưới form sản phẩm */
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+/* Điều chỉnh khoảng cách cho các tab content */
+.tab-container .tab-content {
+    padding: 30px; /* Tăng padding cho nội dung bên trong các tab */
+}
+
+/* Điều chỉnh khoảng cách dưới thông tin sản phẩm như trạng thái, thương hiệu, danh mục, mã sản phẩm */
+.product-info p {
+    margin-bottom: 8px; /* Giảm khoảng cách mặc định giữa các dòng thông tin */
+}
+
+.product-info p:last-child {
+    margin-bottom: 0; /* Đảm bảo không có margin-bottom thừa ở dòng cuối cùng */
+}
+
+/* Khoảng cách giữa các nút trong product-action */
+.product-action {
+    gap: 15px; /* Thêm khoảng cách giữa các nút "Thêm vào giỏ hàng" và "Mua ngay" */
+}
+
+/* Điều chỉnh cho mobile nếu cần */
+@media (max-width: 768px) {
+    .product-details-img.product-thumb-left-style {
+        padding-right: 0; /* Xóa padding phải trên mobile để ảnh chiếm toàn bộ chiều rộng */
+    }
+
+    .product-single-meta .product-review,
+    .product-single-meta .product-price,
+    .product-single-meta .sort-description,
+    .product-form.product-form-border {
+        margin-bottom: 15px; /* Giảm khoảng cách trên mobile */
+        margin-top: 15px; /* Giảm khoảng cách trên mobile */
+    }
+
+    .product-action {
+        flex-direction: column; /* Chuyển thành cột trên mobile */
+        gap: 10px; /* Khoảng cách giữa các nút trên mobile */
+    }
+
+    .product-form-submit.addcart,
+    .product-form-submit.buyit {
+        margin-left: 0 !important; /* Đảm bảo nút chiếm toàn bộ chiều rộng */
+        width: 100%; /* Nút chiếm toàn bộ chiều rộng trên mobile */
+    }
+}
+.page-header {
+    padding-top: 20px; /* Giảm padding trên */
+    padding-bottom: 20px; /* Giảm padding dưới */
+    margin-bottom: 30px; /* Giảm khoảng cách dưới khối này */
+}

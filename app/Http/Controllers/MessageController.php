@@ -47,6 +47,23 @@ class MessageController extends Controller
 
         return response()->json($message);
     }
+    // Xoá tất cả tin nhắn giữa admin và 1 user
+    public function deleteConversationWithUser($userId)
+    {
+        $adminId = Auth::id(); // hoặc truyền qua request nếu cần
+
+        // Xoá tất cả messages giữa admin và user đó (2 chiều)
+        Message::where(function ($query) use ($userId, $adminId) {
+            $query->where('from_user_id', $adminId)
+                ->where('to_user_id', $userId);
+        })->orWhere(function ($query) use ($userId, $adminId) {
+            $query->where('from_user_id', $userId)
+                ->where('to_user_id', $adminId);
+        })->delete();
+
+        return back()->with('success', 'Đã xoá toàn bộ cuộc trò chuyện với user.');
+    }
+
 
 
     // chat của client
