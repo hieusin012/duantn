@@ -40,11 +40,13 @@
     /* Styles for the star rating input in the review form */
     .rating-stars {
         display: inline-block;
-        direction: rtl; /* Right-to-left to handle hover effect correctly */
+        direction: rtl;
+        /* Right-to-left to handle hover effect correctly */
     }
 
     .rating-stars input[type="radio"] {
-        display: none; /* Hide the actual radio buttons */
+        display: none;
+        /* Hide the actual radio buttons */
     }
 
     .rating-stars label {
@@ -53,36 +55,46 @@
         cursor: pointer;
         padding: 0 2px;
     }
-    
+
     /* Change color on hover and for checked stars */
     .rating-stars label:hover,
-    .rating-stars label:hover ~ label,
-    .rating-stars input[type="radio"]:checked ~ label {
+    .rating-stars label:hover~label,
+    .rating-stars input[type="radio"]:checked~label {
         color: #ffc107;
     }
+
     .product-single-meta .product-review {
-    margin-bottom: 5rem; 
-}
-.product-single-meta .product-price {
-    margin-top: 5rem;
-    margin-bottom: 5.5rem;
-}
-.product-single-meta .sort-description {
-    margin-bottom: 5.5rem;
-}
+        margin-bottom: 5rem;
+    }
+
+    .product-single-meta .product-price {
+        margin-top: 5rem;
+        margin-bottom: 5.5rem;
+    }
+
+    .product-single-meta .sort-description {
+        margin-bottom: 5.5rem;
+    }
 
 
-/* YÊU CẦU 2: TĂNG LỀ (PADDING) CHO NỘI DUNG BÊN TRONG CÁC TAB */
-.tab-container .tab-content {
-    padding: 2.5rem; /* Tăng padding cho tất cả các tab */
-}
+    /* YÊU CẦU 2: TĂNG LỀ (PADDING) CHO NỘI DUNG BÊN TRONG CÁC TAB */
+    .tab-container .tab-content {
+        padding: 2.5rem;
+        /* Tăng padding cho tất cả các tab */
+    }
+
+    .product-thumb-img:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        transition: all 0.2s ease-in-out;
+    }
 </style>
 @endpush
 
 @section('content')
 <div id="page-content">
     {{-- ================================================================= --}}
-    {{--                      HEADER & BREADCRUMBS                         --}}
+    {{-- HEADER & BREADCRUMBS                         --}}
     {{-- ================================================================= --}}
     <div class="page-header text-center">
         <div class="container">
@@ -98,7 +110,7 @@
         <div class="product-single">
             <div class="row">
                 {{-- ================================================================= --}}
-                {{--                         PRODUCT IMAGES                            --}}
+                {{-- PRODUCT IMAGES                            --}}
                 {{-- ================================================================= --}}
                 <div class="col-lg-6 col-md-6 col-sm-12 col-12 product-layout-img mb-4 mb-md-0">
                     <div class="product-sticky-style">
@@ -106,14 +118,17 @@
                             <div class="product-thumb thumb-left">
                                 <div id="gallery" class="product-thumb-vertical h-100">
                                     @foreach($product->variants as $image)
-                                    <a data-image="{{ asset('storage/' . $image->image) }}" data-zoom-image="{{ asset('storage/' . $image->image) }}" href="{{ asset('storage/' . $image->image) }}" class="product-thumb-image">
-                                        <img class="blur-up lazyload rounded-0" data-src="{{ asset('storage/' . $image->image) }}" src="{{ asset('storage/' . $image->image) }}" alt="product" width="625" height="808" />
-                                    </a>
+                                    <img
+                                        src="{{ asset('storage/' . $image->image) }}"
+                                        class="product-thumb-img"
+                                        alt="Thumbnail"
+                                        onclick="changeMainImage(this)"
+                                        style="width: 100px; height: 100px; object-fit: cover; cursor: pointer; border-radius: 6px;" />
                                     @endforeach
                                 </div>
                             </div>
                             <div class="zoompro-wrap product-zoom-right rounded-0">
-                                <div class="zoompro-span"><img id="zoompro" class="zoompro rounded-0 img-thumbnail rounded shadow" src="{{ asset($product->image) }}" data-zoom-image="{{ asset($product->image) }}" alt="product" width="625" height="808" /></div>
+                                <div class="zoompro-span"><img id="main-image" class="zoompro rounded-0 img-thumbnail rounded shadow" src="{{ asset($product->image) }}" data-zoom-image="{{ asset($product->image) }}" alt="product" width="625" height="808" /></div>
                             </div>
                         </div>
                         <div class="social-sharing d-flex-center justify-content-center mt-3 mt-md-4 lh-lg">
@@ -126,21 +141,21 @@
                 </div>
 
                 {{-- ================================================================= --}}
-                {{--                         PRODUCT INFO & FORM                         --}}
+                {{-- PRODUCT INFO & FORM                         --}}
                 {{-- ================================================================= --}}
                 <div class="col-lg-6 col-md-6 col-sm-12 col-12 product-layout-info">
                     <div class="product-single-meta">
                         <h2 class="product-main-title">{{ $product->name }}</h2>
                         <div class="product-review d-flex-center mb-3">
-                             @if ($totalReviews > 0)
-                                <div class="review-rating">
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        <i class="icon anm {{ $i <= floor($averageRating) ? 'anm-star' : 'anm-star-o' }}"></i>
+                            @if ($totalReviews > 0)
+                            <div class="review-rating">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    <i class="icon anm {{ $i <= floor($averageRating) ? 'anm-star' : 'anm-star-o' }}"></i>
                                     @endfor
-                                </div>
-                                <span class="caption ms-2">{{ $totalReviews }} Lượt đánh giá</span>
+                            </div>
+                            <span class="caption ms-2">{{ $totalReviews }} Lượt đánh giá</span>
                             @else
-                                <span class="caption ms-2">Chưa có đánh giá</span>
+                            <span class="caption ms-2">Chưa có đánh giá</span>
                             @endif
                             <a class="reviewLink d-flex-center" href="#reviews">Viết đánh giá</a>
                         </div>
@@ -213,7 +228,7 @@
     </div>
 
     {{-- ================================================================= --}}
-    {{--                         TABS SECTION                              --}}
+    {{-- TABS SECTION                              --}}
     {{-- ================================================================= --}}
     <div class="tabs-listing section pb-0">
         <ul class="product-tabs list-unstyled d-flex-wrap border-bottom d-none d-md-flex">
@@ -238,7 +253,7 @@
                 <p class="mb-4">Đây là hướng dẫn được tiêu chuẩn hóa để cho bạn biết về kích thước bạn sẽ cần, tuy nhiên một số thương hiệu có thể khác với các chuyển đổi này.</p>
                 <div class="size-chart-tbl table-responsive px-1">
                     <table class="table-bordered align-middle mb-0">
-                         <thead>
+                        <thead>
                             <tr>
                                 <th>Size</th>
                                 <th>XXS - XS</th>
@@ -286,9 +301,9 @@
                     <li>Chính sách đổi trả dễ dàng trong 30 ngày</li>
                 </ul>
             </div>
-            
+
             {{-- ============================================================= --}}
-            {{--                     DYNAMIC REVIEWS TAB                         --}}
+            {{-- DYNAMIC REVIEWS TAB                         --}}
             {{-- ============================================================= --}}
             <h3 class="tabs-ac-style d-md-none" rel="reviews">Đánh giá</h3>
             <div id="reviews" class="tab-content">
@@ -305,7 +320,7 @@
                                         <div class="review-rating">
                                             @for ($i = 1; $i <= 5; $i++)
                                                 <i class="icon anm {{ $i <= floor($averageRating) ? 'anm-star' : 'anm-star-o' }}"></i>
-                                            @endfor
+                                                @endfor
                                         </div>
                                         <span class="caption ms-2">{{ $totalReviews }} Đánh giá</span>
                                     </div>
@@ -336,7 +351,7 @@
                                 @forelse ($comments as $comment)
                                 <div class="spr-review d-flex w-100">
                                     <div class="spr-review-profile flex-shrink-0">
-                                        <img class="blur-up lazyload" data-src="{{ asset('assets/images/users/default-avatar.jpg') }}" src="{{ asset('assets/images/users/default-avatar.jpg') }}" alt="" width="80" height="80" />
+                                        <img class="blur-up lazyload" data-src="{{ asset('storage/' . $comment->user->avatar) }}" src="{{ asset('storage/' . $comment->user->avatar) }}" alt="" width="80" height="80" />
                                     </div>
                                     <div class="spr-review-content flex-grow-1">
                                         <div class="d-flex justify-content-between flex-column mb-2">
@@ -346,7 +361,7 @@
                                                     <span class="reviewLink">
                                                         @for ($i = 1; $i <= 5; $i++)
                                                             <i class="icon anm {{ $i <= $comment->rating ? 'anm-star' : 'anm-star-o' }}"></i>
-                                                        @endfor
+                                                            @endfor
                                                     </span>
                                                 </span>
                                             </div>
@@ -361,7 +376,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     {{-- RIGHT COLUMN: REVIEW FORM --}}
                     <div class="col-12 col-sm-12 col-md-12 col-lg-6 mb-4">
                         @auth
@@ -379,7 +394,7 @@
                                     <label class="spr-form-label" for="email">Email <span class="required">*</span></label>
                                     <input class="spr-form-input spr-form-input-email" id="email" type="email" value="{{ auth()->user()->email }}" readonly />
                                 </div>
-                                
+
                                 <div class="col-12 spr-form-review-rating form-group">
                                     <label class="spr-form-label">Đánh giá của bạn *</label>
                                     <div class="rating-stars" id="formRatingStars">
@@ -415,7 +430,7 @@
 </div>
 
 {{-- ================================================================= --}}
-{{--                      RELATED PRODUCTS                             --}}
+{{-- RELATED PRODUCTS                             --}}
 {{-- ================================================================= --}}
 <section class="section product-slider pb-0">
     <div class="container">
@@ -462,7 +477,7 @@
                 });
             });
         }
-        
+
         // Set background color for swatches
         document.querySelectorAll('.color-swatch').forEach(function(el) {
             const color = el.getAttribute('data-color-code');
@@ -473,44 +488,53 @@
 
         // Wishlist toggle functionality
         document.querySelectorAll('.wishlist-toggle').forEach(button => {
-            button.addEventListener('click', function () {
+            button.addEventListener('click', function() {
                 const productId = this.dataset.id;
                 const token = '{{ csrf_token() }}';
                 const icon = this.querySelector('i');
                 const span = this.querySelector('span');
 
                 fetch("{{ route('wishlist.toggle') }}", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': token
-                    },
-                    body: JSON.stringify({ product_id: productId })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if(data.error) {
-                         window.location.href = "{{ route('login') }}";
-                         return;
-                    }
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': token
+                        },
+                        body: JSON.stringify({
+                            product_id: productId
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            window.location.href = "{{ route('login') }}";
+                            return;
+                        }
 
-                    if (data.status === 'added') {
-                        icon.classList.add('text-danger');
-                        this.setAttribute('title', 'Bỏ yêu thích');
-                        if (span) span.textContent = 'Đã yêu thích';
-                    } else {
-                        icon.classList.remove('text-danger');
-                        this.setAttribute('title', 'Thêm vào yêu thích');
-                        if (span) span.textContent = 'Thêm vào yêu thích';
-                    }
+                        if (data.status === 'added') {
+                            icon.classList.add('text-danger');
+                            this.setAttribute('title', 'Bỏ yêu thích');
+                            if (span) span.textContent = 'Đã yêu thích';
+                        } else {
+                            icon.classList.remove('text-danger');
+                            this.setAttribute('title', 'Thêm vào yêu thích');
+                            if (span) span.textContent = 'Thêm vào yêu thích';
+                        }
 
-                    const wishlistCountEl = document.querySelector('.wishlist-count');
-                    if (wishlistCountEl) {
-                        wishlistCountEl.textContent = data.count;
-                    }
-                });
+                        const wishlistCountEl = document.querySelector('.wishlist-count');
+                        if (wishlistCountEl) {
+                            wishlistCountEl.textContent = data.count;
+                        }
+                    });
             });
         });
     });
 </script>
+<script>
+    function changeMainImage(el) {
+        const mainImg = document.getElementById('main-image');
+        mainImg.src = el.src;
+    }
+</script>
+
 @endsection
