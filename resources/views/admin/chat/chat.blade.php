@@ -122,6 +122,18 @@
         color: #333;
         margin-left: 20px;
     }
+
+    .user-item:hover {
+        background-color: #f8f9fa;
+        cursor: pointer;
+    }
+
+    .user-name {
+        margin-left: 10px;
+        font-weight: 500;
+    }
+
+
 </style>
 
 
@@ -136,6 +148,11 @@
                 <li class="list-group-item user-item d-flex align-items-center" data-id="{{ $user->id }}">
                     <img src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar" style="max-width: 60px; border-radius: 30px;">
                     <span class="user-name">{{ $user->fullname }}</span>
+                    <form action="" method="POST" style="display:inline-block; margin-left: auto;" class="ms-auto">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm" title="Xóa"><i class="fas fa-trash-alt "></i></button>
+                    </form>
                 </li>
                 @endforeach
             </ul>
@@ -149,7 +166,7 @@
             <form id="chat-form" class="d-flex" style="display: none;">
                 @csrf
                 <input type="hidden" id="to_user_id">
-                <input type="text" id="chat-input" class="form-control me-2" style="background: white;" placeholder="Nhập tin nhắn..." required>
+                <input type="text" id="chat-input" class="form-control me-2" style="background: white;" autocomplete="off" placeholder="Nhập tin nhắn..." required>
                 <button type="submit" class="btn btn-warning">Gửi</button>
             </form>
         </div>

@@ -52,6 +52,7 @@ class ProductController extends Controller
 
         $colors = $product->variants->pluck('color')->unique('id')->values();
         $sizes = $product->variants->pluck('size')->unique('id')->values();
+        $quantity = $product->variants->pluck('quantity')->unique('id')->values();
 
         // ================= LOGIC MỚI CHO PHẦN ĐÁNH GIÁ =================
         // Lấy tất cả bình luận đã được duyệt cho sản phẩm này
