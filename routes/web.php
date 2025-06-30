@@ -182,6 +182,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::delete('suppliers/all/eliminate', [SupplierController::class, 'eliminateAll'])->name('suppliers.all-eliminate'); // Xóa tất cả
 });
 
+Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
+    Route::resource('imports', \App\Http\Controllers\ImportController::class);
+});
 
 
 // Yêu thích sản phẩm
@@ -191,7 +194,9 @@ Route::middleware('auth')->group(function () {
 });
 Route::middleware('auth')->get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
 
-
+// Tra cứu đơn hàng
+Route::get('/tra-cuu-don-hang', [App\Http\Controllers\OrderLookupController::class, 'form'])->name('order.lookup.form');
+Route::post('/tra-cuu-don-hang', [App\Http\Controllers\OrderLookupController::class, 'lookup'])->name('order.lookup');
 
 
 

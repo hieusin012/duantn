@@ -112,6 +112,11 @@
                         </div>
                     </div>
                 </div>
+                <div class="iconset" title="Tra cứu đơn hàng">
+                    <a href="{{ route('order.lookup.form') }}">
+                        <i class="hdr-icon icon anm anm-bag-l"></i>
+                    </a>
+                </div>
                 <div class="wishlist-link iconset" title="Wishlist">
                     <a href="{{ route('wishlist.index') }}">
                         <i class="hdr-icon icon anm anm-heart-l"></i>
