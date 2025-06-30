@@ -192,7 +192,9 @@ Route::middleware('auth')->group(function () {
 });
 Route::middleware('auth')->get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
 
-
+// Tra cứu đơn hàng
+Route::get('/tra-cuu-don-hang', [App\Http\Controllers\OrderLookupController::class, 'form'])->name('order.lookup.form');
+Route::post('/tra-cuu-don-hang', [App\Http\Controllers\OrderLookupController::class, 'lookup'])->name('order.lookup');
 
 
 
