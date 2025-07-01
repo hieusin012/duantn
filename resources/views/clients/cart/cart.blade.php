@@ -191,6 +191,7 @@
             </div>
             <!--End Cart Content-->
 
+            
             <!--Cart Sidebar-->
             <div class="col-12 col-sm-12 col-md-12 col-lg-4 cart-footer">
                 <div class="cart-info sidebar-sticky">
@@ -232,7 +233,7 @@
     </div>
     <!--End Main Content-->
 
-    
+
     <!--Related Products-->
     <section class="section product-slider pb-0">
         <div class="container">
