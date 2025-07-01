@@ -63,6 +63,21 @@ class MessageController extends Controller
 
         return back()->with('success', 'Đã xoá toàn bộ cuộc trò chuyện với user.');
     }
+    // xóa cuộc trò chuyện
+    public function destroy($userId)
+    {
+        $adminId = Auth::id(); // Hoặc gán cứng nếu admin không đăng nhập
+
+        Message::where(function ($query) use ($adminId, $userId) {
+            $query->where('from_user_id', $adminId)
+                ->where('to_user_id', $userId);
+        })->orWhere(function ($query) use ($adminId, $userId) {
+            $query->where('from_user_id', $userId)
+                ->where('to_user_id', $adminId);
+        })->delete();
+
+        return redirect()->back()->with('success', 'Đã xóa toàn bộ cuộc trò chuyện.');
+    }
 
 
 

@@ -334,7 +334,7 @@
                                         <span>{{ $i }}</span> <i class="icon anm anm-star ms-1"></i>
                                     </div>
                                     <div class="progress">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="{{ $ratingPercentages[$i] ?? 0 }}" aria-valuemin="0" aria-valuemax="100" style="width:{{ $ratingPercentages[$i] ?? 0 }}%;"></div>
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="{{ $ratingPercentages[$i] ?? 0 }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ $ratingPercentages[$i] ?? 0 }}%;"></div>
                                     </div>
                                     <div class="progress-value">{{ $ratingPercentages[$i] ?? 0 }}%</div>
                                 </div>

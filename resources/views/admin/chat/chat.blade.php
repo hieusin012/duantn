@@ -132,8 +132,6 @@
         margin-left: 10px;
         font-weight: 500;
     }
-
-
 </style>
 
 
@@ -145,15 +143,18 @@
             <h5 class="mt-3">Người dùng</h5>
             <ul class="list-group user-list">
                 @foreach($users as $user)
+
                 <li class="list-group-item user-item d-flex align-items-center" data-id="{{ $user->id }}">
                     <img src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar" style="max-width: 60px; border-radius: 30px;">
                     <span class="user-name">{{ $user->fullname }}</span>
-                    <form action="" method="POST" style="display:inline-block; margin-left: auto;" class="ms-auto">
+                    <form action="{{ route('admin.chat.destroy', $user->id) }}" method="POST" style="display:inline-block; margin-left: auto;" class="ms-auto">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm" title="Xóa"><i class="fas fa-trash-alt "></i></button>
+                        <button type="submit" class="btn btn-danger btn-sm" title="Xóa" onclick="return confirm('Bạn có chắc muốn xóa cuộc trò chuyện này vĩnh viễn !')"><i class="fas fa-trash-alt "></i></button>
                     </form>
                 </li>
+
+
                 @endforeach
             </ul>
 
