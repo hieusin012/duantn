@@ -169,6 +169,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/chat', [MessageController::class, 'index'])->name('admin.chat');
     Route::get('/admin/chat/messages/{userId}', [MessageController::class, 'fetchMessages']);
     Route::post('/admin/chat/send', [MessageController::class, 'sendMessage']);
+    Route::delete('/admin/chat/{userId}', [MessageController::class, 'destroy'])->name('admin.chat.destroy');
+
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {

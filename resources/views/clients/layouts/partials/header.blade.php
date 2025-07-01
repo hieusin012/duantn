@@ -11,8 +11,13 @@
                 <nav class="navigation" id="AccessibleNav">
                     <ul id="siteNav" class="site-nav medium center">
                         <li class="lvl1 parent dropdown"><a href="{{ route('client.home') }}">Trang chủ</a></li>
-                        <li class="lvl1"><a href="{{ route('client.products.index') }}">Danh mục sản phẩm
+                        <li class="lvl1 parent dropdown"><a href="{{ route('client.products.index') }}">Sản phẩm
                                 <i class="icon anm anm-angle-down-l"></i></a>
+                            <ul class="dropdown-menu"> <!-- menu con -->
+                                <li><a href="#">Điện thoại</a></li>
+                                <li><a href="#">Laptop</a></li>
+                                <li><a href="#">Phụ kiện</a></li>
+                            </ul>
                         </li>
                         <li class="lvl1 parent dropdown"><a href="#">HOT DEAL <i class="icon anm anm-angle-down-l"></i></a></li>
                         <li class="lvl1 parent dropdown"><a href="{{ route('client.blog') }}">Blog</a></li>

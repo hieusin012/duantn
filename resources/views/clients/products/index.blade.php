@@ -1,7 +1,23 @@
 @extends('clients.layouts.master')
 
 @section('content')
+<div class="page-header text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 d-flex justify-content-between align-items-center">
+                    <div class="page-title"><h1>Sản phẩm</h1></div>
+                    <div class="breadcrumbs">
+                        <a href="{{ route('client.home') }}" title="Back to the home page">Home</a>
+                        <span class="main-title fw-bold"><i class="icon anm anm-angle-right-l"></i>Sản phẩm</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 <div class="container py-4">
+    <div class="text-center page-title mb-5">
+        <h1>Danh sách sản phẩm</h1>
+    </div>
     <div class="row">
         @foreach ($products as $product)
         <div class="item col-md-3 col-6 mb-4">
