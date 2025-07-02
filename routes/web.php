@@ -275,6 +275,7 @@ Route::middleware(['auth'])->group(function () {
     // chat client
     Route::post('/chat/send', [MessageController::class, 'send']);
     Route::get('/chat/fetch', [MessageController::class, 'fetch']);
+    
 
 
 
