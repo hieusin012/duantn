@@ -17,9 +17,9 @@ class CartController extends Controller
     public function index()
     {
         $cart = Cart::with('items.product', 'items.variant')->where([
-            'user_id' => Auth::id(),
-            'status' => 0
-        ])->first();
+        'user_id' => Auth::id(),
+        'status' => 'active' // Thay đổi từ 0 thành 'active'
+    ])->first();
         $products = Product::where('is_active', 1)
             ->whereNull('deleted_at')
             ->latest()
@@ -52,9 +52,9 @@ class CartController extends Controller
 
         // Tạo hoặc lấy giỏ hàng
         $cart = Cart::firstOrCreate([
-            'user_id' => $user->id,
-            'status' => 0, // trạng thái "chưa thanh toán"
-        ]);
+        'user_id' => $user->id,
+        'status' => 'active', // Thay đổi từ 0 thành 'active'
+    ]);
         $price = $variant->sale_price ?? $variant->price;
 
         if (is_null($price)) {
@@ -101,9 +101,9 @@ class CartController extends Controller
             'quantity.*' => 'integer|min:1'
         ]);
         $cart = Cart::with('items')->where([
-            'user_id' => Auth::id(),
-            'status' => 0
-        ])->first();
+        'user_id' => Auth::id(),
+        'status' => 'active' // Thay đổi từ 0 thành 'active'
+    ])->first();
         if (!$cart) {
             return back()->with('error', 'Giỏ hàng không tồn tại.');
         }

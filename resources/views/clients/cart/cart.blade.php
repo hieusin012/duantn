@@ -223,7 +223,7 @@
                             <input type="checkbox" value="allen-vela" id="cart-tearm">
                             <label for="cart-tearm">I agree with the terms and conditions</label>
                         </div>
-                        <a href="checkout-style1.html" id="cartCheckout" class="btn btn-lg my-4 checkout w-100">Tiến hành thanh toán</a>
+                        <a href="{{ route('checkout.form') }}" id="cartCheckout" class="btn btn-lg my-4 checkout w-100">Tiến hành thanh toán</a>
                         <div class="paymnet-img text-center"><img src="assets/client/images/icons/safepayment.png" alt="Payment" width="299" height="28" /></div>
                     </div>
                 </div>

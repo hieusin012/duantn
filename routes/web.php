@@ -207,6 +207,10 @@ use App\Http\Controllers\Client\BlogController as ClientBlogController;
 use App\Http\Controllers\Client\ContactController as ClientContactController;
 use App\Http\Controllers\Client\ProductController as ClientProductController;
 use App\Http\Controllers\Client\VoucherController as ClientVoucherController;
+use App\Http\Controllers\Client\CheckoutController;
+
+// Nhóm các routes yêu cầu xác thực người dùng
+
 
 // Sửa trong web.php
 Route::get('/', [HomeController::class, 'index'])->name('client.home'); // Sửa 'home' thành 'client.home'
@@ -261,6 +265,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/cart/apply-voucher', [ApplyVoucherController::class, 'applyVoucher'])->name('client.cart.applyVoucher');
 });
 
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/checkout', [CheckoutController::class, 'showCheckoutForm'])->name('checkout.form');
+    Route::post('/checkout', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
+    Route::get('/checkout/success/{order:code}', [CheckoutController::class, 'success'])->name('checkout.success');
+});
 
     // chat client
     Route::post('/chat/send', [MessageController::class, 'send']);
