@@ -52,23 +52,26 @@
                         <th>📦 Trạng thái</th>
                         <td>
                             @switch($order->status)
-                                @case(0)
+                                @case('Chờ xác nhận')
                                     <span class="badge bg-warning text-dark">Chờ xác nhận</span>
                                     @break
-                                @case(1)
-                                    <span class="badge bg-info">Đang xử lý</span>
+                                @case('Đã xác nhận')
+                                    <span class="badge bg-info text-dark">Đã xác nhận</span>
                                     @break
-                                @case(2)
-                                    <span class="badge bg-primary">Đang giao</span>
+                                @case('Đang chuẩn bị hàng')
+                                    <span class="badge bg-secondary">Đang chuẩn bị hàng</span>
                                     @break
-                                @case(3)
-                                    <span class="badge bg-success">Đã giao</span>
+                                @case('Đang giao hàng')
+                                    <span class="badge bg-primary">Đang giao hàng</span>
                                     @break
-                                @case(4)
-                                    <span class="badge bg-danger">Đã hủy</span>
+                                @case('Đã giao hàng')
+                                    <span class="badge bg-success">Đã giao hàng</span>
+                                    @break
+                                @case('Đơn hàng đã hủy')
+                                    <span class="badge bg-danger">Đơn hàng đã hủy</span>
                                     @break
                                 @default
-                                    <span class="badge bg-secondary">Không xác định</span>
+                                    <span class="badge bg-dark">Không xác định</span>
                             @endswitch
                         </td>
                     </tr>

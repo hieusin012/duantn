@@ -15,7 +15,7 @@ class OrderLookupController extends Controller
     public function lookup(Request $request)
     {
         $request->validate([
-            'order_code' => 'required|string|max:10',
+            'order_code' => 'required|string|max:15',
             'email_or_phone' => [
                 'required',
                 'string',
@@ -27,7 +27,7 @@ class OrderLookupController extends Controller
             ]
         ], [
             'order_code.required' => 'Vui lòng nhập mã đơn hàng.',
-            'order_code.max' => 'Mã đơn hàng không được vượt quá 10 ký tự.',
+            'order_code.max' => 'Mã đơn hàng không được vượt quá 15 ký tự.',
             'email_or_phone.required' => 'Vui lòng nhập email hoặc số điện thoại.',
         ]);
 
