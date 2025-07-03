@@ -306,28 +306,3 @@ Route::get('/admin/thong-ke/data', [ThongKeController::class, 'getData'])->name(
 Route::get('/vnpay/return', [VnpayController::class, 'vnpayReturn'])->name('client.payment.vnpay.return');
 Route::post('/checkout/vnpay', [VnpayController::class, 'redirectToVNPAY'])->name('checkout.vnpay');
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
