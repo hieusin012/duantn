@@ -23,4 +23,16 @@ class Order extends Model
     {
         return $this->hasMany(OrderDetail::class);
     }
+
+    public static function getStatuses()
+{
+    return [
+        'Chờ xác nhận' => 'Chờ xác nhận',
+        'Đã xác nhận' => 'Đã xác nhận',
+        'Đang chuẩn bị hàng' => 'Đang chuẩn bị hàng',
+        'Đang giao hàng' => 'Đang giao hàng',
+        'Đã giao hàng' => 'Đã giao hàng',
+        'Đơn hàng đã hủy' => 'Đơn hàng đã hủy',
+    ];
+}
 }

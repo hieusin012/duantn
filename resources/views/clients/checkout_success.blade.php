@@ -57,6 +57,6 @@
     </div>
 
     <a href="{{ route('client.home') }}" class="btn btn-primary">Tiếp Tục Mua Sắm</a>
-    <a href="{{-- route('customer.orders.index') --}}" class="btn btn-secondary">Xem Lịch Sử Đơn Hàng</a> {{-- Thay 'customer.orders.index' bằng route xem lịch sử đơn hàng của khách hàng --}}
+    <a href="{{ route('order.history') }}" class="btn btn-secondary">Xem Lịch Sử Đơn Hàng</a> {{-- Thay 'customer.orders.index' bằng route xem lịch sử đơn hàng của khách hàng --}}
 </div>
 @endsection

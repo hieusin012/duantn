@@ -208,6 +208,7 @@ use App\Http\Controllers\Client\ContactController as ClientContactController;
 use App\Http\Controllers\Client\ProductController as ClientProductController;
 use App\Http\Controllers\Client\VoucherController as ClientVoucherController;
 use App\Http\Controllers\Client\CheckoutController;
+use App\Http\Controllers\Client\ClientOrderController;
 
 // Nhóm các routes yêu cầu xác thực người dùng
 
@@ -270,6 +271,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'showCheckoutForm'])->name('checkout.form');
     Route::post('/checkout', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
     Route::get('/checkout/success/{order:code}', [CheckoutController::class, 'success'])->name('checkout.success');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/order-history', [ClientOrderController::class, 'orderHistory'])->name('order.history');
+    Route::get('/order/{id}', [ClientOrderController::class, 'orderDetail'])->name('order.details');
 });
 
     // chat client
