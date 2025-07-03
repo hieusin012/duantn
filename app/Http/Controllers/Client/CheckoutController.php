@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Client; // Đảm bảo namespace này là đúng
+namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use App\Models\Voucher; // THÊM DÒNG NÀY
 
 
 class CheckoutController extends Controller
@@ -24,39 +25,47 @@ class CheckoutController extends Controller
      */
     public function showCheckoutForm()
     {
-        // Đảm bảo người dùng đã đăng nhập
         if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để tiến hành thanh toán.');
         }
 
         $userId = Auth::id();
-        // Tìm giỏ hàng của người dùng với status 'active'
-        $cart = Cart::where('user_id', $userId)->where('status', 'active')->first();
+        // Tải luôn mối quan hệ voucher nếu có
+        $cart = Cart::with('voucher')->where('user_id', $userId)->where('status', 'active')->first();
 
-        // Nếu không tìm thấy giỏ hàng hoặc giỏ hàng trống
-        if (!$cart || $cart->items->isEmpty()) { // Sửa cartItems() thành items()
-            return redirect()->route('client.cart')->with('error', 'Giỏ hàng của bạn đang trống.'); // Đã sửa tên route
+        if (!$cart || $cart->items->isEmpty()) {
+            return redirect()->route('client.cart')->with('error', 'Giỏ hàng của bạn đang trống.');
         }
 
-        // Lấy các mặt hàng trong giỏ hàng kèm thông tin sản phẩm, biến thể, màu sắc, kích thước
-        // Sử dụng mối quan hệ 'items' đã định nghĩa trong Cart Model
         $cartItems = $cart->items()->with('product', 'variant.color', 'variant.size')->get();
 
-        // Tính toán tổng tiền sản phẩm (subtotal)
         $subtotal = 0;
         foreach ($cartItems as $item) {
             $subtotal += $item->price_at_purchase * $item->quantity;
         }
 
-        // Các chi phí khác (phí vận chuyển, thuế, giảm giá)
-        $shippingCost = 0; // 'FREE SHIPPING'
-        $tax = 10; // '$10.00'
-        $discount = 0; // Giả sử chưa có mã giảm giá được áp dụng
+        $shippingCost = 0;
+        $tax = 10;
+        $discount = 0; // Khởi tạo giảm giá bằng 0
+
+        // Tính toán giảm giá từ voucher nếu có
+        if ($cart->voucher && $cart->voucher->isValid()) {
+            $voucher = $cart->voucher;
+            if ($voucher->discount_type === 'fixed') {
+                $discount = $voucher->discount;
+            } elseif ($voucher->discount_type === 'percent') {
+                $discount = ($subtotal * $voucher->discount) / 100;
+            }
+
+            // Giới hạn giảm giá tối đa
+            if ($voucher->max_price && $discount > $voucher->max_price) {
+                $discount = $voucher->max_price;
+            }
+        }
 
         $totalPrice = $subtotal + $shippingCost + $tax - $discount;
 
-        // Truyền dữ liệu sang view
-        return view('clients.checkout', compact('cart', 'cartItems', 'subtotal', 'shippingCost', 'tax', 'discount', 'totalPrice'));
+        return view('clients.checkout', compact('cart', 'cartItems', 'subtotal', 'shippingCost', 'tax', 'discount', 'totalPrice')); // Đã sửa tên view
     }
 
 
@@ -68,29 +77,26 @@ class CheckoutController extends Controller
      */
     public function processCheckout(Request $request)
     {
-        // Kiểm tra xem người dùng đã đăng nhập chưa
         if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để tiến hành thanh toán.');
         }
 
         $userId = Auth::id();
-        // Lấy giỏ hàng của người dùng đang hoạt động
-        $cart = Cart::where('user_id', $userId)->where('status', 'active')->first();
+        // Tải luôn mối quan hệ voucher nếu có
+        $cart = Cart::with('voucher')->where('user_id', $userId)->where('status', 'active')->first();
 
-        // Nếu không có giỏ hàng hoặc giỏ hàng trống
-        if (!$cart || $cart->items->isEmpty()) { // Sửa cartItems() thành items()
-            return redirect()->route('client.cart')->with('error', 'Giỏ hàng của bạn đang trống.'); // Đã sửa tên route
+        if (!$cart || $cart->items->isEmpty()) {
+            return redirect()->route('client.cart')->with('error', 'Giỏ hàng của bạn đang trống.');
         }
 
-        // Xác thực dữ liệu người dùng gửi lên
         $validatedData = $request->validate([
             'fullname' => 'required|string|max:50',
             'phone' => 'required|string|max:15',
             'address' => 'required|string|max:199',
             'email' => 'required|email|max:199',
-            'payment' => 'required|in:Thanh toán khi nhận hàng,Thanh toán bằng thẻ,Thanh toán qua VNPay',
+            'payment' => 'required|in:Thanh toán khi nhận hàng,Thanh toán bằng thẻ,Thanh toán qua VNPay,Thanh toán bằng mã QR',
             'note' => 'nullable|string',
-            'agree_terms' => 'accepted', // Yêu cầu đồng ý điều khoản
+            'agree_terms' => 'accepted',
         ], [
             'fullname.required' => 'Họ và tên là bắt buộc.',
             'phone.required' => 'Số điện thoại là bắt buộc.',
@@ -102,57 +108,73 @@ class CheckoutController extends Controller
             'agree_terms.accepted' => 'Bạn phải đồng ý với các điều khoản và điều kiện.',
         ]);
 
-        // Bắt đầu một transaction để đảm bảo tính toàn vẹn dữ liệu
         DB::beginTransaction();
         try {
-            // Lấy các mặt hàng trong giỏ hàng để xử lý
-            $cartItems = $cart->items()->with('product', 'variant')->get(); // Sửa cartItems() thành items()
+            $cartItems = $cart->items()->with('product', 'variant')->get();
 
             $subtotal = 0;
             foreach ($cartItems as $item) {
-                // Kiểm tra số lượng tồn kho trước khi tạo đơn hàng
                 if (!$item->variant || $item->variant->quantity < $item->quantity) {
                     DB::rollBack();
-                    // Thêm thông tin biến thể cụ thể vào thông báo lỗi
                     $variantInfo = '';
                     if ($item->variant) {
                         $variantInfo = ' (' . ($item->variant->color->name ?? 'N/A') . ' - ' . ($item->variant->size->name ?? 'N/A') . ')';
                     }
-                    return redirect()->route('client.cart')->with('error', 'Sản phẩm "' . ($item->product->name ?? 'N/A') . $variantInfo . '" không đủ số lượng trong kho. Vui lòng kiểm tra lại giỏ hàng.'); // Đã sửa tên route
+                    return redirect()->route('client.cart')->with('error', 'Sản phẩm "' . ($item->product->name ?? 'N/A') . $variantInfo . '" không đủ số lượng trong kho. Vui lòng kiểm tra lại giỏ hàng.');
                 }
                 $subtotal += $item->price_at_purchase * $item->quantity;
             }
 
-            $shippingCost = 0; // Miễn phí vận chuyển
-            $tax = 10; // Thuế 10.00
-            $discount = 0; // Giả sử chưa có mã giảm giá
+            $shippingCost = 0;
+            $tax = 10;
+            $discount = 0; // Khởi tạo giảm giá bằng 0
+
+            // Tính toán giảm giá từ voucher nếu có
+            if ($cart->voucher && $cart->voucher->isValid()) {
+                $voucher = $cart->voucher;
+                if ($voucher->discount_type === 'fixed') {
+                    $discount = $voucher->discount;
+                } elseif ($voucher->discount_type === 'percent') {
+                    $discount = ($subtotal * $voucher->discount) / 100;
+                }
+
+                // Giới hạn giảm giá tối đa
+                if ($voucher->max_price && $discount > $voucher->max_price) {
+                    $discount = $voucher->max_price;
+                }
+
+                // Tăng số lần đã sử dụng của voucher (nếu chưa tăng trong ApplyVoucherController)
+                // Lưu ý: Nếu bạn đã tăng trong ApplyVoucherController, có thể bỏ qua bước này để tránh trùng lặp
+                // $voucher->increment('used');
+            }
 
             $finalTotalPrice = $subtotal + $shippingCost + $tax - $discount;
 
-            // 1. Tạo đơn hàng chính (Order)
+            // Tạo đơn hàng chính (Order)
             $order = Order::create([
                 'user_id' => $userId,
-                'code' => 'ORD-' . Str::upper(Str::random(8)), // Tạo mã đơn hàng duy nhất
+                'code' => 'ORD-' . Str::upper(Str::random(8)),
                 'fullname' => $validatedData['fullname'],
                 'phone' => $validatedData['phone'],
                 'address' => $validatedData['address'],
                 'email' => $validatedData['email'],
                 'payment' => $validatedData['payment'],
-                'status' => 'Chờ xác nhận', // Trạng thái ban đầu
-                'payment_status' => 'Chưa thanh toán', // Trạng thái thanh toán ban đầu
+                'status' => 'Chờ xác nhận',
+                'payment_status' => 'Chưa thanh toán',
                 'shiping' => $shippingCost,
                 'discount' => $discount,
                 'total_price' => $finalTotalPrice,
                 'note' => $validatedData['note'] ?? null,
+                'voucher_id' => $cart->voucher_id, // THÊM DÒNG NÀY ĐỂ LƯU VOUCHER_ID
             ]);
 
-            // 2. Tạo chi tiết đơn hàng (Order Details) và cập nhật số lượng tồn kho
+            // Tạo chi tiết đơn hàng (Order Details) và cập nhật số lượng tồn kho
             foreach ($cartItems as $item) {
                 OrderDetail::create([
                     'order_id' => $order->id,
                     'variant_id' => $item->variant_id,
                     'quantity' => $item->quantity,
-                    'price' => $item->price_at_purchase, // Giá tại thời điểm mua hàng
+                    'price' => $item->price_at_purchase,
                     'total_price' => $item->price_at_purchase * $item->quantity,
                 ]);
 
@@ -164,17 +186,21 @@ class CheckoutController extends Controller
                 }
             }
 
-            // 3. Xóa các mặt hàng trong giỏ hàng và đánh dấu giỏ hàng là không hoạt động
-            $cart->items()->delete(); // Sửa cartItems() thành items()
-            $cart->update(['status' => 'inactive']); // Đánh dấu giỏ hàng không còn hoạt động
+            // Xóa các mặt hàng trong giỏ hàng và đánh dấu giỏ hàng là không hoạt động
+            $cart->items()->delete();
+            $cart->update(['status' => 'inactive']);
 
-            DB::commit(); // Hoàn tất transaction
+            DB::commit();
 
-            // Chuyển hướng đến trang thông báo đặt hàng thành công
+               if ($validatedData['payment'] === 'Thanh toán bằng mã QR') {
+            return view('clients.qr_code', [
+                'order' => $order
+            ]);
+        }
             return redirect()->route('checkout.success', ['order' => $order->code])->with('success', 'Đơn hàng của bạn đã được đặt thành công! Mã đơn hàng: ' . $order->code);
         } catch (\Exception $e) {
-            DB::rollBack(); // Hoàn tác nếu có lỗi
-            Log::error('Checkout failed: ' . $e->getMessage(), ['exception' => $e]); // Ghi log lỗi
+            DB::rollBack();
+            Log::error('Checkout failed: ' . $e->getMessage(), ['exception' => $e]);
             return redirect()->back()->withInput()->with('error', 'Có lỗi xảy ra trong quá trình đặt hàng. Vui lòng thử lại. ' . $e->getMessage());
         }
     }
@@ -188,7 +214,9 @@ class CheckoutController extends Controller
     public function success(Order $order)
     {
         // Tải các mối quan hệ cần thiết để hiển thị chi tiết đơn hàng
-        $order->load('orderDetails.variant.product', 'orderDetails.variant.color', 'orderDetails.variant.size');
+        // THÊM 'voucher' vào danh sách load
+        $order->load('orderDetails.variant.product', 'orderDetails.variant.color', 'orderDetails.variant.size', 'voucher');
         return view('clients.checkout_success', compact('order'));
     }
+
 }

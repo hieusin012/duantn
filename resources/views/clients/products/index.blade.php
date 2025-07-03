@@ -16,6 +16,45 @@
     </div>
 <div class="container py-4">
     <div class="text-center page-title mb-5">
+        <form method="GET" action="{{ route('client.products.search') }}" class="row mb-4 gx-2">
+    <div class="col-md-3">
+        <select name="category" class="form-select">
+            <option value="0">-- Danh mục --</option>
+            @foreach ($categories as $cat)
+                <option value="{{ $cat->id }}" {{ request('category') == $cat->id ? 'selected' : '' }}>
+                    {{ $cat->name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
+    <div class="col-md-2">
+        <input type="number" name="min_price" class="form-control" placeholder="Giá từ" value="{{ request('min_price') }}">
+    </div>
+    <div class="col-md-2">
+        <input type="number" name="max_price" class="form-control" placeholder="Giá đến" value="{{ request('max_price') }}">
+    </div>
+
+    <div class="col-md-2">
+        <select name="brand" class="form-select">
+            <option value="">-- Thương hiệu --</option>
+            @foreach ($brands as $brand)
+                <option value="{{ $brand->id }}" {{ request('brand') == $brand->id ? 'selected' : '' }}>
+                    {{ $brand->name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
+    <div class="col-md-2">
+        <input type="text" name="search" class="form-control" placeholder="Từ khóa" value="{{ request('search') }}">
+    </div>
+
+    <div class="col-md-1 d-grid">
+        <button type="submit" class="btn btn-primary">Lọc</button>
+    </div>
+</form>
+
         <h1>Danh sách sản phẩm</h1>
     </div>
     <div class="row">

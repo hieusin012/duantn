@@ -1,4 +1,4 @@
-@extends('clients.layouts.master') {{-- Giả sử bạn có một layout cơ bản tên là app.blade.php --}}
+@extends('clients.layouts.master') {{-- Đã sửa đường dẫn layout --}}
 
 @section('title', 'Thanh Toán Đơn Hàng')
 
@@ -70,13 +70,19 @@
                                 Thanh toán khi nhận hàng (COD)
                             </label>
                         </div>
-                        <div class="form-check mb-2">
+                        <!-- <div class="form-check mb-2">
                             <input class="form-check-input" type="radio" name="payment" id="paymentCard" value="Thanh toán bằng thẻ" {{ old('payment') == 'Thanh toán bằng thẻ' ? 'checked' : '' }} required>
                             <label class="form-check-label" for="paymentCard">
                                 Thanh toán bằng thẻ
                             </label>
                             {{-- Bạn có thể thêm các trường nhập liệu thẻ tín dụng ở đây nếu xử lý trực tiếp --}}
-                        </div>
+                        </div> -->
+                        <div class="form-check mb-2">
+    <input class="form-check-input" type="radio" name="payment" id="paymentQr" value="Thanh toán bằng mã QR" {{ old('payment') == 'Thanh toán bằng mã QR' ? 'checked' : '' }} required>
+    <label class="form-check-label" for="paymentQr">
+        Thanh toán bằng mã QR (Chuyển khoản ngân hàng)
+    </label>
+</div>
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="radio" name="payment" id="paymentVnPay" value="Thanh toán qua VNPay" {{ old('payment') == 'Thanh toán qua VNPay' ? 'checked' : '' }} required>
                             <label class="form-check-label" for="paymentVnPay">
@@ -121,7 +127,7 @@
                     </div>
                     <div class="d-flex justify-content-between mb-2">
                         <span>Mã giảm giá:</span>
-                        <span>{{ number_format($discount, 0, ',', '.') }} VNĐ</span> {{-- Placeholder cho giảm giá --}}
+                        <span>{{ number_format($discount, 0, ',', '.') }} VNĐ</span> {{-- Đã tính toán từ controller --}}
                     </div>
                     <div class="d-flex justify-content-between mb-2">
                         <span>Thuế:</span>

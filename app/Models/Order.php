@@ -12,7 +12,7 @@ class Order extends Model
     protected $fillable = [
         'code', 'fullname', 'phone', 'address', 'email', 'payment',
         'status', 'payment_status', 'shiping', 'discount',
-        'total_price', 'note', 'user_id'
+        'total_price', 'note', 'user_id', 'voucher_id' // THÊM 'voucher_id' VÀO FILLABLE
     ];
 
     public function user()
@@ -23,6 +23,7 @@ class Order extends Model
     {
         return $this->hasMany(OrderDetail::class);
     }
+<<<<<<< HEAD
 
     public static function getStatuses()
 {
@@ -35,4 +36,10 @@ class Order extends Model
         'Đơn hàng đã hủy' => 'Đơn hàng đã hủy',
     ];
 }
+=======
+    public function voucher()
+    {
+        return $this->belongsTo(Voucher::class);
+    }
+>>>>>>> e53302c3431521fda4a5819a713ebda095e2c502
 }
