@@ -281,9 +281,6 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-
-
-
 // Xem/Sửa hồ sơ cá nhân
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
