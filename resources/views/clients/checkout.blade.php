@@ -1,4 +1,4 @@
-@extends('clients.layouts.master') {{-- Giả sử bạn có một layout cơ bản tên là app.blade.php --}}
+@extends('clients.layouts.master') {{-- Đã sửa đường dẫn layout --}}
 
 @section('title', 'Thanh Toán Đơn Hàng')
 
@@ -121,7 +121,7 @@
                     </div>
                     <div class="d-flex justify-content-between mb-2">
                         <span>Mã giảm giá:</span>
-                        <span>{{ number_format($discount, 0, ',', '.') }} VNĐ</span> {{-- Placeholder cho giảm giá --}}
+                        <span>{{ number_format($discount, 0, ',', '.') }} VNĐ</span> {{-- Đã tính toán từ controller --}}
                     </div>
                     <div class="d-flex justify-content-between mb-2">
                         <span>Thuế:</span>

@@ -12,7 +12,7 @@ class Order extends Model
     protected $fillable = [
         'code', 'fullname', 'phone', 'address', 'email', 'payment',
         'status', 'payment_status', 'shiping', 'discount',
-        'total_price', 'note', 'user_id'
+        'total_price', 'note', 'user_id', 'voucher_id' // THÊM 'voucher_id' VÀO FILLABLE
     ];
 
     public function user()
@@ -22,5 +22,9 @@ class Order extends Model
     public function orderDetails()
     {
         return $this->hasMany(OrderDetail::class);
+    }
+    public function voucher()
+    {
+        return $this->belongsTo(Voucher::class);
     }
 }
