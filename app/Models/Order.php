@@ -23,7 +23,6 @@ class Order extends Model
     {
         return $this->hasMany(OrderDetail::class);
     }
-<<<<<<< HEAD
 
     public static function getStatuses()
 {
@@ -36,10 +35,8 @@ class Order extends Model
         'Đơn hàng đã hủy' => 'Đơn hàng đã hủy',
     ];
 }
-=======
     public function voucher()
     {
         return $this->belongsTo(Voucher::class);
     }
->>>>>>> e53302c3431521fda4a5819a713ebda095e2c502
 }
