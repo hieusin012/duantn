@@ -94,7 +94,7 @@ class CheckoutController extends Controller
             'phone' => 'required|string|max:15',
             'address' => 'required|string|max:199',
             'email' => 'required|email|max:199',
-            'payment' => 'required|in:Thanh toán khi nhận hàng,Thanh toán bằng thẻ,Thanh toán qua VNPay',
+            'payment' => 'required|in:Thanh toán khi nhận hàng,Thanh toán bằng thẻ,Thanh toán qua VNPay,Thanh toán bằng mã QR',
             'note' => 'nullable|string',
             'agree_terms' => 'accepted',
         ], [
@@ -192,6 +192,11 @@ class CheckoutController extends Controller
 
             DB::commit();
 
+               if ($validatedData['payment'] === 'Thanh toán bằng mã QR') {
+            return view('clients.qr_code', [
+                'order' => $order
+            ]);
+        }
             return redirect()->route('checkout.success', ['order' => $order->code])->with('success', 'Đơn hàng của bạn đã được đặt thành công! Mã đơn hàng: ' . $order->code);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -213,4 +218,5 @@ class CheckoutController extends Controller
         $order->load('orderDetails.variant.product', 'orderDetails.variant.color', 'orderDetails.variant.size', 'voucher');
         return view('clients.checkout_success', compact('order'));
     }
+
 }
