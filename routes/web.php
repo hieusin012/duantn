@@ -208,11 +208,8 @@ use App\Http\Controllers\Client\ContactController as ClientContactController;
 use App\Http\Controllers\Client\ProductController as ClientProductController;
 use App\Http\Controllers\Client\VoucherController as ClientVoucherController;
 use App\Http\Controllers\Client\CheckoutController;
-<<<<<<< HEAD
 use App\Http\Controllers\Client\ClientOrderController;
-=======
 use App\Http\Controllers\Client\VnpayController;
->>>>>>> e53302c3431521fda4a5819a713ebda095e2c502
 
 // Nhóm các routes yêu cầu xác thực người dùng
 
@@ -308,3 +305,29 @@ Route::get('/admin/thong-ke/data', [ThongKeController::class, 'getData'])->name(
 //vnpay
 Route::get('/vnpay/return', [VnpayController::class, 'vnpayReturn'])->name('client.payment.vnpay.return');
 Route::post('/checkout/vnpay', [VnpayController::class, 'redirectToVNPAY'])->name('checkout.vnpay');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
