@@ -206,6 +206,8 @@ use App\Http\Controllers\Client\ContactController as ClientContactController;
 use App\Http\Controllers\Client\ProductController as ClientProductController;
 use App\Http\Controllers\Client\VoucherController as ClientVoucherController;
 use App\Http\Controllers\Client\CheckoutController;
+use App\Http\Controllers\Client\ClientOrderController;
+use App\Http\Controllers\Client\VnpayController;
 
 // Nhóm các routes yêu cầu xác thực người dùng
 
@@ -280,6 +282,16 @@ Route::get('/chat/fetch', [MessageController::class, 'fetch']);
 
 
 
+Route::middleware('auth')->group(function () {
+    Route::get('/order-history', [ClientOrderController::class, 'orderHistory'])->name('order.history');
+    Route::get('/order/{id}', [ClientOrderController::class, 'orderDetail'])->name('order.details');
+});
+
+    // chat client
+    Route::post('/chat/send', [MessageController::class, 'send']);
+    Route::get('/chat/fetch', [MessageController::class, 'fetch']);
+    
+
 
 
 
@@ -298,3 +310,8 @@ Route::middleware(['auth'])->group(function () {
 // Thống kê sản phẩm theo danh mục
 Route::get('/admin/thong-ke/san-pham', [ThongKeController::class, 'index'])->name('admin.thongke.index');
 Route::get('/admin/thong-ke/data', [ThongKeController::class, 'getData'])->name('admin.thongke.data');
+
+//vnpay
+Route::get('/vnpay/return', [VnpayController::class, 'vnpayReturn'])->name('client.payment.vnpay.return');
+Route::post('/checkout/vnpay', [VnpayController::class, 'redirectToVNPAY'])->name('checkout.vnpay');
+

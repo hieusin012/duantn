@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('phone', 15);
             $table->string('address', 199);
             $table->string('email', 199);
-            $table->enum('payment' ,['Thanh toán khi nhận hàng' , 'Thanh toán bằng thẻ' , 'Thanh toán qua VNPay'])->default('Thanh toán khi nhận hàng');
+            $table->enum('payment', ['Thanh toán khi nhận hàng','Thanh toán bằng thẻ','Thanh toán qua VNPay','Thanh toán bằng mã QR'])->default('Thanh toán khi nhận hàng');
             $table->enum('status' , ['Chờ xác nhận', 'Đã xác nhận' ,'Đang chuẩn bị hàng', 'Đang giao hàng', 'Đã giao hàng', 'Đơn hàng đã hủy'])->default('Chờ xác nhận');
             $table->enum('payment_status' ,['Chưa thanh toán', 'Đã thanh toán' ]);
             $table->double('shiping')->nullable();
