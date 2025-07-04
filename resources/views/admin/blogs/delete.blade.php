@@ -57,8 +57,8 @@
                                 @endif
                             </td>
                             <td>{{ Str::limit(strip_tags($blog->content), 100) }}</td>
-                            <td>{{ $blog->category_name }}</td>
-                            <td>{{ $blog->user_name }}</td>
+                            <td>{{ $blog->category->name ?? '------' }}</td>
+                            <td>{{ $blog->user->fullname ?? '------' }}</td>
                             <td>{{ $blog->status == 1 ? 'Đã đăng' : 'Đã gỡ' }}</td>
                             <td>
                                 <a class="btn btn-primary btn-sm" href="{{ route('admin.blogs.restore', $blog->id) }}" title="Khôi phục">

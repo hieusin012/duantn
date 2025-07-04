@@ -41,6 +41,13 @@
             </li>
 
             <li>
+                  <a class="app-menu__item {{ request()->routeIs('admin.blog-categories.*') ? 'active' : '' }}" href="{{ route('admin.blog-categories.index') }}">
+                        <i class="app-menu__icon fas fa-folder-open"></i>
+                        <span class="app-menu__label">Quản lý danh mục bài viết</span>
+                  </a>
+            </li>
+
+            <li>
                   <a class="app-menu__item {{ request()->routeIs('admin.vouchers*') ? 'active' : '' }}" href="{{ route('admin.vouchers.index') }}">
                         <i class='app-menu__icon fas fa-ticket-alt'></i> {{-- hoặc 'fa-gift' --}}
                         <span class="app-menu__label">Quản lý Vouchers</span>

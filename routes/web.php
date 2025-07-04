@@ -198,6 +198,11 @@ Route::middleware('auth')->get('/wishlist', [WishlistController::class, 'index']
 Route::get('/tra-cuu-don-hang', [App\Http\Controllers\OrderLookupController::class, 'form'])->name('order.lookup.form');
 Route::post('/tra-cuu-don-hang', [App\Http\Controllers\OrderLookupController::class, 'lookup'])->name('order.lookup');
 
+use App\Http\Controllers\BlogCategoryController;
+
+Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+    Route::resource('blog-categories', BlogCategoryController::class);
+});
 
 
 // Trang client (không nằm trong admin)
