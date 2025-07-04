@@ -40,3 +40,6 @@ class Order extends Model
         return $this->belongsTo(Voucher::class);
     }
 }
+
+
+
