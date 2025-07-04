@@ -10,25 +10,25 @@
 
             {{-- Hiển thị lỗi validation --}}
             @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
             @endif
 
             {{-- Hiển thị thông báo thành công/lỗi từ controller --}}
             @if (session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
             @endif
             @if (session('error'))
-                <div class="alert alert-danger">
-                    {{ session('error') }}
-                </div>
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
             @endif
 
             <form action="{{ route('checkout.process') }}" method="POST">
@@ -110,15 +110,15 @@
                 <div class="card-body">
                     {{-- Duyệt qua các sản phẩm trong giỏ hàng để hiển thị --}}
                     @foreach ($cartItems as $item)
-                        <div class="d-flex justify-content-between mb-2">
-                            <div>
-                                <h6 class="mb-0">{{ $item->product->name ?? 'Sản phẩm không tồn tại' }}</h6>
-                                <small>Màu: {{ $item->variant->color->name ?? 'N/A' }}, Size: {{ $item->variant->size->name ?? 'N/A' }}</small><br>
-                                <small>SL: {{ $item->quantity }} x {{ number_format($item->price_at_purchase, 0, ',', '.') }} VNĐ</small>
-                            </div>
-                            <span>{{ number_format($item->price_at_purchase * $item->quantity, 0, ',', '.') }} VNĐ</span>
+                    <div class="d-flex justify-content-between mb-2">
+                        <div>
+                            <h6 class="mb-0">{{ $item->product->name ?? 'Sản phẩm không tồn tại' }}</h6>
+                            <small>Màu: {{ $item->variant->color->name ?? 'N/A' }}, Size: {{ $item->variant->size->name ?? 'N/A' }}</small><br>
+                            <small>SL: {{ $item->quantity }} x {{ number_format($item->price_at_purchase, 0, ',', '.') }} VNĐ</small>
                         </div>
-                        <hr>
+                        <span>{{ number_format($item->price_at_purchase * $item->quantity, 0, ',', '.') }} VNĐ</span>
+                    </div>
+                    <hr>
                     @endforeach
 
                     <div class="d-flex justify-content-between mb-2">

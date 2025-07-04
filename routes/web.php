@@ -24,7 +24,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CartItemController;
 use App\Http\Controllers\MessageController;
-
+use App\Http\Controllers\PaymentController;
 
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\ProductVariantController;
@@ -161,7 +161,6 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
 
     //xóa đoạn chat
     Route::delete('/chat/delete-conversation/{userId}', [MessageController::class, 'deleteConversationWithUser'])->name('chat.deleteConversation');
-    
 });
 
 // Chatbx admin
@@ -170,7 +169,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/chat/messages/{userId}', [MessageController::class, 'fetchMessages']);
     Route::post('/admin/chat/send', [MessageController::class, 'sendMessage']);
     Route::delete('/admin/chat/{userId}', [MessageController::class, 'destroy'])->name('admin.chat.destroy');
-
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -274,6 +272,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/checkout/success/{order:code}', [CheckoutController::class, 'success'])->name('checkout.success');
 });
 
+//thanh toán
+Route::get('/vnpay-return', [PaymentController::class, 'vnpayReturn'])->name('vnpay.return');
+
+
+// chat client
+Route::post('/chat/send', [MessageController::class, 'send']);
+Route::get('/chat/fetch', [MessageController::class, 'fetch']);
+
+
+
 Route::middleware('auth')->group(function () {
     Route::get('/order-history', [ClientOrderController::class, 'orderHistory'])->name('order.history');
     Route::get('/order/{id}', [ClientOrderController::class, 'orderDetail'])->name('order.details');
@@ -283,6 +291,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/chat/send', [MessageController::class, 'send']);
     Route::get('/chat/fetch', [MessageController::class, 'fetch']);
     
+
 
 
 
