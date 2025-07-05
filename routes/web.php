@@ -274,6 +274,8 @@ Route::middleware(['auth'])->group(function () {
 
 //thanh toán
 Route::get('/vnpay-return', [CheckoutController::class, 'vnpayReturn'])->name('vnpay.return');
+//Xuất file PDF
+Route::get('/invoice/{order:code}/pdf', [App\Http\Controllers\InvoiceController::class, 'generatePDF'])->name('invoice.pdf');
 
 
 // chat client
