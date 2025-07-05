@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use App\Models\Voucher; // THÊM DÒNG NÀY
+use App\Models\Payment;
 
 
 class CheckoutController extends Controller
@@ -178,7 +179,6 @@ class CheckoutController extends Controller
                 $vnp_Returnurl = "http://127.0.0.1:8000/vnpay-return";
                 $vnp_TmnCode = "PTCDRZQD"; //Mã website tại VNPAY 
                 $vnp_HashSecret = "MJC8R1W7KOJOWN6KNTHT7I6P5QV4RZ6I"; //Chuỗi bí mật
-
                 $vnp_TxnRef = $order->code; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
                 $vnp_OrderInfo = "Thanh toán hóa đơn";
                 $vnp_OrderType = "Shop quàn áo";
@@ -254,37 +254,69 @@ class CheckoutController extends Controller
 
     public function vnpayReturn(Request $request)
     {
-        $vnp_HashSecret = env('VNPAY_HASHSECRET');
+        $vnp_HashSecret = "MJC8R1W7KOJOWN6KNTHT7I6P5QV4RZ6I";
 
-        $inputData = $request->except('vnp_SecureHash', 'vnp_SecureHashType');
-        ksort($inputData);
-        $hashData = urldecode(http_build_query($inputData, '', '&'));
+        $vnpData = [];
+        foreach ($request->query() as $key => $value) {
+            if (substr($key, 0, 4) === 'vnp_') {
+                $vnpData[$key] = $value;
+            }
+        }
 
-        $secureHash = $request->input('vnp_SecureHash');
+        $vnp_SecureHash = $vnpData['vnp_SecureHash'];
+        unset($vnpData['vnp_SecureHash']);
+        unset($vnpData['vnp_SecureHashType']);
 
-        $checkHash = hash_hmac('sha512', $hashData, $vnp_HashSecret);
+        // ✅ Hash theo đúng thứ tự và format như bên gửi đi
+        ksort($vnpData);
+        $hashData = '';
+        $first = true;
+        foreach ($vnpData as $key => $value) {
+            if ($first) {
+                $hashData .= urlencode($key) . '=' . urlencode($value);
+                $first = false;
+            } else {
+                $hashData .= '&' . urlencode($key) . '=' . urlencode($value);
+            }
+        }
 
-        // Kiểm tra tính hợp lệ của callback
-        if ($checkHash === $secureHash) {
-            $orderCode = $request->input('vnp_TxnRef');
+
+        $secureHash = hash_hmac('sha512', $hashData, $vnp_HashSecret);
+
+        Log::info('HashData: ' . $hashData);
+        Log::info('Client Hash: ' . $vnp_SecureHash);
+        Log::info('Server Hash: ' . $secureHash);
+
+        if ($secureHash === $vnp_SecureHash) {
+            // ✅ Lấy thông tin đơn hàng
+            $orderCode = $vnpData['vnp_TxnRef'];
             $order = Order::where('code', $orderCode)->first();
 
-            if ($order && $request->input('vnp_ResponseCode') == '00') {
-                // Thanh toán thành công
-                $order->update([
-                    'payment_status' => 'Đã thanh toán',
-                    'status' => 'Đang xử lý',
+            if ($order && $vnpData['vnp_ResponseCode'] === '00' && $vnpData['vnp_TransactionStatus'] === '00') {
+                // ✅ Cập nhật đơn hàng
+                $order->payment_status = 'Đã thanh toán';
+                $order->status = 'Đã xác nhận'; // Hoặc giữ nguyên logic của anh
+                $order->save();
+
+                // ✅ Lưu thông tin thanh toán
+                Payment::create([
+                    'order_code' => $orderCode,
+                    'transaction_no' => $vnpData['vnp_TransactionNo'] ?? null,
+                    'bank_code' => $vnpData['vnp_BankCode'] ?? null,
+                    'card_type' => $vnpData['vnp_CardType'] ?? null,
+                    'amount' => ($vnpData['vnp_Amount'] ?? 0) / 100,
+                    'pay_date' => $vnpData['vnp_PayDate'] ?? null,
+                    'response_code' => $vnpData['vnp_ResponseCode'] ?? null,
+                    'transaction_status' => $vnpData['vnp_TransactionStatus'] ?? null,
                 ]);
 
                 return redirect()->route('checkout.success', ['order' => $order->code])
-                    ->with('success', 'Thanh toán thành công qua VNPay! Mã đơn hàng: ' . $order->code);
-            } else {
-                return redirect()->route('client.cart')
-                    ->with('error', 'Thanh toán không thành công hoặc đơn hàng không tồn tại.');
+                ->with('success', 'Bạn đã thanh toán đơn hàng thành công!');;
             }
+
+            return redirect('/cart')->with('error', 'Giao dịch không hợp lệ hoặc đơn hàng không tồn tại!');
         } else {
-            return redirect()->route('client.cart')
-                ->with('error', 'Chữ ký không hợp lệ! Có thể dữ liệu bị giả mạo.');
+            return redirect('/cart')->with('error', 'Chữ ký không hợp lệ!');
         }
     }
 

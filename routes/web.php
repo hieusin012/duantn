@@ -24,7 +24,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CartItemController;
 use App\Http\Controllers\MessageController;
-use App\Http\Controllers\PaymentController;
+
 
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\ProductVariantController;
@@ -290,7 +290,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 //thanh toán
-Route::get('/vnpay-return', [PaymentController::class, 'vnpayReturn'])->name('vnpay.return');
+Route::get('/vnpay-return', [CheckoutController::class, 'vnpayReturn'])->name('vnpay.return');
 
 
 // chat client
