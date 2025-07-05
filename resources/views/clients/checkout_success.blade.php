@@ -12,6 +12,10 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     @endif
+    <div class="col-sm-2 mb-4">
+        <a class="btn btn-delete btn-sm pdf-file" href="{{ route('invoice.pdf', ['order' => $order->code]) }}" type="button" title="Export PDF"><i class="fas fa-file-pdf"></i> Xuất sang PDF</a>
+    </div>
+
     <div class="text-center border p-3">
         <h1>HÓA ĐƠN THANH TOÁN</h1>
 
@@ -108,7 +112,7 @@
                     </tbody>
                 </table>
 
-                <h4 class="text-end mt-4">Tổng Cộng Đơn Hàng: {{ number_format($order->total_price, 0, ',', '.') }} VNĐ</h4>
+                <h1 class="text-end mt-4">Tổng Cộng Đơn Hàng: {{ number_format($order->total_price, 0, ',', '.') }} VNĐ</h1>
                 {{-- Có thể thêm dòng hiển thị giảm giá ở đây nếu bạn muốn nó tách biệt khỏi tổng cộng --}}
                 @if ($order->discount > 0)
                 <p class="text-end text-success">Giảm giá: -{{ number_format($order->discount, 0, ',', '.') }} VNĐ</p>
