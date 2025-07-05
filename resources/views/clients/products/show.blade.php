@@ -170,7 +170,7 @@
                         <input type="hidden" name="product_id" value="{{ $product->id }}">
                         <div class="product-swatches-option">
                             <div class="product-item swatches-image w-100 mb-4 swatch-0 option1" data-option-index="0">
-<<<<<<< HEAD
+
                                 <div class="mb-3">
                                     <label class="form-label d-block">
                                         Chọn màu: <strong id="selectedColorName">Chưa chọn</strong>
@@ -194,14 +194,8 @@
                                         </label>
                                     @endforeach
                                     </div>
-=======
-                                <label class="form-label d-block">Chọn màu: <strong id="selectedColorName">Chưa chọn</strong></label>
-                                <div class="d-flex flex-wrap gap-2">
-                                    @foreach ($colors as $color)
-                                    <input type="radio" class="btn-check" name="color_id" id="color-{{ $color->id }}" value="{{ $color->id }}" autocomplete="off" data-color-name="{{ $color->name }}">
-                                    <label class="btn border p-2 color-swatch" for="color-{{ $color->id }}" data-color-code="{{ $color->color_code }}" title="{{ $color->name }}"></label>
-                                    @endforeach
-                                </div>
+
+                                
                             </div>
                             <div class="product-item swatches-size w-100 mb-4 swatch-1 option2" data-option-index="1">
                                 <label class="form-label">Chọn size:</label>
@@ -210,7 +204,7 @@
                                     <input type="radio" class="btn-check" name="size_id" id="size-{{ $size->id }}" value="{{ $size->id }}" autocomplete="off">
                                     <label class="btn btn-outline-warning" for="size-{{ $size->id }}">{{ $size->name }}</label>
                                     @endforeach
->>>>>>> 85acf50fb88caf2501cbe4d4bc8656f922bee1ca
+
                                 </div>
                                 
                             </div>
