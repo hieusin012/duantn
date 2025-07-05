@@ -171,6 +171,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/admin/chat/{userId}', [MessageController::class, 'destroy'])->name('admin.chat.destroy');
 });
 
+
+// Quản lý nhà cung cấp
 Route::prefix('admin')->name('admin.')->group(function () {
     // Resource CRUD
     Route::resource('suppliers', SupplierController::class)->except(['show']);
@@ -182,6 +184,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::delete('suppliers/all/eliminate', [SupplierController::class, 'eliminateAll'])->name('suppliers.all-eliminate'); // Xóa tất cả
 });
 
+
+// Quản lý nhập hàng(Phiếu nhập)
 Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('imports', \App\Http\Controllers\ImportController::class);
 });
@@ -198,12 +202,16 @@ Route::middleware('auth')->get('/wishlist', [WishlistController::class, 'index']
 Route::get('/tra-cuu-don-hang', [App\Http\Controllers\OrderLookupController::class, 'form'])->name('order.lookup.form');
 Route::post('/tra-cuu-don-hang', [App\Http\Controllers\OrderLookupController::class, 'lookup'])->name('order.lookup');
 
+
+// Quản lý danh mục bài viết
 use App\Http\Controllers\BlogCategoryController;
 
 Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::resource('blog-categories', BlogCategoryController::class);
 });
 
+// Route cho sản phẩm theo danh mục Client
+Route::get('/danh-muc/{id}', [\App\Http\Controllers\Client\ProductController::class, 'showByCategory'])->name('products.byCategory');
 
 // Trang client (không nằm trong admin)
 use App\Http\Controllers\Client\BlogController as ClientBlogController;
@@ -230,6 +238,7 @@ Route::get('/products/search', [ClientProductController::class, 'search'])->name
 
 // Trang chi tiết sản phẩm (dùng slug để SEO tốt hơn)// Trang chi tiết sản phẩm (dùng slug)
 Route::get('san-pham/{slug}', [ClientProductController::class, 'show'])->name('client.products.show');
+
 // comment
 Route::post('/comments/client-store', [CommentController::class, 'storeClient'])->name('client.comments.store')->middleware('auth');
 

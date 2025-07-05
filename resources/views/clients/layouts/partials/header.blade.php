@@ -13,10 +13,14 @@
                         <li class="lvl1 parent dropdown"><a href="{{ route('client.home') }}">Trang chủ</a></li>
                         <li class="lvl1 parent dropdown"><a href="{{ route('client.products.index') }}">Sản phẩm
                                 <i class="icon anm anm-angle-down-l"></i></a>
-                            <ul class="dropdown-menu"> <!-- menu con -->
-                                <li><a href="#">Điện thoại</a></li>
-                                <li><a href="#">Laptop</a></li>
-                                <li><a href="#">Phụ kiện</a></li>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @foreach ($header_categories as $cat)
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('products.byCategory', $cat->id) }}">
+                                            {{ $cat->name }}
+                                        </a>
+                                    </li>
+                                @endforeach
                             </ul>
                         </li>
                         <li class="lvl1 parent dropdown"><a href="#">HOT DEAL <i class="icon anm anm-angle-down-l"></i></a></li>

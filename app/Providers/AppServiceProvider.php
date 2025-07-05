@@ -43,5 +43,9 @@ class AppServiceProvider extends ServiceProvider
             $view->with('brands', $brands);
             $view->with('wishlistCount', $wishlistCount);
         });
+        View::composer('*', function ($view) {
+            $categories = Category::where('is_active', 1)->get();
+            $view->with('header_categories', $categories);
+        });
     }
 }
