@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -116,18 +117,35 @@ class OrderController extends Controller
     }
 
     public function report(Request $request)
-{
-    $startDate = $request->start_date ?? now()->startOfMonth()->format('Y-m-d');
-    $endDate = $request->end_date ?? now()->endOfMonth()->format('Y-m-d');
+    {
+        $startDate = $request->start_date ?? now()->startOfMonth()->format('Y-m-d');
+        $endDate = $request->end_date ?? now()->endOfMonth()->format('Y-m-d');
 
-    $orders = Order::where('status', 'Đã giao hàng')
-                ->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59'])
-                ->get();
+        $orders = Order::where('status', 'Đã giao hàng')
+                    ->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59'])
+                    ->get();
 
-    $totalRevenue = $orders->sum('total_price');
-    $totalOrders = $orders->count();
+        $totalRevenue = $orders->sum('total_price');
+        $totalOrders = $orders->count();
 
-    return view('admin.thongkedoanhthu.report', compact('orders', 'totalRevenue', 'totalOrders', 'startDate', 'endDate'));
-}
+        return view('admin.thongkedoanhthu.report', compact('orders', 'totalRevenue', 'totalOrders', 'startDate', 'endDate'));
+    }
+
+    public function cancel($id)
+    {
+        $order = Order::where('id', $id)
+                    ->where('user_id', Auth::id())
+                    ->where('status', 'Chờ xác nhận')
+                    ->first();
+
+        if (!$order) {
+            return back()->with('error', 'Không thể hủy đơn hàng.');
+        }
+
+        $order->status = 'Đơn hàng đã hủy';
+        $order->save();
+
+        return back()->with('success', '✅ Đơn hàng đã được hủy thành công.');
+    }
 
 }

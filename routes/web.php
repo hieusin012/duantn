@@ -304,6 +304,7 @@ Route::get('/chat/fetch', [MessageController::class, 'fetch']);
 Route::middleware('auth')->group(function () {
     Route::get('/order-history', [ClientOrderController::class, 'orderHistory'])->name('order.history');
     Route::get('/order/{id}', [ClientOrderController::class, 'orderDetail'])->name('order.details');
+    Route::put('/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('order.cancel'); 
 });
 
     // chat client
