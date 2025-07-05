@@ -11,8 +11,17 @@
                 <nav class="navigation" id="AccessibleNav">
                     <ul id="siteNav" class="site-nav medium center">
                         <li class="lvl1 parent dropdown"><a href="{{ route('client.home') }}">Trang chủ</a></li>
-                        <li class="lvl1"><a href="{{ route('client.products.index') }}">Danh mục sản phẩm
+                        <li class="lvl1 parent dropdown"><a href="{{ route('client.products.index') }}">Sản phẩm
                                 <i class="icon anm anm-angle-down-l"></i></a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @foreach ($header_categories as $cat)
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('products.byCategory', $cat->id) }}">
+                                            {{ $cat->name }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
                         </li>
                         <li class="lvl1 parent dropdown"><a href="#">HOT DEAL <i class="icon anm anm-angle-down-l"></i></a></li>
                         <li class="lvl1 parent dropdown"><a href="{{ route('client.blog') }}">Blog</a></li>
@@ -99,6 +108,7 @@
                                 <li><a href="{{ route('profile.edit') }}"><i class="icon anm anm-edit"></i>Edit Profile</a></li>
                                 <li><a href="{{ route('wishlist.index') }}"><i class="icon anm anm-heart-l"></i>Wishlist</a></li>
                                 <li><a href="#"><i class="icon anm anm-random-r"></i>Compare</a></li>
+                                <li><a href="{{ route('order.history') }}"><i class="hdr-icon icon anm anm-bag-l"></i>History</a></li>
                                 <li>
                                     <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         <i class="icon anm anm-sign-out-al"></i>Sign out
@@ -111,6 +121,11 @@
                             </ul>
                         </div>
                     </div>
+                </div>
+                <div class="iconset" title="Tra cứu đơn hàng">
+                    <a href="{{ route('order.lookup.form') }}">
+                        <i class="hdr-icon icon anm anm-bag-l"></i>
+                    </a>
                 </div>
                 <div class="wishlist-link iconset" title="Wishlist">
                     <a href="{{ route('wishlist.index') }}">

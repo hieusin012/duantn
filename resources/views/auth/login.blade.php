@@ -50,6 +50,17 @@
                     </div>
                 </form>
 
+                <div class="my-3 text-center position-relative">
+                    <hr class="text-muted">
+                    <span class="position-absolute top-50 start-50 translate-middle px-3 bg-white text-muted">Hoặc đăng nhập bằng</span>
+                </div>
+
+                <div class="text-center">
+                    <a href="#" class="btn btn-light border d-inline-flex align-items-center justify-content-center shadow-sm p-2 rounded-circle" style="width: 48px; height: 48px;">
+                        <img src="{{ asset('images/google-icon.png') }}" alt="Google" width="24" height="24">
+                    </a>
+                </div>
+
                 <div class="text-center mt-3">
                     <p>Bạn chưa có tài khoản? <a href="{{ route('register') }}">Đăng ký</a></p>
                 </div>

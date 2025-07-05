@@ -29,15 +29,18 @@ class ProductController extends Controller
     {
         $product = Product::where('slug', $slug)->firstOrFail();
 
+        // Tải các mối quan hệ cần thiết
         $product->load([
             'galleries',
             'category',
             'brand',
             'variants' => function ($q) {
                 $q->withTrashed()->with(['color', 'size']);
-            }
+            },
+            'comments' // Eager load comments để tối ưu
         ]);
 
+        // Lấy sản phẩm liên quan
         $relatedProducts = Product::where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
             ->latest()
@@ -49,6 +52,34 @@ class ProductController extends Controller
 
         $colors = $product->variants->pluck('color')->unique('id')->values();
         $sizes = $product->variants->pluck('size')->unique('id')->values();
+        $quantity = $product->variants->pluck('quantity')->unique('id')->values();
+
+        // ================= LOGIC MỚI CHO PHẦN ĐÁNH GIÁ =================
+        // Lấy tất cả bình luận đã được duyệt cho sản phẩm này
+        $comments = $product->comments()->where('status', 1)->with('user')->latest()->get();
+
+        $totalReviews = $comments->count();
+        $averageRating = 0;
+        $ratingPercentages = [
+            '5' => 0, '4' => 0, '3' => 0, '2' => 0, '1' => 0
+        ];
+
+        if ($totalReviews > 0) {
+            // Tính rating trung bình
+            $averageRating = round($comments->avg('rating'), 1);
+
+            // Đếm số lượng review cho mỗi mức sao
+            $ratingCounts = $comments->groupBy('rating')->map->count();
+
+            // Tính phần trăm cho mỗi mức sao
+            foreach ($ratingCounts as $rating => $count) {
+                if (isset($ratingPercentages[$rating])) {
+                    $ratingPercentages[$rating] = round(($count / $totalReviews) * 100);
+                }
+            }
+        }
+        // =================== KẾT THÚC LOGIC MỚI =======================
+
 
         return view('clients.products.show', compact(
             'product',
@@ -56,7 +87,12 @@ class ProductController extends Controller
             'relatedProducts',
             'variants',
             'colors',
-            'sizes'
+            'sizes',
+            // Truyền các biến mới sang view
+            'comments',
+            'totalReviews',
+            'averageRating',
+            'ratingPercentages'
         ));
     }
 
@@ -134,4 +170,12 @@ class ProductController extends Controller
 
         return view('clients.products.index', compact('products', 'categories', 'brands'));
     }
+    public function showByCategory($id)
+    {
+        $category = Category::findOrFail($id);
+        $products = Product::where('category_id', $category->id)->paginate(12);
+
+        return view('clients.products.by_category', compact('category', 'products'));
+    }
+
 }

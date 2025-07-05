@@ -2176,6 +2176,38 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder { opacity:0.7; -ms-f
 .filterBox ul:not(.filter-color) input[type="checkbox"] { width:20px; height:auto; margin:0; padding:0; font-size:1em; opacity:0; display:none; }
 .filterBox ul:not(.filter-color) li:last-child label { margin: 0 0; }
 
+/* Ẩn menu con mặc định */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%; /* nằm dưới menu cha */
+    left: 0;
+    background-color: white;
+    min-width: 180px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    z-index: 999;
+}
+
+/* Hiện menu con khi hover */
+.lvl1:hover > .dropdown-menu {
+    display: block;
+}
+
+/* Style danh sách con */
+.dropdown-menu li {
+    padding: 10px 15px;
+}
+
+.dropdown-menu li a {
+    text-decoration: none;
+    color: #333;
+    display: block;
+}
+
+.dropdown-menu li a:hover {
+    background-color: #f5f5f5;
+}
+
 /* Countdown Timer On listing */
 .grid-products .item:hover .saleTime { display:none }
 .saleTime { position:absolute; bottom:5px; left:5px; box-shadow:0 0 5px rgba(0,0,0,0.1); z-index:2; }

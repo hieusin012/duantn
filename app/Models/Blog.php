@@ -28,9 +28,17 @@ class Blog extends Model
     /**
      * Quan hệ với Category
      */
+    // public function category()
+    // {
+    //     return $this->belongsTo(Category::class);
+    // }
+
+    /**
+     * Quan hệ với BlogCategory
+     */
     public function category()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(\App\Models\BlogCategory::class, 'category_id');
     }
 
     /**

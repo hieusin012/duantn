@@ -114,4 +114,20 @@ class OrderController extends Controller
         $order->delete();
         return redirect()->route('admin.orders.index')->with('success', 'Order deleted successfully');
     }
+
+    public function report(Request $request)
+{
+    $startDate = $request->start_date ?? now()->startOfMonth()->format('Y-m-d');
+    $endDate = $request->end_date ?? now()->endOfMonth()->format('Y-m-d');
+
+    $orders = Order::where('status', 'Đã giao hàng')
+                ->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59'])
+                ->get();
+
+    $totalRevenue = $orders->sum('total_price');
+    $totalOrders = $orders->count();
+
+    return view('admin.thongkedoanhthu.report', compact('orders', 'totalRevenue', 'totalOrders', 'startDate', 'endDate'));
+}
+
 }

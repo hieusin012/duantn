@@ -1,7 +1,62 @@
 @extends('clients.layouts.master')
 
 @section('content')
+<div class="page-header text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 d-flex justify-content-between align-items-center">
+                    <div class="page-title"><h1>Sản phẩm</h1></div>
+                    <div class="breadcrumbs">
+                        <a href="{{ route('client.home') }}" title="Back to the home page">Home</a>
+                        <span class="main-title fw-bold"><i class="icon anm anm-angle-right-l"></i>Sản phẩm</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 <div class="container py-4">
+    <div class="text-center page-title mb-5">
+        <form method="GET" action="{{ route('client.products.search') }}" class="row mb-4 gx-2">
+    <div class="col-md-3">
+        <select name="category" class="form-select">
+            <option value="0">-- Danh mục --</option>
+            @foreach ($categories as $cat)
+                <option value="{{ $cat->id }}" {{ request('category') == $cat->id ? 'selected' : '' }}>
+                    {{ $cat->name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
+    <div class="col-md-2">
+        <input type="number" name="min_price" class="form-control" placeholder="Giá từ" value="{{ request('min_price') }}">
+    </div>
+    <div class="col-md-2">
+        <input type="number" name="max_price" class="form-control" placeholder="Giá đến" value="{{ request('max_price') }}">
+    </div>
+
+    <div class="col-md-2">
+        <select name="brand" class="form-select">
+            <option value="">-- Thương hiệu --</option>
+            @foreach ($brands as $brand)
+                <option value="{{ $brand->id }}" {{ request('brand') == $brand->id ? 'selected' : '' }}>
+                    {{ $brand->name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
+    <div class="col-md-2">
+        <input type="text" name="search" class="form-control" placeholder="Từ khóa" value="{{ request('search') }}">
+    </div>
+
+    <div class="col-md-1 d-grid">
+        <button type="submit" class="btn btn-primary">Lọc</button>
+    </div>
+</form>
+
+        <h1>Danh sách sản phẩm</h1>
+    </div>
     <div class="row">
         @foreach ($products as $product)
         <div class="item col-md-3 col-6 mb-4">

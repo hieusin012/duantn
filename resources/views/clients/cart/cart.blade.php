@@ -125,14 +125,15 @@
                         </tfoot>
                     </table>
 
-
                 </form>
+                @if ($cart && $cart->items)
                 @foreach ($cart->items as $item)
                 <form id="delete-form-{{ $item->id }}" action="{{ route('client.cart.remove', $item->id) }}" method="POST" style="display: none;">
                     @csrf
                     @method('DELETE')
                 </form>
                 @endforeach
+                @endif
 
                 <!--End Cart Form-->
                 <!--Note with Shipping estimates-->
@@ -190,6 +191,7 @@
             </div>
             <!--End Cart Content-->
 
+            
             <!--Cart Sidebar-->
             <div class="col-12 col-sm-12 col-md-12 col-lg-4 cart-footer">
                 <div class="cart-info sidebar-sticky">
@@ -221,7 +223,7 @@
                             <input type="checkbox" value="allen-vela" id="cart-tearm">
                             <label for="cart-tearm">I agree with the terms and conditions</label>
                         </div>
-                        <a href="checkout-style1.html" id="cartCheckout" class="btn btn-lg my-4 checkout w-100">Tiến hành thanh toán</a>
+                        <a href="{{ route('checkout.form') }}" id="cartCheckout" class="btn btn-lg my-4 checkout w-100">Tiến hành thanh toán</a>
                         <div class="paymnet-img text-center"><img src="assets/client/images/icons/safepayment.png" alt="Payment" width="299" height="28" /></div>
                     </div>
                 </div>
@@ -230,6 +232,7 @@
         </div>
     </div>
     <!--End Main Content-->
+
 
     <!--Related Products-->
     <section class="section product-slider pb-0">

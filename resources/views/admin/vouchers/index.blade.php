@@ -79,6 +79,7 @@
                 <!-- Pagination -->
                 <div class="pagination">
                     {{ $vouchers->links() }}
+                    
                 </div>
             </div>
         </div>

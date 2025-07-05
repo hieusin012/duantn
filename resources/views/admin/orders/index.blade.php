@@ -1,4 +1,3 @@
-// resources/views/admin/orders/index.blade.php
 @extends('admin.layouts.index')
 
 @section('title', 'Quản lý đơn hàng')

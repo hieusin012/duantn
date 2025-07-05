@@ -23,6 +23,8 @@ use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CartItemController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\PaymentController;
 
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\ProductVariantController;
@@ -33,8 +35,8 @@ use App\Http\Controllers\Client\ClientCategoryController;
 use App\Http\Controllers\Client\ForgetPasswordController;
 
 use App\Http\Controllers\CommentController;
-
-
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\SupplierController;
 
 // Auth
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -140,6 +142,9 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
 
     Route::resource('shiptypes', \App\Http\Controllers\ShipTypeController::class);
     Route::resource('orders', App\Http\Controllers\OrderController::class);
+    Route::get('orders-report', [OrderController::class, 'report'])->name('orders.report');
+
+
     //Blog
     Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
     Route::get('/blogs/create', [BlogController::class, 'create'])->name('blogs.create');
@@ -154,28 +159,74 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     Route::get('/blogs/{blog}', [BlogController::class, 'show'])->name('blogs.show');
 
     //comment
-     Route::resource('comments', CommentController::class);
+    Route::resource('comments', CommentController::class);
+
+
+    //xóa đoạn chat
+    Route::delete('/chat/delete-conversation/{userId}', [MessageController::class, 'deleteConversationWithUser'])->name('chat.deleteConversation');
 });
 
+// Chatbx admin
+Route::middleware('auth')->group(function () {
+    Route::get('/admin/chat', [MessageController::class, 'index'])->name('admin.chat');
+    Route::get('/admin/chat/messages/{userId}', [MessageController::class, 'fetchMessages']);
+    Route::post('/admin/chat/send', [MessageController::class, 'sendMessage']);
+    Route::delete('/admin/chat/{userId}', [MessageController::class, 'destroy'])->name('admin.chat.destroy');
+});
+
+
+// Quản lý nhà cung cấp
+Route::prefix('admin')->name('admin.')->group(function () {
+    // Resource CRUD
+    Route::resource('suppliers', SupplierController::class)->except(['show']);
+    // Thêm các route quản lý dữ liệu đã xóa
+    Route::get('suppliers/trash', [SupplierController::class, 'trash'])->name('suppliers.trash'); // Trang danh sách đã xóa
+    Route::get('suppliers/trash', [SupplierController::class, 'trash'])->name('suppliers.delete');
+    Route::post('suppliers/{id}/restore', [SupplierController::class, 'restore'])->name('suppliers.restore'); // Khôi phục
+    Route::delete('suppliers/{id}/eliminate', [SupplierController::class, 'eliminate'])->name('suppliers.eliminate'); // Xóa vĩnh viễn
+    Route::delete('suppliers/all/eliminate', [SupplierController::class, 'eliminateAll'])->name('suppliers.all-eliminate'); // Xóa tất cả
+});
+
+
+// Quản lý nhập hàng(Phiếu nhập)
+Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
+    Route::resource('imports', \App\Http\Controllers\ImportController::class);
+});
 
 
 // Yêu thích sản phẩm
 Route::middleware('auth')->group(function () {
     Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
     Route::delete('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove')->middleware('auth');
-
 });
 Route::middleware('auth')->get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
 
+// Tra cứu đơn hàng
+Route::get('/tra-cuu-don-hang', [App\Http\Controllers\OrderLookupController::class, 'form'])->name('order.lookup.form');
+Route::post('/tra-cuu-don-hang', [App\Http\Controllers\OrderLookupController::class, 'lookup'])->name('order.lookup');
 
 
+// Quản lý danh mục bài viết
+use App\Http\Controllers\BlogCategoryController;
 
+Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+    Route::resource('blog-categories', BlogCategoryController::class);
+});
+
+// Route cho sản phẩm theo danh mục Client
+Route::get('/danh-muc/{id}', [\App\Http\Controllers\Client\ProductController::class, 'showByCategory'])->name('products.byCategory');
 
 // Trang client (không nằm trong admin)
 use App\Http\Controllers\Client\BlogController as ClientBlogController;
 use App\Http\Controllers\Client\ContactController as ClientContactController;
 use App\Http\Controllers\Client\ProductController as ClientProductController;
 use App\Http\Controllers\Client\VoucherController as ClientVoucherController;
+use App\Http\Controllers\Client\CheckoutController;
+use App\Http\Controllers\Client\ClientOrderController;
+use App\Http\Controllers\Client\VnpayController;
+
+// Nhóm các routes yêu cầu xác thực người dùng
+
 
 // Sửa trong web.php
 Route::get('/', [HomeController::class, 'index'])->name('client.home'); // Sửa 'home' thành 'client.home'
@@ -191,6 +242,8 @@ Route::get('/products/search', [ClientProductController::class, 'search'])->name
 // Trang chi tiết sản phẩm (dùng slug để SEO tốt hơn)// Trang chi tiết sản phẩm (dùng slug)
 Route::get('san-pham/{slug}', [ClientProductController::class, 'show'])->name('client.products.show');
 
+// comment
+Route::post('/comments/client-store', [CommentController::class, 'storeClient'])->name('client.comments.store')->middleware('auth');
 
 //contact
 Route::get('/contact', [ClientContactController::class, 'showForm'])->name('client.contact');
@@ -205,6 +258,7 @@ Route::get('/danh-muc/{slug}', [ClientCategoryController::class, 'show'])->name(
 
 Route::get('/blog', [ClientBlogController::class, 'index'])->name('client.blog'); // Sửa từ clients.blog
 Route::get('/blog/{slug}', [App\Http\Controllers\Client\BlogController::class, 'show'])->name('client.blogs.show');
+
 
 
 
@@ -229,6 +283,35 @@ Route::middleware('auth')->group(function () {
 });
 
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/checkout', [CheckoutController::class, 'showCheckoutForm'])->name('checkout.form');
+    Route::post('/checkout', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
+    Route::get('/checkout/success/{order:code}', [CheckoutController::class, 'success'])->name('checkout.success');
+});
+
+//thanh toán
+Route::get('/vnpay-return', [PaymentController::class, 'vnpayReturn'])->name('vnpay.return');
+
+
+// chat client
+Route::post('/chat/send', [MessageController::class, 'send']);
+Route::get('/chat/fetch', [MessageController::class, 'fetch']);
+
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/order-history', [ClientOrderController::class, 'orderHistory'])->name('order.history');
+    Route::get('/order/{id}', [ClientOrderController::class, 'orderDetail'])->name('order.details');
+});
+
+    // chat client
+    Route::post('/chat/send', [MessageController::class, 'send']);
+    Route::get('/chat/fetch', [MessageController::class, 'fetch']);
+    
+
+
+
+
 
 
 // Xem/Sửa hồ sơ cá nhân
@@ -244,3 +327,8 @@ Route::middleware(['auth'])->group(function () {
 // Thống kê sản phẩm theo danh mục
 Route::get('/admin/thong-ke/san-pham', [ThongKeController::class, 'index'])->name('admin.thongke.index');
 Route::get('/admin/thong-ke/data', [ThongKeController::class, 'getData'])->name('admin.thongke.data');
+
+//vnpay
+Route::get('/vnpay/return', [VnpayController::class, 'vnpayReturn'])->name('client.payment.vnpay.return');
+Route::post('/checkout/vnpay', [VnpayController::class, 'redirectToVNPAY'])->name('checkout.vnpay');
+

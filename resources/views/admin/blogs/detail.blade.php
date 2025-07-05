@@ -32,11 +32,12 @@
                         </td></tr>
                         <tr><th>Nội dung</th><td>{{ $blog->content ?? '-' }}</td></tr>
                         <tr><th>Slug</th><td>{{ $blog->slug ?? '-' }}</td></tr>
-                        <tr><th>Danh mục</th><td>{{ $blog->category_name ?? '------' }}</td></tr>
-                        <tr><th>Người viết</th><td>{{ $blog->user_name ?? '------' }}</td></tr>
-                        <tr><th>Trạng thái</th><td><code>{{ $blog->status == 1 ? 'Đã đăng' : 'Đã xóa' }}</code></td></tr>
-                        <tr><th>Ngày đăng</th><td>{{ $blog->created_at }}</td></tr>
-                        <tr><th>Ngày cập nhật</th><td>{{ $blog->updated_at }}</td></tr>
+                        <tr><th>Danh mục</th><td>{{ $blog->category->name ?? '------' }}</td></tr>
+                        <tr><th>Người viết</th><td>{{ $blog->user->fullname ?? '------' }}</td></tr>
+                        <tr><th>Trạng thái</th><td><code>{{ $blog->status == 1 ? 'Đã đăng' : 'Đã gỡ' }}</code></td></tr>
+                        <tr><th>Ngày đăng</th><td>{{ $blog->created_at->format('d/m/Y H:i') }}</td></tr>
+                        <tr><th>Ngày cập nhật</th><td>{{ $blog->updated_at->format('d/m/Y H:i') }}</td></tr>
+
                     </tbody>
                 </table>
             </div>

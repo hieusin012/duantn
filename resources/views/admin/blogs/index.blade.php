@@ -1,8 +1,11 @@
 @extends('admin.layouts.index')
+
 @php
     use Illuminate\Support\Str;
 @endphp
+
 @section('title', 'Quản lý bài viết')
+
 @section('content')
 @if (session('success'))
 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -19,9 +22,8 @@
                     <div class="col-sm-2">
                         <a class="btn btn-add btn-sm" href="{{ route('admin.blogs.create') }}" title="Thêm"><i class="fas fa-plus"></i> Thêm bài viết</a>
                     </div>
-
                     <div class="col-sm-2">
-                        <a class="btn btn-danger btn-sm" type="button" title="Xóa" href="{{ route('admin.blogs.delete') }}"><i class="fas fa-trash-alt"></i> Dữ liệu đã xóa</a>
+                        <a class="btn btn-danger btn-sm" href="{{ route('admin.blogs.delete') }}" title="Xem bài viết đã xóa"><i class="fas fa-trash-alt"></i> Dữ liệu đã xóa</a>
                     </div>
                 </div>
 
@@ -45,26 +47,40 @@
                             <td>{{ $blog->title }}</td>
                             <td>
                                 @if ($blog->image)
-                                <img src="{{ Storage::url($blog->image) }}" alt="{{ $blog->title }}" width="100px">
+                                    <img src="{{ Storage::url($blog->image) }}" alt="{{ $blog->title }}" width="100px">
                                 @else
-                                <span>No image</span>
+                                    <span class="text-muted">Không có</span>
                                 @endif
                             </td>
                             <td>{{ Str::limit(strip_tags($blog->content), 100) }}</td>
-                            <td>{{ $blog->category_name }}</td>
-                            <td>{{ $blog->user_name }}</td>
-                            <td>{{ $blog->status == 1 ? 'Đã đăng' : 'Đã gỡ' }}</td>
                             <td>
-                            <a href="{{ route('admin.blogs.show', $blog->id) }}" class="btn btn-info btn-sm" title="Xem">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a class="btn btn-primary btn-sm" href="{{ route('admin.blogs.edit', $blog->id) }}" title="Sửa">
-                                    <i class="fas fa-edit"></i>
-                                </a>
+                                @isset($blog->category)
+                                    {{ $blog->category->name }}
+                                @else
+                                    <span class="text-muted">Chưa có</span>
+                                @endisset
+                            </td>
+                            <td>
+                                @isset($blog->user)
+                                    {{ $blog->user->fullname }}
+                                @else
+                                    <span class="text-muted">Chưa có</span>
+                                @endisset
+                            </td>
+                            <td>
+                                @if ($blog->status)
+                                    <span class="badge bg-success">Đã đăng</span>
+                                @else
+                                    <span class="badge bg-secondary">Đã gỡ</span>
+                                @endif
+                            </td>
+                            <td>
+                                <a href="{{ route('admin.blogs.show', $blog->id) }}" class="btn btn-info btn-sm" title="Xem"><i class="fas fa-eye"></i></a>
+                                <a href="{{ route('admin.blogs.edit', $blog->id) }}" class="btn btn-primary btn-sm" title="Sửa"><i class="fas fa-edit"></i></a>
                                 <form action="{{ route('admin.blogs.destroy', $blog->id) }}" method="POST" style="display:inline-block;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" title="Xóa" onclick="return confirm('Bạn có chắc muốn xóa bài viết này?')">
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa bài viết này?')" title="Xóa">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </form>
@@ -74,7 +90,6 @@
                     </tbody>
                 </table>
 
-                <!-- Pagination Links -->
                 <div class="pagination">
                     {{ $blogs->links() }}
                 </div>

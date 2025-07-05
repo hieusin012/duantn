@@ -1,6 +1,6 @@
 @extends('admin.layouts.index')
 
-@section('title', 'Chỉnh sửa màu sắc')
+@section('title', 'Tạo mới màu sắc')
 
 @section('content')
 @if (session('success'))
@@ -13,7 +13,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="tile">
-            <h3 class="tile-title">Chỉnh sửa màu sắc</h3>
+            <h3 class="tile-title">Thêm màu sắc</h3>
             <div class="tile-body">
                 <form class="row" action="{{ route('admin.colors.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf

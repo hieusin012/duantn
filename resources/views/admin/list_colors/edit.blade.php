@@ -27,8 +27,12 @@
                     </div>
                     <div class="form-group col-md-3">
                         <label class="control-label">Mã màu</label>
-                        <input class="form-control" type="text" name="color_code" id="color_code" value="{{ old('color_code', $colors->color_code) }}">
+                        <input class="form-control form-control-color" type="color" name="color_code" id="color_code" value="{{ old('color_code', $colors->color_code) }}">
+                        @error('color_code')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
+                    
                     <div class="form-group col-md-12">
                         <button class="btn btn-save" type="submit">Lưu</button>
                         <a class="btn btn-cancel" href="{{ route('admin.colors.index') }}">Quay lại</a>
