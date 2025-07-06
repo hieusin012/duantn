@@ -64,7 +64,7 @@
                 <div class="card mb-4">
                     <div class="card-header">Phương Thức Thanh Toán</div>
                     <div class="card-body">
-                        <div class="form-check mb-2">
+                        <div class="form-check mb-3">
                             <input class="form-check-input" type="radio" name="payment" id="paymentCod" value="Thanh toán khi nhận hàng" {{ old('payment') == 'Thanh toán khi nhận hàng' ? 'checked' : '' }} required>
                             <label class="form-check-label" for="paymentCod">
                                 Thanh toán khi nhận hàng (COD)
@@ -77,17 +77,17 @@
                             </label>
                             {{-- Bạn có thể thêm các trường nhập liệu thẻ tín dụng ở đây nếu xử lý trực tiếp --}}
                         </div> -->
-                        <div class="form-check mb-2">
-    <input class="form-check-input" type="radio" name="payment" id="paymentQr" value="Thanh toán bằng mã QR" {{ old('payment') == 'Thanh toán bằng mã QR' ? 'checked' : '' }} required>
-    <label class="form-check-label" for="paymentQr">
-        Thanh toán bằng mã QR (Chuyển khoản ngân hàng)
-    </label>
-    
-</div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="radio" name="payment" id="paymentQr" value="Thanh toán bằng mã QR" {{ old('payment') == 'Thanh toán bằng mã QR' ? 'checked' : '' }} required>
+                            <label class="form-check-label" for="paymentQr">
+                                Thanh toán bằng mã QR (Chuyển khoản ngân hàng)
+                            </label>
+
+                        </div>
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="radio" name="payment" id="paymentVnPay" value="Thanh toán qua VNPay" {{ old('payment') == 'Thanh toán qua VNPay' ? 'checked' : '' }} required>
-                            <label class="form-check-label" for="paymentVnPay">
-                                Thanh toán qua VNPay
+                            <label class="form-check-label me-3" for="paymentVnPay">
+                                 <span class="me-4"> Thanh toán qua VNPay </span> <img src="{{ asset('assets/client/images/logo/vnpay.png') }}" width="50"  >
                             </label>
                             {{-- Tích hợp VNPAY API sẽ cần mã nguồn JS và logic xử lý ở đây --}}
                         </div>

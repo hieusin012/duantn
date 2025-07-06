@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use App\Models\Voucher; // THÊM DÒNG NÀY
 use App\Models\Payment;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderPlacedMail;
 
 
 class CheckoutController extends Controller
@@ -242,9 +244,12 @@ class CheckoutController extends Controller
                     return redirect($vnp_Url);
                 }
             }
-            return redirect()->route('checkout.success', ['order' => $order->code])
+            if ($validatedData['payment'] === 'Thanh toán khi nhận hàng') {
+                Mail::to($validatedData['email'])->send(new OrderPlacedMail($order));
+                return redirect()->route('checkout.success', ['order' => $order->code])
                 ->with('success', 'Đơn hàng của bạn đã được đặt thành công! Mã đơn hàng: ' . $order->code);
-
+            }
+            
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Checkout failed: ' . $e->getMessage(), ['exception' => $e]);
@@ -279,14 +284,7 @@ class CheckoutController extends Controller
                 $hashData .= '&' . urlencode($key) . '=' . urlencode($value);
             }
         }
-
-
         $secureHash = hash_hmac('sha512', $hashData, $vnp_HashSecret);
-
-        Log::info('HashData: ' . $hashData);
-        Log::info('Client Hash: ' . $vnp_SecureHash);
-        Log::info('Server Hash: ' . $secureHash);
-
         if ($secureHash === $vnp_SecureHash) {
             // ✅ Lấy thông tin đơn hàng
             $orderCode = $vnpData['vnp_TxnRef'];
@@ -297,6 +295,7 @@ class CheckoutController extends Controller
                 $order->payment_status = 'Đã thanh toán';
                 $order->status = 'Đã xác nhận'; // Hoặc giữ nguyên logic của anh
                 $order->save();
+                Mail::to($order->email)->send(new OrderPlacedMail($order));
 
                 // ✅ Lưu thông tin thanh toán
                 Payment::create([
@@ -311,7 +310,7 @@ class CheckoutController extends Controller
                 ]);
 
                 return redirect()->route('checkout.success', ['order' => $order->code])
-                ->with('success', 'Bạn đã thanh toán đơn hàng thành công!');;
+                    ->with('success', 'Bạn đã thanh toán đơn hàng thành công!');;
             }
 
             return redirect('/cart')->with('error', 'Giao dịch không hợp lệ hoặc đơn hàng không tồn tại!');
@@ -334,5 +333,4 @@ class CheckoutController extends Controller
         $order->load('orderDetails.variant.product', 'orderDetails.variant.color', 'orderDetails.variant.size', 'voucher');
         return view('clients.checkout_success', compact('order'));
     }
-
 }
