@@ -12,9 +12,6 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     @endif
-    <div class="col-sm-2 mb-4">
-        <a class="btn btn-delete btn-sm pdf-file" href="{{ route('invoice.pdf', ['order' => $order->code]) }}" type="button" title="Export PDF"><i class="fas fa-file-pdf"></i> Xuất sang PDF</a>
-    </div>
 
     <div class="text-center border p-3">
         <h1>HÓA ĐƠN THANH TOÁN</h1>
