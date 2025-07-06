@@ -109,6 +109,7 @@
                                 <li><a href="{{ route('wishlist.index') }}"><i class="icon anm anm-heart-l"></i>Wishlist</a></li>
                                 <li><a href="#"><i class="icon anm anm-random-r"></i>Compare</a></li>
                                 <li><a href="{{ route('order.history') }}"><i class="hdr-icon icon anm anm-bag-l"></i>History</a></li>
+                                <li><a href="{{ route('client.return-requests.index') }}"><i class="icon anm anm-undo-l"></i>Return Requests</a></li>
                                 <li>
                                     <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         <i class="icon anm anm-sign-out-al"></i>Sign out

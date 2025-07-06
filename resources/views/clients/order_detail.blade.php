@@ -135,36 +135,46 @@
             </h5>
         </div>
 
-        {{-- Quay lại --}}
-        <div class="mt-4 d-flex justify-content-between">
+        <div class="mt-4 d-flex flex-wrap justify-content-between gap-2">
+            {{-- Quay lại --}}
             <a href="{{ route('order.history') }}" class="btn btn-outline-secondary">
                 ← Quay lại danh sách đơn hàng
             </a>
 
-            @if ($order->status === 'Chờ xác nhận')
-                <form action="{{ route('order.cancel', $order->id) }}" method="POST"
-                    onsubmit="return confirm('Bạn có chắc muốn hủy đơn hàng này?');">
-                    @csrf
-                    @method('PUT')
-                    <button class="btn btn-outline-danger">❌ Hủy đơn hàng</button>
-                </form>
-            @endif
-            @php
-                use Carbon\Carbon;
+            <div class="d-flex gap-2">
+                {{-- Hủy đơn nếu chưa xác nhận --}}
+                @if ($order->status === 'Chờ xác nhận')
+                    <form action="{{ route('order.cancel', $order->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc muốn hủy đơn hàng này?');">
+                        @csrf
+                        @method('PUT')
+                        <button class="btn btn-outline-danger">❌ Hủy đơn hàng</button>
+                    </form>
+                @endif
 
-                $isDelivered = $order->status === 'Đã giao hàng';
-                $canReturn = $isDelivered && $order->created_at->diffInDays(Carbon::now()) <= 7;
-            @endphp
+                {{-- Hoàn hàng nếu trong 7 ngày --}}
+                @php
+                    $isDelivered = $order->status === 'Đã giao hàng';
+                    $canReturn = $isDelivered && $order->created_at->diffInDays(\Carbon\Carbon::now()) <= 7;
+                @endphp
 
-            @if ($canReturn)
-                <form action="#" method="POST" onsubmit="return confirm('Xác nhận yêu cầu trả hàng?');">
-                    @csrf
-                    <button class="btn btn-outline-warning">↩️ Hoàn lại đơn hàng</button>
-                </form>
-            @endif
+                @if ($canReturn)
+                    <a href="{{ route('client.return-requests.create', $order->id) }}"
+                    class="btn btn-outline-warning"
+                    onclick="return confirm('Bạn có chắc muốn gửi yêu cầu trả hàng cho đơn này?')">
+                    ↩️ Yêu cầu trả hàng
+                    </a>
+                @endif
 
-
+                {{-- Nút Mua lại --}}
+                @if ($isDelivered)
+                    <form action="#" method="POST">
+                        @csrf
+                        <button class="btn btn-outline-success">🔁 Mua lại</button>
+                    </form>
+                @endif
+            </div>
         </div>
+
 
     </div>
 @endsection

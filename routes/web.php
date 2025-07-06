@@ -37,6 +37,7 @@ use App\Http\Controllers\Client\ForgetPasswordController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\AdminReturnRequestController;
 
 // Auth
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -161,7 +162,12 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     //comment
     Route::resource('comments', CommentController::class);
 
-
+    // Yêu cầu trả hàng (Admin)
+    Route::prefix('return-requests')->name('return-requests.')->group(function () {
+        Route::get('/', [AdminReturnRequestController::class, 'index'])->name('index'); // admin.return-requests.index
+        Route::get('/{id}', [AdminReturnRequestController::class, 'show'])->name('show'); // admin.return-requests.show
+        Route::put('/{id}/update', [AdminReturnRequestController::class, 'update'])->name('update'); // admin.return-requests.update
+    });
     //xóa đoạn chat
     Route::delete('/chat/delete-conversation/{userId}', [MessageController::class, 'deleteConversationWithUser'])->name('chat.deleteConversation');
 });
@@ -212,6 +218,16 @@ use App\Http\Controllers\BlogCategoryController;
 Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::resource('blog-categories', BlogCategoryController::class);
 });
+
+
+// use App\Http\Controllers\AdminReturnRequestController;
+
+// Route::prefix('return-requests')->name('return-requests.')->group(function () {
+//     Route::get('/', [AdminReturnRequestController::class, 'index'])->name('index'); // Danh sách
+//     Route::get('/{id}', [AdminReturnRequestController::class, 'show'])->name('show'); // Chi tiết
+//     Route::post('/{id}/update', [AdminReturnRequestController::class, 'update'])->name('update'); // Cập nhật trạng thái
+// });
+
 
 // Route cho sản phẩm theo danh mục Client
 Route::get('/danh-muc/{id}', [\App\Http\Controllers\Client\ProductController::class, 'showByCategory'])->name('products.byCategory');
@@ -334,4 +350,14 @@ Route::get('/admin/thong-ke/data', [ThongKeController::class, 'getData'])->name(
 //vnpay
 Route::get('/vnpay/return', [VnpayController::class, 'vnpayReturn'])->name('client.payment.vnpay.return');
 Route::post('/checkout/vnpay', [VnpayController::class, 'redirectToVNPAY'])->name('checkout.vnpay');
+
+
+// Yêu cầu trả hàng Client
+use App\Http\Controllers\Client\ReturnRequestController as ClientReturnRequestController;
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/return-requests', [ClientReturnRequestController::class, 'index'])->name('client.return-requests.index');
+    Route::get('/return-requests/create/{orderId}', [ClientReturnRequestController::class, 'create'])->name('client.return-requests.create');
+    Route::post('/return-requests/store', [ClientReturnRequestController::class, 'store'])->name('client.return-requests.store');
+});
 

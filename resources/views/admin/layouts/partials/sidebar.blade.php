@@ -61,6 +61,12 @@
                   </a>
             </li>
 
+            <li>
+                  <a class="app-menu__item {{ request()->routeIs('admin.return-requests.*') ? 'active' : '' }}" href="{{ route('admin.return-requests.index') }}">
+                        <i class='app-menu__icon fas fa-undo'></i>
+                        <span class="app-menu__label">Quản lý đơn trả hàng</span>
+                  </a>
+            </li>
 
             <li>
                   <a class="app-menu__item {{ request()->routeIs('admin.banners.*') ? 'active' : '' }}" href="{{ route(name: 'admin.banners.index') }}">
