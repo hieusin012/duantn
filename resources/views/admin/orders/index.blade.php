@@ -21,7 +21,7 @@
                             <input type="text" name="keyword" class="form-control form-control-sm" placeholder="Tìm theo mã đơn, tên khách..." value="{{ request('keyword') }}">
                         </div>
                         <div class="col-md-3">
-                            <select name="status" class="form-select form-select-sm">
+                            <select name="status" class="form-select form-select-sm form-control">
                                 <option value="">Tất cả trạng thái</option>
                                 @foreach (['Chờ xác nhận', 'Đã xác nhận', 'Đang chuẩn bị hàng', 'Đang giao hàng', 'Đã giao hàng', 'Đơn hàng đã hủy'] as $status)
                                     <option value="{{ $status }}" {{ request('status') == $status ? 'selected' : '' }}>
@@ -31,7 +31,7 @@
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <select name="payment_status" class="form-select form-select-sm">
+                            <select name="payment_status" class="form-select form-select-sm form-control">
                                 <option value="">Tất cả trạng thái thanh toán</option>
                                 @foreach (['Chưa thanh toán', 'Đã thanh toán'] as $payment_status)
                                     <option value="{{ $payment_status }}" {{ request('payment_status') == $payment_status ? 'selected' : '' }}>
@@ -41,7 +41,7 @@
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <select name="user_id" class="form-select form-select-sm">
+                            <select name="user_id" class="form-select form-select-sm form-control">
                                 <option value="">Tất cả khách hàng</option>
                                 @foreach ($users as $user)
                                     <option value="{{ $user->id }}" {{ request('user_id') == $user->id ? 'selected' : '' }}>
