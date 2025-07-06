@@ -83,6 +83,7 @@
                                 Thanh toán bằng mã QR (Chuyển khoản ngân hàng)
                             </label>
 
+                            
                         </div>
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="radio" name="payment" id="paymentVnPay" value="Thanh toán qua VNPay" {{ old('payment') == 'Thanh toán qua VNPay' ? 'checked' : '' }} required>
