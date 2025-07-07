@@ -39,6 +39,12 @@ class Order extends Model
     {
         return $this->belongsTo(Voucher::class);
     }
+ 
+public function shipper()
+{
+    return $this->belongsTo(User::class, 'shipper_id');
+}
+
 }
 
 
