@@ -103,7 +103,8 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     Route::put('/sizes/{size}', [SizeController::class, 'update'])->name('sizes.update');
     Route::delete('/sizes/{size}', [SizeController::class, 'destroy'])->name('sizes.destroy');
 
-    // vouchers
+    // voucher
+    
     Route::resource('vouchers', VoucherController::class);
 
 
