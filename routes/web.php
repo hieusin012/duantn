@@ -171,13 +171,6 @@ Route::prefix('shipper')->middleware(['auth'])->name('shipper.orders.')->group(f
     Route::get('/orders/complete/{id}', [\App\Http\Controllers\ShipperOrderController::class, 'complete'])->name('complete');
 });
 
-
-
-
-
-
-        
-
     //comment
     Route::resource('comments', CommentController::class);
 
@@ -239,15 +232,6 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
 });
 
 
-// use App\Http\Controllers\AdminReturnRequestController;
-
-// Route::prefix('return-requests')->name('return-requests.')->group(function () {
-//     Route::get('/', [AdminReturnRequestController::class, 'index'])->name('index'); // Danh sách
-//     Route::get('/{id}', [AdminReturnRequestController::class, 'show'])->name('show'); // Chi tiết
-//     Route::post('/{id}/update', [AdminReturnRequestController::class, 'update'])->name('update'); // Cập nhật trạng thái
-// });
-
-
 // Route cho sản phẩm theo danh mục Client
 Route::get('/danh-muc/{id}', [\App\Http\Controllers\Client\ProductController::class, 'showByCategory'])->name('products.byCategory');
 
@@ -261,7 +245,6 @@ use App\Http\Controllers\Client\ClientOrderController;
 use App\Http\Controllers\Client\VnpayController;
 
 // Nhóm các routes yêu cầu xác thực người dùng
-
 
 // Sửa trong web.php
 Route::get('/', [HomeController::class, 'index'])->name('client.home'); // Sửa 'home' thành 'client.home'
@@ -289,12 +272,8 @@ Route::get('/danh-muc/{slug}', [ClientCategoryController::class, 'show'])->name(
 
 //blog
 
-
-
 Route::get('/blog', [ClientBlogController::class, 'index'])->name('client.blog'); // Sửa từ clients.blog
 Route::get('/blog/{slug}', [App\Http\Controllers\Client\BlogController::class, 'show'])->name('client.blogs.show');
-
-
 
 
 //products
@@ -339,18 +318,14 @@ Route::get('/chat/fetch', [MessageController::class, 'fetch']);
 Route::middleware('auth')->group(function () {
     Route::get('/order-history', [ClientOrderController::class, 'orderHistory'])->name('order.history');
     Route::get('/order/{id}', [ClientOrderController::class, 'orderDetail'])->name('order.details');
-    Route::put('/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('order.cancel'); 
+    Route::put('/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('order.cancel'); // Hủy đơn hàng
+    Route::post('/orders/{id}/reorder', [ClientOrderController::class, 'reorder'])->name('order.reorder'); // Mua lại đơn hàng
 });
 
     // chat client
     Route::post('/chat/send', [MessageController::class, 'send']);
     Route::get('/chat/fetch', [MessageController::class, 'fetch']);
     
-
-
-
-
-
 
 // Xem/Sửa hồ sơ cá nhân
 Route::middleware(['auth'])->group(function () {

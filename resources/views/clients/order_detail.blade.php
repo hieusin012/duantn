@@ -161,13 +161,19 @@
                     <a href="{{ route('client.return-requests.create', $order->id) }}"
                     class="btn btn-outline-warning"
                     onclick="return confirm('Bạn có chắc muốn gửi yêu cầu trả hàng cho đơn này?')">
-                    ↩️ Yêu cầu trả hàng
+                    ↩️ Hoàn lại đơn hàng
                     </a>
                 @endif
 
                 {{-- Nút Mua lại --}}
-                @if ($isDelivered)
-                    <form action="#" method="POST">
+                {{-- @if ($isDelivered)
+                    <form action="{{ route('order.reorder', $order->id) }}" method="POST">
+                        @csrf
+                        <button class="btn btn-outline-success">🔁 Mua lại</button>
+                    </form>
+                @endif --}}
+                @if (in_array($order->status, ['Đã giao hàng', 'Đơn hàng đã hủy']))
+                    <form action="{{ route('order.reorder', $order->id) }}" method="POST">
                         @csrf
                         <button class="btn btn-outline-success">🔁 Mua lại</button>
                     </form>

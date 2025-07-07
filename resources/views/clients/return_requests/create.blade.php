@@ -35,14 +35,14 @@
 
                     <div class="mt-2" id="bank-info" style="display:none;">
                         <label>Số tài khoản ngân hàng</label>
-                        <input type="text" name="bank_account" class="form-control" placeholder="Nhập STK ngân hàng" value="{{ old('bank_account') }}">
+                        <input type="text" name="bank_account" class="form-control" placeholder="Ví dụ: 123456789 - Ngân hàng ABC" value="{{ old('bank_account') }}">
                         @error('bank_account')
                             <div class="text-danger small">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="mt-2" id="wallet-info" style="display:none;">
                         <label>Thông tin ví điện tử</label>
-                        <input type="text" name="wallet_info" class="form-control" placeholder="Nhập tên ví hoặc SĐT ví" value="{{ old('wallet_info') }}">
+                        <input type="text" name="wallet_info" class="form-control" placeholder="Ví dụ: ZaloPay - 0912345678" value="{{ old('wallet_info') }}">
                         @error('wallet_info')
                             <div class="text-danger small">{{ $message }}</div>
                         @enderror
