@@ -103,7 +103,8 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     Route::put('/sizes/{size}', [SizeController::class, 'update'])->name('sizes.update');
     Route::delete('/sizes/{size}', [SizeController::class, 'destroy'])->name('sizes.destroy');
 
-    // vouchers
+    // voucher
+    
     Route::resource('vouchers', VoucherController::class);
 
 
@@ -158,6 +159,24 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     Route::put('/blogs/{blog}', [BlogController::class, 'update'])->name('blogs.update');
     Route::delete('/blogs/{blog}', [BlogController::class, 'destroy'])->name('blogs.destroy');
     Route::get('/blogs/{blog}', [BlogController::class, 'show'])->name('blogs.show');
+         //shipper
+// Nhóm route cho shipper
+Route::prefix('shipper')->middleware(['auth'])->name('shipper.orders.')->group(function () {
+    Route::get('/orders', [\App\Http\Controllers\ShipperOrderController::class, 'index'])->name('index');
+
+    Route::get('/orders/create', [\App\Http\Controllers\ShipperOrderController::class, 'create'])->name('create');
+    Route::post('/orders/store', [\App\Http\Controllers\ShipperOrderController::class, 'store'])->name('store');
+
+    Route::get('/orders/accept/{id}', [\App\Http\Controllers\ShipperOrderController::class, 'accept'])->name('accept');
+    Route::get('/orders/complete/{id}', [\App\Http\Controllers\ShipperOrderController::class, 'complete'])->name('complete');
+});
+
+
+
+
+
+
+        
 
     //comment
     Route::resource('comments', CommentController::class);
