@@ -73,6 +73,14 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
         Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
         Route::get('/search', [ProductController::class, 'search'])->name('products.search');
         Route::get('/filter', [ProductController::class, 'filter'])->name('products.filter');
+        // Route danh sách sản phẩm đã xóa mềm (thùng rác)
+        Route::get('/products/trash', [ProductController::class, 'trash'])->name('products.trash');
+        // Route khôi phục sản phẩm
+        Route::get('/products/restore/{id}', [ProductController::class, 'restore'])->name('products.restore');
+        // Route xóa vĩnh viễn một sản phẩm
+        Route::delete('/products/force-delete/{id}', [ProductController::class, 'forceDelete'])->name('products.force-delete');
+        // Route xóa vĩnh viễn tất cả sản phẩm đã xóa mềm
+        Route::delete('/products/force-delete-all', [ProductController::class, 'forceDeleteAll'])->name('products.force-delete-all');
     });
 
     // Product Variants
@@ -320,6 +328,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/order/{id}', [ClientOrderController::class, 'orderDetail'])->name('order.details');
     Route::put('/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('order.cancel'); // Hủy đơn hàng
     Route::post('/orders/{id}/reorder', [ClientOrderController::class, 'reorder'])->name('order.reorder'); // Mua lại đơn hàng
+    Route::get('/san-pham/{slug}', [ClientProductController::class, 'show'])->name('client.products.show');
 });
 
     // chat client
@@ -354,4 +363,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/return-requests/create/{orderId}', [ClientReturnRequestController::class, 'create'])->name('client.return-requests.create');
     Route::post('/return-requests/store', [ClientReturnRequestController::class, 'store'])->name('client.return-requests.store');
 });
+
+
+
+
+
 

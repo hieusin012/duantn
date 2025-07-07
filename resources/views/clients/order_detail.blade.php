@@ -104,7 +104,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($order->orderDetails as $index => $item)
+                            {{-- @foreach ($order->orderDetails as $index => $item)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $item->variant->product->name ?? 'Sản phẩm không tồn tại' }}</td>
@@ -120,6 +120,31 @@
                                     <td>{{ number_format($item->price, 0, ',', '.') }} VND</td>
                                     <td class="fw-bold">{{ number_format($item->price * $item->quantity, 0, ',', '.') }}
                                         VND</td>
+                                </tr>
+                            @endforeach --}}
+                            @foreach ($order->orderDetails as $item)
+                                @php
+                                    $product = $item->variant->product ?? null;
+                                @endphp
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>
+                                        @if ($product)
+                                            {{ $product->name }}
+                                        @else
+                                            <span class="text-danger">Sản phẩm không tồn tại</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($product && $product->image)
+                                            <img src="{{ asset($item->variant->product->image) }}" alt="Ảnh sản phẩm" width="80" class="rounded shadow-sm">
+                                        @else
+                                            <span class="text-muted">Không có ảnh</span>
+                                        @endif
+                                    </td>
+                                    <td>{{ $item->quantity }}</td>
+                                    <td>{{ number_format($item->price) }} VND</td>
+                                    <td>{{ number_format($item->total_price) }} VND</td>
                                 </tr>
                             @endforeach
                         </tbody>

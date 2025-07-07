@@ -33,6 +33,43 @@ class ClientOrderController extends Controller
         return view('clients.order_detail', compact('order'));
     }
 
+    // public function reorder($id)
+    // {
+    //     $order = Order::with('orderDetails.variant.product')
+    //         ->where('id', $id)
+    //         ->where('user_id', Auth::id())
+    //         ->firstOrFail();
+
+    //     // Lấy hoặc tạo giỏ hàng active
+    //     $cart = Cart::firstOrCreate([
+    //         'user_id' => Auth::id(),
+    //         'status' => 'active'
+    //     ]);
+
+    //     foreach ($order->orderDetails as $item) {
+    //         if ($item->variant && $item->variant->product) {
+    //             $existingItem = $cart->items()
+    //                 ->where('product_id', $item->variant->product_id)
+    //                 ->where('variant_id', $item->variant_id)
+    //                 ->first();
+
+    //             if ($existingItem) {
+    //                 $existingItem->increment('quantity', $item->quantity);
+    //             } else {
+    //                 $cart->items()->create([
+    //                     'product_id' => $item->variant->product_id,
+    //                     'variant_id' => $item->variant_id,
+    //                     'quantity' => $item->quantity,
+    //                     'price_at_purchase' => $item->price,
+    //                 ]);
+    //             }
+    //         }
+    //     }
+
+    //     return redirect()->route('client.cart')->with('success', 'Sản phẩm đã được thêm lại vào giỏ hàng.');
+    // }
+
+
     public function reorder($id)
     {
         $order = Order::with('orderDetails.variant.product')
@@ -40,30 +77,44 @@ class ClientOrderController extends Controller
             ->where('user_id', Auth::id())
             ->firstOrFail();
 
-        // Lấy hoặc tạo giỏ hàng active
         $cart = Cart::firstOrCreate([
             'user_id' => Auth::id(),
             'status' => 'active'
         ]);
 
-        foreach ($order->orderDetails as $item) {
-            if ($item->variant && $item->variant->product) {
-                $existingItem = $cart->items()
-                    ->where('product_id', $item->variant->product_id)
-                    ->where('variant_id', $item->variant_id)
-                    ->first();
+        $unavailableProducts = [];
 
-                if ($existingItem) {
-                    $existingItem->increment('quantity', $item->quantity);
-                } else {
-                    $cart->items()->create([
-                        'product_id' => $item->variant->product_id,
-                        'variant_id' => $item->variant_id,
-                        'quantity' => $item->quantity,
-                        'price_at_purchase' => $item->price,
-                    ]);
-                }
+        foreach ($order->orderDetails as $item) {
+            $variant = $item->variant;
+            $product = $variant?->product;
+
+            // Kiểm tra: sản phẩm hoặc biến thể đã bị xóa hoặc không còn bán
+            if (!$variant || !$product || !$product->is_active) {
+                $unavailableProducts[] = $product?->name ?? 'Sản phẩm không xác định';
+                continue;
             }
+
+            // Kiểm tra item đã tồn tại trong giỏ chưa
+            $existingItem = $cart->items()
+                ->where('product_id', $variant->product_id)
+                ->where('variant_id', $variant->id)
+                ->first();
+
+            if ($existingItem) {
+                $existingItem->increment('quantity', $item->quantity);
+            } else {
+                $cart->items()->create([
+                    'product_id' => $variant->product_id,
+                    'variant_id' => $variant->id,
+                    'quantity' => $item->quantity,
+                    'price_at_purchase' => $item->price,
+                ]);
+            }
+        }
+
+        // Xử lý phản hồi
+        if (!empty($unavailableProducts)) {
+            return redirect()->route('client.cart')->with('warning', 'Một số sản phẩm không còn bán: ' . implode(', ', $unavailableProducts));
         }
 
         return redirect()->route('client.cart')->with('success', 'Sản phẩm đã được thêm lại vào giỏ hàng.');

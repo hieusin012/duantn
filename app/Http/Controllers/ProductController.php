@@ -192,16 +192,55 @@ class ProductController extends Controller
     }
 
     // Xóa sản phẩm
+    // public function destroy($id)
+    // {
+    //     $product = Product::findOrFail($id);
+
+    //     if ($product->image && file_exists(public_path($product->image))) {
+    //         @unlink(public_path($product->image)); // Xóa file ảnh
+    //     }
+
+    //     $product->delete();
+
+    //     return redirect()->route('admin.products.index')->with('success', 'Xóa sản phẩm thành công');
+    // }
+
     public function destroy($id)
     {
         $product = Product::findOrFail($id);
 
-        if ($product->image && file_exists(public_path($product->image))) {
-            @unlink(public_path($product->image));
-        }
-
+        // KHÔNG xóa file ảnh khi chỉ soft delete
         $product->delete();
 
         return redirect()->route('admin.products.index')->with('success', 'Xóa sản phẩm thành công');
+    }
+
+    public function trash()
+    {
+        $deletedProducts = Product::onlyTrashed()->paginate(10);
+        return view('admin.products.trash', compact('deletedProducts'));
+    }
+
+    public function restore($id)
+    {
+        $product = Product::onlyTrashed()->findOrFail($id);
+        $product->restore();
+
+        return redirect()->route('admin.products.trash')->with('success', 'Đã khôi phục sản phẩm!');
+    }
+
+    public function forceDelete($id)
+    {
+        $product = Product::onlyTrashed()->findOrFail($id);
+        $product->forceDelete();
+
+        return redirect()->route('admin.products.trash')->with('success', 'Đã xóa vĩnh viễn sản phẩm!');
+    }
+
+    public function forceDeleteAll()
+    {
+        Product::onlyTrashed()->forceDelete();
+
+        return redirect()->route('admin.products.trash')->with('success', 'Đã xóa vĩnh viễn tất cả sản phẩm!');
     }
 }

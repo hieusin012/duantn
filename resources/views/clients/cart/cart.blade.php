@@ -72,8 +72,13 @@
 
                                 </td>
                                 <td class="cart-meta small-text-left cart-flex-item">
-                                    <div class="list-view-item-title">
+                                    {{-- <div class="list-view-item-title">
                                         <a href="product-layout1.html">{{ $item->product->name }}</a>
+                                    </div> --}}
+                                    <div class="list-view-item-title">
+                                        <a href="{{ route('client.products.show', ['slug' => $item->product->slug]) }}">
+                                            {{ $item->product->name }}
+                                        </a>
                                     </div>
                                     <div class="cart-meta-text">
                                         Color: {{ $item->variant->color->name ?? '—' }}<br>Size: {{ $item->variant->size->name ?? '—' }}<br>Qty: {{ $item->quantity }}
