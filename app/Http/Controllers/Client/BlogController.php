@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Blog;
+use App\Models\BlogCategory;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 
 class BlogController extends Controller
@@ -28,4 +29,17 @@ class BlogController extends Controller
 
         return view('clients.blogs.show', compact('blog', 'recentBlogs'));
     }
+
+    public function showByCategory($slug)
+    {
+        $category = BlogCategory::where('slug', $slug)->firstOrFail();
+
+        $blogs = Blog::where('category_id', $category->id)
+            ->where('status', 1)
+            ->orderBy('created_at', 'desc')
+            ->paginate(6);
+
+        return view('clients.blogs.by_category', compact('blogs', 'category'));
+    }
+
 }

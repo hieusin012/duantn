@@ -24,7 +24,18 @@
                             </ul>
                         </li>
                         <li class="lvl1 parent dropdown"><a href="#">HOT DEAL <i class="icon anm anm-angle-down-l"></i></a></li>
-                        <li class="lvl1 parent dropdown"><a href="{{ route('client.blog') }}">Blog</a></li>
+                        <li class="lvl1 parent dropdown"><a href="{{ route('client.blog') }}">Blog
+                            <i class="icon anm anm-angle-down-l"></i></a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @foreach ($blog_categories as $cat)
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('client.blog-categories.show', $cat->slug) }}">
+                                            {{ $cat->name }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </li>
                         <li class="lvl1 parent dropdown">
                             <a href="{{ route('client.contact') }}">Liên hệ</a>
                         </li>

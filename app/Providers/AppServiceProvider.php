@@ -2,13 +2,14 @@
 
 namespace App\Providers;
 
-use App\Models\Category;
 use App\Models\Brand;
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Category;
 use App\Models\Wishlist;
+use App\Models\BlogCategory;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -46,6 +47,9 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             $categories = Category::where('is_active', 1)->get();
             $view->with('header_categories', $categories);
+        });
+        view()->composer('*', function ($view) {
+            $view->with('blog_categories', BlogCategory::all());
         });
     }
 }

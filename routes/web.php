@@ -328,8 +328,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/order/{id}', [ClientOrderController::class, 'orderDetail'])->name('order.details');
     Route::put('/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('order.cancel'); // Hủy đơn hàng
     Route::post('/orders/{id}/reorder', [ClientOrderController::class, 'reorder'])->name('order.reorder'); // Mua lại đơn hàng
-    Route::get('/san-pham/{slug}', [ClientProductController::class, 'show'])->name('client.products.show');
 });
+
+// Nhấn vào tên sản phẩm ở giỏ hàng để chuyển sang trang chi tiết sản phẩm đấy
+Route::get('/san-pham/{slug}', [ClientProductController::class, 'show'])->name('client.products.show');
 
     // chat client
     Route::post('/chat/send', [MessageController::class, 'send']);
@@ -363,6 +365,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/return-requests/create/{orderId}', [ClientReturnRequestController::class, 'create'])->name('client.return-requests.create');
     Route::post('/return-requests/store', [ClientReturnRequestController::class, 'store'])->name('client.return-requests.store');
 });
+
+// Route bài viết theo danh mục
+Route::get('/blog/danh-muc/{slug}', [ClientBlogController::class, 'showByCategory'])->name('client.blog-categories.show');
+
 
 
 
