@@ -112,7 +112,12 @@
                         <span class="app-menu__label">Thống kê sản phẩm</span>
                   </a>
             </li>
-
+            <li>
+  <a class="app-menu__item {{ request()->routeIs('admin.thongke.*') ? 'active' : '' }}" href="{{ route('admin.inventory.index') }}">
+        <i class="app-menu__icon bx bx-box"></i>
+        <span class="app-menu__label">Quản lí kho hàng</span>
+  </a>
+</li>
             <li>
                   <a class="app-menu__item {{ request()->routeIs('admin.shiptypes*') ? 'active' : '' }}" href="{{ route('admin.shiptypes.index') }}">
                         <i class="app-menu__icon fa fa-shipping-fast"></i>
