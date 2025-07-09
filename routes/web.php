@@ -73,6 +73,14 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
         Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
         Route::get('/search', [ProductController::class, 'search'])->name('products.search');
         Route::get('/filter', [ProductController::class, 'filter'])->name('products.filter');
+        // Route danh sách sản phẩm đã xóa mềm (thùng rác)
+        Route::get('/products/trash', [ProductController::class, 'trash'])->name('products.trash');
+        // Route khôi phục sản phẩm
+        Route::get('/products/restore/{id}', [ProductController::class, 'restore'])->name('products.restore');
+        // Route xóa vĩnh viễn một sản phẩm
+        Route::delete('/products/force-delete/{id}', [ProductController::class, 'forceDelete'])->name('products.force-delete');
+        // Route xóa vĩnh viễn tất cả sản phẩm đã xóa mềm
+        Route::delete('/products/force-delete-all', [ProductController::class, 'forceDeleteAll'])->name('products.force-delete-all');
     });
 
     // Product Variants
@@ -103,7 +111,8 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     Route::put('/sizes/{size}', [SizeController::class, 'update'])->name('sizes.update');
     Route::delete('/sizes/{size}', [SizeController::class, 'destroy'])->name('sizes.destroy');
 
-    // vouchers
+    // voucher
+    
     Route::resource('vouchers', VoucherController::class);
 
 
@@ -158,6 +167,17 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     Route::put('/blogs/{blog}', [BlogController::class, 'update'])->name('blogs.update');
     Route::delete('/blogs/{blog}', [BlogController::class, 'destroy'])->name('blogs.destroy');
     Route::get('/blogs/{blog}', [BlogController::class, 'show'])->name('blogs.show');
+         //shipper
+// Nhóm route cho shipper
+Route::prefix('shipper')->middleware(['auth'])->name('shipper.orders.')->group(function () {
+    Route::get('/orders', [\App\Http\Controllers\ShipperOrderController::class, 'index'])->name('index');
+
+    Route::get('/orders/create', [\App\Http\Controllers\ShipperOrderController::class, 'create'])->name('create');
+    Route::post('/orders/store', [\App\Http\Controllers\ShipperOrderController::class, 'store'])->name('store');
+
+    Route::get('/orders/accept/{id}', [\App\Http\Controllers\ShipperOrderController::class, 'accept'])->name('accept');
+    Route::get('/orders/complete/{id}', [\App\Http\Controllers\ShipperOrderController::class, 'complete'])->name('complete');
+});
 
     //comment
     Route::resource('comments', CommentController::class);
@@ -219,16 +239,9 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::resource('blog-categories', BlogCategoryController::class);
 });
 
-
-// use App\Http\Controllers\AdminReturnRequestController;
-
-// Route::prefix('return-requests')->name('return-requests.')->group(function () {
-//     Route::get('/', [AdminReturnRequestController::class, 'index'])->name('index'); // Danh sách
-//     Route::get('/{id}', [AdminReturnRequestController::class, 'show'])->name('show'); // Chi tiết
-//     Route::post('/{id}/update', [AdminReturnRequestController::class, 'update'])->name('update'); // Cập nhật trạng thái
-// });
-
-
+//quản lý tồn kho 
+use App\Http\Controllers\InventoryController;
+Route::get('/admin/inventory', [InventoryController::class, 'index'])->name('admin.inventory.index');
 // Route cho sản phẩm theo danh mục Client
 Route::get('/danh-muc/{id}', [\App\Http\Controllers\Client\ProductController::class, 'showByCategory'])->name('products.byCategory');
 
@@ -242,7 +255,6 @@ use App\Http\Controllers\Client\ClientOrderController;
 use App\Http\Controllers\Client\VnpayController;
 
 // Nhóm các routes yêu cầu xác thực người dùng
-
 
 // Sửa trong web.php
 Route::get('/', [HomeController::class, 'index'])->name('client.home'); // Sửa 'home' thành 'client.home'
@@ -270,12 +282,8 @@ Route::get('/danh-muc/{slug}', [ClientCategoryController::class, 'show'])->name(
 
 //blog
 
-
-
 Route::get('/blog', [ClientBlogController::class, 'index'])->name('client.blog'); // Sửa từ clients.blog
 Route::get('/blog/{slug}', [App\Http\Controllers\Client\BlogController::class, 'show'])->name('client.blogs.show');
-
-
 
 
 //products
@@ -320,18 +328,17 @@ Route::get('/chat/fetch', [MessageController::class, 'fetch']);
 Route::middleware('auth')->group(function () {
     Route::get('/order-history', [ClientOrderController::class, 'orderHistory'])->name('order.history');
     Route::get('/order/{id}', [ClientOrderController::class, 'orderDetail'])->name('order.details');
-    Route::put('/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('order.cancel'); 
+    Route::put('/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('order.cancel'); // Hủy đơn hàng
+    Route::post('/orders/{id}/reorder', [ClientOrderController::class, 'reorder'])->name('order.reorder'); // Mua lại đơn hàng
 });
+
+// Nhấn vào tên sản phẩm ở giỏ hàng để chuyển sang trang chi tiết sản phẩm đấy
+Route::get('/san-pham/{slug}', [ClientProductController::class, 'show'])->name('client.products.show');
 
     // chat client
     Route::post('/chat/send', [MessageController::class, 'send']);
     Route::get('/chat/fetch', [MessageController::class, 'fetch']);
     
-
-
-
-
-
 
 // Xem/Sửa hồ sơ cá nhân
 Route::middleware(['auth'])->group(function () {
@@ -355,13 +362,12 @@ Route::post('/checkout/vnpay', [VnpayController::class, 'redirectToVNPAY'])->nam
 // Yêu cầu trả hàng Client
 use App\Http\Controllers\Client\ReturnRequestController as ClientReturnRequestController;
 
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/return-requests', [ClientReturnRequestController::class, 'index'])->name('client.return-requests.index');
     Route::get('/return-requests/create/{orderId}', [ClientReturnRequestController::class, 'create'])->name('client.return-requests.create');
     Route::post('/return-requests/store', [ClientReturnRequestController::class, 'store'])->name('client.return-requests.store');
 });
 
-
-
-
-
+// Route bài viết theo danh mục
+Route::get('/blog/danh-muc/{slug}', [ClientBlogController::class, 'showByCategory'])->name('client.blog-categories.show');
