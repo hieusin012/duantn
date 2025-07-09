@@ -552,19 +552,12 @@
     });
 </script>
 <script>
-<<<<<<< HEAD
-    document.querySelectorAll('.color-swatch').forEach(function(el) {
-        const color = el.getAttribute('data-color-code');
-        if (color) {
-            el.style.backgroundColor = `${color}`;
-        }
-    });
-=======
+
     function changeMainImage(el) {
         const mainImg = document.getElementById('main-image');
         mainImg.src = el.src;
     }
->>>>>>> 85acf50fb88caf2501cbe4d4bc8656f922bee1ca
+
 </script>
 <style>
     .color-swatch {
