@@ -1,6 +1,5 @@
 <?php
 
-
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -23,6 +22,7 @@ use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CartItemController;
+use App\Http\Controllers\Client\SpinWheelController;
 use App\Http\Controllers\MessageController;
 
 
@@ -57,7 +57,7 @@ Route::post('/reset-password', [ForgetPasswordController::class, 'resetPassword'
 // Nhóm route admin
 
 Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(function () { // Nếu dùng bảo vệ url http: 127.0.0.1:8000/admin thì bỏ cmt dòng này. Cmt lại dòng dưới.
-    // Route::prefix('admin')->name('admin.')->group(function () {
+//Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
@@ -112,7 +112,7 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     Route::delete('/sizes/{size}', [SizeController::class, 'destroy'])->name('sizes.destroy');
 
     // voucher
-    
+
     Route::resource('vouchers', VoucherController::class);
 
 
@@ -167,17 +167,17 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     Route::put('/blogs/{blog}', [BlogController::class, 'update'])->name('blogs.update');
     Route::delete('/blogs/{blog}', [BlogController::class, 'destroy'])->name('blogs.destroy');
     Route::get('/blogs/{blog}', [BlogController::class, 'show'])->name('blogs.show');
-         //shipper
-// Nhóm route cho shipper
-Route::prefix('shipper')->middleware(['auth'])->name('shipper.orders.')->group(function () {
-    Route::get('/orders', [\App\Http\Controllers\ShipperOrderController::class, 'index'])->name('index');
+    //shipper
+    // Nhóm route cho shipper
+    Route::prefix('shipper')->middleware(['auth'])->name('shipper.orders.')->group(function () {
+        Route::get('/orders', [\App\Http\Controllers\ShipperOrderController::class, 'index'])->name('index');
 
-    Route::get('/orders/create', [\App\Http\Controllers\ShipperOrderController::class, 'create'])->name('create');
-    Route::post('/orders/store', [\App\Http\Controllers\ShipperOrderController::class, 'store'])->name('store');
+        Route::get('/orders/create', [\App\Http\Controllers\ShipperOrderController::class, 'create'])->name('create');
+        Route::post('/orders/store', [\App\Http\Controllers\ShipperOrderController::class, 'store'])->name('store');
 
-    Route::get('/orders/accept/{id}', [\App\Http\Controllers\ShipperOrderController::class, 'accept'])->name('accept');
-    Route::get('/orders/complete/{id}', [\App\Http\Controllers\ShipperOrderController::class, 'complete'])->name('complete');
-});
+        Route::get('/orders/accept/{id}', [\App\Http\Controllers\ShipperOrderController::class, 'accept'])->name('accept');
+        Route::get('/orders/complete/{id}', [\App\Http\Controllers\ShipperOrderController::class, 'complete'])->name('complete');
+    });
 
     //comment
     Route::resource('comments', CommentController::class);
@@ -333,10 +333,10 @@ Route::middleware('auth')->group(function () {
 // Nhấn vào tên sản phẩm ở giỏ hàng để chuyển sang trang chi tiết sản phẩm đấy
 Route::get('/san-pham/{slug}', [ClientProductController::class, 'show'])->name('client.products.show');
 
-    // chat client
-    Route::post('/chat/send', [MessageController::class, 'send']);
-    Route::get('/chat/fetch', [MessageController::class, 'fetch']);
-    
+// chat client
+Route::post('/chat/send', [MessageController::class, 'send']);
+Route::get('/chat/fetch', [MessageController::class, 'fetch']);
+
 
 // Xem/Sửa hồ sơ cá nhân
 Route::middleware(['auth'])->group(function () {
@@ -356,7 +356,7 @@ Route::get('/admin/thong-ke/data', [ThongKeController::class, 'getData'])->name(
 Route::get('/vnpay/return', [VnpayController::class, 'vnpayReturn'])->name('client.payment.vnpay.return');
 Route::post('/checkout/vnpay', [VnpayController::class, 'redirectToVNPAY'])->name('checkout.vnpay');
 
-
+//end minigame
 // Yêu cầu trả hàng Client
 use App\Http\Controllers\Client\ReturnRequestController as ClientReturnRequestController;
 
@@ -368,10 +368,3 @@ Route::middleware(['auth'])->group(function () {
 
 // Route bài viết theo danh mục
 Route::get('/blog/danh-muc/{slug}', [ClientBlogController::class, 'showByCategory'])->name('client.blog-categories.show');
-
-
-
-
-
-
-
