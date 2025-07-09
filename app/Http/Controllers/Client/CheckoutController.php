@@ -186,7 +186,7 @@ class CheckoutController extends Controller
                 $vnp_OrderType = "Shop quàn áo";
                 $vnp_Amount = $order->total_price * 100;
                 $vnp_Locale = 'vn';
-                $vnp_BankCode = "NCB";
+                // $vnp_BankCode = "NCB";
                 $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
 
                 $inputData = array(

@@ -24,7 +24,7 @@ use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CartItemController;
 use App\Http\Controllers\Client\SpinWheelController;
 use App\Http\Controllers\MessageController;
-
+use App\Http\Controllers\GoogleAuthController;
 
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\ProductVariantController;
@@ -49,6 +49,9 @@ Route::get('/forgot-password', [ForgetPasswordController::class, 'showForgotPass
 Route::post('/forgot-password', [ForgetPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 Route::get('/reset-password/{token}', [ForgetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password', [ForgetPasswordController::class, 'resetPassword'])->name('password.update');
+//Google
+Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('google.callback');
 
 
 
