@@ -178,7 +178,7 @@ class CheckoutController extends Controller
 
             if ($validatedData['payment'] === 'Thanh toán qua VNPay') {
                 $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-                $vnp_Returnurl = "http://127.0.0.1:8000/vnpay-return";
+                $vnp_Returnurl = "http://localhost:8000/vnpay-return";
                 $vnp_TmnCode = "PTCDRZQD"; //Mã website tại VNPAY 
                 $vnp_HashSecret = "MJC8R1W7KOJOWN6KNTHT7I6P5QV4RZ6I"; //Chuỗi bí mật
                 $vnp_TxnRef = $order->code; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
