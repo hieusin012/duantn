@@ -7,6 +7,7 @@
     <h2 class="mb-4 text-success">Quét mã QR để thanh toán</h2>
 
     <p>Vui lòng chuyển khoản đúng số tiền <strong>{{ number_format($order->total_price, 0, ',', '.') }} VNĐ</strong> vào tài khoản bên dưới.</p>
+    
 
     
     <img src="{{ asset('uploads/products/loaloa.jfif') }}"alt="Mã QR" style="max-width: 300px;" class="img-fluid">
