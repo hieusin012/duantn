@@ -43,7 +43,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <label>Khách hàng</label>
                                 <select name="user_id" class="form-control @error('user_id') is-invalid @enderror">
                                     <option value="">Chọn khách hàng</option>
@@ -56,7 +56,7 @@
                                 @error('user_id')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                            </div>
+                            </div> --}}
                             <div class="form-group">
                                 <label>Phương thức thanh toán</label>
                                 <select name="payment" class="form-control @error('payment') is-invalid @enderror">

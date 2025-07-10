@@ -89,26 +89,27 @@ class OrderController extends Controller
     }
 
     public function update(Request $request, Order $order)
-    {
-        $validated = $request->validate([
-            'fullname' => 'required|string|max:50',
-            'phone' => 'required|string|max:15',
-            'address' => 'required|string|max:199',
-            'email' => 'required|email|max:199',
-            'payment' => 'required|in:Thanh toán khi nhận hàng,Thanh toán bằng thẻ,Thanh toán qua VNPay',
-            'status' => 'required|in:Chờ xác nhận,Đã xác nhận,Đang chuẩn bị hàng,Đang giao hàng,Đã giao hàng,Đơn hàng đã hủy',
-            'payment_status' => 'required|in:Chưa thanh toán,Đã thanh toán',
-            'shiping' => 'nullable|numeric',
-            'discount' => 'nullable|numeric',
-            'total_price' => 'required|numeric',
-            'note' => 'nullable|string',
-            'user_id' => 'required|exists:users,id',
-        ]);
+{
+    $validated = $request->validate([
+        'fullname' => 'required|string|max:50',
+        'phone' => 'required|string|max:15',
+        'address' => 'required|string|max:199',
+        'email' => 'required|email|max:199',
+        'payment' => 'required|in:Thanh toán khi nhận hàng,Thanh toán bằng thẻ,Thanh toán qua VNPay',
+        'status' => 'required|in:Chờ xác nhận,Đã xác nhận,Đang chuẩn bị hàng,Đang giao hàng,Đã giao hàng,Đơn hàng đã hủy',
+        'payment_status' => 'required|in:Chưa thanh toán,Đã thanh toán',
+        'shipping' => 'nullable|numeric',  // ✅ Sửa đúng chính tả
+        'discount' => 'nullable|numeric',
+        'total_price' => 'required|numeric',
+        'note' => 'nullable|string',
+        'user_id' => 'required|exists:users,id',
+    ]);
 
-        $order->update($validated);
+    $order->update($validated);
 
-        return redirect()->route('admin.orders.index')->with('success', 'Order updated successfully');
-    }
+    return redirect()->route('admin.orders.index')->with('success', '✅ Đơn hàng đã được cập nhật thành công.');
+}
+
 
     public function destroy(Order $order)
     {
