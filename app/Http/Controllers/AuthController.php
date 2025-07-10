@@ -33,7 +33,7 @@ class AuthController extends Controller
             if (Auth::user()->role === 'admin') {
                 return redirect()->intended('/admin');
             } else {
-                return redirect('/');
+                return redirect('/')->with('success', 'đăng nhập thành công');
             }
         }
 
