@@ -41,7 +41,6 @@ class GoogleAuthController extends Controller
         if ($user->wasRecentlyCreated) {
             Mail::to($email)->send(new WelcomeMail($user));
         }
-        Log::info('Gửi mail tới: ' . $user->email);
         Auth::login($user);
 
         return redirect()->intended('/');
