@@ -22,7 +22,7 @@ use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CartItemController;
-use App\Http\Controllers\Client\SpinWheelController;
+use App\Http\Controllers\Client\FacebookController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\GoogleAuthController;
 
@@ -52,8 +52,11 @@ Route::post('/reset-password', [ForgetPasswordController::class, 'resetPassword'
 //Google
 Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('google.callback');
-
-
+//Facebook
+Route::middleware('web')->group(function () {
+Route::get('auth/facebook', [FacebookController::class, 'redirectToFacebook'])->name('facebook.redirect');
+Route::get('auth/facebook/callback', [FacebookController::class, 'handleFacebookCallback'])->name('facebook.callback');
+});
 
 // Trang Dashboard admin
 

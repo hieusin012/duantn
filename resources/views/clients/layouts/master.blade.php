@@ -16,9 +16,6 @@
     <link rel="stylesheet" href="{{ asset('assets/client/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/client/css/style-min.css') }}">
 
-
-
-
     @stack('styles')
     
 </head>
@@ -41,8 +38,6 @@
     <script src="{{ asset('assets/client/js/vendor/slick.min.js') }}"></script>
     <script src="{{ asset('assets/client/js/plugins.js') }}"></script>
     <script src="{{ asset('assets/client/js/main.js') }}"></script>
-    
-
     @stack('scripts')
     @yield('scripts')
 </body>
