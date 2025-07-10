@@ -56,7 +56,7 @@
                 </div>
 
                 <div class="text-center">
-                    <a href="#" class="btn btn-light border d-inline-flex align-items-center justify-content-center shadow-sm p-2 rounded-circle" style="width: 48px; height: 48px;">
+                    <a href="{{ route('google.redirect') }}" class="btn btn-light border d-inline-flex align-items-center justify-content-center shadow-sm p-2 rounded-circle" style="width: 48px; height: 48px;">
                         <img src="{{ asset('images/google-icon.png') }}" alt="Google" width="24" height="24">
                     </a>
                 </div>
