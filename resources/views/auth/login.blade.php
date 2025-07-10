@@ -10,13 +10,13 @@
                 <h2 class="text-center mb-4">Đăng nhập tài khoản</h2>
 
                 @if(session('error'))
-                    <div class="alert alert-danger text-center">
-                        {{ session('error') }}
-                    </div>
+                <div class="alert alert-danger text-center">
+                    {{ session('error') }}
+                </div>
                 @elseif(session('success'))
-                    <div class="alert alert-success text-center">
-                        {{ session('success') }}
-                    </div>
+                <div class="alert alert-success text-center">
+                    {{ session('success') }}
+                </div>
                 @endif
 
                 <form method="POST" action="{{ route('login.post') }}">
@@ -28,7 +28,7 @@
                             class="form-control @error('email') is-invalid @enderror"
                             value="{{ old('email') }}" placeholder="Nhập email...">
                         @error('email')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
 
@@ -38,7 +38,7 @@
                             class="form-control @error('password') is-invalid @enderror"
                             placeholder="Nhập mật khẩu...">
                         @error('password')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="form-check mb-3">
@@ -55,12 +55,14 @@
                     <span class="position-absolute top-50 start-50 translate-middle px-3 bg-white text-muted">Hoặc đăng nhập bằng</span>
                 </div>
 
-                <div class="text-center">
+                <div class="text-center d-flex justify-content-center gap-4">
                     <a href="{{ route('google.redirect') }}" class="btn btn-light border d-inline-flex align-items-center justify-content-center shadow-sm p-2 rounded-circle" style="width: 48px; height: 48px;">
                         <img src="{{ asset('images/google-icon.png') }}" alt="Google" width="24" height="24">
                     </a>
+                    <a href="{{ route('facebook.redirect') }}" class="btn btn-light border d-inline-flex align-items-center justify-content-center shadow-sm p-2 rounded-circle" style="width: 48px; height: 48px;">
+                        <img src="{{ asset('images/facebook.jpg') }}" alt="Facebook" width="24" height="24">
+                    </a>
                 </div>
-
                 <div class="text-center mt-3">
                     <p>Bạn chưa có tài khoản? <a href="{{ route('register') }}">Đăng ký</a></p>
                 </div>
