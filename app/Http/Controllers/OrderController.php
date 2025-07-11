@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Order;
 use App\Models\User;
-use Illuminate\Http\Request;
+use App\Models\Order;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Models\ProductVariant;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
@@ -143,6 +144,12 @@ class OrderController extends Controller
 
         if (!$order) {
             return back()->with('error', 'Không thể hủy đơn hàng.');
+        }
+
+        // ✅ Cộng lại tồn kho cho từng biến thể sản phẩm
+        foreach ($order->orderDetails as $detail) {
+            ProductVariant::where('id', $detail->variant_id)
+                ->increment('quantity', $detail->quantity);
         }
 
         $order->status = 'Đơn hàng đã hủy';

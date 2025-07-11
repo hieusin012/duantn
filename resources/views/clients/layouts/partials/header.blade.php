@@ -109,21 +109,21 @@
                         <div class="customer-links">
                             <ul class="m-0">
                                 @guest
-                                <li><a href="{{ route('login') }}"><i class="icon anm anm-sign-in-al"></i>Sign In</a></li>
-                                <li><a href="{{ route('register') }}"><i class="icon anm anm-user-al"></i>Register</a></li>
+                                <li><a href="{{ route('login') }}"><i class="icon anm anm-sign-in-al"></i>Đăng nhập</a></li>
+                                <li><a href="{{ route('register') }}"><i class="icon anm anm-user-al"></i>Đăng ký</a></li>
                                 @endguest
 
                                 @auth
                                 <li><a href="#"><i class="icon anm anm-user-cil"></i>{{ Auth::user()->fullname }}</a></li>
-                                <li><a href="{{ route('profile.show') }}"><i class="icon anm anm-user-al"></i>My Account</a></li>
-                                <li><a href="{{ route('profile.edit') }}"><i class="icon anm anm-edit"></i>Edit Profile</a></li>
-                                <li><a href="{{ route('wishlist.index') }}"><i class="icon anm anm-heart-l"></i>Wishlist</a></li>
-                                <li><a href="#"><i class="icon anm anm-random-r"></i>Compare</a></li>
-                                <li><a href="{{ route('order.history') }}"><i class="hdr-icon icon anm anm-bag-l"></i>History</a></li>
-                                <li><a href="{{ route('client.return-requests.index') }}"><i class="icon anm anm-undo-l"></i>Return Requests</a></li>
+                                <li><a href="{{ route('profile.show') }}"><i class="icon anm anm-user-al"></i>Tài khoản của tôi</a></li>
+                                <li><a href="{{ route('profile.edit') }}"><i class="icon anm anm-edit"></i>Chỉnh sửa hồ sơ</a></li>
+                                <li><a href="{{ route('wishlist.index') }}"><i class="icon anm anm-heart-l"></i>Danh sách yêu thích</a></li>
+                                <li><a href="#"><i class="icon anm anm-random-r"></i>So sánh</a></li>
+                                <li><a href="{{ route('order.history') }}"><i class="hdr-icon icon anm anm-bag-l"></i>Lịch sử đặt hàng</a></li>
+                                <li><a href="{{ route('client.return-requests.index') }}"><i class="icon anm anm-undo-l"></i>Yêu cầu trả hàng</a></li>
                                 <li>
                                     <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        <i class="icon anm anm-sign-out-al"></i>Sign out
+                                        <i class="icon anm anm-sign-out-al"></i>Đăng xuất
                                     </a>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf

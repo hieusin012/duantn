@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Import;
 use App\Models\Supplier;
 use App\Models\ImportDetail;
-use App\Models\ProductVariant;
 use Illuminate\Http\Request;
+use App\Models\ProductVariant;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StoreImportRequest;
+use App\Http\Requests\UpdateImportRequest;
 
 class ImportController extends Controller
 {
@@ -20,28 +22,28 @@ class ImportController extends Controller
 
     public function create()
     {
-        $suppliers = Supplier::all();
+        $suppliers = Supplier::where('is_active', 1)->get();
         $variants = ProductVariant::with('product', 'color', 'size')->get();
         return view('admin.imports.create', compact('suppliers', 'variants'));
     }
 
-    public function store(Request $request)
+    public function store(StoreImportRequest $request)
     {
-        $request->validate([
-            'supplier_id' => 'required|exists:suppliers,id',
-            'products' => 'required|array|min:1',
-            'products.*.variant_id' => 'required|exists:product_variants,id',
-            'products.*.quantity' => 'required|integer|min:1',
-            'products.*.price' => 'required|numeric|min:0',
-        ], [
-            'supplier_id.required' => 'Vui lòng chọn nhà cung cấp.',
-            'products.required' => 'Vui lòng thêm ít nhất một sản phẩm.',
-            'products.*.variant_id.required' => 'Vui lòng chọn biến thể sản phẩm.',
-            'products.*.variant_id.exists' => 'Biến thể sản phẩm không hợp lệ.',
-            'products.*.quantity.required' => 'Vui lòng nhập số lượng.',
-            'products.*.quantity.min' => 'Số lượng phải lớn hơn 0.',
-            'products.*.price.required' => 'Vui lòng nhập giá nhập.',
-        ]);
+        // $request->validate([
+        //     'supplier_id' => 'required|exists:suppliers,id',
+        //     'products' => 'required|array|min:1',
+        //     'products.*.variant_id' => 'required|exists:product_variants,id',
+        //     'products.*.quantity' => 'required|integer|min:1',
+        //     'products.*.price' => 'required|numeric|min:0',
+        // ], [
+        //     'supplier_id.required' => 'Vui lòng chọn nhà cung cấp.',
+        //     'products.required' => 'Vui lòng thêm ít nhất một sản phẩm.',
+        //     'products.*.variant_id.required' => 'Vui lòng chọn biến thể sản phẩm.',
+        //     'products.*.variant_id.exists' => 'Biến thể sản phẩm không hợp lệ.',
+        //     'products.*.quantity.required' => 'Vui lòng nhập số lượng.',
+        //     'products.*.quantity.min' => 'Số lượng phải lớn hơn 0.',
+        //     'products.*.price.required' => 'Vui lòng nhập giá nhập.',
+        // ]);
 
         DB::beginTransaction();
         try {
@@ -86,20 +88,23 @@ class ImportController extends Controller
     public function edit($id)
     {
         $import = Import::with('details')->findOrFail($id);
-        $suppliers = Supplier::all();
+        $suppliers = Supplier::where(function ($query) use ($import) {
+            $query->where('is_active', 1)
+                ->orWhere('id', $import->supplier_id); // vẫn hiển thị nhà cung cấp hiện tại nếu bị tạm khóa
+        })->get();
         $variants = ProductVariant::with('product', 'color', 'size')->get();
         return view('admin.imports.edit', compact('import', 'suppliers', 'variants'));
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateImportRequest $request, $id)
     {
-        $request->validate([
-            'supplier_id' => 'required|exists:suppliers,id',
-            'products' => 'required|array|min:1',
-            'products.*.variant_id' => 'required|exists:product_variants,id',
-            'products.*.quantity' => 'required|integer|min:1',
-            'products.*.price' => 'required|numeric|min:0',
-        ]);
+        // $request->validate([
+        //     'supplier_id' => 'required|exists:suppliers,id',
+        //     'products' => 'required|array|min:1',
+        //     'products.*.variant_id' => 'required|exists:product_variants,id',
+        //     'products.*.quantity' => 'required|integer|min:1',
+        //     'products.*.price' => 'required|numeric|min:0',
+        // ]);
 
         DB::beginTransaction();
         try {

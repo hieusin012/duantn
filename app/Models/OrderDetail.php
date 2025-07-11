@@ -27,8 +27,13 @@ class OrderDetail extends Model
     }
 
     public function product()
-{
-    return $this->variant ? $this->variant->product : null;
-}
+    {
+        return $this->variant ? $this->variant->product : null;
+    }
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetail::class);
+    }
+
 
 }

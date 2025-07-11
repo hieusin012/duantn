@@ -19,6 +19,23 @@
                         <strong>Lý do:</strong> {{ $request->reason }}
                     </div>
                     <div class="mb-3">
+                        <strong>Phương thức hoàn tiền:</strong>
+                        {{ $request->refund_method === 'bank_transfer' ? 'Chuyển khoản ngân hàng' : ($request->refund_method === 'wallet' ? 'Ví điện tử' : '-') }}
+                    </div>
+
+                    @if ($request->refund_method === 'bank_transfer')
+                        <div class="mb-3">
+                            <strong>Số tài khoản ngân hàng:</strong> {{ $request->bank_account ?? '-' }}
+                        </div>
+                    @endif
+
+                    @if ($request->refund_method === 'wallet')
+                        <div class="mb-3">
+                            <strong>Thông tin ví điện tử:</strong> {{ $request->wallet_info ?? '-' }}
+                        </div>
+                    @endif
+
+                    <div class="mb-3">
                         <strong>Ảnh minh chứng:</strong><br>
                         @if ($request->image)
                             <img src="{{ asset('storage/' . $request->image) }}" alt="proof" width="200">

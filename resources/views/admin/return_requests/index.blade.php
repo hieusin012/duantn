@@ -14,6 +14,7 @@
                                 <th>Người dùng</th>
                                 <th>Mã đơn</th>
                                 <th>Lý do</th>
+                                <th>Hoàn tiền qua</th>
                                 <th>Trạng thái</th>
                                 <th>Ngày gửi</th>
                                 <th>Chức năng</th>
@@ -26,6 +27,15 @@
                                 <td>{{ $req->user->fullname ?? '-' }}</td>
                                 <td>{{ $req->order->code ?? '-' }}</td>
                                 <td>{{ Str::limit($req->reason, 40) }}</td>
+                                <td class="text-center">
+                                    @if($req->refund_method === 'bank_transfer')
+                                        <span class="badge bg-secondary">Ngân hàng</span>
+                                    @elseif($req->refund_method === 'wallet')
+                                        <span class="badge bg-primary">Ví điện tử</span>
+                                    @else
+                                        -
+                                    @endif
+                                </td>
                                 <td class="text-center">
                                     @switch($req->status)
                                         @case('pending')

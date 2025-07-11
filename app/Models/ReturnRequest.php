@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ReturnRequest extends Model
 {
     protected $fillable = [
-        'order_id', 'user_id', 'reason', 'status', 'refund_method', 'admin_note', 'image'
+        'order_id', 'user_id', 'reason', 'status', 'refund_method', 'admin_note', 'image', 'bank_account', 'wallet_info'
     ];
 
     public function order() {
