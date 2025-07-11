@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Import;
-use App\Models\Product;
 use App\Models\Supplier;
 use App\Models\ImportDetail;
+use App\Models\ProductVariant;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 
 class ImportController extends Controller
 {
@@ -21,8 +21,8 @@ class ImportController extends Controller
     public function create()
     {
         $suppliers = Supplier::all();
-        $products = Product::all();
-        return view('admin.imports.create', compact('suppliers', 'products'));
+        $variants = ProductVariant::with('product', 'color', 'size')->get();
+        return view('admin.imports.create', compact('suppliers', 'variants'));
     }
 
     public function store(Request $request)
@@ -30,31 +30,24 @@ class ImportController extends Controller
         $request->validate([
             'supplier_id' => 'required|exists:suppliers,id',
             'products' => 'required|array|min:1',
-            'products.*.product_id' => 'required|exists:products,id',
+            'products.*.variant_id' => 'required|exists:product_variants,id',
             'products.*.quantity' => 'required|integer|min:1',
             'products.*.price' => 'required|numeric|min:0',
         ], [
             'supplier_id.required' => 'Vui lòng chọn nhà cung cấp.',
-            'supplier_id.exists' => 'Nhà cung cấp không tồn tại.',
             'products.required' => 'Vui lòng thêm ít nhất một sản phẩm.',
-            'products.array' => 'Danh sách sản phẩm không hợp lệ.',
-            'products.min' => 'Cần ít nhất một sản phẩm.',
-            'products.*.product_id.required' => 'Vui lòng chọn sản phẩm.',
-            'products.*.product_id.exists' => 'Sản phẩm không hợp lệ.',
+            'products.*.variant_id.required' => 'Vui lòng chọn biến thể sản phẩm.',
+            'products.*.variant_id.exists' => 'Biến thể sản phẩm không hợp lệ.',
             'products.*.quantity.required' => 'Vui lòng nhập số lượng.',
-            'products.*.quantity.integer' => 'Số lượng phải là số nguyên.',
             'products.*.quantity.min' => 'Số lượng phải lớn hơn 0.',
             'products.*.price.required' => 'Vui lòng nhập giá nhập.',
-            'products.*.price.numeric' => 'Giá nhập phải là số.',
-            'products.*.price.min' => 'Giá nhập phải lớn hơn hoặc bằng 0.',
         ]);
 
         DB::beginTransaction();
         try {
-            $total = 0;
-            foreach ($request->products as $item) {
-                $total += $item['quantity'] * $item['price'];
-            }
+            $total = collect($request->products)->sum(function ($item) {
+                return $item['quantity'] * $item['price'];
+            });
 
             $import = Import::create([
                 'code' => 'PN' . now()->timestamp,
@@ -67,13 +60,13 @@ class ImportController extends Controller
             foreach ($request->products as $item) {
                 ImportDetail::create([
                     'import_id' => $import->id,
-                    'product_id' => $item['product_id'],
+                    'variant_id' => $item['variant_id'],
                     'quantity' => $item['quantity'],
                     'price' => $item['price'],
                     'total_price' => $item['quantity'] * $item['price'],
                 ]);
 
-                Product::where('id', $item['product_id'])->increment('quantity', $item['quantity']);
+                ProductVariant::where('id', $item['variant_id'])->increment('quantity', $item['quantity']);
             }
 
             DB::commit();
@@ -86,7 +79,7 @@ class ImportController extends Controller
 
     public function show($id)
     {
-        $import = Import::with('details.product', 'supplier', 'user')->findOrFail($id);
+        $import = Import::with('details.variant.product', 'details.variant.color', 'details.variant.size', 'supplier', 'user')->findOrFail($id);
         return view('admin.imports.show', compact('import'));
     }
 
@@ -94,9 +87,8 @@ class ImportController extends Controller
     {
         $import = Import::with('details')->findOrFail($id);
         $suppliers = Supplier::all();
-        $products = Product::all();
-
-        return view('admin.imports.edit', compact('import', 'suppliers', 'products'));
+        $variants = ProductVariant::with('product', 'color', 'size')->get();
+        return view('admin.imports.edit', compact('import', 'suppliers', 'variants'));
     }
 
     public function update(Request $request, $id)
@@ -104,59 +96,41 @@ class ImportController extends Controller
         $request->validate([
             'supplier_id' => 'required|exists:suppliers,id',
             'products' => 'required|array|min:1',
-            'products.*.product_id' => 'required|exists:products,id',
+            'products.*.variant_id' => 'required|exists:product_variants,id',
             'products.*.quantity' => 'required|integer|min:1',
             'products.*.price' => 'required|numeric|min:0',
-        ], [
-            'supplier_id.required' => 'Vui lòng chọn nhà cung cấp.',
-            'supplier_id.exists' => 'Nhà cung cấp không tồn tại.',
-            'products.required' => 'Vui lòng thêm ít nhất một sản phẩm.',
-            'products.array' => 'Danh sách sản phẩm không hợp lệ.',
-            'products.min' => 'Cần ít nhất một sản phẩm.',
-            'products.*.product_id.required' => 'Vui lòng chọn sản phẩm.',
-            'products.*.product_id.exists' => 'Sản phẩm không hợp lệ.',
-            'products.*.quantity.required' => 'Vui lòng nhập số lượng.',
-            'products.*.quantity.integer' => 'Số lượng phải là số nguyên.',
-            'products.*.quantity.min' => 'Số lượng phải lớn hơn 0.',
-            'products.*.price.required' => 'Vui lòng nhập giá nhập.',
-            'products.*.price.numeric' => 'Giá nhập phải là số.',
-            'products.*.price.min' => 'Giá nhập phải lớn hơn hoặc bằng 0.',
         ]);
 
         DB::beginTransaction();
         try {
             $import = Import::findOrFail($id);
 
-            // Lấy các chi tiết cũ và trừ tồn kho
+            // Trừ tồn kho của chi tiết cũ
             foreach ($import->details as $detail) {
-                Product::where('id', $detail->product_id)->decrement('quantity', $detail->quantity);
+                ProductVariant::where('id', $detail->variant_id)->decrement('quantity', $detail->quantity);
                 $detail->delete();
             }
 
-            // Tính tổng tiền mới
-            $total = 0;
-            foreach ($request->products as $item) {
-                $total += $item['quantity'] * $item['price'];
-            }
+            $total = collect($request->products)->sum(function ($item) {
+                return $item['quantity'] * $item['price'];
+            });
 
-            // Cập nhật phiếu nhập
             $import->update([
                 'supplier_id' => $request->supplier_id,
                 'note' => $request->note,
                 'total_price' => $total,
             ]);
 
-            // Thêm lại chi tiết mới và cộng vào kho
             foreach ($request->products as $item) {
                 ImportDetail::create([
                     'import_id' => $import->id,
-                    'product_id' => $item['product_id'],
+                    'variant_id' => $item['variant_id'],
                     'quantity' => $item['quantity'],
                     'price' => $item['price'],
                     'total_price' => $item['quantity'] * $item['price'],
                 ]);
 
-                Product::where('id', $item['product_id'])->increment('quantity', $item['quantity']);
+                ProductVariant::where('id', $item['variant_id'])->increment('quantity', $item['quantity']);
             }
 
             DB::commit();
@@ -167,10 +141,12 @@ class ImportController extends Controller
         }
     }
 
-
     public function destroy($id)
     {
         $import = Import::findOrFail($id);
+        foreach ($import->details as $detail) {
+            ProductVariant::where('id', $detail->variant_id)->decrement('quantity', $detail->quantity);
+        }
         $import->delete();
         return redirect()->route('admin.imports.index')->with('success', 'Đã xóa phiếu nhập');
     }

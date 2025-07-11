@@ -11,7 +11,7 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <p><strong>Nhà cung cấp:</strong> {{ $import->supplier->name ?? 'N/A' }}</p>
-                        <p><strong>Người nhập:</strong> {{ $import->user->fullname ?? 'N/A' }}</p>
+                        <p><strong>Người nhập:</strong> {{ $import->user->fullname ?? $import->user->name ?? 'N/A' }}</p>
                     </div>
                     <div class="col-md-6">
                         <p><strong>Ghi chú:</strong> {{ $import->note ?? 'Không có' }}</p>
@@ -24,6 +24,7 @@
                     <thead>
                         <tr>
                             <th>Sản phẩm</th>
+                            <th>Biến thể</th>
                             <th>Số lượng</th>
                             <th>Đơn giá</th>
                             <th>Thành tiền</th>
@@ -32,7 +33,11 @@
                     <tbody>
                         @foreach($import->details as $detail)
                         <tr>
-                            <td>{{ $detail->product->name ?? 'Không xác định' }}</td>
+                            <td>{{ $detail->variant->product->name ?? 'Không xác định' }}</td>
+                            <td>
+                                {{ $detail->variant->color->name ?? 'Không màu' }} - 
+                                {{ $detail->variant->size->name ?? 'Không size' }}
+                            </td>
                             <td>{{ $detail->quantity }}</td>
                             <td>{{ number_format($detail->price, 0, ',', '.') }} đ</td>
                             <td>{{ number_format($detail->total_price, 0, ',', '.') }} đ</td>
