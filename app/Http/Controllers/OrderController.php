@@ -90,6 +90,7 @@ class OrderController extends Controller
 
     public function update(Request $request, Order $order)
     {
+        
         $validated = $request->validate([
             'fullname' => 'required|string|max:50',
             'phone' => 'required|string|max:15',
@@ -104,7 +105,7 @@ class OrderController extends Controller
             'note' => 'nullable|string',
             'user_id' => 'required|exists:users,id',
         ]);
-
+        
         $order->update($validated);
 
         return redirect()->route('admin.orders.index')->with('success', 'Order updated successfully');
