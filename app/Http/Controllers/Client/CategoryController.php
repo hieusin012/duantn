@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
-class ClientCategoryController extends Controller
+class CategoryController extends Controller
 {
-      public function show($slug)
+    public function show($slug)
     {
         $category = Category::where('slug', $slug)->firstOrFail();
         $products = $category->products()->latest()->get();

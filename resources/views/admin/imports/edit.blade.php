@@ -34,7 +34,9 @@
                             <select name="supplier_id" class="form-control">
                                 <option value="">-- Chọn nhà cung cấp --</option>
                                 @foreach ($suppliers as $supplier)
-                                    <option value="{{ $supplier->id }}" {{ old('supplier_id', $import->supplier_id) == $supplier->id ? 'selected' : '' }}>{{ $supplier->name }}</option>
+                                    <option value="{{ $supplier->id }}" {{ old('supplier_id', $import->supplier_id) == $supplier->id ? 'selected' : '' }}>
+                                        {{ $supplier->name }}
+                                    </option>
                                 @endforeach
                             </select>
                             @error('supplier_id')
@@ -54,7 +56,7 @@
                         <table class="table table-bordered" id="product-table">
                             <thead>
                                 <tr>
-                                    <th>Sản phẩm</th>
+                                    <th>Biến thể</th>
                                     <th>Số lượng</th>
                                     <th>Giá nhập</th>
                                     <th>Hành động</th>
@@ -64,24 +66,29 @@
                                 @foreach (old('products', $import->details->toArray()) as $index => $detail)
                                 <tr>
                                     <td>
-                                        <select name="products[{{ $index }}][product_id]" class="form-control">
-                                            <option value="">-- Chọn sản phẩm --</option>
-                                            @foreach ($products as $product)
-                                                <option value="{{ $product->id }}" {{ old("products.$index.product_id", $detail['product_id']) == $product->id ? 'selected' : '' }}>{{ $product->name }}</option>
+                                        <select name="products[{{ $index }}][variant_id]" class="form-control">
+                                            <option value="">-- Chọn biến thể --</option>
+                                            @foreach ($variants as $variant)
+                                                <option value="{{ $variant->id }}" 
+                                                    {{ old("products.$index.variant_id", $detail['variant_id']) == $variant->id ? 'selected' : '' }}>
+                                                    {{ $variant->product->name }} - {{ $variant->color->name ?? 'Không màu' }} - {{ $variant->size->name ?? 'Không size' }}
+                                                </option>
                                             @endforeach
                                         </select>
-                                        @error("products.$index.product_id")
+                                        @error("products.$index.variant_id")
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror
                                     </td>
                                     <td>
-                                        <input type="number" name="products[{{ $index }}][quantity]" class="form-control" value="{{ old("products.$index.quantity", $detail['quantity']) }}">
+                                        <input type="number" name="products[{{ $index }}][quantity]" class="form-control"
+                                            value="{{ old("products.$index.quantity", $detail['quantity']) }}">
                                         @error("products.$index.quantity")
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror
                                     </td>
                                     <td>
-                                        <input type="number" name="products[{{ $index }}][price]" class="form-control" value="{{ old("products.$index.price", $detail['price']) }}">
+                                        <input type="number" name="products[{{ $index }}][price]" class="form-control"
+                                            value="{{ old("products.$index.price", $detail['price']) }}">
                                         @error("products.$index.price")
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror
@@ -112,10 +119,12 @@
         const row = `
         <tr>
             <td>
-                <select name="products[\${rowIndex}][product_id]" class="form-control" required>
-                    <option value="">-- Chọn sản phẩm --</option>
-                    @foreach ($products as $product)
-                        <option value="{{ $product->id }}">{{ $product->name }}</option>
+                <select name="products[\${rowIndex}][variant_id]" class="form-control">
+                    <option value="">-- Chọn biến thể --</option>
+                    @foreach ($variants as $variant)
+                        <option value="{{ $variant->id }}">
+                            {{ $variant->product->name }} - {{ $variant->color->name ?? 'Không màu' }} - {{ $variant->size->name ?? 'Không size' }}
+                        </option>
                     @endforeach
                 </select>
             </td>

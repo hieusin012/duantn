@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
@@ -16,10 +17,10 @@ class OrderController extends Controller
 
         // Filter by keyword
         if ($keyword = $request->keyword) {
-            $query->where(function($q) use ($keyword) {
+            $query->where(function ($q) use ($keyword) {
                 $q->where('code', 'like', "%{$keyword}%")
-                  ->orWhere('fullname', 'like', "%{$keyword}%")
-                  ->orWhere('email', 'like', "%{$keyword}%");
+                    ->orWhere('fullname', 'like', "%{$keyword}%")
+                    ->orWhere('email', 'like', "%{$keyword}%");
             });
         }
 
@@ -90,7 +91,6 @@ class OrderController extends Controller
 
     public function update(Request $request, Order $order)
     {
-        
         $validated = $request->validate([
             'fullname' => 'required|string|max:50',
             'phone' => 'required|string|max:15',
@@ -99,17 +99,19 @@ class OrderController extends Controller
             'payment' => 'required|in:Thanh toán khi nhận hàng,Thanh toán bằng thẻ,Thanh toán qua VNPay',
             'status' => 'required|in:Chờ xác nhận,Đã xác nhận,Đang chuẩn bị hàng,Đang giao hàng,Đã giao hàng,Đơn hàng đã hủy',
             'payment_status' => 'required|in:Chưa thanh toán,Đã thanh toán',
-            'shiping' => 'nullable|numeric',
+            'shipping' => 'nullable|numeric',  // ✅ Sửa đúng chính tả
             'discount' => 'nullable|numeric',
             'total_price' => 'required|numeric',
             'note' => 'nullable|string',
             'user_id' => 'required|exists:users,id',
         ]);
-        
+
         $order->update($validated);
 
-        return redirect()->route('admin.orders.index')->with('success', 'Order updated successfully');
+        return redirect()->route('admin.orders.index')->with('success', '✅ Đơn hàng đã được cập nhật thành công.');
     }
+
+
 
     public function destroy(Order $order)
     {
@@ -123,8 +125,8 @@ class OrderController extends Controller
         $endDate = $request->end_date ?? now()->endOfMonth()->format('Y-m-d');
 
         $orders = Order::where('status', 'Đã giao hàng')
-                    ->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59'])
-                    ->get();
+            ->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59'])
+            ->get();
 
         $totalRevenue = $orders->sum('total_price');
         $totalOrders = $orders->count();
@@ -135,9 +137,9 @@ class OrderController extends Controller
     public function cancel($id)
     {
         $order = Order::where('id', $id)
-                    ->where('user_id', Auth::id())
-                    ->where('status', 'Chờ xác nhận')
-                    ->first();
+            ->where('user_id', Auth::id())
+            ->where('status', 'Chờ xác nhận')
+            ->first();
 
         if (!$order) {
             return back()->with('error', 'Không thể hủy đơn hàng.');
@@ -148,5 +150,4 @@ class OrderController extends Controller
 
         return back()->with('success', '✅ Đơn hàng đã được hủy thành công.');
     }
-
 }

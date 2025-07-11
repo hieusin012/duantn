@@ -57,26 +57,28 @@
                         <table class="table table-bordered" id="product-table">
                             <thead>
                                 <tr>
-                                    <th>Sản phẩm</th>
+                                    <th>Biến thể sản phẩm</th>
                                     <th>Số lượng</th>
                                     <th>Giá nhập</th>
                                     <th>Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @php $oldProducts = old('products', [['product_id' => '', 'quantity' => '', 'price' => '']]); @endphp
+                                @php 
+                                    $oldProducts = old('products', [['variant_id' => '', 'quantity' => '', 'price' => '']]); 
+                                @endphp
                                 @foreach ($oldProducts as $index => $item)
                                     <tr>
                                         <td>
-                                            <select name="products[{{ $index }}][product_id]" class="form-control">
-                                                <option value="">-- Chọn sản phẩm --</option>
-                                                @foreach ($products as $product)
-                                                    <option value="{{ $product->id }}" {{ $item['product_id'] == $product->id ? 'selected' : '' }}>
-                                                        {{ $product->name }}
+                                            <select name="products[{{ $index }}][variant_id]" class="form-control">
+                                                <option value="">-- Chọn biến thể --</option>
+                                                @foreach ($variants as $variant)
+                                                    <option value="{{ $variant->id }}" {{ $item['variant_id'] == $variant->id ? 'selected' : '' }}>
+                                                        {{ $variant->product->name }} - {{ $variant->color->name ?? 'Không màu' }} - {{ $variant->size->name ?? 'Không size' }}
                                                     </option>
                                                 @endforeach
                                             </select>
-                                            @error("products.$index.product_id")
+                                            @error("products.$index.variant_id")
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror
                                         </td>
@@ -114,21 +116,21 @@
 
 @push('scripts')
 <script>
-    let rowIndex = {{ count(old('products', [['product_id' => '', 'quantity' => '', 'price' => '']])) }};
+    let rowIndex = {{ count(old('products', [['variant_id' => '', 'quantity' => '', 'price' => '']])) }};
 
     document.getElementById('add-product').addEventListener('click', () => {
         const row = `
         <tr>
             <td>
-                <select name="products[${rowIndex}][product_id]" class="form-control">
-                    <option value="">-- Chọn sản phẩm --</option>
-                    @foreach ($products as $product)
-                        <option value="{{ $product->id }}">{{ $product->name }}</option>
+                <select name="products[\${rowIndex}][variant_id]" class="form-control">
+                    <option value="">-- Chọn biến thể --</option>
+                    @foreach ($variants as $variant)
+                        <option value="{{ $variant->id }}">{{ $variant->product->name }} - {{ $variant->color->name ?? 'Không màu' }} - {{ $variant->size->name ?? 'Không size' }}</option>
                     @endforeach
                 </select>
             </td>
-            <td><input type="number" name="products[${rowIndex}][quantity]" class="form-control"></td>
-            <td><input type="number" name="products[${rowIndex}][price]" class="form-control"></td>
+            <td><input type="number" name="products[\${rowIndex}][quantity]" class="form-control"></td>
+            <td><input type="number" name="products[\${rowIndex}][price]" class="form-control"></td>
             <td><button type="button" class="btn btn-danger btn-sm remove-row">Xóa</button></td>
         </tr>`;
         document.querySelector('#product-table tbody').insertAdjacentHTML('beforeend', row);

@@ -258,7 +258,7 @@ use App\Http\Controllers\Client\ProductController as ClientProductController;
 use App\Http\Controllers\Client\VoucherController as ClientVoucherController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\ClientOrderController;
-use App\Http\Controllers\Client\VnpayController;
+use App\Http\Controllers\VnpayController;
 
 // Nhóm các routes yêu cầu xác thực người dùng
 
@@ -316,7 +316,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'showCheckoutForm'])->name('checkout.form');
     Route::post('/checkout', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
-    
+    Route::get('/checkout/success/{order:code}', [CheckoutController::class, 'success'])->name('checkout.success');
 });
 
 //thanh toán
@@ -361,8 +361,8 @@ Route::get('/admin/thong-ke/san-pham', [ThongKeController::class, 'index'])->nam
 Route::get('/admin/thong-ke/data', [ThongKeController::class, 'getData'])->name('admin.thongke.data');
 
 //vnpay
-// Route::get('/vnpay/return', [VnpayController::class, 'vnpayReturn'])->name('client.payment.vnpay.return');
-// Route::post('/checkout/vnpay', [VnpayController::class, 'redirectToVNPAY'])->name('checkout.vnpay');
+Route::get('/vnpay/return', [VnpayController::class, 'vnpayReturn'])->name('client.payment.vnpay.return');
+Route::post('/checkout/vnpay', [VnpayController::class, 'redirectToVNPAY'])->name('checkout.vnpay');
 
 //end minigame
 // Yêu cầu trả hàng Client
