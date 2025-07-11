@@ -8,17 +8,6 @@
         <div class="col-md-6 col-lg-5">
             <div class="card shadow p-4">
                 <h2 class="text-center mb-4">Tạo mật khẩu mới</h2>
-
-                @if(session('error'))
-                <div class="alert alert-danger text-center">
-                    {{ session('error') }}
-                </div>
-                @elseif(session('success'))
-                <div class="alert alert-success text-center">
-                    {{ session('success') }}
-                </div>
-                @endif
-
                 <form method="POST" action="{{ route('password.update') }}">
                     @csrf
 

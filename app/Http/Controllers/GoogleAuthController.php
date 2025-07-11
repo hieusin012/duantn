@@ -43,6 +43,6 @@ class GoogleAuthController extends Controller
         }
         Auth::login($user);
 
-        return redirect()->intended('/');
+        return redirect()->intended('/')->with('success', 'Bạn đã đăng nhập thành công');
     }
 }

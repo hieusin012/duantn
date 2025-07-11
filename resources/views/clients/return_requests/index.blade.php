@@ -5,10 +5,6 @@
 <div class="container py-4">
     <h2 class="mb-4 text-center text-primary">📦 Yêu cầu trả hàng của bạn</h2>
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-
     @if($requests->isEmpty())
         <div class="alert alert-info text-center">Bạn chưa có yêu cầu trả hàng nào.</div>
     @else

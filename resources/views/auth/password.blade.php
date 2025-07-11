@@ -8,13 +8,6 @@
         <div class="col-md-6 col-lg-5">
             <div class="card shadow p-4">
                 <h2 class="text-center mb-4">Nhập email để lấy lại mật khẩu</h2>
-
-                @if(session('success'))
-                    <div class="alert alert-success text-center">
-                        {{ session('success') }}
-                    </div>
-                @endif
-
                 <form method="POST" action="{{ route('password.email') }}">
                     @csrf
 

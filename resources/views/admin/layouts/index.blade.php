@@ -19,6 +19,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 
 </head>
 
@@ -134,6 +135,7 @@
       }
     }
   </script>
+  
 </body>
 
 </html> --}}
@@ -161,6 +163,7 @@
 
   <!-- SweetAlert -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css" />
 </head>
 
 <body onload="time()" class="app sidebar-mini rtl">
@@ -222,7 +225,37 @@
       return (i < 10) ? "0" + i : i;
     }
   </script>
-
+  <!-- Thông báo toastr -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
+     @if(Session::has('success'))
+    <script>
+        $.toast({
+            heading: 'Thành công !',
+            text: "{{ Session::get('success') }}",
+            showHideTransition: 'slide',
+            icon: 'success',
+            position: {
+                right: 1,
+                top: 50
+            },
+        })
+    </script>
+    @endif
+    @if(Session::has('error'))
+    <script>
+        $.toast({
+            heading: 'Thất bại !',
+            text: "{{ Session::get('error') }}",
+            showHideTransition: 'slide',
+            icon: 'error',
+            position: {
+                right: 1,
+                top: 50
+            },
+        })
+    </script>
+    @endif
+    
   <!-- Yield scripts from children views -->
   @yield('scripts')
   @stack('scripts')
