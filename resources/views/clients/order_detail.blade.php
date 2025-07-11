@@ -38,16 +38,8 @@
 
 @section('content')
     <div class="container py-4">
-        @if (session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
-        @if (session('error'))
-            <div class="alert alert-danger">{{ session('error') }}</div>
-        @endif
-
         <h3 class="mb-4 text-primary">📄 Chi tiết đơn hàng: <span
                 class="text-dark">{{ $order->code ?? str_pad($order->id, 5, '0', STR_PAD_LEFT) }}</span></h3>
-
         {{-- Thông tin đơn hàng --}}
         <div class="row mb-4">
             <div class="col-md-6">

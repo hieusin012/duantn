@@ -8,20 +8,8 @@
         <div class="col-md-6 col-lg-5">
             <div class="card shadow p-4">
                 <h2 class="text-center mb-4">Đăng nhập tài khoản</h2>
-
-                @if(session('error'))
-                <div class="alert alert-danger text-center">
-                    {{ session('error') }}
-                </div>
-                @elseif(session('success'))
-                <div class="alert alert-success text-center">
-                    {{ session('success') }}
-                </div>
-                @endif
-
                 <form method="POST" action="{{ route('login.post') }}">
                     @csrf
-
                     <div class="mb-3">
                         <label for="email" class="form-label">Email:</label>
                         <input type="email" id="email" name="email"

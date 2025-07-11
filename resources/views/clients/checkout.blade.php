@@ -19,18 +19,6 @@
             </div>
             @endif
 
-            {{-- Hiển thị thông báo thành công/lỗi từ controller --}}
-            @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-            @endif
-            @if (session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
-            @endif
-
             <form action="{{ route('checkout.process') }}" method="POST">
                 @csrf
 

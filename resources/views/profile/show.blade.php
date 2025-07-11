@@ -4,9 +4,6 @@
 <div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-md-10">
-            @if(session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-            @endif
 
             <div class="card shadow-sm border-0">
                 <div class="card-header bg-light text-white">

@@ -28,20 +28,6 @@
         <div class="row">
             <!--Cart Content-->
             <div class="col-12 col-sm-12 col-md-12 col-lg-8 main-col">
-                @if(session('success'))
-                <div class="alert alert-success py-2 alert-dismissible fade show cart-alert" role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                @elseif(session('error'))
-                <div class="alert alert-danger py-2 alert-dismissible fade show cart-alert" role="alert">
-                    {{ session('error') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                @endif
-                <!--End Alert msg-->
-
-
                 <!--Cart Form-->
                 <form action="{{ route('client.cart.update') }}" method="post" class="cart-table table-bottom-brd">
                     @csrf
