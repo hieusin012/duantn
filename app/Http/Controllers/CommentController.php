@@ -65,12 +65,15 @@ Comment::create($request->only(['user_id', 'product_id', 'content', 'rating', 's
             'user_id' => 'required|exists:users,id',
             'product_id' => 'required|exists:products,id',
             'content' => 'required|string|min:3',
+            'rating' => 'nullable|integer|min:1|max:5',
+            'status' => 'required|boolean',
         ]);
 
-        $comment->update($request->only(['user_id', 'product_id', 'content']));
+        $comment->update($request->only(['user_id', 'product_id', 'content', 'rating', 'status']));
 
         return redirect()->route('admin.comments.index')->with('success', 'Cập nhật thành công.');
     }
+
 
     // Xóa bình luận
     public function destroy(Comment $comment)

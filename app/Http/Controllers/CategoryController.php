@@ -69,4 +69,18 @@ class CategoryController extends Controller
         $category->delete();
         return redirect()->route('admin.categories.index')->with('success', 'Đã xóa danh mục thành công.');
     }
+
+    public function toggleStatus(Request $request, $id)
+    {
+        $category = Category::findOrFail($id);
+
+        $category->is_active = $request->input('is_active') ? 1 : 0;
+        $category->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Trạng thái đã được cập nhật.',
+            'status' => $category->is_active
+        ]);
+    }
 }

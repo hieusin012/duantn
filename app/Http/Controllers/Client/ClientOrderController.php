@@ -120,4 +120,24 @@ class ClientOrderController extends Controller
         return redirect()->route('client.cart')->with('success', 'Sản phẩm đã được thêm lại vào giỏ hàng.');
     }
 
+    public function cancel(Request $request, $id)
+    {
+        $request->validate([
+            'cancel_reason' => 'required|string|max:255',
+            'cancel_note' => 'nullable|string|max:1000',
+        ]);
+
+        $order = Order::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->where('status', 'Chờ xác nhận')
+            ->firstOrFail();
+
+        $order->status = 'Đơn hàng đã hủy';
+        $order->cancel_reason = $request->cancel_reason;
+        $order->cancel_note = $request->cancel_note;
+        $order->save();
+
+        return redirect()->route('order.history')->with('success', 'Đơn hàng đã được hủy.');
+    }
+
 }

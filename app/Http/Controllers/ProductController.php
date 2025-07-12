@@ -76,7 +76,8 @@ class ProductController extends Controller
     // Form thêm sản phẩm mới
     public function create()
     {
-        $categories = Category::all();
+        // $categories = Category::all();
+        $categories = Category::where('is_active', 1)->get(); // ✅ Lấy các danh mục đang hoạt động
         $brands = Brand::all();
         $colors = Color::all();
         $sizes = Size::all();
@@ -137,7 +138,15 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::findOrFail($id);
-        $categories = Category::all();
+
+        // Lấy các danh mục đang hoạt động
+        $categories = Category::where('is_active', 1)->get();
+
+        // Nếu danh mục của sản phẩm hiện tại đã bị ẩn → thêm thủ công để vẫn hiển thị trong select
+        if ($product->category && !$product->category->is_active) {
+            $categories->push($product->category);
+        }
+
         $brands = Brand::all();
         $colors = Color::all();
         $sizes = Size::all();

@@ -85,6 +85,7 @@
                             <th>Khách hàng</th>
                             <th>Tổng tiền</th>
                             <th>Trạng thái</th>
+                            <th>Lý do hủy</th>
                             <th>Thanh toán</th>
                             <th>Khách hàng</th>
                             <th>Chức năng</th>
@@ -101,6 +102,14 @@
                                 <span class="badge {{ $order->status == 'Đã giao hàng' ? 'bg-success' : ($order->status == 'Đơn hàng đã hủy' ? 'bg-danger' : 'bg-warning') }}">
                                     {{ $order->status }}
                                 </span>
+                            </td>
+                            <td>
+                                @if ($order->status == 'Đơn hàng đã hủy')
+                                    {{ $order->cancel_reason }}<br>
+                                    <small class="text-muted">{{ $order->cancel_note }}</small>
+                                @else
+                                    -
+                                @endif
                             </td>
                             <td>
                                 <span class="badge {{ $order->payment_status == 'Đã thanh toán' ? 'bg-success' : 'bg-danger' }}">

@@ -99,6 +99,7 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
     Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+    Route::post('/categories/{id}/toggle-status', [CategoryController::class, 'toggleStatus'])->name('categories.toggleStatus');
     //banner
     Route::get('/banners', [BannerController::class, 'index'])->name('banners.index');
     Route::get('/banners/create', [BannerController::class, 'create'])->name('banners.create');
@@ -336,6 +337,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/order/{id}', [ClientOrderController::class, 'orderDetail'])->name('order.details');
     Route::put('/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('order.cancel'); // Hủy đơn hàng
     Route::post('/orders/{id}/reorder', [ClientOrderController::class, 'reorder'])->name('order.reorder'); // Mua lại đơn hàng
+    Route::put('/orders/{id}/cancel', [ClientOrderController::class, 'cancel'])->name('order.cancel');
 });
 
 // Nhấn vào tên sản phẩm ở giỏ hàng để chuyển sang trang chi tiết sản phẩm đấy

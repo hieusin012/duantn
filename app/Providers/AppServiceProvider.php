@@ -49,7 +49,8 @@ class AppServiceProvider extends ServiceProvider
             $view->with('header_categories', $categories);
         });
         view()->composer('*', function ($view) {
-            $view->with('blog_categories', BlogCategory::all());
+            // $view->with('blog_categories', BlogCategory::all()); // Hiển thị tất cả danh mục blog ở client
+            $view->with('blog_categories', BlogCategory::where('is_active', 1)->get()); // Hiển thị danh mục blog trạng thái hoạt động Client
         });
     }
 }

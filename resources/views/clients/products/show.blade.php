@@ -100,7 +100,7 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                    <div class="breadcrumbs"><a href="index.html" title="Back to the home page">Home</a><span class="main-title fw-bold"><i class="icon anm anm-angle-right-l"></i>Chi tiết sản phẩm</span></div>
+                    <div class="breadcrumbs"><a href="/" title="Back to the home page">Home</a><span class="main-title fw-bold"><i class="icon anm anm-angle-right-l"></i>Chi tiết sản phẩm</span></div>
                 </div>
             </div>
         </div>

@@ -24,6 +24,12 @@
                     <p><strong>Trạng thái đơn hàng:</strong>
                         <span class="badge bg-info">{{ $order->status }}</span>
                     </p>
+                    @if ($order->status === 'Đơn hàng đã hủy')
+                        <p><strong>Lý do hủy:</strong> {{ $order->cancel_reason }}</p>
+                        @if ($order->cancel_note)
+                            <p><strong>Ghi chú:</strong> {{ $order->cancel_note }}</p>
+                        @endif
+                    @endif
                     <p><strong>Trạng thái thanh toán:</strong>
                         <span class="badge {{ $order->payment_status === 'Đã thanh toán' ? 'bg-success' : 'bg-warning' }}">
                             {{ $order->payment_status }}

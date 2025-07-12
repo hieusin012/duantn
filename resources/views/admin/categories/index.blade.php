@@ -43,7 +43,8 @@
                 <table class="table table-hover table-bordered" id="categories-table">
                     <thead>
                         <tr>
-                            <th width="10"><input type="checkbox" id="all"></th>
+                            {{-- <th width="10"><input type="checkbox" id="all"></th> --}}
+                            <th>Trạng thái</th>
                             <th>Tên</th>
                             <th>Slug</th>
                             <th>Hình ảnh</th>
@@ -54,7 +55,10 @@
                     <tbody>
                         @foreach ($categories as $category)
                             <tr>
-                                <td width="10"><input type="checkbox" name="check[]" value="{{ $category->id }}"></td>
+                                {{-- <td width="10"><input type="checkbox" name="check[]" value="{{ $category->id }}"></td> --}}
+                                <td class="text-center">
+                                    <input type="checkbox" class="toggle-status" data-id="{{ $category->id }}" {{ $category->is_active ? 'checked' : '' }}>
+                                </td>
                                 <td>{{ $category->name }}</td>
                                 <td>{{ $category->slug }}</td>
                                 <td>
@@ -91,3 +95,31 @@
     </div>
 </div>
 @endsection
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.toggle-status').forEach(function (checkbox) {
+            checkbox.addEventListener('change', function () {
+                const categoryId = this.dataset.id;
+                const isActive = this.checked ? 1 : 0;
+
+                fetch(`/admin/categories/${categoryId}/toggle-status`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    },
+                    body: JSON.stringify({ is_active: isActive }),
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.success) {
+                        alert('Cập nhật trạng thái thất bại!');
+                    }
+                })
+                .catch(() => alert('Có lỗi xảy ra khi kết nối máy chủ.'));
+            });
+        });
+    });
+</script>
+@endpush

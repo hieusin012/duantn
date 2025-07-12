@@ -113,7 +113,7 @@
                                 </option>
                             @endforeach
                         </select>
-                        <input type="hidden" name="product_id" value="{{ $product->id }}"> {{-- Không cho sửa nhưng vẫn gửi dữ liệu Giữ disabled + thêm <input type="hidden"> --}}
+                        <input type="hidden" name="product_id" value="{{ $comment->product_id }}"> {{-- Không cho sửa nhưng vẫn gửi dữ liệu Giữ disabled + thêm <input type="hidden"> --}}
                     </div>
 
                     <div class="form-group col-md-12">
