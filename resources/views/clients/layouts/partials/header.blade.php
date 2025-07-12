@@ -16,7 +16,7 @@
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 @foreach ($header_categories as $cat)
                                     <li>
-                                        <a class="dropdown-item" href="{{ route('products.byCategory', $cat->slug) }}">
+                                        {{-- <a class="dropdown-item" href="{{ route('products.byCategory', $cat->slug) }}"> --}}
                                             {{ $cat->name }}
                                         </a>
                                     </li>
@@ -39,7 +39,7 @@
                         <li class="lvl1 parent dropdown">
                             <a href="{{ route('client.contact') }}">Liên hệ</a>
                         </li>
-                        <li class="lvl1 parent megamenu"><a href="#">Abous Us</a></li>
+                        <li class="lvl1 parent megamenu"><a href="{{ route('about') }}">Abous Us</a></li>
                     </ul>
                 </nav>
             </div>

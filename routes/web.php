@@ -379,3 +379,7 @@ Route::middleware(['auth'])->group(function () {
 
 // Route bài viết theo danh mục
 Route::get('/blog/danh-muc/{slug}', [ClientBlogController::class, 'showByCategory'])->name('client.blog-categories.show');
+
+Route::get('/about', function () {
+    return view('clients.about');
+})->name('about');
