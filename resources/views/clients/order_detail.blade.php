@@ -169,52 +169,51 @@
                 @endif --}}
 
                 @if ($order->status === 'Chờ xác nhận')
-    <!-- Nút mở modal -->
-    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#cancelModal">
-        ❌ Hủy đơn hàng
-    </button>
+                    <!-- Nút mở modal -->
+                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#cancelModal">
+                        ❌ Hủy đơn hàng
+                    </button>
 
-    <!-- Modal Hủy đơn hàng -->
-    <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <form action="{{ route('order.cancel', $order->id) }}" method="POST">
-                @csrf
-                @method('PUT')
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title text-danger" id="cancelModalLabel">❌ Hủy đơn hàng</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                    <!-- Modal Hủy đơn hàng -->
+                    <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <form action="{{ route('order.cancel', $order->id) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title text-danger" id="cancelModalLabel">❌ Hủy đơn hàng</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Vui lòng chọn lý do hủy đơn hàng:</p>
+
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="cancel_reason" id="reason1" value="Đặt nhầm" checked>
+                                            <label class="form-check-label" for="reason1">Đặt nhầm</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="cancel_reason" id="reason2" value="Không cần nữa">
+                                            <label class="form-check-label" for="reason2">Không cần nữa</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="cancel_reason" id="reason3" value="Muốn thay đổi sản phẩm">
+                                            <label class="form-check-label" for="reason3">Muốn thay đổi sản phẩm</label>
+                                        </div>
+
+                                        <div class="mt-3">
+                                            <label for="cancel_note" class="form-label">Ghi chú (nếu có):</label>
+                                            <textarea name="cancel_note" id="cancel_note" rows="3" class="form-control" placeholder="Lý do chi tiết..."></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-danger">Xác nhận hủy</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        <p>Vui lòng chọn lý do hủy đơn hàng:</p>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="cancel_reason" id="reason1" value="Đặt nhầm" checked>
-                            <label class="form-check-label" for="reason1">Đặt nhầm</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="cancel_reason" id="reason2" value="Không cần nữa">
-                            <label class="form-check-label" for="reason2">Không cần nữa</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="cancel_reason" id="reason3" value="Muốn thay đổi sản phẩm">
-                            <label class="form-check-label" for="reason3">Muốn thay đổi sản phẩm</label>
-                        </div>
-
-                        <div class="mt-3">
-                            <label for="cancel_note" class="form-label">Ghi chú (nếu có):</label>
-                            <textarea name="cancel_note" id="cancel_note" rows="3" class="form-control" placeholder="Lý do chi tiết..."></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-danger">Xác nhận hủy</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-@endif
-
+                @endif
 
                 {{-- Hoàn hàng nếu trong 7 ngày --}}
                 @php

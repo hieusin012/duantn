@@ -23,6 +23,7 @@ class UpdateCategoryRequest extends FormRequest
     {
         return [
             'name' => 'required|max:200|unique:categories,name,' . $this->route('category')->id,
+            'slug' => 'nullable|string|max:255|unique:categories,slug,' . $this->route('category')->id,
             'image' => 'nullable|image',
             'is_active' => 'boolean',
             'parent_id' => 'nullable|exists:categories,id',
@@ -33,6 +34,8 @@ class UpdateCategoryRequest extends FormRequest
         return [
             'name.required' => 'Trường tên danh mục là bắt buộc',
             'name.unique' => 'Tên danh mục đã tồn tại',
+            'slug.unique' => 'Slug đã tồn tại',
+            'slug.max' => 'Slug không được vượt quá 255 ký tự',
             'image.image' => 'Trường hình ảnh phải là file ảnh',
             'is_active.boolean' => 'Trạng thái không hợp lệ',
             'parent_id.exists' => 'Danh mục cha không hợp lệ',

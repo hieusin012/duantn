@@ -18,7 +18,7 @@
                     <th>Trạng thái</th>
                     <th>PT Hoàn tiền</th>
                     <th>Minh chứng</th>
-                    <th>Ghi chú từ Admin</th>
+                    <th>Phản hồi từ Shop</th>
                 </tr>
             </thead>
             <tbody class="text-center">

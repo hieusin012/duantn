@@ -250,7 +250,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
 use App\Http\Controllers\InventoryController;
 Route::get('/admin/inventory', [InventoryController::class, 'index'])->name('admin.inventory.index');
 // Route cho sản phẩm theo danh mục Client
-Route::get('/danh-muc/{id}', [\App\Http\Controllers\Client\ProductController::class, 'showByCategory'])->name('products.byCategory');
+Route::get('/product/danh-muc/{slug}', [\App\Http\Controllers\Client\ProductController::class, 'showByCategory'])->name('products.byCategory');
 
 // Trang client (không nằm trong admin)
 use App\Http\Controllers\Client\BlogController as ClientBlogController;

@@ -18,7 +18,15 @@ class BlogController extends Controller
 
     public function show($slug)
     {
-        $blog = Blog::with(['user.blogs', 'category'])->where('slug', $slug)->where('status', 1)->firstOrFail();
+        $blog = Blog::with(['user.blogs', 'category'])
+            ->where('slug', $slug)
+            ->where('status', 1)
+            ->firstOrFail();
+
+        // Kiểm tra nếu danh mục đã bị gỡ hoặc không tồn tại
+        if (!$blog->category || !$blog->category->is_active) {
+            abort(404);
+        }
 
         $recentBlogs = Blog::select('id', 'title', 'slug', 'image', 'created_at')
             ->where('id', '!=', $blog->id)
@@ -30,9 +38,14 @@ class BlogController extends Controller
         return view('clients.blogs.show', compact('blog', 'recentBlogs'));
     }
 
+
     public function showByCategory($slug)
     {
         $category = BlogCategory::where('slug', $slug)->firstOrFail();
+
+        if (!$category->is_active) {
+            abort(404);
+        }
 
         $blogs = Blog::where('category_id', $category->id)
             ->where('status', 1)

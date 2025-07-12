@@ -23,6 +23,7 @@ class StoreCategoryRequest extends FormRequest
     {
         return [
             'name' => 'required|max:200|unique:categories,name',
+            'slug' => 'nullable|string|max:255|unique:categories,slug',
             // 'image' => 'nullable|image',
             'image' => 'required|image',
             'is_active' => 'boolean',
@@ -35,6 +36,8 @@ class StoreCategoryRequest extends FormRequest
             'name.required' => 'Trường tên danh mục là bắt buộc',
             'name.max' => 'Tên danh mục không được vượt quá 200 ký tự',
             'name.unique' => 'Tên danh mục đã tồn tại',
+            'slug.unique' => 'Slug đã tồn tại',
+            'slug.max' => 'Slug không được vượt quá 255 ký tự',
             'image.required' => 'Trường hình ảnh là bắt buộc',
             'image.image' => 'Trường hình ảnh phải là file ảnh',
             'is_active.boolean' => 'Trạng thái không hợp lệ',

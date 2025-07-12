@@ -170,9 +170,14 @@ class ProductController extends Controller
 
         return view('clients.products.index', compact('products', 'categories', 'brands'));
     }
-    public function showByCategory($id)
+    public function showByCategory($slug)
     {
-        $category = Category::findOrFail($id);
+        $category = Category::where('slug', $slug)->firstOrFail();
+
+        if (!$category->is_active) {
+            abort(404);
+        }
+
         $products = Product::where('category_id', $category->id)->paginate(12);
 
         return view('clients.products.by_category', compact('category', 'products'));

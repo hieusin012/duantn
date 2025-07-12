@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
@@ -37,6 +38,19 @@ class CategoryController extends Controller
     {
         $data = $request->validated();
 
+        // Sinh slug từ tên
+        $slug = Str::slug($data['name']);
+        $originalSlug = $slug;
+        $counter = 1;
+
+        // Kiểm tra và đảm bảo slug là duy nhất
+        while (Category::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $counter;
+            $counter++;
+        }
+        $data['slug'] = $slug;
+
+        // Xử lý ảnh
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('categories', 'public');
         }
@@ -54,6 +68,19 @@ class CategoryController extends Controller
     public function update(UpdateCategoryRequest $request, Category $category)
     {
         $data = $request->validated();
+
+        if ($data['name'] !== $category->name) {
+            $slug = Str::slug($data['name']);
+            $originalSlug = $slug;
+            $counter = 1;
+
+            while (Category::where('slug', $slug)->where('id', '!=', $category->id)->exists()) {
+                $slug = $originalSlug . '-' . $counter;
+                $counter++;
+            }
+
+            $data['slug'] = $slug;
+        }
 
         if ($request->hasFile('image')) {
             Storage::disk('public')->delete($category->image);

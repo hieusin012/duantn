@@ -9,7 +9,7 @@ class Category extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['name', 'image', 'is_active', 'parent_id'];
+    protected $fillable = ['name', 'image', 'slug', 'is_active', 'parent_id'];
 
     public function parent()
     {
