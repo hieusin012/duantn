@@ -11,19 +11,19 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
     public function index()
-    {
-        $products = Product::with('wishlists') // để kiểm tra đã thích hay chưa
-            ->where('is_active', 1)
-            ->whereNull('deleted_at')
-            ->latest()
-            ->paginate(12);
+{
+    // Thêm 'comments' vào eager loading
+    $products = Product::with(['comments', 'wishlists']) // <--- SỬA DÒNG NÀY
+        ->where('is_active', 1)
+        ->whereNull('deleted_at')
+        ->latest()
+        ->paginate(12);
 
+    $categories = Category::whereNull('deleted_at')->get();
+    $brands = Brand::whereNull('deleted_at')->get();
 
-        $categories = Category::whereNull('deleted_at')->get();
-        $brands = Brand::whereNull('deleted_at')->get();
-
-        return view('clients.products.index', compact('products', 'categories', 'brands'));
-    }
+    return view('clients.products.index', compact('products', 'categories', 'brands'));
+}
 
     public function show($slug)
     {
@@ -109,9 +109,9 @@ class ProductController extends Controller
     {
 
 
-        $query = Product::with('wishlists')
-            ->where('is_active', 1)
-            ->whereNull('deleted_at');
+        $query = Product::with(['comments', 'wishlists']) // <--- SỬA DÒNG NÀY
+        ->where('is_active', 1)
+        ->whereNull('deleted_at');
 
 
         // Search by name

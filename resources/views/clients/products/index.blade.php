@@ -99,11 +99,14 @@
                         </a>
                     </div>
                     <div class="product-review">
-                        @for ($i = 1; $i <= 5; $i++)
-                            <i class="icon anm {{ $i <= ($product->rating ?? 4) ? 'anm-star' : 'anm-star-o' }}"></i>
-                            @endfor
-                            <span class="caption hidden ms-1">{{ $product->reviews_count ?? 3 }} Reviews</span>
-                    </div>
+    @php
+        $rating = $product->average_rating; 
+    @endphp
+    @for ($i = 1; $i <= 5; $i++)
+        <i class="icon anm {{ $i <= $rating ? 'anm-star' : 'anm-star-o' }}"></i>
+    @endfor
+    <span class="caption hidden ms-1">{{ $product->reviews_count }} Reviews</span>
+</div>
                     <div class=" product-price mb-1 ">
                         <span class="price text-danger fw-bold fs-5">{{ number_format($product->price, 0, ',', '.') }} VNĐ</span>
                     </div>
