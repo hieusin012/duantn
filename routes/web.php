@@ -383,3 +383,34 @@ Route::get('/blog/danh-muc/{slug}', [ClientBlogController::class, 'showByCategor
 Route::get('/about', function () {
     return view('clients.about');
 })->name('about');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
