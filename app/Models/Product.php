@@ -12,8 +12,17 @@ class Product extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'code', 'name', 'slug', 'image', 'price', 'description',
-        'status', 'is_active', 'views', 'category_id', 'brand_id'
+        'code',
+        'name',
+        'slug',
+        'image',
+        'price',
+        'description',
+        'status',
+        'is_active',
+        'views',
+        'category_id',
+        'brand_id'
     ];
 
     public function galleries()
@@ -41,8 +50,19 @@ class Product extends Model
     }
     public function comments()
     {
-    return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class);
+    }
+    public function getAverageRatingAttribute()
+    {
+        $approvedComments = $this->comments()->where('status', 1);
+        if ($approvedComments->count() > 0) {
+            return round($approvedComments->avg('rating'), 1);
+        }
+        return 0;
     }
 
-
+    public function getReviewsCountAttribute()
+    {
+        return $this->comments()->where('status', 1)->count();
+    }
 }

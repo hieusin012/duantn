@@ -342,7 +342,7 @@
                                             @for ($i = 1; $i <= 5; $i++)
                                                 <i class="icon anm {{ $i <= floor($averageRating) ? 'anm-star' : 'anm-star-o' }}"></i>
                                                 @endfor
-                                        </div>
+                                        </div><br>
                                         <span class="caption ms-2">{{ $totalReviews }} Đánh giá</span>
                                     </div>
                                 </div>

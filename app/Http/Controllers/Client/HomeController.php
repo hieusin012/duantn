@@ -10,12 +10,17 @@ use Illuminate\Http\Request;
 class HomeController extends Controller
 {
     public function index()
-    {
-        // Lấy 8 sản phẩm mới nhất
-        $products = Product::latest()->take(8)->get();
-        // // Lấy 8 sản phẩm bán chạy nhất (giả sử có cột 'sold' trong bảng products)
-        // $bestSellers = Product::orderBy('sold', 'desc')->take(8)->get();
-        $blogs = Blog::where('status', 1)->latest()->take(3)->get(); // chỉ bài đăng công khai
-       return view('clients.home', compact('products','blogs'));
-    }
+{
+    // Lấy 8 sản phẩm mới nhất và tải kèm thông tin comments, wishlists
+    $products = Product::with(['comments', 'wishlists'])
+        ->where('is_active', 1)
+        ->whereNull('deleted_at')
+        ->latest()
+        ->take(8)
+        ->get();
+
+    $blogs = Blog::where('status', 1)->latest()->take(3)->get(); // chỉ bài đăng công khai
+
+    return view('clients.home', compact('products', 'blogs'));
+}
 }
