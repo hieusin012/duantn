@@ -130,7 +130,7 @@
         const tooltipList = tooltipTriggerList.map(function (el) {
             return new bootstrap.Tooltip(el);
         });
-
+//
         // Wishlist toggle
         document.querySelectorAll('.wishlist-toggle').forEach(button => {
             button.addEventListener('click', function () {
@@ -175,3 +175,4 @@
     });
 </script>
 @endsection
+
