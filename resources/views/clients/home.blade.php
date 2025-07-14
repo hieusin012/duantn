@@ -37,6 +37,7 @@
     <h2 class="text-center mb-4">Sản phẩm mới nhất</h2>
     <div class="row">
         @foreach ($products as $product)
+
         <div class="item col-md-3 col-6 mb-4">
             <div class="product-box position-relative">
                 <!-- Product Image -->
@@ -60,8 +61,38 @@
                         </a>
                         <a href="#" class="btn-icon compare" data-bs-toggle="tooltip" title="Add to Compare">
                             <i class="icon anm anm-random-r"></i>
+
+            <div class="col-md-3 col-6 mb-4">
+                <div class="product-box card border-0 bg-light rounded-3 shadow-sm position-relative overflow-hidden h-100">
+                    <!-- Product Image -->
+                    <div class="product-image position-relative">
+                        <a href="{{ route('client.products.show', ['slug' => $product->slug]) }}">
+                            <img src="{{ asset($product->image ?? 'assets/images/placeholder.jpg') }}"
+                                 class="card-img-top blur-up lazyloaded"
+                                 alt="{{ $product->name }}"
+                                 width="625" height="808">
+
                         </a>
+                        <!-- Hover Buttons -->
+                        <div class="button-set style1">
+                            <a href="#" class="btn-icon quickview"
+                               data-bs-toggle="tooltip" title="Quick View">
+                                <i class="icon anm anm-search-plus-l"></i>
+                            </a>
+                            <a href="javascript:void(0);"
+                               class="btn-icon wishlist-toggle"
+                               data-id="{{ $product->id }}"
+                               data-bs-toggle="tooltip"
+                               title="{{ auth()->check() && $product->wishlists->where('user_id', auth()->id())->count() ? 'Bỏ yêu thích' : 'Thêm vào yêu thích' }}">
+                                <i class="icon anm anm-heart {{ auth()->check() && $product->wishlists->where('user_id', auth()->id())->count() ? 'text-danger' : '' }}"></i>
+                            </a>
+                            <a href="#" class="btn-icon compare"
+                               data-bs-toggle="tooltip" title="Add to Compare">
+                                <i class="icon anm anm-random-r"></i>
+                            </a>
+                        </div>
                     </div>
+
                 </div>
                 <!-- Product Details -->
                 <div class="product-details text-center">
@@ -84,10 +115,34 @@
                     </div>
                     <div class="product-price mb-1">
                         <span class="price text-danger fw-bold fs-5">{{ number_format($product->price, 0, ',', '.') }} VNĐ</span>
+
+                    <!-- Product Details -->
+                    <div class="card-body text-center">
+                        <h5 class="card-title">
+                            <a href="{{ route('client.products.show', ['slug' => $product->slug]) }}"
+                               class="text-decoration-none text-primary fw-bold">
+                                {{ $product->name }}
+                            </a>
+                        </h5>
+                        <!-- Rating -->
+                        <div class="product-review mb-2">
+                            @for ($i = 1; $i <= 5; $i++)
+                                <i class="icon anm {{ $i <= ($product->average_rating ?? 4) ? 'anm-star' : 'anm-star-o' }}"></i>
+                            @endfor
+                            <span class="caption hidden ms-1">{{ $product->reviews_count ?? 0 }} đánh giá</span>
+                        </div>
+                        <!-- Price -->
+                        <p class="card-text fw-bold text-danger fs-5">{{ number_format($product->price, 0, ',', '.') }} VND</p>
+                        <!-- Xem chi tiết -->
+                       <!-- Xem chi tiết -->
+<a href="{{ route('client.products.show', ['slug' => $product->slug]) }}"
+    class="btn btn-primary btn-sm">
+     <i class="icon anm anm-eye"> </i>  Xem chi tiết
+ </a>
+
                     </div>
                 </div>
             </div>
-        </div>
         @endforeach
     </div>
 </div>
