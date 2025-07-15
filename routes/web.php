@@ -315,8 +315,8 @@ Route::middleware('auth')->group(function () {
 
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/checkout', [CheckoutController::class, 'showCheckoutForm'])->name('checkout.form');
-    Route::post('/checkout', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
+    Route::post('/checkout', [CheckoutController::class, 'showCheckoutForm'])->name('checkout.form');
+    Route::post('/checkout/process', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
     Route::get('/checkout/success/{order:code}', [CheckoutController::class, 'success'])->name('checkout.success');
 });
 

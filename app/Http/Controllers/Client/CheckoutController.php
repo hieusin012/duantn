@@ -26,51 +26,66 @@ class CheckoutController extends Controller
      *
      * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
      */
-    public function showCheckoutForm()
+    public function showCheckoutForm(Request $request)
     {
         if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để tiến hành thanh toán.');
         }
 
         $userId = Auth::id();
-        // Tải luôn mối quan hệ voucher nếu có
-        $cart = Cart::with('voucher')->where('user_id', $userId)->where('status', 'active')->first();
+        $selectedIds = json_decode($request->selected_items, true);
+        $voucherCode = $request->voucher_code;
 
-        if (!$cart || $cart->items->isEmpty()) {
-            return redirect()->route('client.cart')->with('error', 'Giỏ hàng của bạn đang trống.');
+        $cart = Cart::with('items.variant.color', 'items.variant.size', 'items.product')
+            ->where('user_id', $userId)
+            ->where('status', 'active')
+            ->first();
+
+        if (!$cart || !$selectedIds || empty($selectedIds)) {
+            return redirect()->route('client.cart')->with('error', 'Giỏ hàng của bạn trống hoặc chưa chọn sản phẩm.');
         }
 
-        $cartItems = $cart->items()->with('product', 'variant.color', 'variant.size')->get();
+        // Lọc ra các sản phẩm đã chọn
+        $cartItems = $cart->items->whereIn('id', $selectedIds);
 
-        $subtotal = 0;
-        foreach ($cartItems as $item) {
-            $subtotal += $item->price_at_purchase * $item->quantity;
+        $subtotal = $cartItems->sum(function ($item) {
+            return $item->price_at_purchase * $item->quantity;
+        });
+
+        $discount = 0;
+        $voucher = null;
+
+        if ($voucherCode) {
+            $voucher = Voucher::where('code', $voucherCode)->first();
+            if ($voucher && $voucher->isValid()) {
+                if ($voucher->discount_type === 'fixed') {
+                    $discount = $voucher->discount;
+                } elseif ($voucher->discount_type === 'percent') {
+                    $discount = ($subtotal * $voucher->discount) / 100;
+                }
+
+                // Giới hạn max
+                if ($voucher->max_price && $discount > $voucher->max_price) {
+                    $discount = $voucher->max_price;
+                }
+            }
         }
 
         $shippingCost = 0;
-        $tax = 10;
-        $discount = 0; // Khởi tạo giảm giá bằng 0
+        $tax = 10; // giả định
+        $totalPrice = $subtotal + $shippingCost - $discount;
 
-        // Tính toán giảm giá từ voucher nếu có
-        if ($cart->voucher && $cart->voucher->isValid()) {
-            $voucher = $cart->voucher;
-            if ($voucher->discount_type === 'fixed') {
-                $discount = $voucher->discount;
-            } elseif ($voucher->discount_type === 'percent') {
-                $discount = ($subtotal * $voucher->discount) / 100;
-            }
-
-            // Giới hạn giảm giá tối đa
-            if ($voucher->max_price && $discount > $voucher->max_price) {
-                $discount = $voucher->max_price;
-            }
-        }
-
-        $totalPrice = $subtotal + $shippingCost + $tax - $discount;
-
-        return view('clients.checkout', compact('cart', 'cartItems', 'subtotal', 'shippingCost', 'tax', 'discount', 'totalPrice')); // Đã sửa tên view
+        return view('clients.checkout', compact(
+            'cart',
+            'cartItems',
+            'subtotal',
+            'shippingCost',
+            'tax',
+            'discount',
+            'totalPrice',
+            'voucher'
+        ));
     }
-
 
     /**
      * Xử lý thông tin đặt hàng từ form thanh toán.
@@ -247,9 +262,8 @@ class CheckoutController extends Controller
             if ($validatedData['payment'] === 'Thanh toán khi nhận hàng') {
                 Mail::to($validatedData['email'])->send(new OrderPlacedMail($order));
                 return redirect()->route('checkout.success', ['order' => $order->code])
-                ->with('success', 'Đơn hàng của bạn đã được đặt thành công! Mã đơn hàng: ' . $order->code);
+                    ->with('success', 'Đơn hàng của bạn đã được đặt thành công! Mã đơn hàng: ' . $order->code);
             }
-            
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Checkout failed: ' . $e->getMessage(), ['exception' => $e]);
