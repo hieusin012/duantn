@@ -306,7 +306,13 @@
                             </div>
                         </div>
 
-                        <a href="{{ route('checkout.form') }}" id="cartCheckout" class="btn btn-lg my-4 checkout w-100">Tiến hành thanh toán</a>
+                        <form id="checkoutForm" action="{{ route('checkout.form') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="selected_items" id="selectedItemsInput">
+                            <input type="hidden" name="voucher_code" id="voucherCodeInput">
+                            <button type="submit" class="btn btn-lg my-4 checkout w-100">Tiến hành thanh toán</button>
+                        </form>
+
                         <div class="paymnet-img text-center"><img src="assets/client/images/icons/safepayment.png" alt="Payment" width="299" height="28" /></div>
                     </div>
                 </div>
@@ -506,6 +512,7 @@
 
                     // ✅ Hiện toastr và redirect
                     toastr.success('Áp dụng mã giảm giá thành công!');
+                    localStorage.setItem("appliedVoucherCode", code);
                     setTimeout(() => {
                         window.location.href = '/cart';
                     }, 1500);
@@ -543,6 +550,31 @@
         });
     });
 </script>
+<!-- thanh toán -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkoutForm = document.getElementById('checkoutForm');
+        const selectedInput = document.getElementById('selectedItemsInput');
+
+        checkoutForm.addEventListener('submit', function(e) {
+            const selectedCheckboxes = document.querySelectorAll('.cart-checkbox:checked');
+            const selectedIds = Array.from(selectedCheckboxes).map(cb => cb.dataset.id);
+
+            if (selectedIds.length === 0) {
+                e.preventDefault();
+                toastr.warning('Vui lòng chọn sản phẩm để thanh toán.');
+                return;
+            }
+
+            selectedInput.value = JSON.stringify(selectedIds);
+
+            // ✅ Lấy voucher từ localStorage
+            const voucherCode = localStorage.getItem("appliedVoucherCode");
+            document.getElementById('voucherCodeInput').value = voucherCode || '';
+        });
+    });
+</script>
+
 
 
 
