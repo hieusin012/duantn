@@ -356,7 +356,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile/change-password', [ChangePasswordController::class, 'showChangePasswordForm'])->name('profile.change-password.form');
     Route::post('/profile/update-password', [ChangePasswordController::class, 'changePassword'])->name('profile.update-password');
 });
-
+// Quản lý thống kê
 
 // Thống kê sản phẩm theo danh mục
 Route::get('/admin/thong-ke/san-pham', [ThongKeController::class, 'index'])->name('admin.thongke.index');
