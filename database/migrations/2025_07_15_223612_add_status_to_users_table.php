@@ -9,21 +9,20 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-        Schema::table('categories', function (Blueprint $table) {
-            $table->string('slug')->unique()->after('name');
-        });
+       Schema::table('users', function (Blueprint $table) {
+        $table->string('status')->default('active')->after('phone');
+    });
     }
-
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::table('categories', function (Blueprint $table) {
-            //
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('status');
         });
     }
 };

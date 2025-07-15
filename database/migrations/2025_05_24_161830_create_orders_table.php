@@ -27,6 +27,7 @@ return new class extends Migration
             $table->double('total_price');
             $table->text('note')->nullable(); 
             $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('shipper_id')->nullable()->constrained('shippers')->nullOnDelete();
             $table->softDeletes();
             $table->timestamps();
         });
