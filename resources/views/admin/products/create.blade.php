@@ -52,9 +52,9 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="brand_id" class="control-label">Nhà cung cấp</label>
+                        <label for="brand_id" class="control-label">Thương hiệu</label>
                         <select class="form-control" name="brand_id" id="brand_id">
-                            <option value="">-- Chọn nhà cung cấp --</option>
+                            <option value="">-- Chọn thương hiệu --</option>
                             @foreach ($brands as $brand)
                                 <option value="{{ $brand->id }}" {{ old('brand_id') == $brand->id ? 'selected' : '' }}>{{ $brand->name }}</option>
                             @endforeach
