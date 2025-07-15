@@ -53,6 +53,6 @@ class ApplyVoucherController extends Controller
             'discount_display' => number_format($discount, 0, ',', '.') . ' ₫',
             'total_display' => number_format($newTotal, 0, ',', '.') . ' ₫',
         ]);
-        return redirect()->route('client.cart.index')->with('success', 'Áp dụng mã thành công!');
+        
     }
 }
