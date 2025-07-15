@@ -43,7 +43,7 @@
                                     </span>
                                 </td>
                                 <td>
-                                    
+
                                     <a href="{{ route('admin.shipper.persons.edit', $shipper->id) }}" 
                                        class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
 
@@ -53,6 +53,7 @@
                                         <button onclick="return confirm('Bạn có chắc chắn xoá?')" 
                                                 class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></button>
                                     </form>
+                                    <a href="{{ route('admin.shipper.persons.show', $shipper->id) }}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
                                 </td>
                             </tr>
                         @empty

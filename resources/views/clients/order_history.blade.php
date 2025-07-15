@@ -18,6 +18,7 @@
         @foreach($orders as $order)
         <tr>
             <td>#{{ $order->id }}</td>
+            
             <td>{{ $order->created_at->format('d/m/Y') }}</td>
             <td>{{ \App\Models\Order::getStatuses()[$order->status] ?? $order->status }}</td>
             <td>{{ number_format($order->total_price) }}đ</td>

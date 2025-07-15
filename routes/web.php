@@ -194,6 +194,7 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     Route::get('/persons/{id}/edit', [ShipperController::class, 'edit'])->name('edit');
     Route::put('/persons/{id}', [ShipperController::class, 'update'])->name('update');
     Route::delete('/persons/{id}', [ShipperController::class, 'destroy'])->name('destroy');
+    Route::get('/persons/{id}', [ShipperController::class, 'show'])->name('show');
     });
 
     //comment
@@ -325,8 +326,8 @@ Route::middleware('auth')->group(function () {
 
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/checkout', [CheckoutController::class, 'showCheckoutForm'])->name('checkout.form');
-    Route::post('/checkout', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
+    Route::post('/checkout', [CheckoutController::class, 'showCheckoutForm'])->name('checkout.form');
+    Route::post('/checkout/process', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
     Route::get('/checkout/success/{order:code}', [CheckoutController::class, 'success'])->name('checkout.success');
 });
 
@@ -366,7 +367,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile/change-password', [ChangePasswordController::class, 'showChangePasswordForm'])->name('profile.change-password.form');
     Route::post('/profile/update-password', [ChangePasswordController::class, 'changePassword'])->name('profile.update-password');
 });
-
+// Quản lý thống kê
 
 // Thống kê sản phẩm theo danh mục
 Route::get('/admin/thong-ke/san-pham', [ThongKeController::class, 'index'])->name('admin.thongke.index');

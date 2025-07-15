@@ -1,20 +1,18 @@
-<!--Footer-->
 <div class="footer">
     <div class="newsletterbg clearfix">
         <div class="container">
             <form action="#" method="post" class="footer-newsletter">
                 <div class="row align-items-center">
                     <div class="col-12 col-sm-12 col-md-6 col-lg-6 mb-3 mb-md-0">
-                        <label class="h3 mb-1 clr-none">Sign Up Our Newsletter & Get 10% OFF</label>
-                        <p>Sign up to stay in the loop. Receive updates, access to exclusive deals, and more.
-                        </p>
+                        <label class="h3 mb-1 clr-none">Đăng ký nhận bản tin &amp; Nhận ngay 10% OFF</label>
+                        <p>Luôn cập nhật những thông tin mới, các chương trình khuyến mãi độc quyền và hơn thế nữa.</p>
                     </div>
                     <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                         <div class="input-group">
                             <input type="email" class="form-control input-group-field newsletter-input"
-                                name="email" value="" placeholder="Enter your email address..." required />
+                                name="email" value="" placeholder="Nhập địa chỉ email của bạn..." required />
                             <button type="submit" class="input-group-btn btn btn-secondary newsletter-submit"
-                                name="commit">Subscribe</button>
+                                name="commit">Đăng ký</button>
                         </div>
                     </div>
                 </div>
@@ -25,44 +23,43 @@
         <div class="container">
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-3 col-lg-3 footer-links">
-                    <h4 class="h4">Informations</h4>
+                    <h4 class="h4">Thông tin</h4>
                     <ul>
-                        <li><a href="my-account.html">My Account</a></li>
-                        <li><a href="aboutus-style1.html">About us</a></li>
-                        <li><a href="login.html">Login</a></li>
-                        <li><a href="privacy-policy.html">Privacy policy</a></li>
-                        <li><a href="#">Terms &amp; condition</a></li>
+                        <li><a href="my-account.html">Tài khoản của tôi</a></li>
+                        <li><a href="aboutus-style1.html">Về SportBay</a></li>
+                        <li><a href="login.html">Đăng nhập</a></li>
+                        <li><a href="privacy-policy.html">Chính sách bảo mật</a></li>
+                        <li><a href="terms-conditions.html">Điều khoản &amp; Điều kiện</a></li>
                     </ul>
                 </div>
                 <div class="col-12 col-sm-12 col-md-3 col-lg-3 footer-links">
-                    <h4 class="h4">Quick Shop</h4>
+                    <h4 class="h4">Sản phẩm</h4>
                     <ul>
-                        <li><a href="#">Bags &amp; Accessories</a></li>
-                        <li><a href="#">Tools &amp; Parts</a></li>
-                        <li><a href="#">Vegetables</a></li>
-                        <li><a href="#">Jewelry</a></li>
-                        <li><a href="#">Cosmetics</a></li>
+                        <li><a href="/collections/nam">Quần Áo Nam</a></li>
+                        <li><a href="/collections/nu">Quần Áo Nữ</a></li>
+                        <li><a href="/collections/giay">Giày Thể Thao</a></li>
+                        <li><a href="/collections/phu-kien">Phụ Kiện</a></li>
+                        <li><a href="/collections/moi">Sản phẩm mới</a></li>
                     </ul>
                 </div>
                 <div class="col-12 col-sm-12 col-md-3 col-lg-3 footer-links">
-                    <h4 class="h4">Customer Services</h4>
+                     <h4 class="h4">Chăm sóc khách hàng</h4>
                     <ul>
-                        <li><a href="#">Request Personal Data</a></li>
-                        <li><a href="faqs-style1.html">FAQ's</a></li>
-                        <li><a href="contact-style1.html">Contact Us</a></li>
-                        <li><a href="#">Orders and Returns</a></li>
-                        <li><a href="#">Support Center</a></li>
+                        <li><a href="faqs-style1.html">Câu hỏi thường gặp (FAQs)</a></li>
+                        <li><a href="contact-style1.html">Liên hệ</a></li>
+                        <li><a href="/pages/chinh-sach-doi-tra">Chính sách đổi trả</a></li>
+                        <li><a href="/pages/huong-dan-chon-size">Hướng dẫn chọn size</a></li>
+                        <li><a href="#">Trung tâm hỗ trợ</a></li>
                     </ul>
                 </div>
                 <div class="col-12 col-sm-12 col-md-3 col-lg-3 footer-contact">
-                    <h4 class="h4">Contact Us</h4>
-                    <p class="address d-flex"><i class="icon anm anm-map-marker-al pt-1"></i> 55 Gallaxy Enque,
-                        2568 steet, 23568 NY</p>
+                    <h4 class="h4">Liên hệ với chúng tôi</h4>
+                    <p class="address d-flex"><i class="icon anm anm-map-marker-al pt-1"></i> Số 123, Đường ABC, Quận XYZ, Hà Nội</p>
                     <p class="phone d-flex align-items-center"><i class="icon anm anm-phone-l"></i> <b
-                            class="me-1 d-none">Phone:</b> <a href="tel:401234567890">(+40) 123 456 7890</a></p>
+                            class="me-1 d-none">Phone:</b> <a href="tel:0987654321">(+84) 987 654 321</a></p>
                     <p class="email d-flex align-items-center"><i class="icon anm anm-envelope-l"></i> <b
                             class="me-1 d-none">Email:</b> <a
-                            href="mailto:info@example.com">info@example.com</a></p>
+                            href="mailto:hotro@sportbay.vn">hotro@sportbay.vn</a></p>
                     <ul class="list-inline social-icons mt-3">
                         <li class="list-inline-item"><a href="#" data-bs-toggle="tooltip"
                                 data-bs-placement="top" title="Facebook"><i
@@ -99,9 +96,8 @@
                     <li><i class="icon anm anm-cc-stripe"></i></li>
                     <li><i class="icon anm anm-cc-jcb"></i></li>
                 </ul>
-                <div class="copytext">&copy; 2024 Hema. All Rights Reserved.</div>
+                <div class="copytext">&copy; 2025 sportBay. All Rights Reserved.</div>
             </div>
         </div>
     </div>
 </div>
-<!--End Footer-->

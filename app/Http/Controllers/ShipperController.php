@@ -22,20 +22,24 @@ class ShipperController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
-            'phone' => 'required|string|max:20',
-        ]);
+    'name' => 'required|string|max:255',
+    'email' => 'required|email|unique:users,email',
+    'password' => 'required|min:6',
+    'phone' => 'required|string|max:20',
+    'address' => 'nullable|string|max:255',
+]);
 
-       User::create([
-        'name' => $request->name,
-        'fullname' => $request->name, // hoặc $request->fullname nếu có input riêng
-        'email' => $request->email,
-        'password' => Hash::make($request->password),
-        'phone' => $request->phone,
-        'role' => 'shipper',
-    ]);
+
+      User::create([
+    'name' => $request->name,
+    'fullname' => $request->name,
+    'email' => $request->email,
+    'password' => Hash::make($request->password),
+    'phone' => $request->phone,
+    'address' => $request->address,
+    'role' => 'shipper',
+]);
+
 
 
         return redirect()->route('admin.shipper.persons.index')->with('success', '✅ Thêm shipper thành công.');
@@ -71,6 +75,13 @@ class ShipperController extends Controller
         return redirect()->route('admin.shipper.persons.index')
             ->with('success', '✅ Cập nhật shipper thành công.');
     }
+
+    public function show($id)
+{
+    $shipper = User::where('role', 'shipper')->findOrFail($id);
+    return view('admin.shipper.persons.show', compact('shipper'));
+}
+
 
     public function destroy($id)
     {

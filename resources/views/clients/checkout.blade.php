@@ -103,33 +103,29 @@
                         <div>
                             <h6 class="mb-0">{{ $item->product->name ?? 'Sản phẩm không tồn tại' }}</h6>
                             <small>Màu: {{ $item->variant->color->name ?? 'N/A' }}, Size: {{ $item->variant->size->name ?? 'N/A' }}</small><br>
-                            <small>SL: {{ $item->quantity }} x {{ number_format($item->price_at_purchase, 0, ',', '.') }} VNĐ</small>
+                            <small>SL: {{ $item->quantity }} x {{ number_format($item->price_at_purchase, 0, ',', '.') }}  ₫</small>
                         </div>
-                        <span>{{ number_format($item->price_at_purchase * $item->quantity, 0, ',', '.') }} VNĐ</span>
+                        <span>{{ number_format($item->price_at_purchase * $item->quantity, 0, ',', '.') }}  ₫</span>
                     </div>
                     <hr>
                     @endforeach
 
                     <div class="d-flex justify-content-between mb-2">
                         <span>Tổng tiền sản phẩm:</span>
-                        <span>{{ number_format($subtotal, 0, ',', '.') }} VNĐ</span>
+                        <span>{{ number_format($subtotal, 0, ',', '.') }}  ₫</span>
                     </div>
                     <div class="d-flex justify-content-between mb-2">
                         <span>Mã giảm giá:</span>
-                        <span>{{ number_format($discount, 0, ',', '.') }} VNĐ</span> {{-- Đã tính toán từ controller --}}
-                    </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Thuế:</span>
-                        <span>{{ number_format($tax, 0, ',', '.') }} VNĐ</span>
+                        <span>{{ number_format($discount, 0, ',', '.') }}  ₫</span> {{-- Đã tính toán từ controller --}}
                     </div>
                     <div class="d-flex justify-content-between mb-3">
                         <span>Phí vận chuyển:</span>
-                        <span>{{ number_format($shippingCost, 0, ',', '.') }} VNĐ (FREE SHIPPING)</span>
+                        <span>{{ number_format($shippingCost, 0, ',', '.') }}  ₫ (FREE SHIPPING)</span>
                     </div>
 
                     <div class="d-flex justify-content-between fw-bold fs-5 text-primary">
                         <span>TỔNG SỐ TIỀN:</span>
-                        <span>{{ number_format($totalPrice, 0, ',', '.') }} VNĐ</span>
+                        <span>{{ number_format($totalPrice, 0, ',', '.') }}  ₫</span>
                     </div>
                 </div>
             </div>
