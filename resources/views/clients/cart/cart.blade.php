@@ -138,7 +138,7 @@
                             </td>
 
                             {{-- Giá --}}
-                            <td class="text-center">{{ number_format($item->price_at_purchase) }} VNĐ</td>
+                            <td class="text-center">{{ number_format($item->price_at_purchase) }} ₫</td>
 
                             {{-- Số lượng --}}
                             <td class="text-center">
@@ -162,7 +162,7 @@
                             </td>
 
                             {{-- Tổng tiền --}}
-                            <td class="text-center">{{ number_format($item->price_at_purchase * $item->quantity) }} VNĐ</td>
+                            <td class="text-center">{{ number_format($item->price_at_purchase * $item->quantity) }} ₫</td>
 
                             {{-- Xóa --}}
                             <td class="text-center">
@@ -232,7 +232,15 @@
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <div>
                                                             <h1 class="mb-1">
-                                                                <strong>Voucher {{ $item->discount }}{{ $item->is_active == 1 ? '%' : ' K' }}</strong>
+                                                                <strong>
+                                                                    Voucher
+                                                                    @if ($item->discount_type == 'percent')
+                                                                    {{ number_format($item->discount, 0, ',', '.') }}%
+                                                                    @else
+                                                                    {{ number_format($item->discount/1000, 0, ',', '.') }}K
+                                                                    @endif
+                                                                </strong>
+
                                                             </h1>
                                                             <p class="mb-1"><b>Mã:</b> {{ $item->code }}</p>
                                                             <small><b>HSD:</b> {{ \Carbon\Carbon::parse($item->end_date)->format('Y-m-d') }}</small>
@@ -264,33 +272,40 @@
             <div class="col-12 col-sm-12 col-md-12 col-lg-4 cart-footer">
                 <div class="cart-info sidebar-sticky">
                     <div class="cart-order-detail cart-col">
-                        <div class="row g-0 border-bottom pb-2">
-                            <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Tổng tiền</strong> </span>
-                            <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span class="money">0 VNĐ </span></span>
-                        </div>
-                        <div class="row g-0 border-bottom py-2">
-                            <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Mã giảm giá</strong></span>
-                            <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span class="money" id="discount-amount" class="mt-2"> 0 VNĐ</span></span>
-                        </div>
-                        <div class="row g-0 border-bottom py-2">
-                            <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Thuế</strong></span>
-                            <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span class="money">$10.00</span></span>
-                        </div>
-                        <div class="row g-0 border-bottom py-2">
-                            <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Phí vận chuển</strong></span>
-                            <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span class="money">Free shipping</span></span>
-                        </div>
-                        <div class="row g-0 pt-2">
-                            <span class="col-6 col-sm-6 cart-subtotal-title fs-6"><strong>Tổng số tiền</strong></span>
-                            <span class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary"><b class="money" id="cart-total"> 0 VNĐ </b></span>
+                        <div class="cart-order-detail cart-col">
+                            {{-- Tổng tiền gốc chưa giảm --}}
+                            <div class="row g-0 border-bottom pb-2">
+                                <span class="col-6 cart-subtotal-title"><strong>Tổng tiền gốc</strong></span>
+                                <span class="col-6 cart-subtotal-title cart-subtotal text-end">
+                                    <span class="money" id="original-total" style="font-size: 20px;">0 ₫</span>
+                                </span>
+                            </div>
+
+                            {{-- Mã giảm giá --}}
+                            <div class="row g-0 border-bottom py-2">
+                                <span class="col-6 cart-subtotal-title"><strong>Mã giảm giá</strong></span>
+                                <span class="col-6 cart-subtotal-title cart-subtotal text-end">
+                                    <span class="money text-danger" id="discount-amount" style="font-size: 15px;">- 0 ₫</span>
+                                </span>
+                            </div>
+
+                            {{-- Thuế, vận chuyển (không đổi) --}}
+                            <div class="row g-0 border-bottom py-2">
+                                <span class="col-6 cart-subtotal-title"><strong>Phí vận chuyển</strong></span>
+                                <span class="col-6 cart-subtotal-title cart-subtotal text-end">
+                                    <span class="money">Free</span>
+                                </span>
+                            </div>
+
+                            {{-- Tổng thanh toán sau giảm --}}
+                            <div class="row g-0 pt-2">
+                                <span class="col-6 cart-subtotal-title fs-6"><strong>Tổng tiền</strong></span>
+                                <span class="col-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary">
+                                    <b class="money" id="cart-total">0 ₫</b>
+                                </span>
+                            </div>
                         </div>
 
-                        <p class="cart-shipping mt-3">Phí vận chuyển &amp; thuế được tính trước khi thanh toán</p>
-                        <p class="cart-shipping fst-normal freeShipclaim"><i class="me-2 align-middle icon anm anm-truck-l"></i><b>FREE SHIPPING</b> ELIGIBLE</p>
-                        <div class="customCheckbox cart-tearm">
-                            <input type="checkbox" value="allen-vela" id="cart-tearm">
-                            <label for="cart-tearm">I agree with the terms and conditions</label>
-                        </div>
                         <a href="{{ route('checkout.form') }}" id="cartCheckout" class="btn btn-lg my-4 checkout w-100">Tiến hành thanh toán</a>
                         <div class="paymnet-img text-center"><img src="assets/client/images/icons/safepayment.png" alt="Payment" width="299" height="28" /></div>
                     </div>
@@ -352,7 +367,7 @@
                             <!-- End Product Name -->
                             <!-- Product Price -->
                             <div class="product-price">
-                                <span class="price">{{ number_format($product->price, 0, ',', '.') }} VNĐ</span>
+                                <span class="price">{{ number_format($product->price, 0, ',', '.') }} ₫</span>
                             </div>
                             <!-- End Product Price -->
                             <!-- Product Review -->
@@ -400,6 +415,7 @@
     document.addEventListener("DOMContentLoaded", function() {
         const checkboxes = document.querySelectorAll(".cart-checkbox");
         const totalEl = document.getElementById("cart-total");
+        const original = document.getElementById("original-total");
 
         // Lấy danh sách ID đã chọn từ localStorage
         let selectedIds = JSON.parse(localStorage.getItem("selectedCartItems")) || [];
@@ -425,6 +441,11 @@
 
             // Hiển thị tổng tiền
             totalEl.textContent = new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }).format(total);
+
+            original.textContent = new Intl.NumberFormat('vi-VN', {
                 style: 'currency',
                 currency: 'VND'
             }).format(total);

@@ -160,7 +160,7 @@
                             <a class="reviewLink d-flex-center" href="#reviews">Viết đánh giá</a>
                         </div>
                         <div class="product-price d-flex-center my-3">
-                            <span class="price">{{ number_format($product->price, 0, ',', '.') }} VNĐ</span>
+                            <span class="price">{{ number_format($product->price, 0, ',', '.') }} ₫</span>
                         </div>
                         <div class="sort-description mb-3">{{ $product->description ?? 'Sản phẩm chất lượng cao từ thương hiệu uy tín.' }}</div>
                     </div>
@@ -316,7 +316,7 @@
                 <ul class="checkmark-info">
                     <li>Giao hàng: Trong vòng 24 giờ</li>
                     <li>Bảo hành thương hiệu 1 năm</li>
-                    <li>Miễn phí vận chuyển cho đơn hàng từ 500.000 VNĐ.</li>
+                    <li>Miễn phí vận chuyển cho đơn hàng từ 500.000 ₫.</li>
                     <li>Thời gian giao hàng toàn quốc - 2-5 ngày làm việc</li>
                     <li>Có thể thanh toán khi nhận hàng (COD)</li>
                     <li>Chính sách đổi trả dễ dàng trong 30 ngày</li>
@@ -472,7 +472,7 @@
                             <a href="{{ route('client.products.show', $relatedProduct->slug) }}" class="text-decoration-none text-primary fw-bold fw-semibold fs-6">{{ $relatedProduct->name }}</a>
                         </div>
                         <div class="product-price">
-                            <span class="price text-danger fw-bold fs-5">{{ number_format($relatedProduct->price, 0, ',', '.') }} VNĐ</span>
+                            <span class="price text-danger fw-bold fs-5">{{ number_format($relatedProduct->price, 0, ',', '.') }} ₫</span>
                         </div>
                     </div>
                 </div>

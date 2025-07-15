@@ -108,7 +108,7 @@
     <span class="caption hidden ms-1">{{ $product->reviews_count }} Reviews</span>
 </div>
                     <div class=" product-price mb-1 ">
-                        <span class="price text-danger fw-bold fs-5">{{ number_format($product->price, 0, ',', '.') }} VNĐ</span>
+                        <span class="price text-danger fw-bold fs-5">{{ number_format($product->price, 0, ',', '.') }} ₫</span>
                     </div>
                     
 
