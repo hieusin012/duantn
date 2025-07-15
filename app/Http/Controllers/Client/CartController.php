@@ -10,22 +10,24 @@ use App\Models\Cart;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\CartItem;
+use App\Models\Voucher;
 
 class CartController extends Controller
 {
     // Hiển thị giỏ hàng
     public function index()
     {
-        $cart = Cart::with('items.product', 'items.variant')->where([
-        'user_id' => Auth::id(),
-        'status' => 'active' // Thay đổi từ 0 thành 'active'
-    ])->first();
+        $cart = Cart::with('items.product', 'items.variant')
+            ->where('user_id', Auth::id())
+            ->where('status', 'active') // ĐÚNG KIỂU string
+            ->first();
+        $voucher = Voucher::where('end_date', '>=', now())->get();
         $products = Product::where('is_active', 1)
             ->whereNull('deleted_at')
             ->latest()
             ->paginate(12);
 
-        return view('clients.cart.cart', compact('cart', 'products'));
+        return view('clients.cart.cart', compact('cart', 'products', 'voucher'));
     }
 
     // Thêm sản phẩm vào giỏ hàng
@@ -52,9 +54,9 @@ class CartController extends Controller
 
         // Tạo hoặc lấy giỏ hàng
         $cart = Cart::firstOrCreate([
-        'user_id' => $user->id,
-        'status' => 'active', // Thay đổi từ 0 thành 'active'
-    ]);
+            'user_id' => $user->id,
+            'status' => 'active', // Thay đổi từ 0 thành 'active'
+        ]);
         $price = $variant->sale_price ?? $variant->price;
 
         if (is_null($price)) {
@@ -65,7 +67,7 @@ class CartController extends Controller
             ->where('product_id', $request->product_id)
             ->where('variant_id', $variant->id)
             ->first();
-           
+
         if ($item) {
             $item->increment('quantity', $request->quantity);
         } else {
@@ -95,43 +97,25 @@ class CartController extends Controller
     // Cập nhật giỏ hàng
     public function updateCart(Request $request)
     {
-        $request->validate([
-            'selected' => 'array',
-            'quantity' => 'array',
-            'quantity.*' => 'integer|min:1'
-        ]);
-        $cart = Cart::with('items')->where([
-        'user_id' => Auth::id(),
-        'status' => 'active' // Thay đổi từ 0 thành 'active'
-    ])->first();
+        $cart = Cart::where('user_id', Auth::id())
+            ->where('status', 'active')
+            ->first();
+
         if (!$cart) {
-            return back()->with('error', 'Giỏ hàng không tồn tại.');
+            return redirect()->back()->with('error', 'Không tìm thấy giỏ hàng!');
         }
-        $selectedItems = $request->input('selected', []);
-        $quantities = $request->input('quantity', []);
-        if (empty($selectedItems)) {
-            return back()->with('error', 'Vui lòng chọn ít nhất một sản phẩm để cập nhật.');
-        }
-        $totalPrice = 0;
-        $totalQuantity = 0;
-        foreach ($cart->items as $item) {
-            if (in_array($item->id, $selectedItems)) {
-                $quantity = isset($quantities[$item->id]) ? (int)$quantities[$item->id] : 1;
-                if ($quantity <= 0) {
-                    $item->delete();
-                } else {
-                    $item->update(['quantity' => $quantity]);
-                }
-                $totalQuantity += $quantity;
-                $totalPrice += $item->price_at_purchase * $quantity;
+
+        foreach ($request->input('quantity', []) as $itemId => $quantity) {
+            $item = CartItem::find($itemId);
+            if ($item && $item->cart_id == $cart->id) {
+                $item->quantity = $quantity;
+                $item->save();
             }
         }
-        if ($totalQuantity === 0) {
-            $cart->delete(); // Xóa giỏ hàng nếu không còn sản phẩm nào
-            return redirect()->route('client.cart')->with('success', 'Giỏ hàng đã được cập nhật và trống.');
-        }
-        return redirect()->route('client.cart')->with('success', 'Giỏ hàng đã được cập nhật thành công!')->with(['total_price' => $totalPrice,]);
+
+        return redirect()->back()->with('success', 'Cập nhật giỏ hàng thành công!');
     }
+
 
     // Xóa sản phẩm khỏi giỏ hàng
     public function removeFromCart($productId)
@@ -152,5 +136,4 @@ class CartController extends Controller
 
         return back()->with('success', 'Đã xóa sản phẩm khỏi giỏ hàng.');
     }
-    
 }

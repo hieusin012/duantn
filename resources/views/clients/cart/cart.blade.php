@@ -5,6 +5,71 @@
 @endsection
 
 @section('content')
+<style>
+    /* Ẩn mũi tên tăng giảm của input[type=number] */
+    input[type="number"].no-spinner::-webkit-outer-spin-button,
+    input[type="number"].no-spinner::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type="number"].no-spinner {
+        -moz-appearance: textfield;
+        /* Firefox */
+    }
+
+    /* (Tuỳ chọn) Làm cho input tròn đẹp hơn nếu muốn */
+    input.cart-qty-input.qty {
+        border-left: none;
+        border-right: none;
+        font-size: 15px;
+        padding-left: 0;
+        padding-right: 0;
+        margin-top: 5px;
+    }
+
+    .input-group.quantity-group {
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    .input-group.quantity-group button {
+        border: none;
+        background: #fff;
+        transition: background 0.2s;
+    }
+
+    .input-group.quantity-group button:hover {
+        background: #f0f0f0;
+    }
+
+    .input-group.quantity-group input {
+        border: none;
+    }
+
+    .cart-image a img {
+        transition: transform 0.3s ease;
+
+    }
+
+    .cart-image a:hover img {
+        transform: scale(1.05);
+    }
+
+
+
+    .ribbon {
+        z-index: 2;
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+</style>
+
 <div id="page-content">
     <!--Page Header-->
     <div class="page-header text-center">
@@ -29,94 +94,103 @@
             <!--Cart Content-->
             <div class="col-12 col-sm-12 col-md-12 col-lg-8 main-col">
                 <!--Cart Form-->
-                <form action="{{ route('client.cart.update') }}" method="post" class="cart-table table-bottom-brd">
-                    @csrf
+                <table class="table align-middle">
+                    <thead class="cart-row cart-header small-hide position-relative">
+                        <tr>
+                            <th class="action"><input type="checkbox" id="select-all"></th>
+                            <th colspan="2" class="text-start">Sản phẩm</th>
+                            <th class="text-center">Giá</th>
+                            <th class="text-center">Số lượng</th>
+                            <th class="text-center">Tổng tiền</th>
+                            <th class="text-center">Xóa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if ($cart && $cart->items->count())
+                        @foreach ($cart->items as $item)
+                        <tr class="align-middle">
+                            <td class="text-center">
+                                <input type="checkbox"
+                                    name="selected[]"
+                                    value="{{ $item->id }}"
+                                    class="cart-checkbox"
+                                    data-id="{{ $item->id }}"
+                                    data-price="{{ $item->price_at_purchase * $item->quantity }}">
+                            </td>
 
-                    <table class="table align-middle">
-                        <thead class="cart-row cart-header small-hide position-relative">
-                            <tr>
-                                <th class="action"><input type="checkbox" id="select-all"></th>
-                                <th colspan="2" class="text-start">Sản phẩm</th>
-                                <th class="text-center">Giá</th>
-                                <th class="text-center">Số lượng</th>
-                                <th class="text-center">Tổng tiền</th>
-                                <th class="text-center">Xóa</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if ($cart && $cart->items->count())
-                            @foreach ($cart->items as $item)
-                            <tr class="cart-row cart-flex position-relative">
-                                <td class="cart-delete text-center small-hide">
-                                    <input type="checkbox" name="selected[]" value="{{ $item->id }}" class="cart-checkbox" />
+                            {{-- Ảnh sản phẩm --}}
+                            <td class="text-center">
+                                <a href="{{ route('client.products.show', ['slug' => $item->product->slug]) }}"
+                                    class="d-inline-block border rounded overflow-hidden shadow-sm"
+                                    style="width: 70px; height: 70px;">
+                                    <img src="{{ $item->variant->image ? asset('storage/' . $item->variant->image) : asset('images/no-image.jpg') }}"
+                                        alt="{{ $item->product->name }}"
+                                        class="img-fluid w-100 h-100"
+                                        style="object-fit: cover;">
+                                </a>
+                            </td>
 
-                                </td>
-                                <td class="cart-image cart-flex-item">
-                                    <a href="product-layout1.html"><img
-                                            src="{{ $item->variant->image ? asset('storage/' . $item->variant->image) : asset('images/no-image.jpg') }}"
-                                            width="60" hight="60" class="rounded" alt="{{ $item->product->name }}"></a>
+                            {{-- Tên và thông tin --}}
+                            <td class="cart-meta">
+                                <strong>{{ $item->product->name }}</strong><br>
+                                Màu: {{ $item->variant->color->name ?? '—' }},
+                                Size: {{ $item->variant->size->name ?? '—' }}
+                            </td>
 
-                                </td>
-                                <td class="cart-meta small-text-left cart-flex-item">
-                                    {{-- <div class="list-view-item-title">
-                                        <a href="product-layout1.html">{{ $item->product->name }}</a>
-                                    </div> --}}
-                                    <div class="list-view-item-title">
-                                        <a href="{{ route('client.products.show', ['slug' => $item->product->slug]) }}">
-                                            {{ $item->product->name }}
-                                        </a>
-                                    </div>
-                                    <div class="cart-meta-text">
-                                        Color: {{ $item->variant->color->name ?? '—' }}<br>Size: {{ $item->variant->size->name ?? '—' }}<br>Qty: {{ $item->quantity }}
-                                    </div>
-                                    <div class="cart-price d-md-none">
-                                        <span class="money fw-500">$99.00</span>
-                                    </div>
-                                </td>
-                                <td class="cart-price cart-flex-item text-center small-hide">
-                                    <span class="money">{{ number_format($item->price_at_purchase) }} VNĐ</span>
-                                </td>
-                                <td class="cart-update-wrapper cart-flex-item text-end text-md-center">
-                                    <div class="cart-qty d-flex justify-content-end justify-content-md-center">
-                                        <div class="qtyField">
-                                            <a class="qtyBtn minus" href="#;"><i class="icon anm anm-minus-r"></i></a>
-                                            <input class="cart-qty-input qty" type="number" name="quantity[{{ $item->id }}]" value="{{ $item->quantity }}" pattern="[0-9]*" />
-                                            <a class="qtyBtn plus" href="#;"><i class="icon anm anm-plus-r"></i></a>
-                                        </div>
-                                    </div>
-                                    <a href="#" title="Remove" class="removeMb d-md-none d-inline-block text-decoration-underline mt-2 me-3">Remove</a>
-                                </td>
-                                <td class="cart-price cart-flex-item text-center small-hide">
-                                    <span class="money fw-500">{{ number_format($item->price_at_purchase * $item->quantity) }} VNĐ</span>
-                                </td>
-                                <td class="cart-delete text-center small-hide">
-                                    <button type="button" onclick="document.getElementById('delete-form-{{ $item->id }}').submit(); " title="Xóa">
-                                        <i class="icon anm anm-times-r"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            @endforeach
-                            @else
-                            <tr class="cart-row cart-flex position-relative">
-                                <td colspan="7" class="text-center">
-                                    <div class="alert alert-info text-center" role="alert">
-                                        <strong>Giỏ hàng của bạn đang trống!</strong> Hãy thêm sản phẩm vào giỏ hàng để tiếp tục mua sắm.
-                                    </div>
-                            </tr>
-                            @endif
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="3" class="text-start"><a href="{{ route('client.products.index') }}" class="btn btn-outline-secondary btn-sm cart-continue"><i class="icon anm anm-angle-left-r me-2 d-none"></i> Tiếp tục mua sắm</a></td>
-                                <td colspan="3" class="text-end">
-                                    <a href="{{ route('client.cart.hasdelete') }}" class="btn btn-outline-secondary btn-sm cart-continue"><i class="icon anm anm-angle-left-r me-2 d-none"></i>Sản phẩm đã xóa</a>
-                                    <button type="submit" name="update" class="btn btn-secondary btn-sm cart-continue ms-2"> Cập nhật giỏ hàng</button>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
+                            {{-- Giá --}}
+                            <td class="text-center">{{ number_format($item->price_at_purchase) }} VNĐ</td>
 
-                </form>
+                            {{-- Số lượng --}}
+                            <td class="text-center">
+                                <form action="{{ route('client.cart.update') }}" method="post" class="d-inline-block">
+                                    @csrf
+                                    <div class="input-group quantity-group" style="max-width: 120px;">
+                                        <button type="button" class="btn btn-outline-secondary btn-sm qtyBtn minus px-2">
+                                            <i class="icon anm anm-minus-r"></i>
+                                        </button>
+                                        <input type="number"
+                                            name="quantity[{{ $item->id }}]"
+                                            class="form-control text-center cart-qty-input qty no-spinner"
+                                            value="{{ $item->quantity }}"
+                                            min="1"
+                                            style="padding: 0.375rem 0; height: 32px;" readonly />
+                                        <button type="button" class="btn btn-outline-secondary btn-sm qtyBtn plus px-2">
+                                            <i class="icon anm anm-plus-r"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </td>
+
+                            {{-- Tổng tiền --}}
+                            <td class="text-center">{{ number_format($item->price_at_purchase * $item->quantity) }} VNĐ</td>
+
+                            {{-- Xóa --}}
+                            <td class="text-center">
+                                <button type="button" onclick="document.getElementById('delete-form-{{ $item->id }}').submit();">
+                                    <i class="icon anm anm-times-r"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        @endforeach
+                        @else
+                        <tr>
+                            <td colspan="7" class="text-center">
+                                <div class="alert alert-info"><strong>Giỏ hàng của bạn đang trống!</strong></div>
+                            </td>
+                        </tr>
+                        @endif
+                    </tbody>
+
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-start"><a href="{{ route('client.products.index') }}" class="btn btn-outline-secondary btn-sm cart-continue"><i class="icon anm anm-angle-left-r me-2 d-none"></i> Tiếp tục mua sắm</a></td>
+                            <td colspan="3" class="text-end">
+                                <a href="{{ route('client.cart.hasdelete') }}" class="btn btn-outline-secondary btn-sm cart-continue"><i class="icon anm anm-angle-left-r me-2 d-none"></i>Sản phẩm đã xóa</a>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+
                 @if ($cart && $cart->items)
                 @foreach ($cart->items as $item)
                 <form id="delete-form-{{ $item->id }}" action="{{ route('client.cart.remove', $item->id) }}" method="POST" style="display: none;">
@@ -130,66 +204,69 @@
                 <!--Note with Shipping estimates-->
                 <div class="row my-4 pt-3">
                     <div class="col-12 col-sm-12 col-md-12 col-lg-6 mb-12 cart-col">
-                        <div class="cart-note mb-4">
-                            <h5>Add a note to your order</h5>
-                            <label for="cart-note">Notes about your order, e.g. special notes for delivery.</label>
-                            <textarea name="note" id="cart-note" class="form-control cart-note-input" rows="3" required></textarea>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 mb-12 cart-col">
                         <div class="cart-discount">
                             <h5>Mã giảm giá</h5>
-                            <form id="voucher-form" data-url="{{ route('client.cart.applyVoucher') }}">
-                                <div class="form-group">
-                                    <label for="voucher_code">Nhập mã giảm giá:</label>
-                                    <div id="voucher-result"></div>
-                                    <div class="input-group0">
-                                        <input class="form-control" type="text" id="voucher_code" name="voucher_code" placeholder="Nhập mã..." required />
-                                        <button type="submit" class="btn text-nowrap mt-3">Áp dụng</button>
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                Chọn hoặc nhập mã giảm giá
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Mã giảm giá</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="input-group mb-3">
+                                                <input type="text" class="form-control" placeholder="Nhập mã ưu đãi" id="manualVoucherCode">
+                                                <button class="btn btn-danger" id="btnApplyManual">ÁP DỤNG</button>
+                                            </div>
+
+                                            <!-- Danh sách voucher -->
+                                            <form id="voucher-form">
+                                                @foreach($voucher as $item)
+                                                <div class="card mb-2 border rounded p-3">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <h1 class="mb-1">
+                                                                <strong>Voucher {{ $item->discount }}{{ $item->is_active == 1 ? '%' : ' K' }}</strong>
+                                                            </h1>
+                                                            <p class="mb-1"><b>Mã:</b> {{ $item->code }}</p>
+                                                            <small><b>HSD:</b> {{ \Carbon\Carbon::parse($item->end_date)->format('Y-m-d') }}</small>
+                                                        </div>
+                                                        <div>
+                                                            <input type="radio" name="selected_voucher" value="{{ $item->id }}" data-code="{{ $item->code }}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @endforeach
+
+                                                <button type="button" class="btn btn-danger w-100" id="btnApplyRadio">ÁP DỤNG</button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 mb-12 cart-col">
-                        <div id="shipping-calculator" class="mt-4 mt-lg-0">
-                            <h5>Get shipping estimates</h5>
-                            <form class="estimate-form row row-cols-lg-3 row-cols-md-3 row-cols-1" action="#" method="post">
-                                <div class="form-group">
-                                    <label for="address_country">Country</label>
-                                    <select id="address_country" name="address[country]" data-default="United States">
-                                        <option value="0" label="Select a country ... " selected="selected">Select a country...</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="address_province">State</label>
-                                    <select id="address_province" name="address[province]" data-default="">
 
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="address_zip">Postal/Zip Code</label>
-                                    <input type="text" id="address_zip" name="address[zip]" />
-                                </div>
-                                <div class="actionRow">
-                                    <input type="button" class="btn btn-secondary get-rates" value="Calculate shipping" />
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+
                 </div>
                 <!--End Note with Shipping estimates-->
             </div>
             <!--End Cart Content-->
 
-            
+
             <!--Cart Sidebar-->
             <div class="col-12 col-sm-12 col-md-12 col-lg-4 cart-footer">
                 <div class="cart-info sidebar-sticky">
                     <div class="cart-order-detail cart-col">
                         <div class="row g-0 border-bottom pb-2">
                             <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Tổng tiền</strong> </span>
-                            <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span class="money" id="total-price">@if(session('total_price')) {{ number_format(session('total_price')) }} VNĐ @else 0 VNĐ @endif</span></span>
+                            <span class="col-6 col-sm-6 cart-subtotal-title cart-subtotal text-end"><span class="money">0 VNĐ </span></span>
                         </div>
                         <div class="row g-0 border-bottom py-2">
                             <span class="col-6 col-sm-6 cart-subtotal-title"><strong>Mã giảm giá</strong></span>
@@ -205,7 +282,7 @@
                         </div>
                         <div class="row g-0 pt-2">
                             <span class="col-6 col-sm-6 cart-subtotal-title fs-6"><strong>Tổng số tiền</strong></span>
-                            <span class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary"><b class="money" id="total-after-discount">@if(session('total_price')) {{ number_format(session('total_price')) }} VNĐ @else 0 VNĐ @endif</b></span>
+                            <span class="col-6 col-sm-6 cart-subtotal-title fs-5 cart-subtotal text-end text-primary"><b class="money" id="cart-total"> 0 VNĐ </b></span>
                         </div>
 
                         <p class="cart-shipping mt-3">Phí vận chuyển &amp; thuế được tính trước khi thanh toán</p>
@@ -296,71 +373,156 @@
     <!--End Related Products-->
 </div>
 <script>
-    document.getElementById('select-all').addEventListener('change', function() {
-        document.querySelectorAll('input[name="selected[]"]').forEach(cb => {
-            cb.checked = this.checked;
-        });
-    });
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.qtyBtn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
 
-  
-    document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('voucher-form');
+                const input = this.closest('.quantity-group').querySelector('.cart-qty-input');
+                let value = parseInt(input.value);
 
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            const code = document.getElementById('voucher_code').value.trim();
-            if (!code) {
-                alert('Vui lòng nhập mã giảm giá');
-                return;
-            }
-
-            fetch("{{ route('client.cart.applyVoucher') }}", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({ voucher_code: code })
-            })
-            .then(async res => {
-                const data = await res.json();
-
-                if (!res.ok) {
-                    document.getElementById('voucher-result').innerHTML = `
-                        <div class="alert alert-danger">${data.message || 'Có lỗi xảy ra'}</div>`;
-                    return;
+                if (this.classList.contains('plus')) {
+                    value += 1;
+                } else if (this.classList.contains('minus') && value > 1) {
+                    value -= 1;
                 }
 
-                // ✅ Thành công
-                document.getElementById('voucher-result').innerHTML = `
-                    <div class="alert alert-success">
-                        ${data.message}<br>
-                        Giảm giá: <strong>${parseInt(data.discount).toLocaleString()} VNĐ</strong>
-                    </div>`;
+                input.value = value;
 
-                // ✅ Cập nhật số tiền
-                const totalElement = document.getElementById('total-price');
-                const discountElement = document.getElementById('discount-amount');
-                const afterDiscountElement = document.getElementById('total-after-discount');
-
-                if (totalElement && discountElement && afterDiscountElement) {
-                    const totalRaw = totalElement.innerText.replace(/[^\d]/g, '');
-                    const total = parseInt(totalRaw);
-                    const discount = parseInt(data.discount);
-                    const afterDiscount = total - discount;
-
-                    discountElement.innerText = `-${discount.toLocaleString()} VNĐ`;
-                    afterDiscountElement.innerHTML = `<span class="text-danger">${afterDiscount.toLocaleString()} VNĐ</span>`;
-                }
-            })
-            .catch(error => {
-                console.error('Lỗi fetch:', error);
-                document.getElementById('voucher-result').innerHTML = `
-                    <div class="alert alert-danger">Lỗi kết nối máy chủ!</div>`;
+                // Submit form
+                const form = this.closest('form');
+                if (form) form.submit();
             });
         });
     });
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const checkboxes = document.querySelectorAll(".cart-checkbox");
+        const totalEl = document.getElementById("cart-total");
+
+        // Lấy danh sách ID đã chọn từ localStorage
+        let selectedIds = JSON.parse(localStorage.getItem("selectedCartItems")) || [];
+
+        // Khôi phục trạng thái checkbox đã lưu
+        checkboxes.forEach(cb => {
+            if (selectedIds.includes(cb.dataset.id)) {
+                cb.checked = true;
+            }
+        });
+
+        // Hàm cập nhật tổng và lưu lại các checkbox đã check
+        function updateTotalAndSave() {
+            let total = 0;
+            let selected = [];
+
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    total += parseFloat(cb.dataset.price);
+                    selected.push(cb.dataset.id); // lưu id
+                }
+            });
+
+            // Hiển thị tổng tiền
+            totalEl.textContent = new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }).format(total);
+
+            // Lưu danh sách id đã chọn vào localStorage
+            localStorage.setItem("selectedCartItems", JSON.stringify(selected));
+        }
+
+        // Bắt sự kiện thay đổi checkbox
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', updateTotalAndSave);
+        });
+
+        // Gọi hàm ngay lúc đầu để cập nhật tổng tiền
+        updateTotalAndSave();
+    });
+</script>
+<script>
+    // Lấy tổng tiền từ các checkbox đã chọn
+    function getCartTotal() {
+        let total = 0;
+        document.querySelectorAll(".cart-checkbox:checked").forEach(cb => {
+            total += parseFloat(cb.dataset.price);
+        });
+        return total;
+    }
+
+    // Gửi mã giảm giá lên server để kiểm tra
+    function applyVoucher(code) {
+        const total = getCartTotal();
+
+        if (total <= 0) {
+            toastr.warning("Vui lòng chọn sản phẩm để áp dụng mã giảm giá.");
+            return;
+        }
+
+        fetch('/cart/apply-voucher', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({
+                    code: code,
+                    cart_total: total
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    // ✅ Cập nhật hiển thị
+                    document.getElementById('discount-amount').innerText = `- ${data.discount_display}`;
+                    document.getElementById('cart-total').innerText = data.total_display;
+
+                    // ✅ Đóng modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('exampleModal'));
+                    if (modal) modal.hide();
+
+                    // ✅ Hiện toastr và redirect
+                    toastr.success('Áp dụng mã giảm giá thành công!');
+                    setTimeout(() => {
+                        window.location.href = '/cart';
+                    }, 1500);
+                } else {
+                    toastr.error(data.message || 'Mã giảm giá không hợp lệ!');
+                }
+            })
+            .catch(error => {
+                console.error('Lỗi:', error);
+                toastr.error('Có lỗi khi áp dụng mã giảm giá.');
+            });
+    }
+
+
+    // Nhấn nút ÁP DỤNG từ input nhập tay
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('btnApplyManual').addEventListener('click', function() {
+            const code = document.getElementById('manualVoucherCode').value.trim();
+            if (!code) {
+                alert('Vui lòng nhập mã.');
+                return;
+            }
+            applyVoucher(code);
+        });
+
+        // Nhấn nút ÁP DỤNG từ radio voucher
+        document.getElementById('btnApplyRadio').addEventListener('click', function() {
+            const selected = document.querySelector('input[name="selected_voucher"]:checked');
+            if (!selected) {
+                alert('Vui lòng chọn một mã giảm giá.');
+                return;
+            }
+            const code = selected.dataset.code;
+            applyVoucher(code);
+        });
+    });
+</script>
+
+
 
 @endsection
