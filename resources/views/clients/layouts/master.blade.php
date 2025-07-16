@@ -22,7 +22,9 @@
     <div class="page-wrapper">
         @include('clients.layouts.partials.header')
         @yield('banner')
-        @yield('content')
+        <main class="flex-grow-1">
+            @yield('content')
+        </main>
         @include('clients.layouts.partials.chat')
         @include('clients.layouts.partials.footer')
     </div>
@@ -58,6 +60,34 @@
                 top: 83
             },
         })
+    </script>
+    @endif
+    @if (request()->get('message') === 'success')
+    <script>
+        $.toast({
+            heading: 'Thành công !',
+            text: 'Bạn đã thanh toán đơn hàng thành công!',
+            showHideTransition: 'slide',
+            icon: 'success',
+            position: {
+                right: 1,
+                top: 83
+            },
+        });
+    </script>
+    @endif
+    @if (request()->get('message') === 'warning')
+    <script>
+        $.toast({
+            heading: 'Cảnh báo !',
+            text: 'Bạn đã đặt hàng thành công, nhưng chưa thanh toán!',
+            showHideTransition: 'slide',
+            icon: 'warning',
+            position: {
+                right: 1,
+                top: 83
+            },
+        });
     </script>
     @endif
     @stack('scripts')

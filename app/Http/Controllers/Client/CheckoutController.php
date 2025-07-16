@@ -29,23 +29,26 @@ class CheckoutController extends Controller
     public function showCheckoutForm(Request $request)
     {
         if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để tiến hành thanh toán.');
+            return redirect()->route('login')->with('error', 'Vui lòng đăng nhập.');
         }
 
         $userId = Auth::id();
-        $selectedIds = json_decode($request->selected_items, true);
-        $voucherCode = $request->voucher_code;
+        $selectedIds = json_decode($request->input('selected_items'), true);
+        $voucherCode = $request->input('voucher_code');
+        if (!$selectedIds || empty($selectedIds)) {
+            return redirect()->route('client.cart')->with('error', 'Vui lòng chọn sản phẩm.');
+        }
 
         $cart = Cart::with('items.variant.color', 'items.variant.size', 'items.product')
             ->where('user_id', $userId)
             ->where('status', 'active')
             ->first();
 
-        if (!$cart || !$selectedIds || empty($selectedIds)) {
-            return redirect()->route('client.cart')->with('error', 'Giỏ hàng của bạn trống hoặc chưa chọn sản phẩm.');
+        if (!$cart) {
+            return redirect()->route('client.cart')->with('error', 'Không tìm thấy giỏ hàng.');
         }
 
-        // Lọc ra các sản phẩm đã chọn
+        // Lấy các item được chọn
         $cartItems = $cart->items->whereIn('id', $selectedIds);
 
         $subtotal = $cartItems->sum(function ($item) {
@@ -57,22 +60,39 @@ class CheckoutController extends Controller
 
         if ($voucherCode) {
             $voucher = Voucher::where('code', $voucherCode)->first();
-            if ($voucher && $voucher->isValid()) {
-                if ($voucher->discount_type === 'fixed') {
-                    $discount = $voucher->discount;
-                } elseif ($voucher->discount_type === 'percent') {
-                    $discount = ($subtotal * $voucher->discount) / 100;
-                }
 
-                // Giới hạn max
-                if ($voucher->max_price && $discount > $voucher->max_price) {
-                    $discount = $voucher->max_price;
+            if ($voucher) {
+                $now = now();
+
+                $isValid = (!$voucher->start_date || $voucher->start_date <= $now)
+                    && (!$voucher->end_date || $voucher->end_date >= $now)
+                    && ($voucher->quantity === null || $voucher->quantity > 0);
+
+                if ($isValid) {
+                    if ($voucher->discount_type == 'fixed') {
+                        $discount = $voucher->discount;
+                    } elseif ($voucher->discount_type == 'percent') {
+                        $discount = ($subtotal * $voucher->discount) / 100;
+                    }
+
+                    if ($voucher->max_price && $discount > $voucher->max_price) {
+                        $discount = $voucher->max_price;
+                    }
+
+                    // Gán vào cart
+                    $cart->voucher_id = $voucher->id;
+                    $cart->save();
+                } else {
+                    $voucher = null; // Không hợp lệ
                 }
             }
+        } else {
+            // Không có mã voucher thì reset lại
+            $cart->voucher_id = null;
+            $cart->save();
         }
 
         $shippingCost = 0;
-        $tax = 10; // giả định
         $totalPrice = $subtotal + $shippingCost - $discount;
 
         return view('clients.checkout', compact(
@@ -80,12 +100,12 @@ class CheckoutController extends Controller
             'cartItems',
             'subtotal',
             'shippingCost',
-            'tax',
             'discount',
             'totalPrice',
             'voucher'
         ));
     }
+
 
     /**
      * Xử lý thông tin đặt hàng từ form thanh toán.
@@ -136,22 +156,27 @@ class CheckoutController extends Controller
             }
 
             $shippingCost = 0;
-            $tax = 10;
             $discount = 0;
 
-            if ($cart->voucher && $cart->voucher->isValid()) {
-                $voucher = $cart->voucher;
-                if ($voucher->discount_type === 'fixed') {
-                    $discount = $voucher->discount;
-                } elseif ($voucher->discount_type === 'percent') {
-                    $discount = ($subtotal * $voucher->discount) / 100;
-                }
-                if ($voucher->max_price && $discount > $voucher->max_price) {
-                    $discount = $voucher->max_price;
+            if ($request->filled('voucher_code')) {
+                $voucher = Voucher::where('code', $request->voucher_code)->first();
+                if ($voucher && $voucher->isValid()) {
+                    $cart->voucher_id = $voucher->id;
+                    $cart->save();
+
+                    // TÍNH GIẢM GIÁ
+                    if ($voucher->discount_type == 'percent') {
+                        $discount = round($subtotal * $voucher->discount / 100);
+                    } elseif ($voucher->discount_type == 'fixed') {
+                        $discount = $voucher->discount;
+                    }
+
+                    // Đảm bảo giảm không vượt quá tổng tiền
+                    $discount = min($discount, $subtotal);
                 }
             }
 
-            $finalTotalPrice = $subtotal + $shippingCost + $tax - $discount;
+            $finalTotalPrice = $subtotal + $shippingCost - $discount;
 
             $order = Order::create([
                 'user_id' => $userId,
@@ -261,8 +286,7 @@ class CheckoutController extends Controller
             }
             if ($validatedData['payment'] === 'Thanh toán khi nhận hàng') {
                 Mail::to($validatedData['email'])->send(new OrderPlacedMail($order));
-                return redirect()->route('checkout.success', ['order' => $order->code])
-                    ->with('success', 'Đơn hàng của bạn đã được đặt thành công! Mã đơn hàng: ' . $order->code);
+                return redirect()->route('checkout.success', ['order' => $order->code, 'message' => 'success',]);
             }
         } catch (\Exception $e) {
             DB::rollBack();
@@ -304,29 +328,33 @@ class CheckoutController extends Controller
             $orderCode = $vnpData['vnp_TxnRef'];
             $order = Order::where('code', $orderCode)->first();
 
-            if ($order && $vnpData['vnp_ResponseCode'] === '00' && $vnpData['vnp_TransactionStatus'] === '00') {
-                // ✅ Cập nhật đơn hàng
-                $order->payment_status = 'Đã thanh toán';
-                $order->status = 'Đã xác nhận'; // Hoặc giữ nguyên logic của anh
-                $order->save();
-                Mail::to($order->email)->send(new OrderPlacedMail($order));
+            if ($order) {
+                if ($vnpData['vnp_ResponseCode'] === '00' && $vnpData['vnp_TransactionStatus'] === '00') {
+                    // Thành công
+                    $order->payment_status = 'Đã thanh toán';
+                    $order->status = 'Đã xác nhận';
+                    $order->save();
 
-                // ✅ Lưu thông tin thanh toán
-                Payment::create([
-                    'order_code' => $orderCode,
-                    'transaction_no' => $vnpData['vnp_TransactionNo'] ?? null,
-                    'bank_code' => $vnpData['vnp_BankCode'] ?? null,
-                    'card_type' => $vnpData['vnp_CardType'] ?? null,
-                    'amount' => ($vnpData['vnp_Amount'] ?? 0) / 100,
-                    'pay_date' => $vnpData['vnp_PayDate'] ?? null,
-                    'response_code' => $vnpData['vnp_ResponseCode'] ?? null,
-                    'transaction_status' => $vnpData['vnp_TransactionStatus'] ?? null,
-                ]);
+                    Mail::to($order->email)->send(new OrderPlacedMail($order));
 
-                return redirect()->route('checkout.success', ['order' => $order->code])
-                    ->with('success', 'Bạn đã thanh toán đơn hàng thành công!');;
+                    Payment::create([
+                        'order_code' => $orderCode,
+                        'transaction_no' => $vnpData['vnp_TransactionNo'] ?? null,
+                        'bank_code' => $vnpData['vnp_BankCode'] ?? null,
+                        'card_type' => $vnpData['vnp_CardType'] ?? null,
+                        'amount' => ($vnpData['vnp_Amount'] ?? 0) / 100,
+                        'pay_date' => $vnpData['vnp_PayDate'] ?? null,
+                        'response_code' => $vnpData['vnp_ResponseCode'] ?? null,
+                        'transaction_status' => $vnpData['vnp_TransactionStatus'] ?? null,
+                    ]);
+                    return redirect()->route('checkout.success', ['order' => $order->code, 'message' => 'success',]);
+                        
+                } else {
+                    // ❌ KHÔNG thành công → vẫn hiển thị trang thành công, nhưng chưa thanh toán
+                    return redirect()->route('checkout.success', ['order' => $order->code, 'message' => 'warning',]);
+                }
             }
-
+            
             return redirect('/cart')->with('error', 'Giao dịch không hợp lệ hoặc đơn hàng không tồn tại!');
         } else {
             return redirect('/cart')->with('error', 'Chữ ký không hợp lệ!');
