@@ -69,10 +69,7 @@
             text: 'Bạn đã thanh toán đơn hàng thành công!',
             showHideTransition: 'slide',
             icon: 'success',
-            position: {
-                right: 1,
-                top: 83
-            },
+            position: 'top-center',
         });
     </script>
     @endif
@@ -83,10 +80,7 @@
             text: 'Bạn đã đặt hàng thành công, nhưng chưa thanh toán!',
             showHideTransition: 'slide',
             icon: 'warning',
-            position: {
-                right: 1,
-                top: 83
-            },
+            position: 'top-centter',
         });
     </script>
     @endif
