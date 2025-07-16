@@ -15,24 +15,24 @@
                                 <i class="icon anm anm-angle-down-l"></i></a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 @foreach ($header_categories as $cat)
-                                    <li>
-                                        {{-- <a class="dropdown-item" href="{{ route('products.byCategory', $cat->slug) }}"> --}}
-                                            {{ $cat->name }}
-                                        </a>
-                                    </li>
+                                <li>
+                                    {{-- <a class="dropdown-item" href="{{ route('products.byCategory', $cat->slug) }}"> --}}
+                                    {{ $cat->name }}
+                                    </a>
+                                </li>
                                 @endforeach
                             </ul>
                         </li>
                         <li class="lvl1 parent dropdown"><a href="#">HOT DEAL <i class="icon anm anm-angle-down-l"></i></a></li>
                         <li class="lvl1 parent dropdown"><a href="{{ route('client.blog') }}">Blog
-                            <i class="icon anm anm-angle-down-l"></i></a>
+                                <i class="icon anm anm-angle-down-l"></i></a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 @foreach ($blog_categories as $cat)
-                                    <li>
-                                        <a class="dropdown-item" href="{{ route('client.blog-categories.show', $cat->slug) }}">
-                                            {{ $cat->name }}
-                                        </a>
-                                    </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('client.blog-categories.show', $cat->slug) }}">
+                                        {{ $cat->name }}
+                                    </a>
+                                </li>
                                 @endforeach
                             </ul>
                         </li>
@@ -149,10 +149,16 @@
                 <div class="header-cart iconset" title="Cart">
                     <a href="{{ route('client.cart') }}" class="header-cart btn-minicart clr-none">
                         <i class="hdr-icon icon anm anm-cart-l"></i>
+                        @php
+                        $cartItemCount = 0;
+                        if (Auth::check()) {
+                        $cart = \App\Models\Cart::withCount('items')->where('user_id', Auth::id())->where('status', 0)->first();
+                        $cartItemCount = $cart?->items_count ?? 0;
+                        }
+                        @endphp
                         <span class="cart-count">
-                            {{ Auth::check() ? \App\Models\Cart::where('user_id', Auth::id())->where('status', 0)->first()?->items()->count() ?? 0 : 0 }}
+                            {{ $cartItemCount }}
                         </span>
-
                     </a>
                 </div>
                 <button type="button" class="iconset pe-0 menu-icon js-mobile-nav-toggle mobile-nav--open d-lg-none" title="Menu"><i class="hdr-icon icon anm anm-times-l"></i><i class="hdr-icon icon anm anm-bars-r"></i></button>

@@ -213,7 +213,7 @@
 
                             <!-- Modal -->
                             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
+                                <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h1 class="modal-title fs-5" id="exampleModalLabel">Mã giảm giá</h1>
@@ -312,6 +312,7 @@
                             <input type="hidden" name="voucher_code" id="voucherCodeInput">
                             <button type="submit" class="btn btn-lg my-4 checkout w-100">Tiến hành thanh toán</button>
                         </form>
+
 
                         <div class="paymnet-img text-center"><img src="assets/client/images/icons/safepayment.png" alt="Payment" width="299" height="28" /></div>
                     </div>
@@ -418,22 +419,24 @@
     });
 </script>
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkoutForm = document.getElementById('checkoutForm');
+        const selectedInput = document.getElementById('selectedItemsInput');
+        const voucherInput = document.getElementById('voucherCodeInput');
+
         const checkboxes = document.querySelectorAll(".cart-checkbox");
         const totalEl = document.getElementById("cart-total");
         const original = document.getElementById("original-total");
 
-        // Lấy danh sách ID đã chọn từ localStorage
+        // --- 1. Khôi phục checkbox đã chọn từ localStorage
         let selectedIds = JSON.parse(localStorage.getItem("selectedCartItems")) || [];
-
-        // Khôi phục trạng thái checkbox đã lưu
         checkboxes.forEach(cb => {
             if (selectedIds.includes(cb.dataset.id)) {
                 cb.checked = true;
             }
         });
 
-        // Hàm cập nhật tổng và lưu lại các checkbox đã check
+        // --- 2. Hàm cập nhật tổng tiền & lưu selected IDs
         function updateTotalAndSave() {
             let total = 0;
             let selected = [];
@@ -441,54 +444,55 @@
             checkboxes.forEach(cb => {
                 if (cb.checked) {
                     total += parseFloat(cb.dataset.price);
-                    selected.push(cb.dataset.id); // lưu id
+                    selected.push(cb.dataset.id);
                 }
             });
 
-            // Hiển thị tổng tiền
             totalEl.textContent = new Intl.NumberFormat('vi-VN', {
                 style: 'currency',
                 currency: 'VND'
             }).format(total);
 
-            original.textContent = new Intl.NumberFormat('vi-VN', {
-                style: 'currency',
-                currency: 'VND'
-            }).format(total);
+            original.textContent = totalEl.textContent;
 
-            // Lưu danh sách id đã chọn vào localStorage
             localStorage.setItem("selectedCartItems", JSON.stringify(selected));
         }
 
-        // Bắt sự kiện thay đổi checkbox
+        // --- 3. Sự kiện chọn checkbox
         checkboxes.forEach(cb => {
             cb.addEventListener('change', updateTotalAndSave);
         });
 
-        // Gọi hàm ngay lúc đầu để cập nhật tổng tiền
-        updateTotalAndSave();
-    });
-</script>
-<script>
-    // Lấy tổng tiền từ các checkbox đã chọn
-    function getCartTotal() {
-        let total = 0;
-        document.querySelectorAll(".cart-checkbox:checked").forEach(cb => {
-            total += parseFloat(cb.dataset.price);
+        // --- 4. Gửi form thanh toán
+        checkoutForm.addEventListener('submit', function (e) {
+            const selectedCheckboxes = document.querySelectorAll('.cart-checkbox:checked');
+            const selectedIds = Array.from(selectedCheckboxes).map(cb => cb.dataset.id);
+
+            if (selectedIds.length === 0) {
+                e.preventDefault();
+                toastr.warning('Vui lòng chọn sản phẩm để thanh toán.');
+                return;
+            }
+
+            selectedInput.value = JSON.stringify(selectedIds);
+
+            const storedVoucher = localStorage.getItem("appliedVoucherCode") || '';
+            voucherInput.value = storedVoucher;
+
+            console.log("🛒 selectedItems:", selectedInput.value);
+            console.log("🎟️ voucherCode:", voucherInput.value);
         });
-        return total;
-    }
 
-    // Gửi mã giảm giá lên server để kiểm tra
-    function applyVoucher(code) {
-        const total = getCartTotal();
+        // --- 5. Áp dụng voucher (từ nhập tay hoặc radio)
+        function applyVoucher(code) {
+            const total = getCartTotal();
 
-        if (total <= 0) {
-            toastr.warning("Vui lòng chọn sản phẩm để áp dụng mã giảm giá.");
-            return;
-        }
+            if (total <= 0) {
+                toastr.warning("Vui lòng chọn sản phẩm để áp dụng mã giảm giá.");
+                return;
+            }
 
-        fetch('/cart/apply-voucher', {
+            fetch('/cart/apply-voucher', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -502,20 +506,16 @@
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    // ✅ Cập nhật hiển thị
                     document.getElementById('discount-amount').innerText = `- ${data.discount_display}`;
                     document.getElementById('cart-total').innerText = data.total_display;
 
-                    // ✅ Đóng modal
+                    localStorage.setItem("appliedVoucherCode", code); // ⚠️ lưu đúng mã
+                    document.getElementById('voucherCodeInput').value = code;
+
                     const modal = bootstrap.Modal.getInstance(document.getElementById('exampleModal'));
                     if (modal) modal.hide();
 
-                    // ✅ Hiện toastr và redirect
                     toastr.success('Áp dụng mã giảm giá thành công!');
-                    localStorage.setItem("appliedVoucherCode", code);
-                    setTimeout(() => {
-                        window.location.href = '/cart';
-                    }, 1500);
                 } else {
                     toastr.error(data.message || 'Mã giảm giá không hợp lệ!');
                 }
@@ -524,12 +524,10 @@
                 console.error('Lỗi:', error);
                 toastr.error('Có lỗi khi áp dụng mã giảm giá.');
             });
-    }
+        }
 
-
-    // Nhấn nút ÁP DỤNG từ input nhập tay
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('btnApplyManual').addEventListener('click', function() {
+        // --- 6. Nhấn ÁP DỤNG (nhập tay)
+        document.getElementById('btnApplyManual').addEventListener('click', function () {
             const code = document.getElementById('manualVoucherCode').value.trim();
             if (!code) {
                 alert('Vui lòng nhập mã.');
@@ -538,8 +536,8 @@
             applyVoucher(code);
         });
 
-        // Nhấn nút ÁP DỤNG từ radio voucher
-        document.getElementById('btnApplyRadio').addEventListener('click', function() {
+        // --- 7. Nhấn ÁP DỤNG (voucher radio)
+        document.getElementById('btnApplyRadio').addEventListener('click', function () {
             const selected = document.querySelector('input[name="selected_voucher"]:checked');
             if (!selected) {
                 alert('Vui lòng chọn một mã giảm giá.');
@@ -548,32 +546,21 @@
             const code = selected.dataset.code;
             applyVoucher(code);
         });
+
+        // --- 8. Tính tổng tiền các checkbox đã chọn
+        function getCartTotal() {
+            let total = 0;
+            document.querySelectorAll(".cart-checkbox:checked").forEach(cb => {
+                total += parseFloat(cb.dataset.price);
+            });
+            return total;
+        }
+
+        // Gọi lần đầu để hiển thị tổng
+        updateTotalAndSave();
     });
 </script>
-<!-- thanh toán -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const checkoutForm = document.getElementById('checkoutForm');
-        const selectedInput = document.getElementById('selectedItemsInput');
 
-        checkoutForm.addEventListener('submit', function(e) {
-            const selectedCheckboxes = document.querySelectorAll('.cart-checkbox:checked');
-            const selectedIds = Array.from(selectedCheckboxes).map(cb => cb.dataset.id);
-
-            if (selectedIds.length === 0) {
-                e.preventDefault();
-                toastr.warning('Vui lòng chọn sản phẩm để thanh toán.');
-                return;
-            }
-
-            selectedInput.value = JSON.stringify(selectedIds);
-
-            // ✅ Lấy voucher từ localStorage
-            const voucherCode = localStorage.getItem("appliedVoucherCode");
-            document.getElementById('voucherCodeInput').value = voucherCode || '';
-        });
-    });
-</script>
 
 
 
