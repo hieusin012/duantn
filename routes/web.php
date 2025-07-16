@@ -287,6 +287,10 @@ Route::get('/products/search', [ClientProductController::class, 'search'])->name
 
 // Trang chi tiết sản phẩm (dùng slug để SEO tốt hơn)// Trang chi tiết sản phẩm (dùng slug)
 Route::get('san-pham/{slug}', [ClientProductController::class, 'show'])->name('client.products.show');
+// biến thể
+// routes/web.php
+Route::get('/product/variant-info', [ClientProductController::class, 'getVariantInfo'])->name('product.variant.info');
+
 
 // comment
 Route::post('/comments/client-store', [CommentController::class, 'storeClient'])->name('client.comments.store')->middleware('auth');
