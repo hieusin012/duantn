@@ -9,7 +9,12 @@ class AddShipperToOrdersTable extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->unsignedBigInteger('shipper_id')->nullable()->after('user_id');
+            
+            $table->foreignId('shipper_id')
+                ->nullable()
+                ->after('user_id')
+                ->constrained('shippers')
+                ->nullOnDelete();
             $table->timestamp('assigned_at')->nullable()->after('shipper_id');
         });
     }

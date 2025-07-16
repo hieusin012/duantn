@@ -38,6 +38,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\AdminReturnRequestController;
+use App\Http\Controllers\ShipperController;
 
 // Auth
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -184,6 +185,16 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
 
         Route::get('/orders/accept/{id}', [\App\Http\Controllers\ShipperOrderController::class, 'accept'])->name('accept');
         Route::get('/orders/complete/{id}', [\App\Http\Controllers\ShipperOrderController::class, 'complete'])->name('complete');
+    });
+
+    Route::prefix('shipper')->middleware(['auth'])->name('shipper.persons.')->group(function () {
+    Route::get('/persons', [ShipperController::class, 'index'])->name('index');
+    Route::get('/persons/create', [ShipperController::class, 'create'])->name('create');
+    Route::post('/persons/store', [ShipperController::class, 'store'])->name('store');
+    Route::get('/persons/{id}/edit', [ShipperController::class, 'edit'])->name('edit');
+    Route::put('/persons/{id}', [ShipperController::class, 'update'])->name('update');
+    Route::delete('/persons/{id}', [ShipperController::class, 'destroy'])->name('destroy');
+    Route::get('/persons/{id}', [ShipperController::class, 'show'])->name('show');
     });
 
     //comment

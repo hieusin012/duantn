@@ -9,21 +9,20 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-        Schema::table('categories', function (Blueprint $table) {
-            $table->string('slug')->unique()->after('name');
+         Schema::table('users', function (Blueprint $table) {
+            $table->enum('status', ['active', 'inactive'])->default('active')->change();
         });
     }
-
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::table('categories', function (Blueprint $table) {
-            //
+        Schema::table('users', function (Blueprint $table) {
+            $table->tinyInteger('status')->default(1)->change(); // ví dụ rollback về số
         });
     }
 };

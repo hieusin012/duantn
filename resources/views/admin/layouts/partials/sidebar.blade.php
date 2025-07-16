@@ -131,7 +131,12 @@
                         <span class="app-menu__label">Quản Lí Danh Sách Đơn Hàng Chuyển Đi Shipper</span>
                   </a>
             </li>
-              
+               <li>
+                  <a class="app-menu__item {{ request()->routeIs('admin.shipper.persons*') ? 'active' : '' }}" href="{{ route('admin.shipper.persons.index') }}">
+                        <i class="app-menu__icon fa fa-shipping-fast"></i>
+                        <span class="app-menu__label">Quản Lí Danh Sách Shipper</span>
+                  </a>
+            </li>
             <li>
                   <a class="app-menu__item {{ request()->routeIs('admin.suppliers*') ? 'active' : '' }}" href="{{ route('admin.suppliers.index') }}">
                       <i class="app-menu__icon fa fa-building"></i>
