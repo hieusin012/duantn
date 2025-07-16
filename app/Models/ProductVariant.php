@@ -35,18 +35,21 @@ class ProductVariant extends Model
     {
         return $this->belongsTo(Size::class, 'size_id');
     }
-        public function totalSold()
+    public function totalSold()
     {
-        return $this->OrderDetail()->sum('quantity');
+        return $this->orderDetails()->sum('quantity');
     }
+
     public function galleries()
     {
         return $this->hasMany(ProductGallery::class);
     }
     public function orderDetails()
     {
-    return $this->hasMany(OrderDetail::class, 'variant_id');
+        return $this->hasMany(OrderDetail::class, 'variant_id');
     }
-
-
+    public function displayPrice()
+    {
+        return $this->sale_price ?? $this->price;
+    }
 }
