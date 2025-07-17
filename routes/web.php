@@ -89,7 +89,7 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
         // Route xóa vĩnh viễn tất cả sản phẩm đã xóa mềm
         Route::delete('/products/force-delete-all', [ProductController::class, 'forceDeleteAll'])->name('products.force-delete-all');
     });
-
+       
     // Product Variants
     Route::resource('product-variants', ProductVariantController::class);
     // Categories
