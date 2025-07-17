@@ -115,18 +115,27 @@
                 <div class="col-lg-6 col-md-6 col-sm-12 col-12 product-layout-img mb-4 mb-md-0">
                     <div class="product-sticky-style">
                         <div class="product-details-img product-thumb-left-style d-flex justify-content-center">
+                            @php
+                            $colorsShown = [];
+                            @endphp
+
                             <div class="product-thumb thumb-left">
-                                <div id="gallery" class="product-thumb-vertical h-100">
-                                    @foreach($product->variants as $image)
+                                <div id="gallery" class="product-thumb-vertical h-100 d-flex flex-column gap-3">
+                                    @foreach($product->variants as $variant)
+                                    @if(!in_array($variant->color, $colorsShown))
                                     <img
-                                        src="{{ asset('storage/' . $image->image) }}"
+                                        src="{{ asset('storage/' . $variant->image) }}"
                                         class="product-thumb-img"
                                         alt="Thumbnail"
-                                        onclick="changeMainImage(this)"
-                                        style="width: 100px; height: 100px; object-fit: cover; cursor: pointer; border-radius: 6px;" />
+                                        onclick="changeMainImage(this)" />
+                                    @php
+                                    $colorsShown[] = $variant->color;
+                                    @endphp
+                                    @endif
                                     @endforeach
                                 </div>
                             </div>
+
                             <div class="zoompro-wrap product-zoom-right rounded-0">
                                 <div class="zoompro-span"><img id="main-image" class="zoompro rounded-0 img-thumbnail rounded shadow" src="{{ asset($product->image) }}" data-zoom-image="{{ asset($product->image) }}" alt="product" width="625" height="808" /></div>
                             </div>
@@ -164,7 +173,6 @@
                                 {{ number_format($product->price, 0, ',', '.') }} ₫
                             </span>
                         </div>
-                        <div class="sort-description mb-3">{{ $product->description ?? 'Sản phẩm chất lượng cao từ thương hiệu uy tín.' }}</div>
                     </div>
 
                     <form method="post" action="{{ route('client.cart.add') }}" id="add-to-cart-form" class="product-form product-form-border hidedropdown">
@@ -275,7 +283,7 @@
                     <hr class="my-2">
 
                     <!-- Thông tin sản phẩm -->
-                    <table class="table table-borderless align-middle fs-9" >
+                    <table class="table table-borderless align-middle fs-9">
                         <tbody>
                             <tr>
                                 <th scope="row" class="text-nowrap">
@@ -528,7 +536,7 @@
             <h2>Sản phẩm liên quan</h2>
         </div>
 
-        <div class="product-slider-4items gp10 arwOut5 grid-products">
+        <div class="product-slider-4items gp10 arwOut5 grid-products mb-5">
             @foreach($relatedProducts as $relatedProduct)
             <div class="item col-item">
                 <div class="product-box">
@@ -541,7 +549,14 @@
                         </div>
                         <div class="product-price">
                             <span class="price text-danger fw-bold fs-5">{{ number_format($relatedProduct->price, 0, ',', '.') }} ₫</span>
+                            <div>
+                                <a href="{{ route('client.products.show', ['slug' => $product->slug]) }}"
+                                    class="btn btn-primary btn-sm">
+                                    <i class="icon anm anm-eye"> </i> Xem chi tiết
+                                </a>
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>

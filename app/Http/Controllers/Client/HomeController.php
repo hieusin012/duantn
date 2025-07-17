@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
+use App\Models\Brand;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Models\Category;
+
 
 class HomeController extends Controller
 {
@@ -21,6 +24,9 @@ class HomeController extends Controller
 
     $blogs = Blog::where('status', 1)->latest()->take(3)->get(); // chỉ bài đăng công khai
 
-    return view('clients.home', compact('products', 'blogs'));
+    $category = Category::get();
+    $brand = Brand::get();
+
+    return view('clients.home', compact('products', 'blogs', 'category', 'brand'));
 }
 }
