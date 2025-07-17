@@ -16,14 +16,17 @@
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 @foreach ($header_categories as $cat)
                                 <li>
-                                     <a class="dropdown-item fs-10" href="{{ route('products.byCategory', $cat->slug) }}">
-                                    {{ $cat->name }}
+                                    <a class="dropdown-item fs-10" href="{{ route('products.byCategory', $cat->slug) }}">
+                                        {{ $cat->name }}
                                     </a>
                                 </li>
                                 @endforeach
                             </ul>
                         </li>
-                        <li class="lvl1 parent dropdown"><a href="#">HOT DEAL <i class="icon anm anm-angle-down-l"></i></a></li>
+                        <li class="lvl1 parent dropdown"><a href="{{ route('hot-deals.index') }}">HOT DEAL 
+                            {{-- <i class="icon anm anm-angle-down-l"></i> --}}
+                            </a>
+                        </li>
                         <li class="lvl1 parent dropdown"><a href="{{ route('client.blog') }}">Blog
                                 <i class="icon anm anm-angle-down-l"></i></a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">

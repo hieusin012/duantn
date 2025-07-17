@@ -28,6 +28,17 @@
                         </span>
                     </div>
                 </div>
+                <div class="row mb-3">
+                    <div class="col-md-3"><strong>Là Hot Deal?:</strong>
+                        {{ $product->is_hot_deal ? 'Có' : 'Không' }}
+                    </div>
+                    <div class="col-md-3"><strong>Phần trăm giảm (%):</strong>
+                        {{ $product->discount_percent ? $product->discount_percent . '%' : '0%' }}
+                    </div>
+                    <div class="col-md-3"><strong>Hết hạn ưu đãi:</strong>
+                        {{ $product->deal_end_at ? \Carbon\Carbon::parse($product->deal_end_at)->format('H:i d/m/Y') : 'Không có' }}
+                    </div>
+                </div>
                 <div class="row mb-4">
                     <div class="col-md-6">
                         <strong>Ảnh sản phẩm:</strong><br>

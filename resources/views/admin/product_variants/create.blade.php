@@ -78,17 +78,17 @@
         </div>
 
         <div class="mb-3">
-            <label for="sale_start" class="form-label">Ngày bắt đầu giảm giá</label>
-            <input type="date" name="sale_start" id="sale_start" class="form-control @error('sale_start') is-invalid @enderror">
-            @error('sale_start')
+            <label for="sale_start_date" class="form-label">Ngày bắt đầu giảm giá</label>
+            <input type="date" name="sale_start_date" id="sale_start_date" class="form-control @error('sale_start_date') is-invalid @enderror">
+            @error('sale_start_date')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
 
         <div class="mb-3">
-            <label for="sale_end" class="form-label">Ngày kết thúc giảm giá</label>
-            <input type="date" name="sale_end" id="sale_end" class="form-control @error('sale_end') is-invalid @enderror">
-            @error('sale_end')
+            <label for="sale_end_date" class="form-label">Ngày kết thúc giảm giá</label>
+            <input type="date" name="sale_end_date" id="sale_end_date" class="form-control @error('sale_end_date') is-invalid @enderror">
+            @error('sale_end_date')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>

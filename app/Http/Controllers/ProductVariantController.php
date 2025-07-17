@@ -35,6 +35,8 @@ class ProductVariantController extends Controller
             'size_id' => 'required|exists:sizes,id',
             'price' => 'required|numeric',
             'sale_price' => 'nullable|numeric',
+            'sale_start_date' => 'nullable|date',
+            'sale_end_date' => 'nullable|date|after_or_equal:sale_start_date',
             'quantity' => 'required|integer',
             'image' => 'nullable|max:2048'
         ]);
@@ -50,6 +52,8 @@ class ProductVariantController extends Controller
             'size_id' => $request->size_id,
             'price' => $request->price,
             'sale_price' => $request->sale_price,
+            'sale_start_date' => $request->sale_start_date,
+            'sale_end_date' => $request->sale_end_date,
             'quantity' => $request->quantity,
             'image' => $imagePath
         ]);
@@ -79,6 +83,8 @@ class ProductVariantController extends Controller
             'size_id' => 'required|exists:sizes,id',
             'price' => 'required|numeric',
             'sale_price' => 'nullable|numeric',
+            'sale_start_date' => 'nullable|date',
+            'sale_end_date' => 'nullable|date|after_or_equal:sale_start_date',
             'quantity' => 'required|integer',
             'image' => 'nullable|image'
         ]);
@@ -89,6 +95,8 @@ class ProductVariantController extends Controller
             'size_id',
             'price',
             'sale_price',
+            'sale_start_date',
+            'sale_end_date',
             'quantity',
         ]);
 

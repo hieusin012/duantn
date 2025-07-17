@@ -371,6 +371,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile/change-password', [ChangePasswordController::class, 'showChangePasswordForm'])->name('profile.change-password.form');
     Route::post('/profile/update-password', [ChangePasswordController::class, 'changePassword'])->name('profile.update-password');
 });
+
+// Trang hot deal
+use App\Http\Controllers\Client\HotDealController;
+
+Route::get('/hot-deals', [HotDealController::class, 'index'])->name('hot-deals.index');
+
+
 // Quản lý thống kê
 
 // Thống kê sản phẩm theo danh mục

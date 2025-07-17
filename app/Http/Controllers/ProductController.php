@@ -102,6 +102,10 @@ class ProductController extends Controller
             'is_active' => 'required|boolean',
             'category_id' => 'required|exists:categories,id',
             'brand_id' => 'required|exists:brands,id',
+            'is_hot_deal' => 'nullable|boolean',
+            'discount_percent' => 'nullable|integer|min:0|max:100',
+            'deal_end_at' => 'nullable|date|after:now',
+
         ]);
 
         // Tạo mã code duy nhất
@@ -129,6 +133,9 @@ class ProductController extends Controller
             'is_active' => $validated['is_active'],
             'category_id' => $validated['category_id'],
             'brand_id' => $validated['brand_id'],
+            'is_hot_deal' => $request->has('is_hot_deal'), // checkbox
+            'discount_percent' => $request->input('discount_percent'),
+            'deal_end_at' => $request->input('deal_end_at'),
         ]);
 
         return redirect()->route('admin.products.index')->with('success', 'Thêm sản phẩm thành công');
@@ -169,6 +176,10 @@ class ProductController extends Controller
             'is_active' => 'required|boolean',
             'category_id' => 'required|exists:categories,id',
             'brand_id' => 'required|exists:brands,id',
+            'is_hot_deal' => 'nullable|boolean',
+            'discount_percent' => 'nullable|integer|min:0|max:100',
+            'deal_end_at' => 'nullable|date|after:now',
+
         ]);
 
         $slug = Str::slug($validated['name']);
@@ -195,6 +206,9 @@ class ProductController extends Controller
             'is_active' => $validated['is_active'],
             'category_id' => $validated['category_id'],
             'brand_id' => $validated['brand_id'],
+            'is_hot_deal' => $request->has('is_hot_deal'),
+            'discount_percent' => $request->input('discount_percent'),
+            'deal_end_at' => $request->input('deal_end_at'),
         ]);
 
         return redirect()->route('admin.products.index')->with('success', 'Cập nhật sản phẩm thành công');

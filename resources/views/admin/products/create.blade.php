@@ -109,6 +109,26 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
+                    <div class="form-group col-md-3">
+                        <label class="control-label">Là Hot Deal?</label><br>
+                        <input type="checkbox" name="is_hot_deal" value="1" {{ old('is_hot_deal') ? 'checked' : '' }}> Đánh dấu nếu là hot deal
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label class="control-label">Phần trăm giảm (%)</label>
+                        <input type="number" class="form-control" name="discount_percent" value="{{ old('discount_percent') }}" min="0" max="100">
+                        @error('discount_percent')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label class="control-label">Thời gian kết thúc ưu đãi</label>
+                        <input type="datetime-local" class="form-control" name="deal_end_at" value="{{ old('deal_end_at') }}">
+                        @error('deal_end_at')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
                     <div class="form-group col-md-12">
                         <label class="control-label">Mô tả sản phẩm</label>
                         <textarea class="form-control" name="description" id="mota">{{ old('description') }}</textarea>
