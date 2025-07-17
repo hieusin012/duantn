@@ -287,7 +287,6 @@
                         <tbody>
                             <tr>
                                 <th scope="row" class="text-nowrap">
-                                    <i class="icon anm anm-check-circle me-2 text-success fs-5"></i>
                                     Trạng thái:
                                 </th>
                                 <td>
@@ -298,21 +297,18 @@
                             </tr>
                             <tr>
                                 <th scope="row" class="text-nowrap">
-                                    <i class="icon anm anm-star me-2 text-warning fs-5"></i>
                                     Thương hiệu:
                                 </th>
                                 <td class="text-muted">{{ $product->brand->name }}</td>
                             </tr>
                             <tr>
                                 <th scope="row" class="text-nowrap">
-                                    <i class="icon anm anm-tag me-2 text-info fs-5"></i>
                                     Danh mục:
                                 </th>
                                 <td class="text-muted">{{ $product->category->name }}</td>
                             </tr>
                             <tr>
                                 <th scope="row" class="text-nowrap">
-                                    <i class="icon anm anm-info-circle me-2 text-secondary fs-5"></i>
                                     Mã sản phẩm:
                                 </th>
                                 <td class="text-muted">{{ $product->code }}</td>
