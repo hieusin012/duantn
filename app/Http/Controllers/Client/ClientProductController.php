@@ -71,7 +71,7 @@ class ClientProductController extends Controller
                 ->whereNull('deleted_at')
                 ->where(function ($q) use ($categoryId) {
                     $q->where('id', $categoryId)
-                      ->orWhere('parent_id', $categoryId);
+                        ->orWhere('parent_id', $categoryId);
                 })
                 ->pluck('id')
                 ->toArray();
@@ -105,5 +105,22 @@ class ClientProductController extends Controller
         return $product->galleries->pluck('image')->toArray() ?: [
             $product->image ?? 'assets/images/products/default.jpg'
         ];
+    }
+
+
+
+    public function getVariantInfo(Request $request)
+    {
+        $productId = $request->input('product_id');
+        $colorId = $request->input('color_id');
+
+        $availableSizes = ProductVariant::where('product_id', $productId)
+            ->where('color_id', $colorId)
+            ->pluck('size_id')
+            ->toArray();
+
+        return response()->json([
+            'available_sizes' => $availableSizes
+        ]);
     }
 }

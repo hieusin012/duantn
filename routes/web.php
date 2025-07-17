@@ -89,8 +89,8 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
         // Route xóa vĩnh viễn tất cả sản phẩm đã xóa mềm
         Route::delete('/products/force-delete-all', [ProductController::class, 'forceDeleteAll'])->name('products.force-delete-all');
     });
-
-    // Product Variants
+       
+    // Product Variant
     Route::resource('product-variants', ProductVariantController::class);
     // Categories
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
@@ -287,6 +287,10 @@ Route::get('/products/search', [ClientProductController::class, 'search'])->name
 
 // Trang chi tiết sản phẩm (dùng slug để SEO tốt hơn)// Trang chi tiết sản phẩm (dùng slug)
 Route::get('san-pham/{slug}', [ClientProductController::class, 'show'])->name('client.products.show');
+// biến thể
+// routes/web.php
+Route::get('/product/variant-info', [ClientProductController::class, 'getVariantInfo'])->name('product.variant.info');
+
 
 // comment
 Route::post('/comments/client-store', [CommentController::class, 'storeClient'])->name('client.comments.store')->middleware('auth');
