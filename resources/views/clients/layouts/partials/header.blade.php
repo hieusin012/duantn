@@ -16,7 +16,7 @@
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 @foreach ($header_categories as $cat)
                                 <li>
-                                    {{-- <a class="dropdown-item" href="{{ route('products.byCategory', $cat->slug) }}"> --}}
+                                     <a class="dropdown-item fs-10" href="{{ route('products.byCategory', $cat->slug) }}">
                                     {{ $cat->name }}
                                     </a>
                                 </li>
