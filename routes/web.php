@@ -90,7 +90,7 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
         Route::delete('/products/force-delete-all', [ProductController::class, 'forceDeleteAll'])->name('products.force-delete-all');
     });
        
-    // Product Variants
+    // Product Variant
     Route::resource('product-variants', ProductVariantController::class);
     // Categories
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
