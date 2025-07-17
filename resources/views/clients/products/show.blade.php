@@ -115,18 +115,27 @@
                 <div class="col-lg-6 col-md-6 col-sm-12 col-12 product-layout-img mb-4 mb-md-0">
                     <div class="product-sticky-style">
                         <div class="product-details-img product-thumb-left-style d-flex justify-content-center">
+                            @php
+                            $colorsShown = [];
+                            @endphp
+
                             <div class="product-thumb thumb-left">
-                                <div id="gallery" class="product-thumb-vertical h-100">
-                                    @foreach($product->variants as $image)
+                                <div id="gallery" class="product-thumb-vertical h-100 d-flex flex-column gap-3">
+                                    @foreach($product->variants as $variant)
+                                    @if(!in_array($variant->color, $colorsShown))
                                     <img
-                                        src="{{ asset('storage/' . $image->image) }}"
+                                        src="{{ asset('storage/' . $variant->image) }}"
                                         class="product-thumb-img"
                                         alt="Thumbnail"
-                                        onclick="changeMainImage(this)"
-                                        style="width: 100px; height: 100px; object-fit: cover; cursor: pointer; border-radius: 6px;" />
+                                        onclick="changeMainImage(this)" />
+                                    @php
+                                    $colorsShown[] = $variant->color;
+                                    @endphp
+                                    @endif
                                     @endforeach
                                 </div>
                             </div>
+
                             <div class="zoompro-wrap product-zoom-right rounded-0">
                                 <div class="zoompro-span"><img id="main-image" class="zoompro rounded-0 img-thumbnail rounded shadow" src="{{ asset($product->image) }}" data-zoom-image="{{ asset($product->image) }}" alt="product" width="625" height="808" /></div>
                             </div>
@@ -160,14 +169,15 @@
                             <a class="reviewLink d-flex-center" href="#reviews">Viết đánh giá</a>
                         </div>
                         <div class="product-price d-flex-center my-3">
-                            <span class="price">{{ number_format($product->price, 0, ',', '.') }} ₫</span>
+                            <span class="price fs-3" id="variant-price">
+                                {{ number_format($product->price, 0, ',', '.') }} ₫
+                            </span>
                         </div>
-                        <div class="sort-description mb-3">{{ $product->description ?? 'Sản phẩm chất lượng cao từ thương hiệu uy tín.' }}</div>
                     </div>
 
                     <form method="post" action="{{ route('client.cart.add') }}" id="add-to-cart-form" class="product-form product-form-border hidedropdown">
                         @csrf
-                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <input type="hidden" name="product_id" id="product-id" value="{{ $product->id }}">
                         <div class="product-swatches-option">
                             <div class="product-item swatches-image w-100 mb-4 swatch-0 option1" data-option-index="0">
 
@@ -175,7 +185,7 @@
                                     <label class="form-label d-block">
                                         Chọn màu: <strong id="selectedColorName">Chưa chọn</strong>
                                     </label>
-                                
+
                                     <div class="d-flex flex-wrap gap-2">
                                         @foreach ($colors as $color)
                                         <input
@@ -184,65 +194,127 @@
                                             name="color_id"
                                             id="color-{{ $color->id }}"
                                             value="{{ $color->id }}"
-                                            autocomplete="off"
-                                            data-color-name="{{ $color->name }}">
-                                        <label
-                                            class="btn border p-2 color-swatch"
+                                            data-color-name="{{ $color->name }}"
+                                            {{ old('color_id') == $color->id ? 'checked' : '' }}
+                                            autocomplete="off">
+
+                                        <label class="btn color-swatch position-relative"
                                             for="color-{{ $color->id }}"
-                                            style="background-color: {{ $color->color_code }}; width: 32px; height: 32px; border-radius: 50%;"
+                                            style="background-color: {{ $color->color_code }};"
                                             title="{{ $color->name }}">
+                                            <span class="checkmark"></span>
                                         </label>
-                                    @endforeach
+                                        @endforeach
                                     </div>
 
-                                
-                            </div>
-                            <div class="product-item swatches-size w-100 mb-4 swatch-1 option2" data-option-index="1">
-                                <label class="form-label">Chọn size:</label>
-                                <div class="d-flex flex-wrap gap-2">
-                                    @foreach ($sizes as $size)
-                                    <input type="radio" class="btn-check" name="size_id" id="size-{{ $size->id }}" value="{{ $size->id }}" autocomplete="off">
-                                    <label class="btn btn-outline-warning" for="size-{{ $size->id }}">{{ $size->name }}</label>
-                                    @endforeach
 
                                 </div>
-                                
-                            </div>
-                        </div>
-                        <div class="product-action w-100 d-flex-wrap my-3 my-md-4">
-                            <div class="product-form-quantity d-flex-center">
-                                <div class="input-group input-group-sm w-auto">
-                                    <button class="btn btn-outline-secondary" type="button" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">–</button>
-                                    <input type="number" name="quantity" value="1" min="1" class="form-control text-center" style="max-width: 80px;" />
-                                    <button class="btn btn-outline-secondary" type="button" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">+</button>
+                                <div id="size-wrapper" style="display: none;" class="mt-3">
+                                    <label>Chọn size:</label>
+                                    <div class="d-flex flex-wrap gap-2" id="size-options">
+                                        @foreach ($variants as $variant)
+                                        <button type="button"
+                                            class="btn btn-outline-dark size-btn d-none"
+                                            data-color-id="{{ $variant->color_id }}"
+                                            data-size-id="{{ $variant->size_id }}"
+                                            data-variant-quantity="{{ $variant->quantity }}"
+                                            data-image="{{ asset('storage/' . $variant->image) }}"
+                                            data-price="{{ $variant->price }}">
+                                            {{ $variant->size->name }}
+                                        </button>
+
+
+                                        @endforeach
+                                        <input type="hidden" name="size_id" id="selected-size-id">
+                                    </div>
+                                    <div id="stock-info"
+                                        class="mt-3 px-3 py-2 rounded-3 d-inline-flex align-items-center bg-white border border-2 shadow-sm"
+                                        style="display: none; font-size: 15px; min-width: 230px;">
+
+                                        <i class="icon anm anm-cube me-2 text-primary fs-5"></i>
+
+                                        <span class="me-1 text-secondary">Số lượng còn:</span>
+
+                                        <strong id="stock-quantity" class="text-danger fs-6">0</strong>
+
+                                        <span class="ms-1 text-muted">sản phẩm</span>
+                                    </div>
+
                                 </div>
-                            </div>
-                            <div class="product-form-submit addcart fl-1 ms-3">
-                                <button type="submit" id="add-to-cart-btn" class="btn btn-primary">Thêm vào giỏ hàng</button>
-                            </div>
-                            <div class="product-form-submit buyit fl-1 ms-3">
-                                <button type="submit" class="btn btn-primary proceed-to-checkout"><span>Mua ngay</span></button>
+                                <div class="product-action w-100 d-flex-wrap my-3 my-md-4">
+                                    <div class="product-form-quantity d-flex align-items-center">
+                                        <div class="quantity-wrapper d-flex align-items-center border rounded-pill overflow-hidden">
+                                            <button type="button" class="qty-btn quantity-minus px-3 py-1 border-0 bg-white">
+                                                <i class="icon anm anm-minus"></i>
+                                            </button>
+                                            <input type="number" name="quantity" id="quantity-input" value="1" min="1"
+                                                class="qty-input text-center border-0" style="width: 50px;" readonly />
+                                            <button type="button" class="qty-btn quantity-plus px-3 py-1 border-0 bg-white">
+                                                <i class="icon anm anm-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="product-form-submit addcart fl-1 ms-3">
+                                        <button type="submit" id="add-to-cart-btn" class="btn btn-primary">Thêm vào giỏ hàng</button>
+                                    </div>
+                                    <div class="product-form-submit buyit fl-1 ms-3">
+                                        <button type="submit" class="btn btn-primary proceed-to-checkout"><span>Mua ngay</span></button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </form>
 
-                    <p class="infolinks d-flex-center justify-content-between">
-                        <a href="javascript:void(0);" class="text-link wishlist wishlist-toggle" data-id="{{ $product->id }}" data-bs-toggle="tooltip" title="{{ auth()->check() && $product->wishlists->where('user_id', auth()->id())->count() ? 'Bỏ yêu thích' : 'Thêm vào yêu thích' }}">
-                            <i class="icon anm anm-heart {{ auth()->check() && $product->wishlists->where('user_id', auth()->id())->count() ? 'text-danger' : '' }} me-1"></i>
-                            <span>{{ auth()->check() && $product->wishlists->where('user_id', auth()->id())->count() ? 'Đã yêu thích' : 'Thêm vào yêu thích' }}</span>
-                        </a>
-                    </p>
-
-                    <div class="product-info">
-                        <p class="product-stock d-flex">Trạng thái:
-                            <span class="d-flex-center stockLbl text-uppercase {{ $product->is_active ? 'instock' : 'outofstock' }}">
-                                {{ $product->is_active ? 'Còn hàng' : 'Hết hàng' }}
+                    <!-- Yêu thích -->
+                    <!-- Yêu thích -->
+                    <div class="d-flex align-items-center mb-3">
+                        <a href="javascript:void(0);"
+                            class="wishlist wishlist-toggle text-decoration-none d-flex align-items-center"
+                            data-id="{{ $product->id }}"
+                            data-bs-toggle="tooltip"
+                            title="{{ auth()->check() && $product->wishlists->where('user_id', auth()->id())->count() ? 'Bỏ yêu thích' : 'Thêm vào yêu thích' }}">
+                            <i class="icon anm anm-heart me-2 fs-5 {{ auth()->check() && $product->wishlists->where('user_id', auth()->id())->count() ? 'text-danger' : 'text-muted' }}"></i>
+                            <span class="fw-medium text-dark">
+                                {{ auth()->check() && $product->wishlists->where('user_id', auth()->id())->count() ? 'Đã yêu thích' : 'Thêm vào yêu thích' }}
                             </span>
-                        </p>
-                        <p class="product-vendor">Thương hiệu:<span class="text"><a href="#">{{ $product->brand->name }}</a></span></p>
-                        <p class="product-type">Danh mục:<span class="text">{{ $product->category->name }}</span></p>
-                        <p class="product-sku">Mã sản phẩm:<span class="text">{{ $product->code }}</span></p>
+                        </a>
                     </div>
+
+                    <hr class="my-2">
+
+                    <!-- Thông tin sản phẩm -->
+                    <table class="table table-borderless align-middle fs-9">
+                        <tbody>
+                            <tr>
+                                <th scope="row" class="text-nowrap">
+                                    Trạng thái:
+                                </th>
+                                <td>
+                                    <span class="badge bg-success rounded-pill px-3 py-1">
+                                        {{ $product->is_active ? 'Còn hàng' : 'Hết hàng' }}
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="text-nowrap">
+                                    Thương hiệu:
+                                </th>
+                                <td class="text-muted">{{ $product->brand->name }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="text-nowrap">
+                                    Danh mục:
+                                </th>
+                                <td class="text-muted">{{ $product->category->name }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="text-nowrap">
+                                    Mã sản phẩm:
+                                </th>
+                                <td class="text-muted">{{ $product->code }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -460,7 +532,7 @@
             <h2>Sản phẩm liên quan</h2>
         </div>
 
-        <div class="product-slider-4items gp10 arwOut5 grid-products">
+        <div class="product-slider-4items gp10 arwOut5 grid-products mb-5">
             @foreach($relatedProducts as $relatedProduct)
             <div class="item col-item">
                 <div class="product-box">
@@ -473,7 +545,14 @@
                         </div>
                         <div class="product-price">
                             <span class="price text-danger fw-bold fs-5">{{ number_format($relatedProduct->price, 0, ',', '.') }} ₫</span>
+                            <div>
+                                <a href="{{ route('client.products.show', ['slug' => $product->slug]) }}"
+                                    class="btn btn-primary btn-sm">
+                                    <i class="icon anm anm-eye"> </i> Xem chi tiết
+                                </a>
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -552,21 +631,239 @@
     });
 </script>
 <script>
-
     function changeMainImage(el) {
         const mainImg = document.getElementById('main-image');
         mainImg.src = el.src;
     }
-
 </script>
 <style>
-    .color-swatch {
-    display: inline-block;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-}
+    .quantity-wrapper {
+        background: #f8f9fa;
+        height: 40px;
+    }
 
+    .qty-btn {
+        background-color: transparent;
+        color: #333;
+        font-size: 16px;
+        transition: background-color 0.2s ease;
+    }
+
+    .qty-btn:hover {
+        background-color: #e2e6ea;
+    }
+
+    .qty-input {
+        pointer-events: none;
+        /* Tắt tương tác chuột */
+        background-color: #fff;
+    }
+
+
+    /* css size */
+    .size-btn {
+        border: 2px solid #ccc;
+        background-color: #fff;
+        color: #333;
+        padding: 0.6rem 1rem;
+        font-weight: 600;
+        border-radius: 8px;
+        margin: 0.25rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        min-width: 48px;
+        text-align: center;
+    }
+
+    .size-btn:hover {
+        border-color: #333;
+        color: #000;
+    }
+
+    .size-btn.active {
+        background-color: #000;
+        color: #fff;
+        border-color: #000;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+    /* css color */
+    .color-swatch {
+        width: 40px;
+        height: 40px;
+        border-radius: 6px;
+        /* Bo góc nhẹ */
+        border: 2px solid transparent;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .color-swatch:hover {
+        opacity: 0.85;
+        border-color: #999;
+    }
+
+    .btn-check:checked+.color-swatch {
+        border-color: #000;
+        box-shadow: 0 0 0 2px #00000010;
+    }
 </style>
+<script>
+    $(document).ready(function() {
+        // Khi click size
+        $('.size-btn').on('click', function() {
+            // Bỏ active tất cả
+            $('.size-btn').removeClass('active');
+
+            // Đánh dấu size đang chọn
+            $(this).addClass('active');
+
+            // Gán vào input ẩn
+            const sizeId = $(this).data('size-id');
+            $('#selected-size-id').val(sizeId);
+        });
+
+        // Khi chọn màu
+        $('input[name="color_id"]').on('change', function() {
+            const selectedColorId = $(this).val();
+            const selectedColorName = $(this).data('color-name');
+            $('#selectedColorName').text(selectedColorName);
+
+            // Reset size đang chọn
+            $('.size-btn').removeClass('active');
+            $('#selected-size-id').val('');
+
+            // Ẩn tất cả
+            $('.size-btn').addClass('d-none');
+
+            // Hiện size đúng màu
+            let hasSize = false;
+            $('.size-btn').each(function() {
+                if ($(this).data('color-id') == selectedColorId) {
+                    $(this).removeClass('d-none');
+                    hasSize = true;
+                }
+            });
+
+            // Hiện khối chọn size nếu có
+            if (hasSize) {
+                $('#size-wrapper').show();
+            } else {
+                $('#size-wrapper').hide();
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        // Khi chọn size
+        $('.size-btn').on('click', function() {
+            // Bỏ active
+            $('.size-btn').removeClass('active');
+            $(this).addClass('active');
+
+            // Gán size_id
+            const sizeId = $(this).data('size-id');
+            $('#selected-size-id').val(sizeId);
+
+            // Cập nhật ảnh & giá
+            const price = $(this).data('price');
+            const image = $(this).data('image');
+
+            $('#variant-price').text(new Intl.NumberFormat('vi-VN').format(price) + ' ₫');
+            $('#main-image').attr('src', image);
+        });
+
+        // Khi chọn màu
+        $('input[name="color_id"]').on('change', function() {
+            const selectedColorId = $(this).val();
+            const selectedColorName = $(this).data('color-name');
+            $('#selectedColorName').text(selectedColorName);
+
+            $('.size-btn').removeClass('active d-none');
+            $('#selected-size-id').val('');
+            $('#size-wrapper').hide();
+
+            let hasSize = false;
+            $('.size-btn').each(function() {
+                if ($(this).data('color-id') == selectedColorId) {
+                    $(this).removeClass('d-none');
+                    hasSize = true;
+                } else {
+                    $(this).addClass('d-none');
+                }
+            });
+
+            if (hasSize) {
+                $('#size-wrapper').show();
+            }
+        });
+
+        // Khi load lại có chọn sẵn thì cập nhật lại size/màu
+        const checkedColor = $('input[name="color_id"]:checked');
+        if (checkedColor.length) {
+            checkedColor.trigger('change');
+        }
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        let maxQty = 1;
+
+        // Khi chọn size
+        $('.size-btn').on('click', function() {
+            $('.size-btn').removeClass('active');
+            $(this).addClass('active');
+
+            const sizeId = $(this).data('size-id');
+            const quantity = parseInt($(this).data('variant-quantity')) || 1;
+
+            $('#selected-size-id').val(sizeId);
+            $('#quantity-input').val(1);
+            maxQty = quantity;
+        });
+
+        // Tăng số lượng
+        $('.quantity-plus').on('click', function() {
+            let current = parseInt($('#quantity-input').val());
+            if (current < maxQty) {
+                $('#quantity-input').val(current + 1);
+            }
+        });
+
+        // Giảm số lượng
+        $('.quantity-minus').on('click', function() {
+            let current = parseInt($('#quantity-input').val());
+            if (current > 1) {
+                $('#quantity-input').val(current - 1);
+            }
+        });
+        $('.size-btn').on('click', function() {
+            $('.size-btn').removeClass('active');
+            $(this).addClass('active');
+
+            const sizeId = $(this).data('size-id');
+            const variantQty = parseInt($(this).data('variant-quantity')) || 0;
+            $('#selected-size-id').val(sizeId);
+
+            // Cập nhật số lượng tồn kho và hiển thị
+            $('#stock-quantity').text(variantQty);
+            $('#stock-info').show();
+
+            // Reset số lượng input về 1
+            $('#quantity-input').val(1);
+            maxQty = variantQty;
+        });
+
+    });
+</script>
+
+
+
+
 
 @endsection

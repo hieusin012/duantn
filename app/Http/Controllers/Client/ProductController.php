@@ -7,23 +7,24 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class ProductController extends Controller
 {
     public function index()
-{
-    // Thêm 'comments' vào eager loading
-    $products = Product::with(['comments', 'wishlists']) // <--- SỬA DÒNG NÀY
-        ->where('is_active', 1)
-        ->whereNull('deleted_at')
-        ->latest()
-        ->paginate(12);
+    {
+        // Thêm 'comments' vào eager loading
+        $products = Product::with(['comments', 'wishlists']) // <--- SỬA DÒNG NÀY
+            ->where('is_active', 1)
+            ->whereNull('deleted_at')
+            ->latest()
+            ->paginate(12);
 
-    $categories = Category::whereNull('deleted_at')->get();
-    $brands = Brand::whereNull('deleted_at')->get();
+        $categories = Category::whereNull('deleted_at')->get();
+        $brands = Brand::whereNull('deleted_at')->get();
 
-    return view('clients.products.index', compact('products', 'categories', 'brands'));
-}
+        return view('clients.products.index', compact('products', 'categories', 'brands'));
+    }
 
     public function show($slug)
     {
@@ -181,6 +182,25 @@ class ProductController extends Controller
         $products = Product::where('category_id', $category->id)->paginate(12);
 
         return view('clients.products.by_category', compact('category', 'products'));
+    }
+
+    public function hotDeals()
+    {
+        $now = Carbon::now();
+
+        $products = Product::with(['comments', 'wishlists'])
+            ->where('is_hot_deal', true)
+            ->whereNotNull('discount_percent')
+            ->where('deal_end_at', '>', $now)
+            ->where('is_active', true)
+            ->whereNull('deleted_at')
+            ->latest()
+            ->paginate(12);
+
+        $categories = Category::whereNull('deleted_at')->get();
+        $brands = Brand::whereNull('deleted_at')->get();
+
+        return view('clients.products.hot_deals', compact('products', 'categories', 'brands'));
     }
 
 }
