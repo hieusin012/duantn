@@ -150,6 +150,13 @@
             </div>
         </div>
 
+        {{-- Giảm giá --}}
+        <div class="text-end">
+            @if ($order->discount > 0)
+                <p><strong class="text-dark">Giảm giá:</strong> <span class="text-danger">-{{ number_format($order->discount, 0, ',', '.') }} ₫</span></p>
+            @endif
+        </div>
+
         {{-- Tổng cộng --}}
         <div class="text-end">
             <h5 class="text-dark">Tổng cộng:

@@ -40,7 +40,7 @@
 
                 <div class="my-3 text-center position-relative">
                     <hr class="text-muted">
-                    <span class="position-absolute top-50 start-50 translate-middle px-3 bg-white text-muted">Hoặc đăng nhập bằng</span>
+                    <span class="position-absolute top-50 start-50 translate-middle px-3 bg-white text-muted">Hoặc</span>
                 </div>
 
                 <div class="text-center d-flex justify-content-center gap-4">

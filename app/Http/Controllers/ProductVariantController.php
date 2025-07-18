@@ -15,7 +15,9 @@ class ProductVariantController extends Controller
 {
     public function index()
     {
-        $variants = ProductVariant::with(['product', 'color', 'size'])->paginate(10);
+        $variants = ProductVariant::with(['product', 'color', 'size'])
+            ->orderByDesc('created_at') // hoặc ->orderBy('created_at', 'desc')
+            ->paginate(10);
         return view('admin.product_variants.index', compact('variants'));
     }
 
