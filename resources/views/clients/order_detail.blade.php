@@ -68,7 +68,7 @@
             {{-- Thông tin khách hàng --}}
             <div class="col-md-6">
                 <div class="border rounded p-3 bg-light">
-                    <h5 class="mb-3 text-secondary">👤 Thông tin người đặt</h5>
+                    <h5 class="mb-3 text-secondary">👤 Thông tin người nhận</h5>
                     <p><strong>Họ tên:</strong> {{ $order->fullname }}</p>
                     <p><strong>Email:</strong> {{ $order->email }}</p>
                     <p><strong>Điện thoại:</strong> {{ $order->phone }}</p>
@@ -90,6 +90,8 @@
                                 <th>#</th>
                                 <th>Sản phẩm</th>
                                 <th>Ảnh</th>
+                                <th>Màu</th>
+                                <th>Size</th>
                                 <th>Số lượng</th>
                                 <th>Giá</th>
                                 <th>Thành tiền</th>
@@ -129,11 +131,14 @@
                                     </td>
                                     <td>
                                         @if ($product && $product->image)
-                                            <img src="{{ asset($item->variant->product->image) }}" alt="Ảnh sản phẩm" width="80" class="rounded shadow-sm">
+                                            {{-- <img src="{{ asset($item->variant->product->image) }}" alt="Ảnh sản phẩm" width="80" class="rounded shadow-sm"> --}}
+                                            <img src="{{ $item->variant->image ? asset('storage/' . $item->variant->image) : asset('images/no-image.jpg') }}" width="80" class="rounded shadow-sm">
                                         @else
                                             <span class="text-muted">Không có ảnh</span>
                                         @endif
                                     </td>
+                                    <td>{{ $item->variant->color->name ?? 'N/A' }}</td>
+                                    <td>{{ $item->variant->size->name ?? 'N/A' }}</td>
                                     <td>{{ $item->quantity }}</td>
                                     <td>{{ number_format($item->price) }} ₫</td>
                                     <td>{{ number_format($item->total_price) }} ₫</td>

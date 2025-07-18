@@ -9,7 +9,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-12 d-flex justify-content-between align-items-center">
-                    <div class="page-title"><h1>Blog Details</h1></div>
+                    <div class="page-title"><h1>Chi tiết blog</h1></div>
                     <div class="breadcrumbs">
                         <a href="{{ route('client.home') }}">Home</a>
                         <span><i class="icon anm anm-angle-right-l"></i>Blog</span>
@@ -26,19 +26,19 @@
             <div class="col-lg-3">
                 <div class="sidebar">
                     <div class="widget">
-                        <h4>Category</h4>
+                        <h4>Danh mục</h4>
                         <ul>
                             <li>{{ $blog->category->name ?? 'Uncategorized' }}</li>
                         </ul>
                     </div>
                     <div class="widget">
-                        <h4>Archive</h4>
+                        <h4>Lưu trữ</h4>
                         <ul>
                             <li>{{ $blog->created_at->format('F Y') }}</li>
                         </ul>
                     </div>
                     <div class="widget">
-                        <h4>Recent Posts</h4>
+                        <h4>Bài viết gần đây</h4>
                         <ul>
                             @foreach($recentBlogs as $recent)
                                 <li>
@@ -81,19 +81,19 @@
 
                     <!-- Comments Section Placeholder -->
                     <div class="mt-5">
-                        <h4>Leave a Comment</h4>
+                        <h4>Để lại một bình luận</h4>
                         <form action="#" method="GET">
                             
                             <div class="mb-3">
-                                <input type="text" class="form-control" placeholder="Name" required>
+                                <input type="text" class="form-control" placeholder="Tên..." required>
                             </div>
                             <div class="mb-3">
-                                <input type="email" class="form-control" placeholder="Email" required>
+                                <input type="email" class="form-control" placeholder="Email..." required>
                             </div>
                             <div class="mb-3">
-                                <textarea class="form-control" rows="5" placeholder="Your comment" required></textarea>
+                                <textarea class="form-control" rows="5" placeholder="Bình luận của bạn..." required></textarea>
                             </div>
-                            <button type="submit" class="btn btn-primary">Submit Comment</button>
+                            <button type="submit" class="btn btn-primary">Gửi bình luận</button>
                         </form>
                     </div>
                 </div>
