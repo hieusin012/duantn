@@ -62,7 +62,11 @@ class ProductController extends Controller
         $totalReviews = $comments->count();
         $averageRating = 0;
         $ratingPercentages = [
-            '5' => 0, '4' => 0, '3' => 0, '2' => 0, '1' => 0
+            '5' => 0,
+            '4' => 0,
+            '3' => 0,
+            '2' => 0,
+            '1' => 0
         ];
 
         if ($totalReviews > 0) {
@@ -111,8 +115,8 @@ class ProductController extends Controller
 
 
         $query = Product::with(['comments', 'wishlists']) // <--- SỬA DÒNG NÀY
-        ->where('is_active', 1)
-        ->whereNull('deleted_at');
+            ->where('is_active', 1)
+            ->whereNull('deleted_at');
 
 
         // Search by name
@@ -184,6 +188,7 @@ class ProductController extends Controller
         return view('clients.products.by_category', compact('category', 'products'));
     }
 
+
     public function hotDeals()
     {
         $now = Carbon::now();
@@ -204,3 +209,4 @@ class ProductController extends Controller
     }
 
 }
+

@@ -384,9 +384,6 @@ Route::get('/hot-deals', [HotDealController::class, 'index'])->name('hot-deals.i
 Route::get('/admin/thong-ke/san-pham', [ThongKeController::class, 'index'])->name('admin.thongke.index');
 Route::get('/admin/thong-ke/data', [ThongKeController::class, 'getData'])->name('admin.thongke.data');
 
-//vnpay
-Route::get('/vnpay/return', [VnpayController::class, 'vnpayReturn'])->name('client.payment.vnpay.return');
-Route::post('/checkout/vnpay', [VnpayController::class, 'redirectToVNPAY'])->name('checkout.vnpay');
 
 //end minigame
 // Yêu cầu trả hàng Client

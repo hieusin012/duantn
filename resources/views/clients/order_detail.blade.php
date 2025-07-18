@@ -109,9 +109,9 @@
                                         @endif
                                     </td>
                                     <td>{{ $item->quantity }}</td>
-                                    <td>{{ number_format($item->price, 0, ',', '.') }} VND</td>
+                                    <td>{{ number_format($item->price, 0, ',', '.') }} ₫</td>
                                     <td class="fw-bold">{{ number_format($item->price * $item->quantity, 0, ',', '.') }}
-                                        VND</td>
+                                        ₫</td>
                                 </tr>
                             @endforeach --}}
                             @foreach ($order->orderDetails as $item)
@@ -135,8 +135,8 @@
                                         @endif
                                     </td>
                                     <td>{{ $item->quantity }}</td>
-                                    <td>{{ number_format($item->price) }} VND</td>
-                                    <td>{{ number_format($item->total_price) }} VND</td>
+                                    <td>{{ number_format($item->price) }} ₫</td>
+                                    <td>{{ number_format($item->total_price) }} ₫</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -148,7 +148,7 @@
         {{-- Tổng cộng --}}
         <div class="text-end">
             <h5 class="text-dark">Tổng cộng:
-                <span class="text-danger fw-bold">{{ number_format($order->total_price, 0, ',', '.') }} VND</span>
+                <span class="text-danger fw-bold">{{ number_format($order->total_price, 0, ',', '.') }} ₫</span>
             </h5>
         </div>
 

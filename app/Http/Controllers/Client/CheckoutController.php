@@ -157,24 +157,24 @@ class CheckoutController extends Controller
 
             $shippingCost = 0;
             $discount = 0;
+            $voucher = null;
 
             if ($request->filled('voucher_code')) {
                 $voucher = Voucher::where('code', $request->voucher_code)->first();
                 if ($voucher && $voucher->isValid()) {
-                    $cart->voucher_id = $voucher->id;
-                    $cart->save();
-
-                    // TÍNH GIẢM GIÁ
                     if ($voucher->discount_type == 'percent') {
                         $discount = round($subtotal * $voucher->discount / 100);
                     } elseif ($voucher->discount_type == 'fixed') {
                         $discount = $voucher->discount;
                     }
-
-                    // Đảm bảo giảm không vượt quá tổng tiền
                     $discount = min($discount, $subtotal);
                 }
+            } else {
+                // Không có voucher_code → KHÔNG áp dụng gì hết
+                $cart->voucher_id = null;
+                $cart->save();
             }
+
 
             $finalTotalPrice = $subtotal + $shippingCost - $discount;
 
@@ -348,13 +348,12 @@ class CheckoutController extends Controller
                         'transaction_status' => $vnpData['vnp_TransactionStatus'] ?? null,
                     ]);
                     return redirect()->route('checkout.success', ['order' => $order->code, 'message' => 'success',]);
-                        
                 } else {
                     // ❌ KHÔNG thành công → vẫn hiển thị trang thành công, nhưng chưa thanh toán
                     return redirect()->route('checkout.success', ['order' => $order->code, 'message' => 'warning',]);
                 }
             }
-            
+
             return redirect('/cart')->with('error', 'Giao dịch không hợp lệ hoặc đơn hàng không tồn tại!');
         } else {
             return redirect('/cart')->with('error', 'Chữ ký không hợp lệ!');

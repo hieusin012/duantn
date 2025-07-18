@@ -118,7 +118,7 @@
                                     <span>Không có ảnh</span>
                                 @endif
                             </td>
-                            <td>{{ number_format($product->price, 0, ',', '.') }} đ</td>
+                            <td>{{ number_format($product->price, 0, ',', '.') }} ₫</td>
                             <td>
                                 <span class="badge {{ $product->is_active ? 'bg-success' : 'bg-danger' }}">
                                     {{ $product->is_active ? 'Còn hàng' : 'Hết hàng' }}

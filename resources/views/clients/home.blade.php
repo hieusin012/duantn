@@ -86,6 +86,23 @@
             height: 240px;
         }
     }
+
+    .badge-new-ribbon {
+    position: absolute;
+    top: 10px;
+    left: -40px;
+    background: #e60023;
+    color: white;
+    padding: 5px 50px;
+    font-size: 13px;
+    font-weight: bold;
+    transform: rotate(-45deg);
+    z-index: 10;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    text-align: center;
+    pointer-events: none;
+}
+
 </style>
 
 
@@ -113,179 +130,175 @@
         <h2 class="text-center mb-4 fs-3 fw-bold border-bottom pb-2 d-inline-block">
             SẢN PHẨM MỚI NHẤT
         </h2>
-        <div class="row">
-
-        </div>
         <div class="product-slider-4items gp10 arwOut5 grid-products">
             @foreach ($products as $product)
             <div class="col-md-3 col-6 mb-4">
                 <div class="product-box card border-0 bg-light rounded-3 shadow-sm position-relative overflow-hidden h-100">
+
                     <!-- Product Image -->
                     <div class="product-image position-relative">
-                        <a href="{{ route('client.products.show', ['slug' => $product->slug]) }}">
-                            <img src="{{ asset($product->image ?? 'assets/images/placeholder.jpg') }}"
-                                class="card-img-top blur-up lazyloaded"
-                                alt="{{ $product->name }}"
-                                width="625" height="808">
-                        </a>
-                        <!-- Hover Buttons -->
-                        <div class="button-set style1">
-                            <a href="#" class="btn-icon quickview"
-                                data-bs-toggle="tooltip" title="Quick View">
-                                <i class="icon anm anm-search-plus-l"></i>
-                            </a>
-                            <a href="javascript:void(0);"
-                                class="btn-icon wishlist-toggle"
-                                data-id="{{ $product->id }}"
-                                data-bs-toggle="tooltip"
-                                title="{{ auth()->check() && $product->wishlists->where('user_id', auth()->id())->count() ? 'Bỏ yêu thích' : 'Thêm vào yêu thích' }}">
-                                <i class="icon anm anm-heart {{ auth()->check() && $product->wishlists->where('user_id', auth()->id())->count() ? 'text-danger' : '' }}"></i>
-                            </a>
-                            <a href="#" class="btn-icon compare"
-                                data-bs-toggle="tooltip" title="Add to Compare">
-                                <i class="icon anm anm-random-r"></i>
-                            </a>
-                        </div>
+                        <!-- NEW Badge -->
+                        @if(\Carbon\Carbon::parse($product->created_at)->diffInDays(now()) <= 7)
+                            <div class="badge-new-ribbon">NEW
                     </div>
-                    <!-- Product Details -->
-                    <div class="card-body text-center">
-                        <h5 class="card-title">
-                            <a href="{{ route('client.products.show', ['slug' => $product->slug]) }}"
-                                class="text-decoration-none text-primary fw-bold">
-                                {{ $product->name }}
-                            </a>
-                        </h5>
-                        <!-- Rating -->
-                        <div class="product-review mb-2">
-                            @for ($i = 1; $i <= 5; $i++)
-                                <i class="icon anm {{ $i <= ($product->average_rating ?? 4) ? 'anm-star' : 'anm-star-o' }}"></i>
-                                @endfor
-                                <span class="caption hidden ms-1">{{ $product->reviews_count ?? 0 }} đánh giá</span>
-                        </div>
-                        <!-- Price -->
-                        <p class="card-text fw-bold text-danger fs-5">{{ number_format($product->price, 0, ',', '.') }} VND</p>
-                        <!-- Xem chi tiết -->
-                        <!-- Xem chi tiết -->
-                        <a href="{{ route('client.products.show', ['slug' => $product->slug]) }}"
-                            class="btn btn-primary btn-sm">
-                            <i class="icon anm anm-eye"> </i> Xem chi tiết
-                        </a>
-                    </div>
-                </div>
-            </div>
-            @endforeach
-        </div>
-    </div>
-    <div class="home-slideshow slick-arrow-dots">
-        <div class="slide">
-            <img class="blur-up lazyload" src="{{ asset('assets/client/images/slideshow/banner5.jpg') }}" alt="slideshow" title="" />
-        </div>
-        <div class="slide">
-            <img class="blur-up lazyload" src="{{ asset('assets/client/images/slideshow/banner6.jpg') }}" alt="slideshow" title="" />
-        </div>
-        <div class="slide">
-            <img class="blur-up lazyload" src="{{ asset('assets/client/images/slideshow/banner7.jpg') }}" alt="slideshow" title="" />
-        </div>
-    </div>
-    <div class="container py-5">
-        <h2 class="text-center mb-4 fs-3 fw-bold border-bottom pb-2 d-inline-block">
-            TIN TỨC THỂ THAO & KHUYẾN MÃI
-        </h2>
-        <div class="row">
-            @foreach ($blogs as $blog)
-            <div class="col-md-4 col-12 mb-4">
-                <div class="card h-100 shadow-sm border-0 rounded-4">
-                    <a href="{{ route('client.blogs.show', $blog->slug) }}">
-                        <img src="{{ asset('storage/' . $blog->image) }}" class="card-img-top rounded-top-4" alt="{{ $blog->title }}" style="height: 200px; object-fit: cover; transition: transform 0.3s;">
+                    @endif
+
+                    <a href="{{ route('client.products.show', ['slug' => $product->slug]) }}">
+                        <img src="{{ asset($product->image ?? 'assets/images/placeholder.jpg') }}"
+                            class="card-img-top blur-up lazyloaded"
+                            alt="{{ $product->name }}"
+                            width="625" height="808">
                     </a>
-                    <div class="card-body px-4 py-3">
-                        <h5 class="card-title fw-semibold fs-5 mb-2">
-                            <a href="{{ route('client.blogs.show', $blog->slug) }}" class="text-decoration-none text-dark">
-                                {{ $blog->title }}
-                            </a>
-                        </h5>
-                        <p class="text-secondary small">{{ Str::limit($blog->content, 80) }}</p>
-                        <p class="text-muted small mb-3">
-                            {{ $blog->created_at->format('d/m/Y') }}
-                        </p>
-                        <a href="{{ route('client.blogs.show', $blog->slug) }}" class="btn btn-primary btn-sm rounded-pill px-3">
-                            Xem chi tiết
+
+                    <!-- Hover Buttons -->
+                    <div class="button-set style1">
+                        <a href="#" class="btn-icon quickview" data-bs-toggle="tooltip" title="Quick View">
+                            <i class="icon anm anm-search-plus-l"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="btn-icon wishlist-toggle"
+                            data-id="{{ $product->id }}"
+                            data-bs-toggle="tooltip"
+                            title="{{ auth()->check() && $product->wishlists->where('user_id', auth()->id())->count() ? 'Bỏ yêu thích' : 'Thêm vào yêu thích' }}">
+                            <i class="icon anm anm-heart {{ auth()->check() && $product->wishlists->where('user_id', auth()->id())->count() ? 'text-danger' : '' }}"></i>
+                        </a>
+                        <a href="#" class="btn-icon compare" data-bs-toggle="tooltip" title="Add to Compare">
+                            <i class="icon anm anm-random-r"></i>
                         </a>
                     </div>
                 </div>
+
+                <!-- Product Details -->
+                <div class="card-body text-center">
+                    <h5 class="card-title">
+                        <a href="{{ route('client.products.show', ['slug' => $product->slug]) }}"
+                            class="text-decoration-none text-primary fw-bold">
+                            {{ $product->name }}
+                        </a>
+                    </h5>
+
+                    <!-- Rating -->
+                    <div class="product-review mb-2">
+                        @for ($i = 1; $i <= 5; $i++)
+                            <i class="icon anm {{ $i <= ($product->average_rating ?? 4) ? 'anm-star' : 'anm-star-o' }}"></i>
+                            @endfor
+                            <span class="caption hidden ms-1">{{ $product->reviews_count ?? 0 }} đánh giá</span>
+                    </div>
+
+                    <!-- Price -->
+                    <p class="card-text fw-bold text-danger fs-5">
+                        {{ number_format($product->price, 0, ',', '.') }} ₫
+                    </p>
+
+                    <!-- Xem chi tiết -->
+                    <a href="{{ route('client.products.show', ['slug' => $product->slug]) }}"
+                        class="btn btn-primary btn-sm">
+                        <i class="icon anm anm-eye"> </i> Xem chi tiết
+                    </a>
+                </div>
+
             </div>
-            @endforeach
         </div>
+        @endforeach
     </div>
 
-    @endsection
-    @section('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Kích hoạt tooltip lần đầu
-            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            const tooltipList = tooltipTriggerList.map(function(el) {
-                return new bootstrap.Tooltip(el);
-            });
-            //
-            // Wishlist toggle
-            document.querySelectorAll('.wishlist-toggle').forEach(button => {
-                button.addEventListener('click', function() {
-                    const productId = this.dataset.id;
-                    const token = '{{ csrf_token() }}';
-                    const icon = this.querySelector('i');
-                    const span = this.querySelector('span');
+</div>
+<div class="home-slideshow slick-arrow-dots">
+    <div class="slide">
+        <img class="blur-up lazyload" src="{{ asset('assets/client/images/slideshow/banner5.jpg') }}" alt="slideshow" title="" />
+    </div>
+    <div class="slide">
+        <img class="blur-up lazyload" src="{{ asset('assets/client/images/slideshow/banner6.jpg') }}" alt="slideshow" title="" />
+    </div>
+    <div class="slide">
+        <img class="blur-up lazyload" src="{{ asset('assets/client/images/slideshow/banner7.jpg') }}" alt="slideshow" title="" />
+    </div>
+</div>
+<div class="container py-5">
+    <h2 class="text-center mb-4 fs-3 fw-bold border-bottom pb-2 d-inline-block">
+        TIN TỨC THỂ THAO & KHUYẾN MÃI
+    </h2>
+    <div class="row">
+        @foreach ($blogs as $blog)
+        <div class="col-md-4 col-12 mb-4">
+            <div class="card h-100 shadow-sm border-0 rounded-4">
+                <a href="{{ route('client.blogs.show', $blog->slug) }}">
+                    <img src="{{ asset('storage/' . $blog->image) }}" class="card-img-top rounded-top-4" alt="{{ $blog->title }}" style="height: 200px; object-fit: cover; transition: transform 0.3s;">
+                </a>
+                <div class="card-body px-4 py-3">
+                    <h5 class="card-title fw-semibold fs-5 mb-2">
+                        <a href="{{ route('client.blogs.show', $blog->slug) }}" class="text-decoration-none text-dark">
+                            {{ $blog->title }}
+                        </a>
+                    </h5>
+                    <p class="text-secondary small">{{ Str::limit($blog->content, 80) }}</p>
+                    <p class="text-muted small mb-3">
+                        {{ $blog->created_at->format('d/m/Y') }}
+                    </p>
+                    <a href="{{ route('client.blogs.show', $blog->slug) }}" class="btn btn-primary btn-sm rounded-pill px-3">
+                        Xem chi tiết
+                    </a>
+                </div>
+            </div>
+        </div>
+        @endforeach
+    </div>
+</div>
+</div>
 
-                    fetch("{{ route('wishlist.toggle') }}", {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': token
-                            },
-                            body: JSON.stringify({
-                                product_id: productId
-                            })
+@endsection
+@section('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Kích hoạt tooltip lần đầu
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        const tooltipList = tooltipTriggerList.map(function(el) {
+            return new bootstrap.Tooltip(el);
+        });
+        //
+        // Wishlist toggle
+        document.querySelectorAll('.wishlist-toggle').forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = this.dataset.id;
+                const token = '{{ csrf_token() }}';
+                const icon = this.querySelector('i');
+                const span = this.querySelector('span');
+
+                fetch("{{ route('wishlist.toggle') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': token
+                        },
+                        body: JSON.stringify({
+                            product_id: productId
                         })
-                        .then(response => response.json())
-                        .then(data => {
-                            // Cập nhật giao diện
-                            if (data.status === 'added') {
-                                icon.classList.add('text-danger');
-                                if (span) span.textContent = 'Đã yêu thích';
-                                this.setAttribute('title', 'Bỏ yêu thích');
-                            } else {
-                                icon.classList.remove('text-danger');
-                                if (span) span.textContent = 'Thêm vào yêu thích';
-                                this.setAttribute('title', 'Thêm vào yêu thích');
-                            }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Cập nhật giao diện
+                        if (data.status === 'added') {
+                            icon.classList.add('text-danger');
+                            if (span) span.textContent = 'Đã yêu thích';
+                            this.setAttribute('title', 'Bỏ yêu thích');
+                        } else {
+                            icon.classList.remove('text-danger');
+                            if (span) span.textContent = 'Thêm vào yêu thích';
+                            this.setAttribute('title', 'Thêm vào yêu thích');
+                        }
 
-                            // Cập nhật tooltip mới
-                            bootstrap.Tooltip.getInstance(this)?.dispose(); // Xóa tooltip cũ
-                            new bootstrap.Tooltip(this); // Tạo lại tooltip
+                        // Cập nhật tooltip mới
+                        bootstrap.Tooltip.getInstance(this)?.dispose(); // Xóa tooltip cũ
+                        new bootstrap.Tooltip(this); // Tạo lại tooltip
 
-                            // Cập nhật số lượng
-                            const wishlistCountEl = document.querySelector('.wishlist-count');
-                            if (wishlistCountEl) {
-                                wishlistCountEl.textContent = data.count;
-                            }
-                        });
-                });
+                        // Cập nhật số lượng
+                        const wishlistCountEl = document.querySelector('.wishlist-count');
+                        if (wishlistCountEl) {
+                            wishlistCountEl.textContent = data.count;
+                        }
+                    });
             });
         });
-    </script>
-    <script>
-        $(document).ready(function() {
-            $('.home-slideshow').slick({
-                dots: true,
-                arrows: true,
-                infinite: true,
-                speed: 500,
-                autoplay: true,
-                autoplaySpeed: 3000,
-                slidesToShow: 1,
-                slidesToScroll: 1
-            });
-        });
-    </script>
+    });
+</script>
 
-    @endsection
+@endsection

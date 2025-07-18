@@ -22,13 +22,20 @@
                     <p><strong>Ngày tạo đơn:</strong> {{ $order->created_at->format('d/m/Y H:i') }}</p>
                     <p><strong>Phương thức thanh toán:</strong> {{ $order->payment }}</p>
                     <p><strong>Trạng thái đơn hàng:</strong>
-                        <span class="badge bg-info">{{ $order->status }}</span>
+                    <form action="{{ route('admin.orders.updateStatus', $order->id) }}" method="POST" style="display: inline-block;">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="btn btn-sm btn-info" onclick="return confirm('Bạn có chắc muốn cập nhật trạng thái đơn hàng?')">
+                            {{ $order->status }}
+                        </button>
+                    </form>
                     </p>
+
                     @if ($order->status === 'Đơn hàng đã hủy')
-                        <p><strong>Lý do hủy:</strong> {{ $order->cancel_reason }}</p>
-                        @if ($order->cancel_note)
-                            <p><strong>Ghi chú:</strong> {{ $order->cancel_note }}</p>
-                        @endif
+                    <p><strong>Lý do hủy:</strong> {{ $order->cancel_reason }}</p>
+                    @if ($order->cancel_note)
+                    <p><strong>Ghi chú:</strong> {{ $order->cancel_note }}</p>
+                    @endif
                     @endif
                     <p><strong>Trạng thái thanh toán:</strong>
                         <span class="badge {{ $order->payment_status === 'Đã thanh toán' ? 'bg-success' : 'bg-warning' }}">

@@ -59,9 +59,9 @@
                                 <td>{{ $variant->product->name ?? 'N/A' }}</td>
                                 <td>{{ $variant->color->name ?? 'N/A' }}</td>
                                 <td>{{ $variant->size->name ?? 'N/A' }}</td>
-                                <td>{{ number_format($variant->price, 0, ',', '.') }} đ</td>
+                                <td>{{ number_format($variant->price, 0, ',', '.') }} ₫</td>
                                 <td>{{ $variant->sale_price ? number_format($variant->sale_price, 0, ',', '.') : 'N/A' }}
-                                    đ
+                                    ₫
                                 </td>
                                 <td>{{ $variant->quantity }}</td>
                                                             

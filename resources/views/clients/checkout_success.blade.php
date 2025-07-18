@@ -145,6 +145,9 @@
         </div>
 
         <div class="text-end mt-4">
+            @if ($order->discount > 0)
+            <p><strong>Giảm giá:</strong> <span class="text-danger">-{{ number_format($order->discount, 0, ',', '.') }} ₫</span></p>
+            @endif
             <span class="me-2 fs-5">Tổng tiền đơn hàng:</span>
             <span class="total-amount">{{ number_format($order->total_price, 0, ',', '.') }} ₫</span>
         </div>
