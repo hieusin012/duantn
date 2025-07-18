@@ -11,19 +11,19 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
     public function index()
-{
-    // Thêm 'comments' vào eager loading
-    $products = Product::with(['comments', 'wishlists']) // <--- SỬA DÒNG NÀY
-        ->where('is_active', 1)
-        ->whereNull('deleted_at')
-        ->latest()
-        ->paginate(12);
+    {
+        // Thêm 'comments' vào eager loading
+        $products = Product::with(['comments', 'wishlists']) // <--- SỬA DÒNG NÀY
+            ->where('is_active', 1)
+            ->whereNull('deleted_at')
+            ->latest()
+            ->paginate(12);
 
-    $categories = Category::whereNull('deleted_at')->get();
-    $brands = Brand::whereNull('deleted_at')->get();
+        $categories = Category::whereNull('deleted_at')->get();
+        $brands = Brand::whereNull('deleted_at')->get();
 
-    return view('clients.products.index', compact('products', 'categories', 'brands'));
-}
+        return view('clients.products.index', compact('products', 'categories', 'brands'));
+    }
 
     public function show($slug)
     {
@@ -61,7 +61,11 @@ class ProductController extends Controller
         $totalReviews = $comments->count();
         $averageRating = 0;
         $ratingPercentages = [
-            '5' => 0, '4' => 0, '3' => 0, '2' => 0, '1' => 0
+            '5' => 0,
+            '4' => 0,
+            '3' => 0,
+            '2' => 0,
+            '1' => 0
         ];
 
         if ($totalReviews > 0) {
@@ -110,8 +114,8 @@ class ProductController extends Controller
 
 
         $query = Product::with(['comments', 'wishlists']) // <--- SỬA DÒNG NÀY
-        ->where('is_active', 1)
-        ->whereNull('deleted_at');
+            ->where('is_active', 1)
+            ->whereNull('deleted_at');
 
 
         // Search by name
@@ -182,5 +186,4 @@ class ProductController extends Controller
 
         return view('clients.products.by_category', compact('category', 'products'));
     }
-
 }

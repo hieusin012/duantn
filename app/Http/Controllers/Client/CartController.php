@@ -26,6 +26,15 @@ class CartController extends Controller
             ->whereNull('deleted_at')
             ->latest()
             ->paginate(12);
+        if ($cart) {
+            foreach ($cart->items as $item) {
+                if (!$item->product || !$item->variant) {
+                    $item->forceDelete();
+                }
+            }
+            $cart->load(['items.product', 'items.variant']);
+        }
+
 
         return view('clients.cart.cart', compact('cart', 'products', 'voucher'));
     }
@@ -123,17 +132,13 @@ class CartController extends Controller
 
         $item = CartItem::with('cart')->find($productId);
 
-
         if (!$item) {
             return back()->with('error', 'Không tìm thấy sản phẩm trong giỏ hàng.');
         }
-
         if (!$item->cart || $item->cart->user_id !== Auth::id()) {
             abort(403, 'Bạn không có quyền xóa sản phẩm này.');
         }
-
         $item->delete();
-
         return back()->with('success', 'Đã xóa sản phẩm khỏi giỏ hàng.');
     }
 }

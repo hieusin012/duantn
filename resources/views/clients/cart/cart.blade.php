@@ -419,7 +419,7 @@
     });
 </script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const checkoutForm = document.getElementById('checkoutForm');
         const selectedInput = document.getElementById('selectedItemsInput');
         const voucherInput = document.getElementById('voucherCodeInput');
@@ -464,7 +464,7 @@
         });
 
         // --- 4. Gửi form thanh toán
-        checkoutForm.addEventListener('submit', function (e) {
+        checkoutForm.addEventListener('submit', function(e) {
             const selectedCheckboxes = document.querySelectorAll('.cart-checkbox:checked');
             const selectedIds = Array.from(selectedCheckboxes).map(cb => cb.dataset.id);
 
@@ -493,54 +493,99 @@
             }
 
             fetch('/cart/apply-voucher', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                },
-                body: JSON.stringify({
-                    code: code,
-                    cart_total: total
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({
+                        code: code,
+                        cart_total: total
+                    })
                 })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    document.getElementById('discount-amount').innerText = `- ${data.discount_display}`;
-                    document.getElementById('cart-total').innerText = data.total_display;
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('discount-amount').innerText = `- ${data.discount_display}`;
+                        document.getElementById('cart-total').innerText = data.total_display;
 
-                    localStorage.setItem("appliedVoucherCode", code); // ⚠️ lưu đúng mã
-                    document.getElementById('voucherCodeInput').value = code;
+                        localStorage.setItem("appliedVoucherCode", code); // ⚠️ lưu đúng mã
+                        document.getElementById('voucherCodeInput').value = code;
 
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('exampleModal'));
-                    if (modal) modal.hide();
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('exampleModal'));
+                        if (modal) modal.hide();
 
-                    toastr.success('Áp dụng mã giảm giá thành công!');
-                } else {
-                    toastr.error(data.message || 'Mã giảm giá không hợp lệ!');
-                }
-            })
-            .catch(error => {
-                console.error('Lỗi:', error);
-                toastr.error('Có lỗi khi áp dụng mã giảm giá.');
-            });
+                        $.toast({
+                            heading: 'Thành công !',
+                            text: "Áp dụng mã giảm giá thành công.",
+                            showHideTransition: 'slide',
+                            icon: 'success',
+                            position: {
+                                right: 1,
+                                top: 83
+                            },
+                        })
+                    } else {
+                        $.toast({
+                            heading: 'Thất bại !',
+                            text: "Mã giảm giá không hợp lệ.",
+                            showHideTransition: 'slide',
+                            icon: 'error',
+                            position: {
+                                right: 1,
+                                top: 83
+                            },
+                        })
+                    }
+                })
+                .catch(error => {
+                    console.error('Lỗi:', error);
+                    $.toast({
+                        heading: 'Thất bại !',
+                        text: "Lỗi khi áp dụng mã.",
+                        showHideTransition: 'slide',
+                        icon: 'error',
+                        position: {
+                            right: 1,
+                            top: 83
+                        },
+                    })
+                });
         }
 
         // --- 6. Nhấn ÁP DỤNG (nhập tay)
-        document.getElementById('btnApplyManual').addEventListener('click', function () {
+        document.getElementById('btnApplyManual').addEventListener('click', function() {
             const code = document.getElementById('manualVoucherCode').value.trim();
             if (!code) {
-                alert('Vui lòng nhập mã.');
+                $.toast({
+                    heading: 'Cảnh báo !',
+                    text: "Vui lòng nhập mã giảm giá",
+                    showHideTransition: 'slide',
+                    icon: 'warning',
+                    position: {
+                        right: 1,
+                        top: 83
+                    },
+                })
                 return;
             }
             applyVoucher(code);
         });
 
         // --- 7. Nhấn ÁP DỤNG (voucher radio)
-        document.getElementById('btnApplyRadio').addEventListener('click', function () {
+        document.getElementById('btnApplyRadio').addEventListener('click', function() {
             const selected = document.querySelector('input[name="selected_voucher"]:checked');
             if (!selected) {
-                alert('Vui lòng chọn một mã giảm giá.');
+                $.toast({
+                    heading: 'Cảnh báo !',
+                    text: "Vui lòng chọn mã giảm giá.",
+                    showHideTransition: 'slide',
+                    icon: 'warning',
+                    position: {
+                        right: 1,
+                        top: 83
+                    },
+                })
                 return;
             }
             const code = selected.dataset.code;

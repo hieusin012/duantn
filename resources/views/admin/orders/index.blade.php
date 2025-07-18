@@ -118,17 +118,7 @@
                             </td>
                             <td>{{ $order->user ? $order->user->name : 'N/A' }}</td>
                             <td>
-                                <a href="{{ route('admin.orders.edit', $order->id) }}" class="btn btn-primary btn-sm edit" title="Sửa">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <form action="{{ route('admin.orders.destroy', $order->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc muốn xóa đơn hàng này?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-primary btn-sm trash" title="Xóa">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </form>
-                                <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-primary btn-sm" title="Xem chi tiết">
+                                <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-success btn-sm" title="Xem chi tiết">
                                     <i class="fas fa-eye"></i>
                                 </a>
                             </td>

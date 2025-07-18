@@ -15,12 +15,11 @@
     <link rel="stylesheet" href="{{ asset('assets/client/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/client/css/style-min.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
     @stack('styles')
 </head>
 
 <body class="template-index index-demo1">
+    @include('clients.layouts.partials.load')
     <div class="page-wrapper">
         @include('clients.layouts.partials.header')
         @yield('banner')
@@ -36,8 +35,6 @@
     <script src="{{ asset('assets/client/js/plugins.js') }}"></script>
     <script src="{{ asset('assets/client/js/main.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     @if(Session::has('success'))
     <script>
         $.toast({
@@ -73,7 +70,10 @@
             text: 'Bạn đã thanh toán đơn hàng thành công!',
             showHideTransition: 'slide',
             icon: 'success',
-            position: 'top-center',
+            position: {
+                right: 1,
+                top: 83
+            },
         });
     </script>
     @endif
@@ -84,7 +84,10 @@
             text: 'Bạn đã đặt hàng thành công, nhưng chưa thanh toán!',
             showHideTransition: 'slide',
             icon: 'warning',
-            position: 'top-centter',
+            position: {
+                right: 1,
+                top: 83
+            },
         });
     </script>
     @endif
