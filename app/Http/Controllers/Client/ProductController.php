@@ -28,7 +28,10 @@ class ProductController extends Controller
 
     public function show($slug)
     {
-        $product = Product::where('slug', $slug)->firstOrFail();
+        // $product = Product::where('slug', $slug)->firstOrFail();
+        $product = Product::with(['variants']) // <-- load quan hệ
+            ->where('slug', $slug)
+            ->firstOrFail();
 
         // Tải các mối quan hệ cần thiết
         $product->load([

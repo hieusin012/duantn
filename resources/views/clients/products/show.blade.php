@@ -169,9 +169,35 @@
                             <a class="reviewLink d-flex-center" href="#reviews">Viết đánh giá</a>
                         </div>
                         <div class="product-price d-flex-center my-3">
-                            <span class="price fs-3" id="variant-price">
+                            {{-- <span class="price fs-3" id="variant-price">
                                 {{ number_format($product->price, 0, ',', '.') }} ₫
-                            </span>
+                            </span> --}}
+                            @php
+                                $price = $product->price;
+                                $discountPercent = $product->discount_percent ?? 0;
+                                $isHotDeal = $product->is_hot_deal
+                                    && $discountPercent > 0
+                                    && $product->deal_end_at
+                                    && \Carbon\Carbon::now()->lt($product->deal_end_at);
+
+                                $salePrice = $isHotDeal ? $price * (1 - $discountPercent / 100) : null;
+                            @endphp
+
+                            <div class="product-price d-flex-center my-3">
+                                @if ($isHotDeal)
+                                    <span class="price fs-3 text-danger">
+                                        {{ number_format($salePrice, 0, ',', '.') }} ₫
+                                    </span>
+                                    <del class="text-muted ms-2">
+                                        {{ number_format($price, 0, ',', '.') }} ₫
+                                    </del>
+                                @else
+                                    <span class="price fs-3" id="variant-price">
+                                        {{ number_format($price, 0, ',', '.') }} ₫
+                                    </span>
+                                @endif
+                                
+                            </div>
                         </div>
                     </div>
 

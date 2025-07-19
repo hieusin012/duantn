@@ -66,11 +66,31 @@ class CartController extends Controller
             'user_id' => $user->id,
             'status' => 'active', // Thay đổi từ 0 thành 'active'
         ]);
-        $price = $variant->sale_price ?? $variant->price;
+        // $price = $variant->sale_price ?? $variant->price;
 
+        // if (is_null($price)) {
+        //     return back()->with('error', 'Không thể thêm sản phẩm chưa có giá.');
+        // } 
+
+        $product = Product::findOrFail($request->product_id);
+        $isHotDeal = $product->is_hot_deal 
+            && $product->discount_percent > 0 
+            && $product->deal_end_at 
+            && now()->lt($product->deal_end_at);
+
+        // Nếu là Hot Deal → giảm giá theo phần trăm từ variant->price
+        if ($isHotDeal) {
+            $price = $variant->price * (1 - $product->discount_percent / 100);
+        } else {
+            // Không phải hot deal → dùng sale_price nếu có, không thì price
+            $price = $variant->sale_price ?? $variant->price;
+        }
+
+        // Nếu không có giá → báo lỗi
         if (is_null($price)) {
             return back()->with('error', 'Không thể thêm sản phẩm chưa có giá.');
         }
+        
         // Kiểm tra xem biến thể đã có trong giỏ hàng chưa
         $item = $cart->items()
             ->where('product_id', $request->product_id)

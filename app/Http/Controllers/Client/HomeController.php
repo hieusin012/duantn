@@ -18,6 +18,7 @@ class HomeController extends Controller
         // Lấy 8 sản phẩm mới nhất và tải kèm thông tin comments, wishlists
         $products = Product::with(['comments', 'wishlists'])
             ->where('is_active', 1)
+            ->where('is_hot_deal', false) // 🔥 Loại bỏ sản phẩm hot deal
             ->whereNull('deleted_at')
             ->latest()
             ->take(8)
