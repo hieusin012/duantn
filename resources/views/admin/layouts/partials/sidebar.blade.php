@@ -1,177 +1,155 @@
-<aside class="app-sidebar">
-      <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="{{ asset('assets/admin/ckeditor/samples/img/logo.png') }}" width="150px"
-                  alt="User Image">
-            <div>
-                  <p class="app-sidebar__user-name"><b>ADMIN</b></p>
-                  <p class="app-sidebar__user-designation">Trang quản lý</p>
-            </div>
+<aside id="sidebar" class="app-sidebar" style="width: 250px">
+      <div class="app-sidebar__user text-center py-4">
+            <img class="app-sidebar__user-avatar shadow" src="{{ asset('assets/admin/ckeditor/samples/img/logo.png') }}" width="100" style="border-radius: 50%;" alt="User Image">
+            <p class="app-sidebar__user-name fw-bold mt-3 mb-1 text-white">Trang quản lí</p>
       </div>
       <hr>
+
       <ul class="app-menu">
-            <li>
-                  <a class="app-menu__item {{ request()->routeIs('chat.index') ? 'active' : '' }}" href="{{ route('admin.chat') }}"><i class="app-menu__icon fas fa-comment-dots"></i>
-                        <span class="app-menu__label">Hỗ trợ khách hàng</span>
-                  </a>
-            </li>
+            <!-- Nhóm: Tổng quan & Hỗ trợ -->
+            <li class="app-menu__section">TỔNG QUAN</li>
+            <li><a class="app-menu__item {{ request()->routeIs('chat.index') ? 'active' : '' }}" href="{{ route('admin.chat') }}">
+                        <i class="app-menu__icon fas fa-comment-dots"></i><span class="app-menu__label">Hỗ trợ khách hàng</span></a></li>
+            <li><a class="app-menu__item {{ request()->is('phan-mem-ban-hang*') ? 'active' : '' }}" href="phan-mem-ban-hang.html">
+                        <i class="app-menu__icon bx bx-cart-alt"></i><span class="app-menu__label">POS Bán Hàng</span></a></li>
+            <li><a class="app-menu__item {{ request()->routeIs('admin.dashboard.index') ? 'active' : '' }}" href="{{route('admin.dashboard.index')}}">
+                        <i class="app-menu__icon bx bx-tachometer"></i><span class="app-menu__label">Bảng điều khiển</span></a></li>
 
+            <!-- Nhóm: Quản lý nội dung -->
+            <li class="app-menu__section">QUẢN LÝ NỘI DUNG</li>
+            <li><a class="app-menu__item {{ request()->routeIs('admin.users.*') ? 'active' : '' }}" href="{{ route('admin.users.index') }}">
+                        <i class="app-menu__icon bx bx-group"></i><span class="app-menu__label">Người dùng</span></a></li>
+            <li><a class="app-menu__item {{ request()->routeIs('admin.blogs.*') ? 'active' : '' }}" href="{{ route('admin.blogs.index') }}">
+                        <i class="app-menu__icon fas fa-newspaper"></i><span class="app-menu__label">Bài viết</span></a></li>
+            <li><a class="app-menu__item {{ request()->routeIs('admin.blog-categories.*') ? 'active' : '' }}" href="{{ route('admin.blog-categories.index') }}">
+                        <i class="app-menu__icon fas fa-folder-open"></i><span class="app-menu__label">Danh mục bài viết</span></a></li>
+            <li><a class="app-menu__item {{ request()->routeIs('admin.comments.*') ? 'active' : '' }}" href="{{ route('admin.comments.index') }}">
+                        <i class="app-menu__icon fas fa-comments"></i><span class="app-menu__label">Bình luận</span></a></li>
 
-            <li><a class="app-menu__item {{ request()->is('phan-mem-ban-hang*') ? 'active' : '' }}" href="phan-mem-ban-hang.html"><i class='app-menu__icon bx bx-cart-alt'></i>
-                        <span class="app-menu__label">POS Bán Hàng</span></a></li>
+            <!-- Nhóm: Quản lý sản phẩm -->
+            <li class="app-menu__section">QUẢN LÝ SẢN PHẨM</li>
+            <li><a class="app-menu__item {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}" href="{{ route('admin.categories.index') }}">
+                        <i class="app-menu__icon bx bx-category"></i><span class="app-menu__label">Danh mục sản phẩm</span></a></li>
+            <li><a class="app-menu__item {{ request()->routeIs('admin.products.*') ? 'active' : '' }}" href="{{ route('admin.products.index') }}">
+                        <i class="app-menu__icon bx bx-purchase-tag-alt"></i><span class="app-menu__label">Sản phẩm</span></a></li>
+            <li><a class="app-menu__item {{ request()->routeIs('admin.product-variants.*') ? 'active' : '' }}" href="{{ route('admin.product-variants.index') }}">
+                        <i class="app-menu__icon bx bx-layer"></i><span class="app-menu__label">Sản phẩm biến thể</span></a></li>
+            <li><a class="app-menu__item {{ request()->routeIs('admin.colors.*') ? 'active' : '' }}" href="{{ route('admin.colors.index') }}">
+                        <i class="app-menu__icon bx bx-palette"></i><span class="app-menu__label">Màu sắc</span></a></li>
+            <li><a class="app-menu__item {{ request()->routeIs('admin.sizes.*') ? 'active' : '' }}" href="{{ route('admin.sizes.index') }}">
+                        <i class="app-menu__icon bx bx-ruler"></i><span class="app-menu__label">Kích cỡ</span></a></li>
+            <li><a class="app-menu__item {{ request()->routeIs('admin.brands.*') ? 'active' : '' }}" href="{{ route('admin.brands.index') }}">
+                        <i class="app-menu__icon fas fa-tag"></i><span class="app-menu__label">Thương hiệu</span></a></li>
 
-            <li><a class="app-menu__item {{ request()->routeIs('admin.dashboard.index') ? 'active' : '' }}" href="{{route('admin.dashboard.index')}}"><i class='app-menu__icon bx bx-tachometer'></i> <span
-                              class="app-menu__label">Bảng điều khiển</span></a></li>
-            {{--
-            <li><a class="app-menu__item" href="#"><i class='app-menu__icon bx bx-id-card'></i> <span
-                              class="app-menu__label">Quản lý nhân viên</span></a></li> --}}
+            <!-- Nhóm: Đơn hàng & Kho -->
+            <li class="app-menu__section">ĐƠN HÀNG & KHO</li>
+            <li><a class="app-menu__item {{ request()->routeIs('admin.orders*') ? 'active' : '' }}" href="{{ route('admin.orders.index') }}">
+                        <i class="app-menu__icon fas fa-shopping-cart"></i><span class="app-menu__label">Đơn hàng</span></a></li>
+            <li><a class="app-menu__item {{ request()->routeIs('admin.return-requests.*') ? 'active' : '' }}" href="{{ route('admin.return-requests.index') }}">
+                        <i class="app-menu__icon fas fa-undo"></i><span class="app-menu__label">Hoàn trả</span></a></li>
+            <li><a class="app-menu__item {{ request()->routeIs('admin.inventory.*') ? 'active' : '' }}" href="{{ route('admin.inventory.index') }}">
+                        <i class="app-menu__icon bx bx-box"></i><span class="app-menu__label">Kho hàng</span></a></li>
+            <li><a class="app-menu__item {{ request()->routeIs('admin.vouchers*') ? 'active' : '' }}" href="{{ route('admin.vouchers.index') }}">
+                        <i class="app-menu__icon fas fa-ticket-alt"></i><span class="app-menu__label">Vouchers</span></a></li>
 
-            <li><a class="app-menu__item {{ request()->routeIs('admin.users.*') ? 'active' : '' }}" href="{{ route(name: 'admin.users.index') }}"><i class='app-menu__icon bx bx-group'></i><span
-                              class="app-menu__label">Quản lý người dùng</span></a></li>
+            <!-- Nhóm: Vận chuyển -->
+            <li class="app-menu__section">VẬN CHUYỂN</li>
+            <li><a class="app-menu__item {{ request()->routeIs('admin.shiptypes*') ? 'active' : '' }}" href="{{ route('admin.shiptypes.index') }}">
+                        <i class="app-menu__icon fa fa-shipping-fast"></i><span class="app-menu__label">Loại shipper</span></a></li>
+            <li><a class="app-menu__item {{ request()->routeIs('admin.shipper.orders*') ? 'active' : '' }}" href="{{ route('admin.shipper.orders.index') }}">
+                        <i class="app-menu__icon fa fa-shipping-fast"></i><span class="app-menu__label">Đơn hàng shipper</span></a></li>
+            <li><a class="app-menu__item {{ request()->routeIs('admin.shipper.persons*') ? 'active' : '' }}" href="{{ route('admin.shipper.persons.index') }}">
+                        <i class="app-menu__icon fa fa-shipping-fast"></i><span class="app-menu__label">Danh sách shipper</span></a></li>
 
-            <li>
-                  <a class="app-menu__item {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}" href="{{ route(name: 'admin.categories.index') }}">
-                        <i class='app-menu__icon bx bx-category'></i>
-                        <span class="app-menu__label">Quản lý danh mục</span>
-                  </a>
-            </li>
-            <li>
-                  <a class="app-menu__item {{ request()->routeIs('admin.blogs.*') ? 'active' : '' }}" href="{{ route(name: 'admin.blogs.index') }}">
-                        <i class='app-menu__icon fas fa-newspaper'></i>
-                        <span class="app-menu__label">Quản lý bài viết</span>
-                  </a>
-            </li>
+            <!-- Nhóm: Thống kê & Báo cáo -->
+            <li class="app-menu__section">BÁO CÁO</li>
+            <li><a class="app-menu__item {{ request()->routeIs('admin.thongke.*') ? 'active' : '' }}" href="{{ route('admin.thongke.index') }}">
+                        <i class="app-menu__icon bx bx-bar-chart-alt"></i><span class="app-menu__label">Thống kê</span></a></li>
+            <li><a class="app-menu__item {{ request()->is('quan-ly-bao-cao*') ? 'active' : '' }}" href="{{route('admin.orders.report')}}">
+                        <i class="app-menu__icon bx bx-pie-chart-alt-2"></i><span class="app-menu__label">Doanh thu</span></a></li>
 
-            <li>
-                  <a class="app-menu__item {{ request()->routeIs('admin.blog-categories.*') ? 'active' : '' }}" href="{{ route('admin.blog-categories.index') }}">
-                        <i class="app-menu__icon fas fa-folder-open"></i>
-                        <span class="app-menu__label">Quản lý danh mục bài viết</span>
-                  </a>
-            </li>
-
-            <li>
-                  <a class="app-menu__item {{ request()->routeIs('admin.vouchers*') ? 'active' : '' }}" href="{{ route('admin.vouchers.index') }}">
-                        <i class='app-menu__icon fas fa-ticket-alt'></i> {{-- hoặc 'fa-gift' --}}
-                        <span class="app-menu__label">Quản lý Vouchers</span>
-                  </a>
-            </li>
-
-            <li>
-                  <a class="app-menu__item {{ request()->routeIs('admin.orders*') ? 'active' : '' }}" href="{{ route('admin.orders.index') }}">
-                        <i class='app-menu__icon fas fa-shopping-cart'></i> {{-- hoặc 'fa-box' --}}
-                        <span class="app-menu__label">Quản lý Đơn Hàng</span>
-                  </a>
-            </li>
-
-            <li>
-                  <a class="app-menu__item {{ request()->routeIs('admin.return-requests.*') ? 'active' : '' }}" href="{{ route('admin.return-requests.index') }}">
-                        <i class='app-menu__icon fas fa-undo'></i>
-                        <span class="app-menu__label">Quản lý đơn trả hàng</span>
-                  </a>
-            </li>
-
-            <li>
-                  <a class="app-menu__item {{ request()->routeIs('admin.banners.*') ? 'active' : '' }}" href="{{ route(name: 'admin.banners.index') }}">
-                        <i class='app-menu__icon fas fa-image'></i>
-
-                        <span class="app-menu__label">Quản lý banner</span>
-                  </a>
-            </li>
-
-            <li>
-                  <a class="app-menu__item {{ request()->routeIs('admin.brands.*') ? 'active' : '' }}" href="{{ route(name: 'admin.brands.index') }}"><i class='app-menu__icon fas fa-tag'></i> <span
-                              class="app-menu__label">Quản lý thương hiệu</span></a>
-            </li>
-            <li>
-                  <a class="app-menu__item {{ request()->routeIs('admin.sizes.*') ? 'active' : '' }}" href="{{ route(name: 'admin.sizes.index') }}">
-                        <i class='app-menu__icon bx bx-ruler'></i>
-                        <span class="app-menu__label">Quản lý kích cỡ</span>
-                  </a>
-            </li>
-            <li>
-                  <a class="app-menu__item {{ request()->routeIs('admin.colors.*') ? 'active' : '' }}" href="{{ route(name: 'admin.colors.index') }}">
-                        <i class="app-menu__icon bx bx-palette"></i>
-                        <span class="app-menu__label">Quản lý màu sắc</span>
-                  </a>
-            </li>
-
-
-
-
-            <li><a class="app-menu__item {{ request()->routeIs('admin.products.*') ? 'active' : '' }}" href="{{route('admin.products.index')}}"><i
-                              class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản phẩm</span></a>
-            </li>
-
-            <li>
-                  <a class="app-menu__item {{ request()->routeIs('admin.product-variants.*') ? 'active' : '' }}" href="{{ route('admin.product-variants.index') }}">
-                        <i class='app-menu__icon bx bx-layer'></i>
-                        <span class="app-menu__label">Quản lý sản phẩm thuộc tính</span>
-                  </a>
-            </li>
-            <li>
-                  <a class="app-menu__item {{ request()->routeIs('admin.thongke.*') ? 'active' : '' }}" href="{{ route('admin.thongke.index') }}">
-                        <i class="app-menu__icon bx bx-bar-chart-alt"></i>
-                        <span class="app-menu__label">Thống kê sản phẩm</span>
-                  </a>
-            </li>
-            <li>
-                  <a class="app-menu__item {{ request()->routeIs('admin.inventory.*') ? 'active' : '' }}" href="{{ route('admin.inventory.index') }}">
-                        <i class="app-menu__icon bx bx-box"></i>
-                        <span class="app-menu__label">Quản lí kho hàng</span>
-                  </a>
-            </li>
-
-            <li>
-                  <a class="app-menu__item {{ request()->routeIs('admin.shiptypes*') ? 'active' : '' }}" href="{{ route('admin.shiptypes.index') }}">
-                        <i class="app-menu__icon fa fa-shipping-fast"></i>
-                        <span class="app-menu__label">Quản Lí Tên Loại Shipper</span>
-                  </a>
-            </li>
-            <li>
-                  <a class="app-menu__item {{ request()->routeIs('admin.shipper.orders*') ? 'active' : '' }}" href="{{ route('admin.shipper.orders.index') }}">
-                        <i class="app-menu__icon fa fa-shipping-fast"></i>
-                        <span class="app-menu__label">Quản Lí Danh Sách Đơn Hàng Chuyển Đi Shipper</span>
-                  </a>
-            </li>
-               <li>
-                  <a class="app-menu__item {{ request()->routeIs('admin.shipper.persons*') ? 'active' : '' }}" href="{{ route('admin.shipper.persons.index') }}">
-                        <i class="app-menu__icon fa fa-shipping-fast"></i>
-                        <span class="app-menu__label">Quản Lí Danh Sách Shipper</span>
-                  </a>
-            </li>
-            <li>
-                  <a class="app-menu__item {{ request()->routeIs('admin.suppliers*') ? 'active' : '' }}" href="{{ route('admin.suppliers.index') }}">
-                      <i class="app-menu__icon fa fa-building"></i>
-                      <span class="app-menu__label">Quản lí nhà cung cấp</span>
-                  </a>
-            </li>
-            <li>
-                  <a class="app-menu__item {{ request()->routeIs('admin.imports*') ? 'active' : '' }}" href="{{ route('admin.imports.index') }}">
-                      <i class="app-menu__icon fa fa-receipt"></i>
-                      <span class="app-menu__label">Quản lí nhập hàng</span>
-                  </a>
-            </li>     
-
-            <li>
-                  <a class="app-menu__item {{ request()->routeIs('admin.comments.*') ? 'active' : '' }}" href="{{ route('admin.comments.index') }}">
-                        <i class='app-menu__icon fas fa-comments'></i>
-                        <span class="app-menu__label">Quản lý bình luận</span>
-                  </a>
-            </li>
-
-            <li>  
-                  <a class="app-menu__item {{ request()->is('table-data-banned*') ? 'active' : '' }}" href="table-data-banned.html">
-                        <i class='app-menu__icon bx bx-run'></i>
-                        <span class="app-menu__label">Quản lý nội bộ</span>
-                  </a>
-            </li>
-
-            <li><a class="app-menu__item {{ request()->is('table-data-money*') ? 'active' : '' }}" href="table-data-money.html"><i class='app-menu__icon bx bx-dollar'></i><span
-                              class="app-menu__label">Bảng kê lương</span></a></li>
-            <li><a class="app-menu__item {{ request()->is('quan-ly-bao-cao*') ? 'active' : '' }}" href="{{route('admin.orders.report')}}"><i
-                              class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo doanh thu</span></a>
-            </li>
-            <li><a class="app-menu__item {{ request()->is('page-calendar*') ? 'active' : '' }}" href="page-calendar.html"><i class='app-menu__icon bx bx-calendar-check'></i><span
-                              class="app-menu__label">Lịch công tác </span></a></li>
-            <li><a class="app-menu__item {{ request()->is('cai-dat*') ? 'active' : '' }}" href="#"><i class='app-menu__icon bx bx-cog'></i><span class="app-menu__label">Cài
-                              đặt hệ thống</span></a></li>
+            <!-- Nhóm: Cấu hình hệ thống -->
+            <li class="app-menu__section">HỆ THỐNG</li>
+            <li><a class="app-menu__item {{ request()->routeIs('admin.banners.*') ? 'active' : '' }}" href="{{ route('admin.banners.index') }}">
+                        <i class="app-menu__icon fas fa-image"></i><span class="app-menu__label">Banner</span></a></li>
+            <li><a class="app-menu__item {{ request()->routeIs('admin.suppliers*') ? 'active' : '' }}" href="{{ route('admin.suppliers.index') }}">
+                        <i class="app-menu__icon fa fa-building"></i><span class="app-menu__label">Nhà cung cấp</span></a></li>
+            <li><a class="app-menu__item {{ request()->routeIs('admin.imports*') ? 'active' : '' }}" href="{{ route('admin.imports.index') }}">
+                        <i class="app-menu__icon fa fa-receipt"></i><span class="app-menu__label">Nhập hàng</span></a></li>
+            <li><a class="app-menu__item {{ request()->is('cai-dat*') ? 'active' : '' }}" href="#">
+                        <i class="app-menu__icon bx bx-cog"></i><span class="app-menu__label">Cài đặt</span></a></li>
       </ul>
 </aside>
+
+<style>
+      .app-sidebar {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background: #000000ff;
+      }
+
+      .app-sidebar__user {
+            flex-shrink: 0;
+      }
+
+      .app-menu {
+            overflow-y: auto;
+            scrollbar-width: thin;
+            /* Firefox */
+            scrollbar-color: #888 transparent;
+            /* Firefox */
+      }
+
+      /* Chrome, Edge */
+      .app-menu::-webkit-scrollbar {
+            width: 4px;
+            /* nhỏ lại */
+      }
+
+      .app-menu::-webkit-scrollbar-thumb {
+            background-color: #999;
+            border-radius: 10px;
+      }
+
+      .app-menu::-webkit-scrollbar-track {
+            background: transparent;
+      }
+
+
+      .app-menu__section {
+            color: #fff !important;
+            border-bottom: 1px solid white;
+            padding-bottom: 10px;
+            margin-top: 15px;
+            margin-bottom: 10px;
+      }
+
+      .app-menu__item.active {
+            background-color: #f6c23e;
+            color: #000;
+            font-weight: bold;
+      }
+
+      .app-menu__item:hover {
+            background: #ffe599;
+      }
+
+      /* Ẩn sidebar ban đầu (khi có class 'collapsed') */
+      .app-sidebar.collapsed {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+      }
+
+      /* Sidebar bình thường */
+      .app-sidebar {
+            width: 250px;
+            background-color: #000000ff;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            transition: transform 0.3s ease;
+            z-index: 999;
+      }
+</style>

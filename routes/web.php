@@ -161,6 +161,8 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     Route::resource('shiptypes', \App\Http\Controllers\ShipTypeController::class);
     Route::resource('orders', App\Http\Controllers\OrderController::class);
     Route::get('orders-report', [OrderController::class, 'report'])->name('orders.report');
+    Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
+
 
 
     //Blog

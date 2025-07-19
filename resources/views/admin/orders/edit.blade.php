@@ -108,7 +108,7 @@
                         @error('note') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
                 
-                    <button type="submit" class="btn btn-primary">Cập nhật đơn hàng</button>
+                    <button type="submit" class="btn primary">Cập nhật đơn hàng</button>
                     <a href="{{ route('admin.orders.index') }}" class="btn btn-secondary">Quay lại</a>
                 </form>
                 

@@ -21,7 +21,8 @@ class OrderController extends Controller
             $query->where(function ($q) use ($keyword) {
                 $q->where('code', 'like', "%{$keyword}%")
                     ->orWhere('fullname', 'like', "%{$keyword}%")
-                    ->orWhere('email', 'like', "%{$keyword}%");
+                    ->orWhere('email', 'like', "%{$keyword}%")
+                    ->orWhere('phone', 'like', "%{$keyword}");
             });
         }
 
@@ -156,5 +157,43 @@ class OrderController extends Controller
         $order->save();
 
         return back()->with('success', '✅ Đơn hàng đã được hủy thành công.');
+    }
+
+    public function updateStatus(Order $order)
+    {
+        // Danh sách trạng thái đơn hàng và thanh toán
+        $statuses = [
+            'Chờ xác nhận',
+            'Đã xác nhận',
+            'Đang chuẩn bị hàng',
+            'Đang giao hàng',
+            'Đã giao hàng',
+        ];
+
+        $paymentStatuses = [
+            'Chưa thanh toán',
+            'Đã thanh toán',
+        ];
+
+        // Tìm chỉ số trạng thái hiện tại
+        $currentStatusIndex = array_search($order->status, $statuses);
+        $currentPaymentIndex = array_search($order->payment_status, $paymentStatuses);
+
+        // Nếu trạng thái hiện tại tồn tại trong danh sách và chưa phải cuối cùng
+        if ($currentStatusIndex !== false && $currentStatusIndex < count($statuses) - 1) {
+            $nextStatus = $statuses[$currentStatusIndex + 1];
+            $order->status = $nextStatus;
+
+            // Nếu trạng thái mới là "Đã giao hàng" thì cập nhật trạng thái thanh toán
+            if ($nextStatus === 'Đã giao hàng' && $currentPaymentIndex === 0) {
+                $order->payment_status = $paymentStatuses[1]; // Đã thanh toán
+            }
+
+            $order->save();
+
+            return back()->with('success', '✅ Trạng thái đơn hàng đã được cập nhật thành công.');
+        }
+
+        return back()->with('error', '⚠️ Không thể cập nhật trạng thái đơn hàng.');
     }
 }
