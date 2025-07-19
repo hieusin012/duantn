@@ -23,8 +23,8 @@
                                 @endforeach
                             </ul>
                         </li>
-                        <li class="lvl1 parent dropdown"><a href="{{ route('hot-deals.index') }}">HOT DEAL 
-                            {{-- <i class="icon anm anm-angle-down-l"></i> --}}
+                        <li class="lvl1 parent dropdown"><a href="{{ route('hot-deals.index') }}">HOT DEAL
+                                {{-- <i class="icon anm anm-angle-down-l"></i> --}}
                             </a>
                         </li>
                         <li class="lvl1 parent dropdown"><a href="{{ route('client.blog') }}">Blog
@@ -109,7 +109,7 @@
                 <div class="account-parent iconset">
                     <div class="account-link" title="Account"><i class="hdr-icon icon anm anm-user-al"></i></div>
                     <div id="accountBox">
-                        <div class="customer-links">
+                        <div class="customer-links" style="max-width: auto;">
                             <ul class="m-0">
                                 @guest
                                 <li><a href="{{ route('login') }}"><i class="icon anm anm-sign-in-al"></i>Đăng nhập</a></li>
@@ -117,13 +117,21 @@
                                 @endguest
 
                                 @auth
-                                <li><a href="#"><i class="icon anm anm-user-cil"></i>{{ Auth::user()->fullname }}</a></li>
-                                <li><a href="{{ route('profile.show') }}"><i class="icon anm anm-user-al"></i>Tài khoản của tôi</a></li>
-                                <li><a href="{{ route('profile.edit') }}"><i class="icon anm anm-edit"></i>Chỉnh sửa hồ sơ</a></li>
-                                <li><a href="{{ route('wishlist.index') }}"><i class="icon anm anm-heart-l"></i>Danh sách yêu thích</a></li>
+                                <li class="d-flex align-items-center gap-2">
+                                    <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('images/avatar_trang.jpg') }}"
+                                        class="rounded-circle shadow border border-dark"
+                                        width="80" height="80"
+                                        style="object-fit: cover;"
+                                        alt="Avatar">
+                                
+                                <span><b>{{ Auth::user()->fullname }}</b></span>
+                                </li>
+                                <li><a href="{{ route('profile.show') }}"><i class="icon anm anm-user-al"></i>Tài khoản</a></li>
+                                <li><a href="{{ route('profile.edit') }}"><i class="icon anm anm-edit"></i>Chỉnh sửa</a></li>
+                                <li><a href="{{ route('wishlist.index') }}"><i class="icon anm anm-heart-l"></i>Yêu thích</a></li>
                                 <li><a href="#"><i class="icon anm anm-random-r"></i>So sánh</a></li>
-                                <li><a href="{{ route('order.history') }}"><i class="hdr-icon icon anm anm-bag-l"></i>Lịch sử đặt hàng</a></li>
-                                <li><a href="{{ route('client.return-requests.index') }}"><i class="icon anm anm-undo-l"></i>Yêu cầu trả hàng</a></li>
+                                <li><a href="{{ route('order.history') }}"><i class="hdr-icon icon anm anm-bag-l"></i>Đơn hàng</a></li>
+                                <li><a href="{{ route('client.return-requests.index') }}"><i class="icon anm anm-undo-l"></i>Trả hàng</a></li>
                                 <li>
                                     <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         <i class="icon anm anm-sign-out-al"></i>Đăng xuất
