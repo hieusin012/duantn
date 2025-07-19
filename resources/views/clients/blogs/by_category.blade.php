@@ -10,27 +10,29 @@
         <div class="row">
             @foreach ($blogs as $blog)
                 <div class="col-md-3 col-6 mb-4">
-                    <div class="card border-0 bg-light rounded-3 shadow-sm h-100 overflow-hidden">
+                    <div class="product-box card border-0 bg-light rounded-3 shadow-sm position-relative overflow-hidden h-100">
 
                         {{-- Blog Image --}}
-                        <a href="{{ route('client.blogs.show', $blog->slug) }}">
-                            <img src="{{ asset('storage/' . ($blog->image ?? 'assets/images/blog-placeholder.jpg')) }}"
-                                class="card-img-top"
-                                alt="{{ $blog->title }}">
-                        </a>
+                        <div class="product-image position-relative">
+                            <a href="{{ route('client.blogs.show', $blog->slug) }}">
+                                <img src="{{ asset('storage/' . ($blog->image ?? 'assets/images/blog-placeholder.jpg')) }}"
+                                    class="card-img-top"
+                                    alt="{{ $blog->title }}">
+                            </a>
+                        </div>
 
                         {{-- Blog Info --}}
                         <div class="card-body text-center">
                             <h5 class="card-title">{{ $blog->title }}</h5>
 
-                            <p class="text-muted small mb-2">
+                            <div class="product-review mb-2 text-muted small">
                                 {{ $blog->created_at->format('d/m/Y') }}
-                            </p>
+                            </div>
 
                             <p class="card-text">{{ Str::limit(strip_tags($blog->description), 100) }}</p>
 
-                            <a href="{{ route('client.blogs.show', $blog->slug) }}" class="btn btn-outline-primary btn-sm">
-                                Đọc tiếp
+                            <a href="{{ route('client.blogs.show', $blog->slug) }}" class="btn btn-primary btn-sm">
+                                <i class="icon anm anm-arrow-right me-1"></i> Đọc tiếp
                             </a>
                         </div>
 

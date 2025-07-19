@@ -32,7 +32,7 @@
                             <td>{{ $banner->link ?? 'N/A' }}</td>
                             <td>
                                 @if ($banner->image)
-                                    <img src="{{ asset('storage/' . $banner->image) }}" alt="{{ $banner->title ?? 'Banner' }}" height="80" width="80">
+                                    <img src="{{ asset('storage/' . $banner->image) }}" alt="{{ $banner->title ?? 'Banner' }}" height="80" width="180">
                                 @else
                                     <span>Không có ảnh</span>
                                 @endif

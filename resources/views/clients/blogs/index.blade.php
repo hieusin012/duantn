@@ -26,7 +26,7 @@
                 <div class="col-12 col-sm-6 col-md-6 col-lg-6 text-left filters-toolbar-item d-flex justify-content-center justify-content-sm-start">
                     <div class="search-form mb-3 mb-sm-0">
                         <form class="d-flex" action="#">
-                            <input class="search-input" type="text" placeholder="Blog search...">
+                            <input class="search-input" type="text" placeholder="Tìm kiếm blog...">
                             <button type="submit" class="search-btn"><i class="icon anm anm-search-l"></i></button>
                         </form>
                     </div>
@@ -67,12 +67,12 @@
                         <div class="blog-content">
                             <h2 class="h3"><a href="{{ route('client.blogs.show', $blog->slug) }}">{{ $blog->title }}</a></h2>
                             <ul class="publish-detail d-flex-wrap">                      
-                                <li><i class="icon anm anm-user-al"></i> <span class="opacity-75 me-1">Posted by:</span> {{ $blog->user->fullname ?? 'Unknown User' }}</li>
+                                <li><i class="icon anm anm-user-al"></i> <span class="opacity-75 me-1">Đăng bởi:</span> {{ $blog->user->fullname ?? 'Unknown User' }}</li>
                                 <li><i class="icon anm anm-clock-r"></i> <time datetime="{{ $blog->created_at->format('Y-m-d') }}">{{ $blog->created_at->format('M d, Y') }}</time></li>
-                                <li><i class="icon anm anm-comments-l"></i> <a href="#">0 Comments</a></li>
+                                <li><i class="icon anm anm-comments-l"></i> <a href="#">0 Bình luận</a></li>
                             </ul>
                             <p class="content">{{ Str::limit($blog->content, 150) }}</p>
-                            <a href="{{ route('client.blogs.show', $blog->slug) }}" class="btn btn-secondary btn-sm">Read more</a>
+                            <a href="{{ route('client.blogs.show', $blog->slug) }}" class="btn btn-secondary btn-sm">Đọc thêm</a>
                         </div>
                     </div>
                 </div>

@@ -202,17 +202,22 @@
     </div>
 
 </div>
+@if(isset($banners) && !$banners->isEmpty())
 <div class="home-slideshow slick-arrow-dots">
+    {{-- Lặp qua từng banner --}}
+    @foreach($banners as $banner)
     <div class="slide">
-        <img class="blur-up lazyload" src="{{ asset('assets/client/images/slideshow/banner5.jpg') }}" alt="slideshow" title="" />
+        {{-- Bọc ảnh trong thẻ <a> với link của banner --}}
+        <a href="{{ $banner->link ?? '#' }}" target="_blank">
+            <img class="blur-up lazyload slideshow-img" 
+                 src="{{ asset('storage/' . $banner->image) }}" 
+                 alt="{{ $banner->title }}" 
+                 title="{{ $banner->title }}" />
+        </a>
     </div>
-    <div class="slide">
-        <img class="blur-up lazyload" src="{{ asset('assets/client/images/slideshow/banner6.jpg') }}" alt="slideshow" title="" />
-    </div>
-    <div class="slide">
-        <img class="blur-up lazyload" src="{{ asset('assets/client/images/slideshow/banner7.jpg') }}" alt="slideshow" title="" />
-    </div>
+    @endforeach
 </div>
+@endif
 <div class="container py-5">
     <h2 class="text-center mb-4 fs-3 fw-bold border-bottom pb-2 d-inline-block">
         TIN TỨC THỂ THAO & KHUYẾN MÃI
