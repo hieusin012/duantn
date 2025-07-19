@@ -15,11 +15,13 @@ class ProductVariant extends Model
         'color_id',
         'size_id',
         'price',
+        'sale_start_date',
+        'sale_end_date',
         'sale_price',
         'quantity',
         'image'
     ];
-    public $timestamps = false;
+    // public $timestamps = false;
     protected $dates = ['deleted_at'];
     public function product()
     {

@@ -22,7 +22,10 @@ class Product extends Model
         'is_active',
         'views',
         'category_id',
-        'brand_id'
+        'brand_id',
+        'is_hot_deal',
+        'discount_percent',
+        'deal_end_at'
     ];
 
     public function galleries()
@@ -65,10 +68,17 @@ class Product extends Model
     {
         return $this->comments()->where('status', 1)->count();
     }
+
     protected static function booted()
     {
         static::deleting(function ($product) {
             CartItem::where('product_id', $product->id)->delete();
         });
     }
+
+    protected $casts = [
+        'sale_start_date' => 'datetime',
+        'sale_end_date' => 'datetime',
+    ];
+
 }
