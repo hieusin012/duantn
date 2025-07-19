@@ -81,11 +81,11 @@
                             <input type="number" name="max_price" class="form-control form-control-sm" placeholder="Đến" value="{{ request('max_price') }}">
                         </div>
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-warning btn-sm">
-                                <i class="fas fa-filter me-1"></i> Lọc kết quả
+                            <button type="submit" class="btn btn-warning btn-sm" style="margin-left: 15px; margin-top: 10px">
+                                <i class="fas fa-filter me-1"></i> Lọc 
                             </button>
-                            <a href="{{ route('admin.orders.index') }}" class="btn btn-outline-secondary btn-sm">
-                                <i class="fas fa-sync-alt me-1"></i> Reset bộ lọc
+                            <a href="{{ route('admin.orders.index') }}" class="btn btn-outline-secondary btn-sm" style="margin-left: 20px; margin-top: 10px">
+                                <i class="fas fa-sync-alt me-1"></i> Reset 
                             </a>
                         </div>
                     </div>
