@@ -81,5 +81,4 @@ class Product extends Model
         'sale_end_date' => 'datetime',
     ];
 
-
 }
