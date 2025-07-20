@@ -168,7 +168,7 @@
                             @endif
                             <a class="reviewLink d-flex-center" href="#reviews">Viết đánh giá</a>
                         </div>
-                        <div class="product-price d-flex-center my-3">
+                        <div class="product-price d-flex-center my-3" id="product-price">
                             {{-- <span class="price fs-3" id="variant-price">
                                 {{ number_format($product->price, 0, ',', '.') }} ₫
                             </span> --}}
@@ -191,6 +191,9 @@
                                     <del class="text-muted ms-2">
                                         {{ number_format($price, 0, ',', '.') }} ₫
                                     </del>
+                                    <span class="text-danger fw-bold ms-2" style="font-size: 10px;">
+                                        -{{ $discountPercent }}%
+                                    </span>
                                 @else
                                     <span class="price fs-3" id="variant-price">
                                         {{ number_format($price, 0, ',', '.') }} ₫
@@ -245,7 +248,8 @@
                                             data-size-id="{{ $variant->size_id }}"
                                             data-variant-quantity="{{ $variant->quantity }}"
                                             data-image="{{ asset('storage/' . $variant->image) }}"
-                                            data-price="{{ $variant->price }}">
+                                            data-price="{{ $variant->sale_price ?? $variant->price }}">
+                                            {{-- data-price="{{ $variant->price }}"> --}}
                                             {{ $variant->size->name }}
                                         </button>
 
@@ -788,19 +792,18 @@
     $(document).ready(function() {
         // Khi chọn size
         $('.size-btn').on('click', function() {
-            // Bỏ active
             $('.size-btn').removeClass('active');
             $(this).addClass('active');
 
-            // Gán size_id
             const sizeId = $(this).data('size-id');
             $('#selected-size-id').val(sizeId);
 
-            // Cập nhật ảnh & giá
             const price = $(this).data('price');
             const image = $(this).data('image');
 
-            $('#variant-price').text(new Intl.NumberFormat('vi-VN').format(price) + ' ₫');
+            $('#variant-price').text(
+                new Intl.NumberFormat('vi-VN').format(price) + ' ₫'
+            );
             $('#main-image').attr('src', image);
         });
 
@@ -829,13 +832,14 @@
             }
         });
 
-        // Khi load lại có chọn sẵn thì cập nhật lại size/màu
+        // Nếu có sẵn màu khi load trang thì cập nhật lại giao diện
         const checkedColor = $('input[name="color_id"]:checked');
         if (checkedColor.length) {
             checkedColor.trigger('change');
         }
     });
 </script>
+
 <script>
     $(document).ready(function() {
         let maxQty = 1;
