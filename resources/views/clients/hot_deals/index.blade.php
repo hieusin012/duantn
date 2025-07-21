@@ -114,10 +114,12 @@
                                 @endif
 
                                 {{-- Hết hạn --}}
-                                <p class="text-secondary small mb-2">
-                                    Hết hạn: {{ \Carbon\Carbon::parse($product->deal_end_at)->format('H:i d/m/Y') }}
+                                <p class="mb-1">
+                                    <span class="countdown-timer"
+                                        data-deal-end="{{ \Carbon\Carbon::parse($product->deal_end_at)->timestamp * 1000 }}">
+                                        <i class="bi bi-clock-fill me-1"></i><span class="time-remaining">--:--:--</span>
+                                    </span>
                                 </p>
-
                                 {{-- Nút xem chi tiết --}}
                                 <a href="{{ route('client.products.show', ['slug' => $product->slug]) }}"
                                    class="btn btn-primary btn-sm">
@@ -133,3 +135,51 @@
         @endif
     </div>
 @endsection
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const timers = document.querySelectorAll('.countdown-timer');
+
+        timers.forEach(timer => {
+            const endTimestamp = parseInt(timer.getAttribute('data-deal-end'));
+            const timeSpan = timer.querySelector('.time-remaining');
+
+            function updateCountdown() {
+                const now = Date.now(); // Mili giây hiện tại
+                const distance = endTimestamp - now;
+
+                if (distance <= 0) {
+                    timeSpan.innerText = "Đã hết hạn";
+                    return;
+                }
+
+                const totalSeconds = Math.floor(distance / 1000);
+                const days = Math.floor(totalSeconds / (3600 * 24));
+                const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                const seconds = totalSeconds % 60;
+
+                let timeText = '';
+
+                if (days > 0) {
+                    timeText += `${days} ngày `;
+                }
+
+                timeText += `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+                timeSpan.innerText = timeText;
+            }
+
+            updateCountdown(); // Gọi lần đầu
+            const interval = setInterval(() => {
+                updateCountdown();
+
+                if (Date.now() >= endTimestamp) {
+                    clearInterval(interval);
+                }
+            }, 1000);
+        });
+    });
+</script>
+@endpush
+
