@@ -86,7 +86,7 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
-            background: #000000ff;
+            background: #6c757d;
       }
 
       .app-sidebar__user {
@@ -144,7 +144,7 @@
       /* Sidebar bình thường */
       .app-sidebar {
             width: 250px;
-            background-color: #000000ff;
+            background-color: #384047ff;
             height: 100vh;
             position: fixed;
             top: 0;
