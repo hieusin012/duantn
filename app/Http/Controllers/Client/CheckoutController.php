@@ -140,7 +140,12 @@ class CheckoutController extends Controller
 
         DB::beginTransaction();
         try {
-            $cartItems = $cart->items()->with('product', 'variant')->get();
+            $cartItems = $cart->items()->with([
+                'product',
+                'variant.product',
+                'variant.color',
+                'variant.size'
+            ])->get();
             $subtotal = 0;
 
             foreach ($cartItems as $item) {
@@ -156,24 +161,38 @@ class CheckoutController extends Controller
             }
 
             $shippingCost = 0;
-            $discount = 0;
+
             $voucher = null;
+            $discount = 0;
 
             if ($request->filled('voucher_code')) {
                 $voucher = Voucher::where('code', $request->voucher_code)->first();
+
                 if ($voucher && $voucher->isValid()) {
                     if ($voucher->discount_type == 'percent') {
                         $discount = round($subtotal * $voucher->discount / 100);
                     } elseif ($voucher->discount_type == 'fixed') {
                         $discount = $voucher->discount;
                     }
+
                     $discount = min($discount, $subtotal);
+                    // Áp dụng mã hợp lệ
+                    $cart->voucher_id = $voucher->id;
+                } else {
+                    // Mã không hợp lệ: xoá mã đã gắn (nếu có)
+                    $voucher = null;
+                    $discount = 0;
+                    $cart->voucher_id = null;
                 }
+                $cart->save();
             } else {
-                // Không có voucher_code → KHÔNG áp dụng gì hết
+                // Không nhập mã → reset lại luôn
+                $voucher = null;
+                $discount = 0;
                 $cart->voucher_id = null;
                 $cart->save();
             }
+
 
 
             $finalTotalPrice = $subtotal + $shippingCost - $discount;
@@ -194,24 +213,28 @@ class CheckoutController extends Controller
                 'note' => $validatedData['note'] ?? null,
                 'voucher_id' => $cart->voucher_id,
             ]);
-
             foreach ($cartItems as $item) {
-                OrderDetail::create([
-                    'order_id' => $order->id,
-                    'variant_id' => $item->variant_id,
-                    'quantity' => $item->quantity,
-                    'price' => $item->price_at_purchase,
-                    'total_price' => $item->price_at_purchase * $item->quantity,
-                ]);
-
-                $variant = ProductVariant::find($item->variant_id);
+                $variant = ProductVariant::with(['product', 'color', 'size'])->find($item->variant_id);
                 if ($variant) {
+                    OrderDetail::create([
+                        'order_id'     => $order->id,
+                        'variant_id'   => $item->variant_id,
+                        'product_name' => optional($variant->product)->name ?? 'Không rõ',
+                        'color'        => optional($variant->color)->name ?? 'Không rõ',
+                        'size'         => optional($variant->size)->name ?? 'Không rõ',
+                        'product_image' => $variant->image ?? 'Không rõ',
+                        'quantity'     => $item->quantity,
+                        'price'        => $item->price_at_purchase,
+                        'total_price'  => $item->price_at_purchase * $item->quantity,
+                    ]);
+
                     $variant->quantity -= $item->quantity;
                     $variant->save();
                 }
             }
 
-            $cart->items()->delete();
+
+            $cart->items()->forceDelete();
             $cart->update(['status' => 'inactive']);
 
             DB::commit();

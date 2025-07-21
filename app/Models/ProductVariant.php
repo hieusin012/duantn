@@ -54,4 +54,5 @@ class ProductVariant extends Model
     {
         return $this->sale_price ?? $this->price;
     }
+    
 }

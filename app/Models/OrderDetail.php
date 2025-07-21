@@ -13,7 +13,7 @@ class OrderDetail extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'order_id', 'variant_id', 'price', 'quantity', 'total_price'
+        'order_id', 'variant_id','product_name','color', 'size','product_image', 'price', 'quantity', 'total_price'
     ];
 
     public function order()
@@ -28,7 +28,7 @@ class OrderDetail extends Model
 
     public function product()
     {
-        return $this->variant ? $this->variant->product : null;
+        return $this->belongsTo(Product::class, 'product_id');
     }
     public function orderDetails()
     {

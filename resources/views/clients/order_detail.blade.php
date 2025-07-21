@@ -98,47 +98,20 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- @foreach ($order->orderDetails as $index => $item)
+                             @foreach ($order->orderDetails as $index => $item)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td>{{ $item->variant->product->name ?? 'Sản phẩm không tồn tại' }}</td>
+                                    <td>{{ $item->product_name ?? 'Sản phẩm không tồn tại' }}</td>
                                     <td>
-                                        @if (isset($item->variant->product->image))
-                                            <img src="{{ asset($item->variant->product->image) }}" alt="Ảnh sản phẩm"
+                                        @if (isset($item->product_image))
+                                            <img src="{{ asset('storage/' . $item->product_image) }}" alt="Ảnh sản phẩm"
                                                 width="80" class="rounded shadow-sm">
                                         @else
                                             <span class="text-muted">Không có ảnh</span>
                                         @endif
                                     </td>
-                                    <td>{{ $item->quantity }}</td>
-                                    <td>{{ number_format($item->price, 0, ',', '.') }} ₫</td>
-                                    <td class="fw-bold">{{ number_format($item->price * $item->quantity, 0, ',', '.') }}
-                                        ₫</td>
-                                </tr>
-                            @endforeach --}}
-                            @foreach ($order->orderDetails as $item)
-                                @php
-                                    $product = $item->variant->product ?? null;
-                                @endphp
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>
-                                        @if ($product)
-                                            {{ $product->name }}
-                                        @else
-                                            <span class="text-danger">Sản phẩm không tồn tại</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if ($product && $product->image)
-                                            {{-- <img src="{{ asset($item->variant->product->image) }}" alt="Ảnh sản phẩm" width="80" class="rounded shadow-sm"> --}}
-                                            <img src="{{ $item->variant->image ? asset('storage/' . $item->variant->image) : asset('images/no-image.jpg') }}" width="80" class="rounded shadow-sm">
-                                        @else
-                                            <span class="text-muted">Không có ảnh</span>
-                                        @endif
-                                    </td>
-                                    <td>{{ $item->variant->color->name ?? 'N/A' }}</td>
-                                    <td>{{ $item->variant->size->name ?? 'N/A' }}</td>
+                                    <td>{{ $item->color ?? 'N/A' }}</td>
+                                    <td>{{ $item->size ?? 'N/A' }}</td>
                                     <td>{{ $item->quantity }}</td>
                                     <td>{{ number_format($item->price) }} ₫</td>
                                     <td>{{ number_format($item->total_price) }} ₫</td>
