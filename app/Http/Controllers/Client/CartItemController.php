@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers\Client;
+
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\CartItem;
@@ -16,7 +18,7 @@ class CartItemController extends Controller
         $deletedItems = CartItem::onlyTrashed()
             ->whereHas('cart', function ($query) {
                 $query->where('user_id', Auth::id())
-                    ->where('status', 0); // Chỉ lấy giỏ hàng chưa thanh toán
+                    ->where('status', 'Đã xóa'); // Chỉ lấy giỏ hàng chưa thanh toán
             })
             ->get();
 
@@ -31,6 +33,7 @@ class CartItemController extends Controller
         $item->forceDelete();
         return redirect()->route('client.cart.hasdelete')->with('success', 'Đã xóa vĩnh viễn sản phẩm khỏi giỏ hàng.');
     }
+
     public function forceDeleteSelected(Request $request)
     {
         $request->validate([
@@ -54,6 +57,7 @@ class CartItemController extends Controller
 
         return redirect()->route('client.cart.hasdelete')->with('success', "Đã xóa vĩnh viễn {$deletedCount} sản phẩm.");
     }
+
     public function restoreSelected(Request $request)
     {
         $request->validate([
@@ -76,5 +80,16 @@ class CartItemController extends Controller
         }
 
         return redirect()->route('client.cart.hasdelete')->with('success', "Đã khôi phục {$restoredCount} sản phẩm.");
+    }
+
+    public function bought()
+    {
+        $boughtCart = CartItem::onlyTrashed()
+            ->whereHas('cart', function ($query) {
+                $query->where('user_id', Auth::id())
+                    ->where('status', 'Đã mua'); // Chỉ lấy giỏ hàng chưa thanh toán
+            })
+            ->get();
+        return view('clients.cart.bought', compact('boughtCart'));
     }
 }

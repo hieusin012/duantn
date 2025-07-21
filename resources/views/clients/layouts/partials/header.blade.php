@@ -161,7 +161,7 @@
                         @php
                         $cartItemCount = 0;
                         if (Auth::check()) {
-                        $cart = \App\Models\Cart::withCount('items')->where('user_id', Auth::id())->where('status', 0)->first();
+                        $cart = \App\Models\Cart::withCount('items')->where('user_id', Auth::id())->where('status', 'active')->first();
                         $cartItemCount = $cart?->items_count ?? 0;
                         }
                         @endphp

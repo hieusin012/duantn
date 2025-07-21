@@ -234,8 +234,8 @@ class CheckoutController extends Controller
             }
 
 
-            $cart->items()->forceDelete();
-            $cart->update(['status' => 'inactive']);
+            $cart->items()->delete();
+            $cart->update(['status' => 'Đã mua']);
 
             DB::commit();
 

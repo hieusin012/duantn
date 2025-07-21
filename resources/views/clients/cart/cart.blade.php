@@ -94,7 +94,7 @@
             <!--Cart Content-->
             <div class="col-12 col-sm-12 col-md-12 col-lg-8 main-col">
                 <!--Cart Form-->
-                <table class="table align-middle">
+                <table class="table align-middle  shadow-sm bg-white">
                     <thead class="cart-row cart-header small-hide position-relative">
                         <tr>
                             <th class="action"><input type="checkbox" id="select-all"></th>
@@ -186,6 +186,9 @@
                             <td colspan="3" class="text-start"><a href="{{ route('client.products.index') }}" class="btn btn-outline-secondary btn-sm cart-continue"><i class="icon anm anm-angle-left-r me-2 d-none"></i> Tiếp tục mua sắm</a></td>
                             <td colspan="3" class="text-end">
                                 <a href="{{ route('client.cart.hasdelete') }}" class="btn btn-outline-secondary btn-sm cart-continue"><i class="icon anm anm-angle-left-r me-2 d-none"></i>Sản phẩm đã xóa</a>
+                            </td>
+                            <td colspan="3" class="text-end">
+                                <a href="{{ route('client.cart.bought') }}" class="btn btn-outline-secondary btn-sm cart-continue"><i class="icon anm anm-angle-left-r me-2 d-none"></i>Sản phẩm đã mua</a>
                             </td>
                         </tr>
                     </tfoot>

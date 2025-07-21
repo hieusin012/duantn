@@ -57,9 +57,6 @@
                                     <div class="cart-meta-text">
                                         Color: {{ $item->variant->color->name ?? '—' }}<br>Size: {{ $item->variant->size->name ?? '—' }}<br>Qty: {{ $item->quantity }}
                                     </div>
-                                    <div class="cart-price d-md-none">
-                                        <span class="money fw-500">$99.00</span>
-                                    </div>
                                 </td>
                                 <td class="cart-price cart-flex-item text-center small-hide">
                                     <span class="money">{{ number_format($item->price_at_purchase) }} VNĐ</span>

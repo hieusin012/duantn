@@ -53,10 +53,12 @@
                         @php
                             $statusText = \App\Models\Order::getStatuses()[$order->status] ?? $order->status;
                             $badgeClass = match ($order->status) {
-                                'pending' => 'warning',
-                                'processing' => 'primary',
-                                'completed' => 'success',
-                                'canceled' => 'danger',
+                                'Chờ xác nhận' => 'warning',
+                                'Đã xác nhận' => 'primary',
+                                'Đang chuẩn bị hàng' => 'primary',
+                                'Đang giao hàng' => 'primary',
+                                'Đã giao hàng' => 'success',
+                                'Đơn hàng đã hủy' => 'danger',
                                 default => 'secondary',
                             };
                         @endphp
@@ -73,6 +75,7 @@
                     <p><strong>Email:</strong> {{ $order->email }}</p>
                     <p><strong>Điện thoại:</strong> {{ $order->phone }}</p>
                     <p><strong>Địa chỉ:</strong> {{ $order->address }}</p>
+                    <p><strong>Ghi chú:</strong> {{ $order->note }}</p>
                 </div>
             </div>
         </div>

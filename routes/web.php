@@ -326,6 +326,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/cart/{id}/restore', [CartItemController::class, 'restore'])->name('client.cart.restore');
     Route::delete('/cart-items/force-delete-selected', [CartItemController::class, 'forceDeleteSelected'])->name('client.cart.forceDeleteSelected');
     Route::post('/cart-items/restore-selected', [CartItemController::class, 'restoreSelected'])->name('client.cart.restoreSelected');
+    Route::get('/cart/bought', [CartItemController::class, 'bought'])->name('client.cart.bought');
     //mã giảm giá
     Route::post('/cart/apply-voucher', [ApplyVoucherController::class, 'applyVoucher'])->name('client.cart.applyVoucher');
 });
