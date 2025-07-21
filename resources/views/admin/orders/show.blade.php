@@ -171,9 +171,6 @@
 
             {{-- Hành động --}}
             <div class="mt-4 d-flex gap-2">
-                <a href="{{ route('admin.orders.edit', $order->id) }}" class="btn btn-warning">
-                    <i class="fas fa-edit me-1"></i> Sửa đơn hàng
-                </a>
                 <a href="{{ route('admin.orders.index') }}" class="btn btn-secondary">
                     <i class="fas fa-arrow-left me-1"></i> Quay lại danh sách
                 </a>

@@ -1,15 +1,19 @@
 <!-- HEADER -->
-<header class="app-header d-flex justify-content-between align-items-center px-4 shadow-sm">
-  <!-- Nút toggle -->
-  <button id="sidebarToggle" class="btn btn-outline-light">
-    <i class="bx bx-menu"></i>
-  </button>
+<header class="app-header d-flex justify-content-between align-items-center px-4 py-2 shadow-sm bg-dark border-bottom">
+  <!-- Logo hoặc tiêu đề bên trái -->
+  <div class="d-flex align-items-center text-white">
+    <i class='bx bx-menu fs-4 me-3' id="sidebarToggle" style="cursor: pointer;"></i>
+    <h5 class="mb-0 fw-bold">Trang Quản Trị</h5>
+  </div>
 
-  <!-- Các nút khác -->
-  <ul class="app-nav">
+  <!-- Nút logout bên phải -->
+  <ul class="app-nav list-unstyled d-flex align-items-center mb-0">
     <li>
-      <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="app-nav__item" title="Logout">
-        <i class='bx bx-log-out bx-rotate-180'></i>
+      <a href="{{ route('logout') }}" 
+         onclick="event.preventDefault(); document.getElementById('logout-form').submit();" 
+         class="btn btn-outline-light d-flex align-items-center" title="Đăng xuất">
+        <i class='bx bx-log-out bx-rotate-180 fs-5'></i>
+        <span class="ms-2 d-none d-md-inline">Đăng xuất</span>
       </a>
       <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
         @csrf
@@ -17,13 +21,3 @@
     </li>
   </ul>
 </header>
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const toggleButton = document.getElementById('sidebarToggle');
-    const sidebar = document.getElementById('sidebar');
-
-    toggleButton.addEventListener('click', function () {
-      sidebar.classList.toggle('collapsed');
-    });
-  });
-</script>
