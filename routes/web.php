@@ -332,7 +332,7 @@ Route::middleware('auth')->group(function () {
 
 
 Route::middleware(['auth'])->group(function () {
-    Route::post('/checkout', [CheckoutController::class, 'showCheckoutForm'])->name('checkout.form');
+    Route::get('/checkout', [CheckoutController::class, 'showCheckoutForm'])->name('checkout.form');
     Route::post('/checkout/process', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
     Route::get('/checkout/success/{order:code}', [CheckoutController::class, 'success'])->name('checkout.success');
 });

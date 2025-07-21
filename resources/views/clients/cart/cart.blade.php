@@ -306,7 +306,7 @@
                             </div>
                         </div>
 
-                        <form id="checkoutForm" action="{{ route('checkout.form') }}" method="POST">
+                        <form id="checkoutForm" action="{{ route('checkout.form') }}" method="GET">
                             @csrf
                             <input type="hidden" name="selected_items" id="selectedItemsInput">
                             <input type="hidden" name="voucher_code" id="voucherCodeInput">

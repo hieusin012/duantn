@@ -131,10 +131,10 @@
                 <tbody>
                     @foreach ($order->orderDetails as $detail)
                     <tr>
-                        <td>{{ $detail->variant->product->name ?? 'N/A' }}</td>
-                        <td><img src="{{ $detail->variant->image ? asset('storage/' . $detail->variant->image) : asset('images/no-image.jpg') }}" width="50" class="rounded"></td>
-                        <td>{{ $detail->variant->color->name ?? 'N/A' }}</td>
-                        <td>{{ $detail->variant->size->name ?? 'N/A' }}</td>
+                        <td>{{ $detail->product_name ?? 'N/A' }}</td>
+                        <td><img src="{{ $detail->product_image ? asset('storage/' . $detail->product_image) : asset('images/no-image.jpg') }}" width="50" class="rounded"></td>
+                        <td>{{ $detail->color ?? 'N/A' }}</td>
+                        <td>{{ $detail->size ?? 'N/A' }}</td>
                         <td>{{ number_format($detail->price, 0, ',', '.') }} ₫</td>
                         <td>{{ $detail->quantity }}</td>
                         <td>{{ number_format($detail->total_price, 0, ',', '.') }} ₫</td>
