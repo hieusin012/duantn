@@ -4,6 +4,7 @@
 @include('clients.banner')
 @endsection
 
+
 @section('title', 'Trang Chủ')
 
 @push('scripts')

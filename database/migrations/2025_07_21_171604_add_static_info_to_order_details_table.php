@@ -21,5 +21,6 @@ return new class extends Migration
         Schema::table('order_details', function (Blueprint $table) {
             $table->dropColumn(['product_name', 'color', 'size', 'product_image']);
         });
+        
     }
 };
