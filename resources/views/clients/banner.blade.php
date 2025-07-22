@@ -1,4 +1,4 @@
-<div id="page-content" class="mb-0">
+{{-- <div id="page-content" class="mb-0">
     <!--Home Slideshow-->
     <section class="slideshow slideshow-wrapper">
         <div class="home-slideshow slick-arrow-dots">
@@ -67,6 +67,46 @@
                 </div>
             </div>
 
+        </div>
+    </section>
+</div> --}}
+
+
+<div id="page-content" class="mb-0">
+    <section class="slideshow slideshow-wrapper">
+        <div class="home-slideshow slick-arrow-dots">
+            @forelse ($banners as $banner)
+                <div class="slide">
+                    <div class="slideshow-wrap">
+                        <picture>
+                            <source media="(max-width:767px)" srcset="{{ asset('storage/' . ($banner->mobile_image ?? $banner->image)) }}">
+                            <img class="blur-up lazyload slideshow-img" src="{{ asset('storage/' . $banner->image) }}" alt="{{ $banner->title ?? 'Banner' }}">
+                        </picture>
+
+                        <div class="container">
+                            <div class="slideshow-content slideshow-overlay middle-left">
+                                <div class="slideshow-content-in">
+                                    <div class="wrap-caption animation style1">
+                                        @if($banner->title)
+                                            <h2 class="ss-mega-title">{{ $banner->title }}</h2>
+                                        @endif
+                                        @if($banner->description)
+                                            <p class="ss-sub-title">{{ $banner->description }}</p>
+                                        @endif
+                                        @if($banner->link)
+                                            <div class="ss-btnWrap">
+                                                <a class="btn btn-primary" href="{{ $banner->link }}">Xem chi tiết</a>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <p class="text-center text-danger">Không có banner nào hiển thị</p>
+            @endforelse
         </div>
     </section>
 </div>
