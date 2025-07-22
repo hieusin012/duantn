@@ -55,8 +55,8 @@ Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('goo
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('google.callback');
 //Facebook
 Route::middleware('web')->group(function () {
-Route::get('auth/facebook', [FacebookController::class, 'redirectToFacebook'])->name('facebook.redirect');
-Route::get('auth/facebook/callback', [FacebookController::class, 'handleFacebookCallback'])->name('facebook.callback');
+    Route::get('auth/facebook', [FacebookController::class, 'redirectToFacebook'])->name('facebook.redirect');
+    Route::get('auth/facebook/callback', [FacebookController::class, 'handleFacebookCallback'])->name('facebook.callback');
 });
 
 // Trang Dashboard admin
@@ -64,7 +64,7 @@ Route::get('auth/facebook/callback', [FacebookController::class, 'handleFacebook
 // Nhóm route admin
 
 Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(function () { // Nếu dùng bảo vệ url http: 127.0.0.1:8000/admin thì bỏ cmt dòng này. Cmt lại dòng dưới.
-//Route::prefix('admin')->name('admin.')->group(function () {
+    //Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
@@ -89,9 +89,12 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
         // Route xóa vĩnh viễn tất cả sản phẩm đã xóa mềm
         Route::delete('/products/force-delete-all', [ProductController::class, 'forceDeleteAll'])->name('products.force-delete-all');
     });
-       
+
     // Product Variant
+    Route::get('product-variants/search', [ProductVariantController::class, 'search'])->name('variants.search');
     Route::resource('product-variants', ProductVariantController::class);
+
+
     // Categories
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
     Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
@@ -194,13 +197,13 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     });
 
     Route::prefix('shipper')->middleware(['auth'])->name('shipper.persons.')->group(function () {
-    Route::get('/persons', [ShipperController::class, 'index'])->name('index');
-    Route::get('/persons/create', [ShipperController::class, 'create'])->name('create');
-    Route::post('/persons/store', [ShipperController::class, 'store'])->name('store');
-    Route::get('/persons/{id}/edit', [ShipperController::class, 'edit'])->name('edit');
-    Route::put('/persons/{id}', [ShipperController::class, 'update'])->name('update');
-    Route::delete('/persons/{id}', [ShipperController::class, 'destroy'])->name('destroy');
-    Route::get('/persons/{id}', [ShipperController::class, 'show'])->name('show');
+        Route::get('/persons', [ShipperController::class, 'index'])->name('index');
+        Route::get('/persons/create', [ShipperController::class, 'create'])->name('create');
+        Route::post('/persons/store', [ShipperController::class, 'store'])->name('store');
+        Route::get('/persons/{id}/edit', [ShipperController::class, 'edit'])->name('edit');
+        Route::put('/persons/{id}', [ShipperController::class, 'update'])->name('update');
+        Route::delete('/persons/{id}', [ShipperController::class, 'destroy'])->name('destroy');
+        Route::get('/persons/{id}', [ShipperController::class, 'show'])->name('show');
     });
 
     //comment
@@ -265,6 +268,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
 
 //quản lý tồn kho 
 use App\Http\Controllers\InventoryController;
+
 Route::get('/admin/inventory', [InventoryController::class, 'index'])->name('admin.inventory.index');
 // Route cho sản phẩm theo danh mục Client
 Route::get('/product/danh-muc/{slug}', [\App\Http\Controllers\Client\ProductController::class, 'showByCategory'])->name('products.byCategory');

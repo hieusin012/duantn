@@ -8,22 +8,24 @@
     <div class="col-md-12">
         <div class="tile">
             <div class="tile-body">
-                <form method="GET" action="{{ route('admin.orders.index') }}" class="filter-form mb-4">
+                <form method="GET" action="{{ route('admin.variants.search') }}" class="filter-form mb-4">
                         <div class="row g-6 align-items-end">
                             <div class="col-md-2">
                                 <input type="text" name="keyword" class="form-control form-control-sm" placeholder="Mã đơn / Số điện thoại" value="{{ request('keyword') }}">
                             </div>
                             <div class="col-md-2">
-                                <select name="status" class="form-control form-control-sm">
-                                    <option value="">-- Trạng thái --</option>
-                                    <option></option>
+                                <select name="color" class="form-control form-control-sm">
+                                    <option value="">-- Màu sắc --</option>
+                                    @foreach ( $color as $colors)
+                                    <option value="{{ $colors->name }}">{{ $colors->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-md-2">
-                                <select name="payment_status" class="form-control form-control-sm">
-                                    <option value="">-- Thanh toán --</option>
-                                    @foreach (['Chưa thanh toán', 'Đã thanh toán'] as $payment_status)
-                                    <option></option>
+                                <select name="size" class="form-control form-control-sm">
+                                    <option value="">-- Size --</option>
+                                    @foreach ( $size as $sizes)
+                                    <option value="{{ $sizes->name }}">{{ $sizes->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -37,7 +39,7 @@
                                 <button type="submit" class="btn btn-warning btn-sm" style="margin-left: 15px; margin-top: 10px">
                                     <i class="fas fa-filter me-1"></i> Lọc
                                 </button>
-                                <a href="{{ route('admin.orders.index') }}" class="btn btn-outline-secondary btn-sm" style="margin-left: 20px; margin-top: 10px">
+                                <a href="{{ route('admin.variants.search') }}" class="btn btn-outline-secondary btn-sm" style="margin-left: 20px; margin-top: 10px">
                                     <i class="fas fa-sync-alt me-1"></i> Reset
                                 </a>
                             </div>

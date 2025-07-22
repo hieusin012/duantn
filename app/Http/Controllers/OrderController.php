@@ -156,7 +156,7 @@ class OrderController extends Controller
         $order->status = 'Đơn hàng đã hủy';
         $order->save();
 
-        return back()->with('success', '✅ Đơn hàng đã được hủy thành công.');
+        return back()->with('success', ' Đơn hàng đã được hủy thành công.');
     }
 
     public function updateStatus(Order $order)
@@ -191,13 +191,12 @@ class OrderController extends Controller
 
             $order->save();
 
-            return back()->with('success', '✅ Trạng thái đơn hàng đã được cập nhật thành công.');
+            return back()->with('success', ' Trạng thái đơn hàng đã được cập nhật thành công.');
         }
 
-        return back()->with('error', '⚠️ Không thể cập nhật trạng thái đơn hàng.');
+        return back()->with('error', ' Không thể cập nhật trạng thái đơn hàng.');
     }
     // in dữ liệu
-    // OrderController.php
     public function print($id)
     {
         $order = Order::with('items')->findOrFail($id);

@@ -18,7 +18,9 @@ class ProductVariantController extends Controller
         $variants = ProductVariant::with(['product', 'color', 'size'])
             ->orderByDesc('created_at') // hoặc ->orderBy('created_at', 'desc')
             ->paginate(10);
-        return view('admin.product_variants.index', compact('variants'));
+        $color = Color::all();
+        $size = Size::all();
+        return view('admin.product_variants.index', compact('variants', 'color', 'size'));
     }
 
     public function create()
@@ -127,5 +129,40 @@ class ProductVariantController extends Controller
         $productVariant->delete();
         return redirect()->route('admin.product-variants.index')
             ->with('success', 'Product variant deleted successfully.');
+    }
+
+    public function search(Request $request)
+    {
+        $query = ProductVariant::with('product', 'color', 'size');
+
+        if ($keyword = $request->keyword) {
+            $query->whereHas('product', function ($q2) use ($keyword) {
+                $q2->where('name', 'like', "%{$keyword}%");
+            });
+        }
+
+        if ($request->color) {
+            $query->whereHas('color', function ($q) use ($request) {
+                $q->where('name', $request->color);
+            });
+        }
+        if ($request->size) {
+            $query->whereHas('size', function ($q) use ($request) {
+                $q->where('name', $request->size);
+            });
+        }
+
+        if ($request->min_price) {
+            $query->where('price', '>=', $request->min_price);
+        }
+        if ($request->max_price) {
+            $query->where('price', '<=', $request->max_price);
+        }
+
+        $variants = $query->latest()->paginate(10);
+        $color = Color::all();
+        $size = Size::all();
+
+        return view('admin.product_variants.index', compact('variants', 'color', 'size'));
     }
 }
