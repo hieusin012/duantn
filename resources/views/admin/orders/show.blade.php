@@ -5,12 +5,21 @@
 @section('content')
 <div class="container-fluid">
     <div class="card mb-4 shadow">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h4 class="mb-0">🧾 Chi tiết đơn hàng #{{ $order->code }}</h4>
-            <a class="btn btn-danger btn-sm" href="{{ route('invoice.pdf', ['order' => $order->code]) }}">
-                <i class="fas fa-file-pdf me-1"></i> Xuất PDF
-            </a>
+        <div class="card-header bg-primary text-white d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2">
+            <h4 class="mb-0">
+                🧾 Chi tiết đơn hàng <span class="text-warning">#{{ $order->code }}</span>
+            </h4>
+
+            <div class="d-flex gap-2">
+                <a href="{{ route('invoice.pdf', ['order' => $order->code]) }}" class="btn btn-outline-danger btn-sm">
+                    <i class="fas fa-file-pdf me-1"></i> Xuất PDF
+                </a>
+                <a href="{{ route('admin.orders.print', ['id' => $order->id]) }}" class="btn btn-outline-success btn-sm mf-1 " title="In dữ liệu">
+                    <i class="fas fa-print me-1"></i> In dữ liệu
+                </a>
+            </div>
         </div>
+
         <div class="card-body">
             {{-- Hiển thị thông tin đơn hàng --}}
             <div class="container">

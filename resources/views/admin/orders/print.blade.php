@@ -12,9 +12,15 @@
         }
 
         .container {
-            padding: 20px;
+            width: 800px;
+            max-width: 100%;
+            margin: 40px auto;
+            padding: 30px;
             border: 1px solid #000;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
         }
+
 
         h1,
         h2 {
@@ -65,6 +71,30 @@
 
         .section table {
             text-align: center;
+        }
+
+        @media print {
+            .no-print {
+                display: none;
+            }
+        }
+
+        .btn-print {
+            background-color: #198754;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+            float: right;
+        }
+
+        .btn-print:hover {
+            background-color: #084298;
         }
     </style>
 </head>
@@ -132,8 +162,8 @@
                     @foreach ($order->orderDetails as $detail)
                     <tr>
                         <td>{{ $detail->product_name ?? 'N/A' }}</td>
-                        <td>{{ $detail->color-> ?? 'N/A' }}</td>
-                        <td>{{ $detail->size-> ?? 'N/A' }}</td>
+                        <td>{{ $detail->color ?? 'N/A' }}</td>
+                        <td>{{ $detail->size ?? 'N/A' }}</td>
                         <td>{{ number_format($detail->price, 0, ',', '.') }} đ</td>
                         <td>{{ $detail->quantity }}</td>
                         <td>{{ number_format($detail->total_price, 0, ',', '.') }} đ</td>
@@ -148,6 +178,9 @@
 
 
         </div>
+        <button class="btn-print no-print" onclick="window.print()">
+            🖨️ In đơn hàng
+        </button>
     </div>
 </body>
 

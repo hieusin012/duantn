@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,9 +11,20 @@ class Order extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'code', 'fullname', 'phone', 'address', 'email', 'payment',
-        'status', 'payment_status', 'shiping', 'discount',
-        'total_price', 'note', 'user_id', 'voucher_id' // THÊM 'voucher_id' VÀO FILLABLE
+        'code',
+        'fullname',
+        'phone',
+        'address',
+        'email',
+        'payment',
+        'status',
+        'payment_status',
+        'shiping',
+        'discount',
+        'total_price',
+        'note',
+        'user_id',
+        'voucher_id' // THÊM 'voucher_id' VÀO FILLABLE
     ];
 
     public function user()
@@ -25,27 +37,27 @@ class Order extends Model
     }
 
     public static function getStatuses()
-{
-    return [
-        'Chờ xác nhận' => 'Chờ xác nhận',
-        'Đã xác nhận' => 'Đã xác nhận',
-        'Đang chuẩn bị hàng' => 'Đang chuẩn bị hàng',
-        'Đang giao hàng' => 'Đang giao hàng',
-        'Đã giao hàng' => 'Đã giao hàng',
-        'Đơn hàng đã hủy' => 'Đơn hàng đã hủy',
-    ];
-}
+    {
+        return [
+            'Chờ xác nhận' => 'Chờ xác nhận',
+            'Đã xác nhận' => 'Đã xác nhận',
+            'Đang chuẩn bị hàng' => 'Đang chuẩn bị hàng',
+            'Đang giao hàng' => 'Đang giao hàng',
+            'Đã giao hàng' => 'Đã giao hàng',
+            'Đơn hàng đã hủy' => 'Đơn hàng đã hủy',
+        ];
+    }
     public function voucher()
     {
         return $this->belongsTo(Voucher::class);
     }
- 
-public function shipper()
-{
-    return $this->belongsTo(User::class, 'shipper_id');
+
+    public function shipper()
+    {
+        return $this->belongsTo(User::class, 'shipper_id');
+    }
+    public function items()
+    {
+        return $this->hasMany(OrderDetail::class, 'order_id');
+    }
 }
-
-}
-
-
-

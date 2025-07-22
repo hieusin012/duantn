@@ -196,4 +196,11 @@ class OrderController extends Controller
 
         return back()->with('error', '⚠️ Không thể cập nhật trạng thái đơn hàng.');
     }
+    // in dữ liệu
+    // OrderController.php
+    public function print($id)
+    {
+        $order = Order::with('items')->findOrFail($id);
+        return view('admin.orders.print', compact('order'));
+    }
 }
