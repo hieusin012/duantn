@@ -11,7 +11,7 @@
                 <nav class="navigation" id="AccessibleNav">
                     <ul id="siteNav" class="site-nav medium center">
                         <li class="lvl1 parent dropdown"><a href="{{ route('client.home') }}">Trang chủ</a></li>
-                        <li class="lvl1 parent dropdown"><a href="{{ route('client.products.index') }}">Sản phẩm
+                        <li class="lvl1 parent dropdown"><a href="{{ route('client.products.index') }}">Sản Phẩm
                                 <i class="icon anm anm-angle-down-l"></i></a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 @foreach ($header_categories as $cat)
@@ -27,7 +27,7 @@
                                 {{-- <i class="icon anm anm-angle-down-l"></i> --}}
                             </a>
                         </li>
-                        <li class="lvl1 parent dropdown"><a href="{{ route('client.blog') }}">Blog
+                        <li class="lvl1 parent dropdown"><a href="{{ route('client.blog') }}">Bài Viết
                                 <i class="icon anm anm-angle-down-l"></i></a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 @foreach ($blog_categories as $cat)
@@ -40,7 +40,7 @@
                             </ul>
                         </li>
                         <li class="lvl1 parent dropdown">
-                            <a href="{{ route('client.contact') }}">Liên hệ</a>
+                            <a href="{{ route('client.contact') }}">Liên Hệ</a>
                         </li>
                         <li class="lvl1 parent megamenu"><a href="{{ route('about') }}">Về Chúng Tôi</a></li>
                     </ul>
