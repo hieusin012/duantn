@@ -42,7 +42,7 @@
                         <li class="lvl1 parent dropdown">
                             <a href="{{ route('client.contact') }}">Liên hệ</a>
                         </li>
-                        <li class="lvl1 parent megamenu"><a href="{{ route('about') }}">Abous Us</a></li>
+                        <li class="lvl1 parent megamenu"><a href="{{ route('about') }}">Về Chúng Tôi</a></li>
                     </ul>
                 </nav>
             </div>
