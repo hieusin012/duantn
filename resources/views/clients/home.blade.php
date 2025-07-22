@@ -88,20 +88,33 @@
     }
 
     .badge-new-ribbon {
-    position: absolute;
-    top: 10px;
-    left: -40px;
-    background: #e60023;
-    color: white;
-    padding: 5px 50px;
-    font-size: 13px;
-    font-weight: bold;
-    transform: rotate(-45deg);
-    z-index: 10;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    text-align: center;
-    pointer-events: none;
-}
+        position: absolute;
+        top: 10px;
+        left: -40px;
+        background: #e60023;
+        color: white;
+        padding: 5px 50px;
+        font-size: 13px;
+        font-weight: bold;
+        transform: rotate(-45deg);
+        z-index: 10;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        text-align: center;
+        pointer-events: none;
+    }
+
+    .slide {
+        height: 595px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .slideshow-img {
+        width: 100%;
+        height: 595px;
+        object-fit: cover;
+        border-radius: 12px;
+    }
 
 </style>
 
@@ -202,12 +215,12 @@
     </div>
 
 </div>
-@if(isset($banners) && !$banners->isEmpty())
+{{-- @if(isset($banners) && !$banners->isEmpty())
 <div class="home-slideshow slick-arrow-dots">
-    {{-- Lặp qua từng banner --}}
+    Lặp qua từng banner
     @foreach($banners as $banner)
     <div class="slide">
-        {{-- Bọc ảnh trong thẻ <a> với link của banner --}}
+        Bọc ảnh trong thẻ <a> với link của banner
         <a href="{{ $banner->link ?? '#' }}" target="_blank">
             <img class="blur-up lazyload slideshow-img" 
                  src="{{ asset('storage/' . $banner->image) }}" 
@@ -217,7 +230,7 @@
     </div>
     @endforeach
 </div>
-@endif
+@endif --}}
 <div class="container py-5">
     <h2 class="text-center mb-4 fs-3 fw-bold border-bottom pb-2 d-inline-block">
         TIN TỨC THỂ THAO & KHUYẾN MÃI
