@@ -45,6 +45,7 @@ class Order extends Model
             'Đang giao hàng' => 'Đang giao hàng',
             'Đã giao hàng' => 'Đã giao hàng',
             'Đơn hàng đã hủy' => 'Đơn hàng đã hủy',
+            'Đã hoàn hàng' => 'Đã hoàn hàng',
         ];
     }
     public function voucher()

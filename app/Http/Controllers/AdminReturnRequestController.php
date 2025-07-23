@@ -27,6 +27,14 @@ class AdminReturnRequestController extends Controller
             'admin_note' => $request->admin_note,
         ]);
 
+        // Nếu chọn trạng thái "refunded" thì cập nhật đơn hàng liên quan
+        if ($request->status === 'refunded' && $return->order) {
+            $return->order->update([
+                'status' => 'Đã hoàn hàng',
+                'payment_status' => 'Đã hoàn tiền',
+            ]);
+        }
+
         return redirect()->route('admin.return-requests.index')->with('success', 'Cập nhật thành công');
     }
 }

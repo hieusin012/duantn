@@ -64,8 +64,8 @@ class OrderController extends Controller
             'address' => 'required|string|max:199',
             'email' => 'required|email|max:199',
             'payment' => 'required|in:Thanh toán khi nhận hàng,Thanh toán bằng thẻ,Thanh toán qua VNPay',
-            'status' => 'required|in:Chờ xác nhận,Đã xác nhận,Đang chuẩn bị hàng,Đang giao hàng,Đã giao hàng,Đơn hàng đã hủy',
-            'payment_status' => 'required|in:Chưa thanh toán,Đã thanh toán',
+            'status' => 'required|in:Chờ xác nhận,Đã xác nhận,Đang chuẩn bị hàng,Đang giao hàng,Đã giao hàng,Đơn hàng đã hủy,Đã hoàn hàng',
+            'payment_status' => 'required|in:Chưa thanh toán,Đã thanh toán,Đã hoàn tiền',
             'shiping' => 'nullable|numeric',
             'discount' => 'nullable|numeric',
             'total_price' => 'required|numeric',
@@ -99,8 +99,8 @@ class OrderController extends Controller
             'address' => 'required|string|max:199',
             'email' => 'required|email|max:199',
             'payment' => 'required|in:Thanh toán khi nhận hàng,Thanh toán bằng thẻ,Thanh toán qua VNPay',
-            'status' => 'required|in:Chờ xác nhận,Đã xác nhận,Đang chuẩn bị hàng,Đang giao hàng,Đã giao hàng,Đơn hàng đã hủy',
-            'payment_status' => 'required|in:Chưa thanh toán,Đã thanh toán',
+            'status' => 'required|in:Chờ xác nhận,Đã xác nhận,Đang chuẩn bị hàng,Đang giao hàng,Đã giao hàng,Đơn hàng đã hủy,Đã hoàn hàng',
+            'payment_status' => 'required|in:Chưa thanh toán,Đã thanh toán,Đã hoàn tiền',
             'shipping' => 'nullable|numeric',  // ✅ Sửa đúng chính tả
             'discount' => 'nullable|numeric',
             'total_price' => 'required|numeric',
@@ -110,7 +110,7 @@ class OrderController extends Controller
 
         $order->update($validated);
 
-        return redirect()->route('admin.orders.index')->with('success', '✅ Đơn hàng đã được cập nhật thành công.');
+        return redirect()->route('admin.orders.index')->with('success', 'Đơn hàng đã được cập nhật thành công.');
     }
 
 
@@ -156,7 +156,7 @@ class OrderController extends Controller
         $order->status = 'Đơn hàng đã hủy';
         $order->save();
 
-        return back()->with('success', ' Đơn hàng đã được hủy thành công.');
+        return back()->with('success', 'Đơn hàng đã được hủy thành công.');
     }
 
     public function updateStatus(Order $order)
@@ -191,15 +191,33 @@ class OrderController extends Controller
 
             $order->save();
 
-            return back()->with('success', ' Trạng thái đơn hàng đã được cập nhật thành công.');
+            return back()->with('success', 'Trạng thái đơn hàng đã được cập nhật thành công.');
         }
 
-        return back()->with('error', ' Không thể cập nhật trạng thái đơn hàng.');
+        return back()->with('error', 'Không thể cập nhật trạng thái đơn hàng.');
     }
     // in dữ liệu
+    // OrderController.php
     public function print($id)
     {
         $order = Order::with('items')->findOrFail($id);
         return view('admin.orders.print', compact('order'));
     }
+
+    // Hoàn hàng tự động
+    public function acceptReturn($id)
+    {
+        $order = Order::findOrFail($id);
+
+        if ($order->status === 'Đã giao hàng') {
+            $order->status = 'Đã hoàn hàng';
+            $order->payment_status = 'Đã hoàn tiền';
+            $order->save();
+
+            return back()->with('success', 'Đơn hàng đã được cập nhật sang trạng thái "Đã hoàn hàng" và đã hoàn tiền.');
+        }
+
+        return back()->with('error', 'Chỉ có thể hoàn hàng khi đơn hàng đã giao.');
+    }
+
 }

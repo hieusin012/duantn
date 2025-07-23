@@ -32,7 +32,18 @@
                         <div class="col-md-3"><strong>Phương thức thanh toán:</strong><br>{{ $order->payment }}</div>
                         <div class="col-md-3">
                             <strong>Thanh toán:</strong><br>
-                            <span class="badge {{ $order->payment_status === 'Đã thanh toán' ? 'bg-success' : 'bg-warning text-dark' }}">
+                            {{-- <span class="badge {{ $order->payment_status === 'Đã thanh toán' ? 'bg-success' : 'bg-warning text-dark' }}">
+                                {{ $order->payment_status }}
+                            </span> --}}
+                            @php
+                                $paymentClass = match($order->payment_status) {
+                                    'Chưa thanh toán' => 'bg-danger',
+                                    'Đã thanh toán' => 'bg-success',
+                                    'Đã hoàn tiền' => 'bg-warning',
+                                    default => 'bg-secondary'
+                                };
+                            @endphp
+                            <span class="badge {{ $paymentClass }}">
                                 {{ $order->payment_status }}
                             </span>
                         </div>

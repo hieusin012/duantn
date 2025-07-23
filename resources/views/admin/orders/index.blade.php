@@ -53,7 +53,7 @@
                         <div class="col-md-2">
                             <select name="status" class="form-control form-control-sm">
                                 <option value="">-- Trạng thái --</option>
-                                @foreach (['Chờ xác nhận', 'Đã xác nhận', 'Đang chuẩn bị hàng', 'Đang giao hàng', 'Đã giao hàng', 'Đơn hàng đã hủy', 'Hoàn tất'] as $status)
+                                @foreach (['Chờ xác nhận', 'Đã xác nhận', 'Đang chuẩn bị hàng', 'Đang giao hàng', 'Đã giao hàng', 'Đơn hàng đã hủy', 'Đã hoàn hàng', 'Hoàn tất'] as $status)
                                 <option value="{{ $status }}" {{ request('status') == $status ? 'selected' : '' }}>{{ $status }}</option>
                                 @endforeach
                             </select>
@@ -61,7 +61,7 @@
                         <div class="col-md-2">
                             <select name="payment_status" class="form-control form-control-sm">
                                 <option value="">-- Thanh toán --</option>
-                                @foreach (['Chưa thanh toán', 'Đã thanh toán'] as $payment_status)
+                                @foreach (['Chưa thanh toán', 'Đã thanh toán', 'Đã hoàn tiền'] as $payment_status)
                                 <option value="{{ $payment_status }}" {{ request('payment_status') == $payment_status ? 'selected' : '' }}>{{ $payment_status }}</option>
                                 @endforeach
                             </select>
@@ -132,6 +132,7 @@
                                     'Đã giao hàng' => 'bg-success',
                                     'Hoàn tất' => 'bg-success',
                                     'Đơn hàng đã hủy' => 'bg-danger',
+                                    'Đã hoàn hàng' => 'bg-dark text-warning',
                                     default => 'bg-light text-dark'
                                     };
                                     @endphp
@@ -145,7 +146,18 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <span class="badge {{ $order->payment_status === 'Đã thanh toán' ? 'bg-success' : 'bg-danger' }}">
+                                    {{-- <span class="badge {{ $order->payment_status === 'Đã thanh toán' ? 'bg-success' : 'bg-danger' }}">
+                                        {{ $order->payment_status }}
+                                    </span> --}}
+                                    @php
+                                        $paymentClass = match($order->payment_status) {
+                                            'Chưa thanh toán' => 'bg-danger',
+                                            'Đã thanh toán' => 'bg-success',
+                                            'Đã hoàn tiền' => 'bg-warning',
+                                            default => 'bg-secondary'
+                                        };
+                                    @endphp
+                                    <span class="badge {{ $paymentClass }}">
                                         {{ $order->payment_status }}
                                     </span>
                                 </td>

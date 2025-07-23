@@ -59,6 +59,7 @@
                                 'Đang giao hàng' => 'primary',
                                 'Đã giao hàng' => 'success',
                                 'Đơn hàng đã hủy' => 'danger',
+                                'Đã hoàn hàng' => 'dark',
                                 default => 'secondary',
                             };
                         @endphp

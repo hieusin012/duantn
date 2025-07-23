@@ -94,7 +94,7 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     Route::get('product-variants/search', [ProductVariantController::class, 'search'])->name('variants.search');
     Route::resource('product-variants', ProductVariantController::class);
 
-
+    
     // Categories
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
     Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
@@ -364,6 +364,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('order.cancel'); // Hủy đơn hàng
     Route::post('/orders/{id}/reorder', [ClientOrderController::class, 'reorder'])->name('order.reorder'); // Mua lại đơn hàng
     Route::put('/orders/{id}/cancel', [ClientOrderController::class, 'cancel'])->name('order.cancel');
+    Route::post('/orders/{order}/accept-return', [OrderController::class, 'acceptReturn'])->name('orders.acceptReturn');
 });
 
 // Nhấn vào tên sản phẩm ở giỏ hàng để chuyển sang trang chi tiết sản phẩm đấy

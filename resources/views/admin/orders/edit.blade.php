@@ -57,18 +57,29 @@
                             <div class="form-group">
                                 <label>Trạng thái đơn hàng</label>
                                 <select name="status" class="form-control @error('status') is-invalid @enderror">
-                                    @foreach (['Chờ xác nhận', 'Đã xác nhận', 'Đang chuẩn bị hàng', 'Đang giao hàng', 'Đã giao hàng', 'Đơn hàng đã hủy'] as $status)
+                                    @foreach (['Chờ xác nhận', 'Đã xác nhận', 'Đang chuẩn bị hàng', 'Đang giao hàng', 'Đã giao hàng', 'Đơn hàng đã hủy', 'Đã hoàn hàng'] as $status)
                                         <option value="{{ $status }}" {{ old('status', $order->status) == $status ? 'selected' : '' }}>{{ $status }}</option>
                                     @endforeach
                                 </select>
                                 @error('status') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
                 
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <label>Trạng thái thanh toán</label>
                                 <select name="payment_status" class="form-control @error('payment_status') is-invalid @enderror">
                                     @foreach (['Chưa thanh toán', 'Đã thanh toán'] as $payment_status)
                                         <option value="{{ $payment_status }}" {{ old('payment_status', $order->payment_status) == $payment_status ? 'selected' : '' }}>{{ $payment_status }}</option>
+                                    @endforeach
+                                </select>
+                                @error('payment_status') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div> --}}
+                            <div class="form-group">
+                                <label>Trạng thái thanh toán</label>
+                                <select name="payment_status" class="form-control @error('payment_status') is-invalid @enderror">
+                                    @foreach (['Chưa thanh toán', 'Đã thanh toán', 'Đã hoàn tiền'] as $payment_status)
+                                        <option value="{{ $payment_status }}" {{ old('payment_status', $order->payment_status) == $payment_status ? 'selected' : '' }}>
+                                            {{ $payment_status }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 @error('payment_status') <div class="invalid-feedback">{{ $message }}</div> @enderror
