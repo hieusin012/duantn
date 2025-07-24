@@ -363,7 +363,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/order/{id}', [ClientOrderController::class, 'orderDetail'])->name('order.details');
     Route::put('/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('order.cancel'); // Hủy đơn hàng
     Route::post('/orders/{id}/reorder', [ClientOrderController::class, 'reorder'])->name('order.reorder'); // Mua lại đơn hàng
-    Route::put('/orders/{id}/cancel', [ClientOrderController::class, 'cancel'])->name('order.cancel');
+    // Route::put('/orders/{id}/cancel', [ClientOrderController::class, 'cancel'])->name('order.cancel');
     Route::post('/orders/{order}/accept-return', [OrderController::class, 'acceptReturn'])->name('orders.acceptReturn');
 });
 
