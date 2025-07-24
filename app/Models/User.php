@@ -29,6 +29,13 @@ class User extends Authenticatable
 {
     return $this->hasMany(\App\Models\Blog::class, 'user_id');
 }
+public function setPhoneAttribute($value)
+{
+
+    $value = preg_replace('/[^0-9+]/', '', $value);
+    $value = preg_replace('/^\+84/', '0', $value);
+    $this->attributes['phone'] = $value;
+}
 
 
 }

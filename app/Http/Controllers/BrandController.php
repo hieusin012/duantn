@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class BrandController extends Controller
 {
@@ -18,20 +19,26 @@ class BrandController extends Controller
     }
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:50',
-            'logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
+    $request->validate([
+    'name' => 'required|string|max:50|unique:brands,name',
+    'logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ], [
+    'name.required' => 'Vui lòng nhập tên thương hiệu.',
+    'name.unique' => 'Tên thương hiệu đã tồn tại.',
+    'logo.required' => 'Vui lòng chọn ảnh đại diện.',
+    'logo.image' => 'Tập tin phải là hình ảnh.',
+    ]);
 
-        $data = [
-            'name' => $request->name,
-            'logo' => $request->file('logo')->store('brands', 'public'),
-        ];
-        if ($request->hasFile('logo')) {
-            $data['logo'] = $request->file('logo')->store('brands', 'public');
-        }
-        Brand::create($data);
-        return redirect()->route('admin.brands.index')->with('success', 'Thêm thương hiệu thành công!');
+    $name = Str::lower(trim($request->name));
+
+    $data = [
+        'name' => $name,
+        'logo' => $request->file('logo')->store('brands', 'public'),
+    ];
+
+    Brand::create($data);
+
+    return redirect()->route('admin.brands.index')->with('success', 'Thêm thương hiệu thành công!');
     }
     //edit
     public function edit($id)
@@ -42,21 +49,26 @@ class BrandController extends Controller
     //update
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required|string|max:50',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
+    $request->validate([
+        'name' => 'required|string|max:50|unique:brands,name,' . $id,
+        'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
 
-        $brand = Brand::findOrFail($id);
-        $data = [
-            'name' => $request->name,
-        ];
-        if ($request->hasFile('logo')) {
-            $data['logo'] = $request->file('logo')->store('brands', 'public');
-        }
-        $brand->update($data);
+    $brand = Brand::findOrFail($id);
 
-        return redirect()->route('admin.brands.index')->with('success', 'Cập nhật thương hiệu thành công!');
+    $name = Str::lower(trim($request->name));
+
+    $data = [
+        'name' => $name,
+    ];
+
+    if ($request->hasFile('logo')) {
+        $data['logo'] = $request->file('logo')->store('brands', 'public');
+    }
+
+    $brand->update($data);
+
+    return redirect()->route('admin.brands.index')->with('success', 'Cập nhật thương hiệu thành công!');
     }
     public function destroy($id)
     {

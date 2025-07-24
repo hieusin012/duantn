@@ -20,22 +20,32 @@ class ColorController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:50',
-            'color_code' => ['required', 'string', 'regex:/^#([A-Fa-f0-9]{6})$/'],
-        ], [
-            'color_code.regex' => 'Mã màu phải đúng định dạng HEX, ví dụ: #FF0000',
-        ]);
+    $request->validate([
+        'name' => 'required|string|max:50|unique:colors,name',
+        'color_code' => [
+            'required',
+            'string',
+            'regex:/^#([A-Fa-f0-9]{6})$/',
+            'unique:colors,color_code',
+        ],
+    ], [
+        'name.required' => 'Vui lòng nhập tên màu.',
+        'name.unique' => 'Tên màu đã tồn tại.',
+        'color_code.required' => 'Vui lòng nhập mã màu.',
+        'color_code.regex' => 'Mã màu phải đúng định dạng HEX, ví dụ: #FF0000.',
+        'color_code.unique' => 'Mã màu này đã tồn tại.',
+    ]);
 
-        $data = [
-            'name' => $request->name,
-            'color_code' => strtoupper($request->color_code), // chuẩn hóa viết hoa
-        ];
+    $data = [
+        'name' => strtolower(trim($request->name)),
+        'color_code' => strtoupper($request->color_code),
+    ];
 
-        Color::create($data);
+    Color::create($data);
 
-        return redirect()->route('admin.colors.index')->with('success', 'Thêm màu thành công!');
+    return redirect()->route('admin.colors.index')->with('success', 'Thêm màu thành công!');
     }
+
 
     public function edit($id)
     {
@@ -45,21 +55,32 @@ class ColorController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required|string|max:50',
-            'color_code' => ['required', 'string', 'regex:/^#([A-Fa-f0-9]{6})$/'],
-        ], [
-            'color_code.regex' => 'Mã màu phải đúng định dạng HEX, ví dụ: #FF0000',
-        ]);
+    $request->validate([
+        'name' => 'required|string|max:50|unique:colors,name,' . $id,
+        'color_code' => [
+            'required',
+            'string',
+            'regex:/^#([A-Fa-f0-9]{6})$/',
+            'unique:colors,color_code,' . $id,
+        ],
+    ], [
+        'name.required' => 'Vui lòng nhập tên màu.',
+        'name.unique' => 'Tên màu đã tồn tại.',
+        'color_code.required' => 'Vui lòng nhập mã màu.',
+        'color_code.regex' => 'Mã màu phải đúng định dạng HEX, ví dụ: #FF0000.',
+        'color_code.unique' => 'Mã màu này đã tồn tại.',
+    ]);
 
-        $color = Color::findOrFail($id);
-        $color->update([
-            'name' => $request->name,
-            'color_code' => strtoupper($request->color_code),
-        ]);
+    $color = Color::findOrFail($id);
 
-        return redirect()->route('admin.colors.index')->with('success', 'Cập nhật màu thành công!');
+    $color->update([
+        'name' => strtolower(trim($request->name)),
+        'color_code' => strtoupper($request->color_code),
+    ]);
+
+    return redirect()->route('admin.colors.index')->with('success', 'Cập nhật màu thành công!');
     }
+
 
     public function destroy($id)
     {

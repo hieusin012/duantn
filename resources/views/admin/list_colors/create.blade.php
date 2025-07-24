@@ -13,7 +13,7 @@
                     @csrf
                     <div class="form-group col-md-3">
                         <label class="control-label">Tên màu sắc</label>
-                        <input class="form-control" type="text" name="name" id="name" value="">
+                        <input class="form-control" type="text" name="name" id="name" value="{{ old('name') }}">
                         @error('name')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -21,7 +21,7 @@
 
                     <div class="form-group col-md-3">
                         <label class="control-label">Mã màu</label>
-                        <input class="form-control form-control-color" type="color" name="color_code" id="color_code" value="#000000">
+                        <input class="form-control form-control-color" type="color" name="color_code" id="color_code" value="{{ old('color_code', '#000000') }}">
                         @error('color_code')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror

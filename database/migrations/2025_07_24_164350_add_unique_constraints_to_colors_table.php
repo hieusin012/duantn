@@ -11,14 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('brands', function (Blueprint $table) {
-            $table->id();
-            $table->string('name', 200)->unique();
-            $table->string('logo')->nullable();
-            $table->softDeletes();
-            $table->timestamps();
-        });
-        
+        Schema::table('colors', function (Blueprint $table) {
+        $table->unique('name');
+        $table->unique('color_code');
+    });
     }
 
     /**
@@ -26,6 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('brands');
+        Schema::table('colors', function (Blueprint $table) {
+        $table->dropUnique(['name']);
+        $table->dropUnique(['color_code']);
+    });
     }
 };

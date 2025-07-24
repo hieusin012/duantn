@@ -28,15 +28,22 @@ class ProfileController extends Controller
         $request->validate([
             'fullname' => 'required|string|max:199',
             'avatar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'phone' => 'nullable|string|max:11',
+            'phone' => ['nullable', 'regex:/^(0)(3|5|7|8|9)[0-9]{8}$/'],
             'address' => 'nullable|string|max:255',
             'gender' => 'nullable|in:Nam,Nữ,Khác',
             'birthday' => 'nullable|date',
             'language' => 'nullable|string|max:50',
             'introduction' => 'nullable|string',
-        ]);
+            ], [
+            'phone.regex' => 'Số điện thoại không hợp lệ. Vui lòng nhập đúng định dạng Việt Nam như 0901234567.',
+            ]);
+        $data = $request->except('avatar');
 
-        $user->fill($request->except('avatar'));
+            if (!empty($data['phone'])) {
+            $data['phone'] = preg_replace('/[^0-9+]/', '', $data['phone']);      // loại ký tự không phải số
+            $data['phone'] = preg_replace('/^\+84/', '0', $data['phone']);       // chuyển +84 về 0
+            }
+       $user->fill($data);  
 
         if ($request->hasFile('avatar')) {
             if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {

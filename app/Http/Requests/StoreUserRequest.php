@@ -19,7 +19,7 @@ class StoreUserRequest extends FormRequest
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
             'avatar' => 'nullable|image|max:2048',
-            'phone' => ['nullable', 'regex:/^(\+84|0)\d{9,10}$/'],
+            'phone' => ['nullable', 'regex:/^(0)(3|5|7|8|9)[0-9]{8}$/'],
             'address' => 'nullable|string',
             'role' => 'nullable|in:member,admin',
             'status' => 'nullable|boolean',
@@ -48,7 +48,7 @@ class StoreUserRequest extends FormRequest
             'avatar.max' => 'Ảnh đại diện không được lớn hơn 2MB.',
 
             'phone.string' => 'Số điện thoại phải là chuỗi ký tự.',
-            'phone.regex' => 'Số điện thoại không hợp lệ. Ví dụ: +84901234567 hoặc 0901234567.',
+            'phone.regex' => 'Số điện thoại không hợp lệ. Vui lòng nhập đúng định dạng Việt Nam như 0901234567.',
 
             'address.string' => 'Địa chỉ phải là chuỗi ký tự.',
 
