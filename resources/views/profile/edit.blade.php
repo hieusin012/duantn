@@ -27,6 +27,7 @@
                             @if($user->avatar)
                                 <img src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar" class="rounded-circle mb-3" style="width: 200px; height: 200px; object-fit: cover;">
                             @else
+                            
                                 <i>Chưa có ảnh</i>
                             @endif
                             <input type="file" name="avatar" class="form-control mt-2">

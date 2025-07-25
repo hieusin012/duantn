@@ -7,6 +7,7 @@
 <table class="table table-bordered">
     <thead>
         <tr>
+            
             <th>Mã đơn</th>
             <th>Ngày đặt</th>
             <th>Trạng thái</th>
