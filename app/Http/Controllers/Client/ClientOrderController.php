@@ -17,7 +17,7 @@ class ClientOrderController extends Controller
 
             ->where('user_id', Auth::id())
             ->orderByDesc('created_at')
-            ->get();
+            ->paginate(5);
 
         return view('clients.order_history', compact('orders'));
     }
