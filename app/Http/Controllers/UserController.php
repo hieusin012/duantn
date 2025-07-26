@@ -88,9 +88,5 @@ class UserController extends Controller
         $user->delete();
         return redirect()->route('admin.users.index')->with('success', 'Xóa người dùng thành công.');
     }
-   
-
-
-    
 
 }
