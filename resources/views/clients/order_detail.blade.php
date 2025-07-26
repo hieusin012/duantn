@@ -226,7 +226,7 @@
                         <button class="btn btn-outline-success">🔁 Mua lại</button>
                     </form>
                 @endif --}}
-                @if (in_array($order->status, ['Đã giao hàng', 'Đơn hàng đã hủy']))
+                @if (in_array($order->status, ['Đã giao hàng', 'Đơn hàng đã hủy', 'Đã hoàn hàng']))
                     <form action="{{ route('order.reorder', $order->id) }}" method="POST">
                         @csrf
                         <button class="btn btn-outline-success">🔁 Mua lại</button>

@@ -70,12 +70,32 @@
 
                         <div class="mb-3">
                             <label for="status" class="form-label fw-bold">Trạng thái</label>
-                            <select name="status" id="status" class="form-control">
+                            {{-- <select name="status" id="status" class="form-control">
                                 <option value="pending" {{ $request->status == 'pending' ? 'selected' : '' }}>Chờ duyệt</option>
                                 <option value="approved" {{ $request->status == 'approved' ? 'selected' : '' }}>Chấp nhận</option>
                                 <option value="rejected" {{ $request->status == 'rejected' ? 'selected' : '' }}>Từ chối</option>
                                 <option value="refunded" {{ $request->status == 'refunded' ? 'selected' : '' }}>Đã hoàn tiền</option>
+                            </select> --}}
+                            <select name="status" id="status" class="form-control" {{ $request->status === 'refunded' ? 'disabled' : '' }}>
+                                @php $status = $request->status; @endphp
+
+                                @if ($status === 'pending')
+                                    <option value="pending" selected>Chờ duyệt</option>
+                                    <option value="approved">Chấp nhận</option>
+                                    <option value="rejected">Từ chối</option>
+                                @elseif ($status === 'approved')
+                                    <option value="approved" selected>Chấp nhận</option>
+                                    <option value="refunded">Đã hoàn tiền</option>
+                                @elseif ($status === 'rejected')
+                                    <option value="rejected" selected>Từ chối</option>
+                                    <option value="approved">→ Chấp nhận lại (sửa nhầm)</option>
+                                @elseif ($status === 'refunded')
+                                    <option value="refunded" selected>Đã hoàn tiền</option>
+                                @endif
                             </select>
+                            @if ($request->status === 'refunded')
+                                <small class="text-danger mt-1 d-block">Đơn hàng đã hoàn tiền, không thể thay đổi trạng thái.</small>
+                            @endif
                         </div>
 
                         <div class="mb-3">
