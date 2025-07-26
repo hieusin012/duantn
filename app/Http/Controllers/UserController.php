@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
-
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -88,5 +88,9 @@ class UserController extends Controller
         $user->delete();
         return redirect()->route('admin.users.index')->with('success', 'Xóa người dùng thành công.');
     }
+   
+
+
+    
 
 }
