@@ -46,8 +46,7 @@ class UserController extends Controller
         }
 
         $data['password'] = Hash::make($request->password);
-        $data['status'] = $request->has('status') ? (bool)$request->input('status') : true;
-
+        $data['status'] = $request->input('status', 'active'); // FIX HERE
         User::create($data);
 
         return redirect()->route('admin.users.index')->with('success', 'Tạo người dùng thành công.');
@@ -77,7 +76,7 @@ class UserController extends Controller
             unset($data['password']);
         }
 
-        $data['status'] = $request->has('status') ? (bool)$request->input('status') : true;
+        $data['status'] = $request->input('status', 'active'); // FIX HERE
 
         $user->update($data);
 

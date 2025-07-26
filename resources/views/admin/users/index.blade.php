@@ -72,7 +72,12 @@
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->phone }}</td>
                             <td>{{ $user->role === 'admin' ? 'Admin' : 'User' }}</td>
-                            <td>{{ $user->status == 1 ? 'Hoạt động' : 'Tạm khóa' }}</td>
+                            <td>
+                                <span class="badge {{ $user->status === 'active' ? 'bg-success' : 'bg-danger' }}">
+                                    {{ $user->status === 'active' ? 'Hoạt động' : 'Tạm khóa' }}
+                                </span>
+                            </td>
+
                             <td>
                                 <a href="{{ route('admin.users.show', $user->id) }}" class="btn btn-info btn-sm" title="Xem">
                                     <i class="fas fa-eye"></i>
