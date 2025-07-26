@@ -22,6 +22,7 @@
         color: #198754;
     }
 
+    
     .section-title {
         font-weight: 600;
         color: rgb(0, 98, 255);

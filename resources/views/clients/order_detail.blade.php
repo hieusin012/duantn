@@ -6,6 +6,7 @@
 <h3>Chi tiết đơn hàng #{{ $order->id }}</h3>
 <p>Trạng thái: <strong>{{ \App\Models\Order::getStatuses()[$order->status] ?? $order->status }}</strong></p>
 
+
 <table class="table">
     <thead>
         <tr>
