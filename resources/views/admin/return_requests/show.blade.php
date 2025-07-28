@@ -83,12 +83,17 @@
                                     <option value="pending" selected>Chờ duyệt</option>
                                     <option value="approved">Chấp nhận</option>
                                     <option value="rejected">Từ chối</option>
+                                {{-- @elseif ($status === 'approved')
+                                    <option value="approved" selected>Chấp nhận</option>
+                                    <option value="refunded">Đã hoàn tiền</option>
+                                @elseif ($status === 'rejected') --}}
                                 @elseif ($status === 'approved')
                                     <option value="approved" selected>Chấp nhận</option>
                                     <option value="refunded">Đã hoàn tiền</option>
+                                    <option value="rejected">Từ chối lại (sản phẩm lỗi, lý do khác)</option>
                                 @elseif ($status === 'rejected')
                                     <option value="rejected" selected>Từ chối</option>
-                                    <option value="approved">→ Chấp nhận lại (sửa nhầm)</option>
+                                    <option value="approved">Chấp nhận lại (sửa nhầm)</option>
                                 @elseif ($status === 'refunded')
                                     <option value="refunded" selected>Đã hoàn tiền</option>
                                 @endif
