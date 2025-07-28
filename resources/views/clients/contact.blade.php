@@ -79,8 +79,8 @@
                                 <!-- Contact Form -->
                                 <div class="formFeilds contact-form form-vertical mb-4 mb-lg-0">
                                     <div class="section-header">
-                                        <h2>Send Us a Message</h2>
-                                        <p>You can contact us any way that is convenient for you.</p>
+                                        <h2>Gửi tin nhắn cho chúng tôi</h2>
+                                        <p>Bạn có thể liên hệ với chúng tôi theo bất kỳ cách nào thuận tiện cho bạn.</p>
                                     </div>
 
                                     
@@ -114,25 +114,25 @@
                             <div class="col-12 col-sm-12 col-md-12 col-lg-6">
                                 <!-- Contact Details -->
                                 <div class="section-header">
-                                    <h2>People usually ask these</h2>
-                                    <p>We would be happy to answer your questions.</p>
+                                    <h2>Mọi người thường hỏi những điều này</h2>
+                                    <p> Chúng tôi rất vui lòng trả lời câu hỏi của bạn.</p>
                                 </div>
 
                                 <div class="contact-details faqs-style faqs-style1">
                                     <div class="accordion" id="accordionFaq">
                                         <div class="accordion-item">
                                             <h2 class="accordion-header" id="headingOne">
-                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">How can I cancel my order?</button>
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Làm thế nào tôi có thể hủy đơn hàng?</button>
                                             </h2>
                                             <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionFaq">
                                                 <div class="accordion-body">
-                                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+                                                   
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="accordion-item">
                                             <h2 class="accordion-header" id="headingTwo">
-                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Why is my registration delayed?</button>
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Tại sao việc đăng ký của tôi bị chậm trễ?</button>
                                             </h2>
                                             <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionFaq">
                                                 <div class="accordion-body">
@@ -142,7 +142,7 @@
                                         </div>
                                         <div class="accordion-item">
                                             <h2 class="accordion-header" id="headingThree">
-                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">What do I need to buy products?</button>
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Tôi cần những gì để mua sản phẩm?</button>
                                             </h2>
                                             <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionFaq">
                                                 <div class="accordion-body">
@@ -152,7 +152,7 @@
                                         </div>
                                         <div class="accordion-item">
                                             <h2 class="accordion-header" id="headingFour">
-                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">How can I track an order?</button>
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Tôi có thể theo dõi đơn hàng như thế nào?</button>
                                             </h2>
                                             <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionFaq">
                                                 <div class="accordion-body">
@@ -162,7 +162,7 @@
                                         </div>
                                         <div class="accordion-item">
                                             <h2 class="accordion-header" id="headingFive">
-                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">How can I get money back?</button>
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">Làm sao tôi có thể lấy lại tiền?</button>
                                             </h2>
                                             <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionFaq">
                                                 <div class="accordion-body">
