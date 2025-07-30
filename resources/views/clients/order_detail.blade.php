@@ -158,13 +158,31 @@
                     </form>
                 @endif --}}
 
-                @if ($order->status === 'Chờ xác nhận')
+                @php
+                    $canCancel = $order->status === 'Chờ xác nhận';
+                    $shouldShowCancel = in_array($order->status, ['Chờ xác nhận', 'Đã xác nhận', 'Đang chuẩn bị hàng', 'Đang giao hàng']);
+                @endphp
+
+                {{-- @if ($order->status === 'Chờ xác nhận')
                     <!-- Nút mở modal -->
                     <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#cancelModal">
                         ❌ Hủy đơn hàng
-                    </button>
+                    </button> --}}
 
+                    {{-- Nút Hủy đơn hàng --}}
+                    @if ($shouldShowCancel)
+                        <button type="button"
+                            class="btn btn-outline-danger {{ $canCancel ? '' : 'disabled' }}"
+                            data-bs-toggle="{{ $canCancel ? 'modal' : '' }}"
+                            data-bs-target="{{ $canCancel ? '#cancelModal' : '' }}"
+                            style="{{ $canCancel ? '' : 'pointer-events: none; opacity: 0.5;' }}"
+                            title="{{ $canCancel ? '' : 'Không thể hủy đơn ở trạng thái hiện tại' }}">
+                            ❌ Hủy đơn hàng
+                        </button>
+                    @endif
+                    
                     <!-- Modal Hủy đơn hàng -->
+                    @if ($canCancel)
                     <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <form action="{{ route('order.cancel', $order->id) }}" method="POST">
@@ -226,7 +244,7 @@
                         <button class="btn btn-outline-success">🔁 Mua lại</button>
                     </form>
                 @endif --}}
-                @if (in_array($order->status, ['Đã giao hàng', 'Đơn hàng đã hủy']))
+                @if (in_array($order->status, ['Đã giao hàng', 'Đơn hàng đã hủy', 'Đã hoàn hàng']))
                     <form action="{{ route('order.reorder', $order->id) }}" method="POST">
                         @csrf
                         <button class="btn btn-outline-success">🔁 Mua lại</button>
