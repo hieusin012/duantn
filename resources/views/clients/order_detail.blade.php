@@ -233,7 +233,7 @@
                     <a href="{{ route('client.return-requests.create', $order->id) }}"
                     class="btn btn-outline-warning"
                     onclick="return confirm('Bạn có chắc muốn gửi yêu cầu trả hàng cho đơn này?')">
-                    ↩️ Yêu cầu hoàn tiền
+                    ↩️ Hoàn lại đơn hàng
                     </a>
                 @endif
 

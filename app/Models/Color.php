@@ -17,5 +17,9 @@ class Color extends Model
 
     protected $dates = ['deleted_at'];
 
-  
+    public function productVariants()
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
+
 }

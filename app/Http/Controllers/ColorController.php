@@ -7,11 +7,19 @@ use Illuminate\Http\Request;
 
 class ColorController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $colors = Color::orderBy('id', 'desc')->get();
+        $query = Color::query();
+
+        if ($request->filled('keyword')) {
+            $query->where('name', 'like', '%' . $request->keyword . '%');
+        }
+
+        $colors = $query->orderBy('id', 'desc')->latest()->paginate(5);
+
         return view('admin.list_colors.index', compact('colors'));
     }
+
 
     public function create()
     {
@@ -85,6 +93,10 @@ class ColorController extends Controller
     public function destroy($id)
     {
         $color = Color::findOrFail($id);
+
+        if ($color->productVariants()->count() > 0) {
+            return redirect()->back()->with('error', 'Không thể xóa vì màu đang được sử dụng.');
+        }
         $color->delete();
         return redirect()->route('admin.colors.index')->with('success', 'Xóa màu thành công!');
     }
