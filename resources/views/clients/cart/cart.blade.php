@@ -315,8 +315,6 @@
                             <input type="hidden" name="voucher_code" id="voucherCodeInput">
                             <button type="submit" class="btn btn-lg my-4 checkout w-100">Tiến hành thanh toán</button>
                         </form>
-
-
                         <div class="paymnet-img text-center"><img src="assets/client/images/icons/safepayment.png" alt="Payment" width="299" height="28" /></div>
                     </div>
                 </div>

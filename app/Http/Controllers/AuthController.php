@@ -31,9 +31,9 @@ class AuthController extends Controller
 
             // Kiểm tra role admin hoặc user
             if (Auth::user()->role === 'admin') {
-                return redirect()->intended('/admin')->with('success', 'đăng nhập thành công');
+                return redirect()->intended('/admin')->with('success', 'Đăng nhập thành công');
             } else {
-                return redirect('/')->with('success', 'đăng nhập thành công');
+                return redirect('/')->with('success', 'Đăng nhập thành công');
             }
         }
 
