@@ -35,8 +35,10 @@
                         <label for="is_active" class="control-label">Trạng thái</label>
                         <select class="form-control" name="is_active" id="is_active">
                             <option value="">-- Chọn trạng thái --</option>
-                            <option value="1" {{ old('is_active', 1) == 1 ? 'selected' : '' }}>Hoạt động</option>
-                            <option value="0" {{ old('is_active') == 0 ? 'selected' : '' }}>Không hoạt động</option>
+                            {{-- <option value="1" {{ old('is_active', 1) == 1 ? 'selected' : '' }}>Hoạt động</option>
+                            <option value="0" {{ old('is_active') == 0 ? 'selected' : '' }}>Không hoạt động</option> --}}
+                            <option value="1" {{ old('is_active') === '1' ? 'selected' : '' }}>Hoạt động</option>
+                            <option value="0" {{ old('is_active') === '0' ? 'selected' : '' }}>Không hoạt động</option>
                         </select>
                         @error('is_active')
                             <span class="text-danger">{{ $message }}</span>
@@ -46,8 +48,10 @@
                         <label for="location" class="control-label">Vị trí</label>
                         <select class="form-control" name="location" id="location">
                             <option value="">-- Chọn vị trí --</option>
-                            <option value="1" {{ old('location', 0) == 1 ? 'selected' : '' }}>Hiển thị</option>
-                            <option value="0" {{ old('location') == 0 ? 'selected' : '' }}>Ẩn</option>
+                            {{-- <option value="1" {{ old('location', 0) == 1 ? 'selected' : '' }}>Hiển thị</option>
+                            <option value="0" {{ old('location') == 0 ? 'selected' : '' }}>Ẩn</option> --}}
+                            <option value="1" {{ old('location') === '1' ? 'selected' : '' }}>Hiển thị</option>
+                            <option value="0" {{ old('location') === '0' ? 'selected' : '' }}>Ẩn</option>
                         </select>
                         @error('location')
                             <span class="text-danger">{{ $message }}</span>

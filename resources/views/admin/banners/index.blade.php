@@ -12,6 +12,11 @@
                         <a class="btn btn-add btn-sm" href="{{ route('admin.banners.create') }}" title="Thêm"><i class="fas fa-plus"></i> Tạo mới banner</a>
                     </div>
                 </div>
+                <form method="GET" action="{{ route('admin.banners.index') }}" class="mb-3 d-flex">
+                    <input type="text" name="keyword" class="form-control me-2" style="width: 350px;" placeholder="Tìm theo tên banner..." value="{{ request('keyword') }}">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+                </form>
+
                 <table class="table table-hover table-bordered" id="sampleTable">
                     <thead>
                         <tr>

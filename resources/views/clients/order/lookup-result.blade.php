@@ -70,6 +70,9 @@
                                 @case('Đơn hàng đã hủy')
                                     <span class="badge bg-danger">Đơn hàng đã hủy</span>
                                     @break
+                                @case('Đã hoàn hàng')
+                                    <span class="badge bg-info">Đã hoàn hàng</span>
+                                    @break
                                 @default
                                     <span class="badge bg-dark">Không xác định</span>
                             @endswitch
