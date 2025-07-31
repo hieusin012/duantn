@@ -120,7 +120,10 @@ class CheckoutController extends Controller
         if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để tiến hành thanh toán.');
         }
-
+        $selectedIds = json_decode($request->input('selected_items'), true);
+        if (empty($selectedIds) || !is_array($selectedIds)) {
+            return redirect()->back()->with('error', 'Không có sản phẩm được chọn.');
+        }
         $userId = Auth::id();
         $cart = Cart::with('voucher')->where('user_id', $userId)->where('status', 'active')->first();
 
@@ -140,12 +143,10 @@ class CheckoutController extends Controller
 
         DB::beginTransaction();
         try {
-            $cartItems = $cart->items()->with([
-                'product',
-                'variant.product',
-                'variant.color',
-                'variant.size'
-            ])->get();
+            $cartItems = $cart->items()
+                ->whereIn('id', $selectedIds)
+                ->with(['product', 'variant.product', 'variant.color', 'variant.size'])
+                ->get();
             $subtotal = 0;
 
             foreach ($cartItems as $item) {
@@ -234,8 +235,10 @@ class CheckoutController extends Controller
             }
 
 
-            $cart->items()->delete();
-            $cart->update(['status' => 'Đã mua']);
+            $cart->items()->whereIn('id', $selectedIds)->delete();
+            if ($cart->items()->count() === 0) {
+                $cart->update(['status' => 'Đã mua']);
+            }
 
             DB::commit();
 

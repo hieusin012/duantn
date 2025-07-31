@@ -89,6 +89,46 @@
         transition: all 0.2s ease-in-out;
     }
 </style>
+<style>
+    .color-swatch {
+        width: 36px;
+        height: 36px;
+        border: 2px solid #aaa;
+        border-radius: 50%;
+        display: inline-block;
+        cursor: pointer;
+        transition: 0.2s;
+        position: relative;
+    }
+    .border-for-white {
+        border: 2px solid #888 !important;
+        /* hoặc #000 cho rõ */
+        box-shadow: 0 0 3px rgba(71, 71, 71, 0.4);
+    }
+
+    .btn-check:checked+.color-swatch {
+        border: 3px solid #000;
+        box-shadow: 0 0 0 2px rgba(2, 2, 2, 0.2);
+    }
+
+    .color-swatch .checkmark {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: none;
+        width: 10px;
+        height: 10px;
+        background: white;
+        border: 1px solid black;
+        border-radius: 50%;
+    }
+
+    .btn-check:checked+.color-swatch .checkmark {
+        display: block;
+    }
+</style>
+
 @endpush
 
 @section('content')
@@ -173,45 +213,45 @@
                                 {{ number_format($product->price, 0, ',', '.') }} ₫
                             </span> --}}
                             @php
-                                $price = $product->price;
-                                $discountPercent = $product->discount_percent ?? 0;
-                                $isHotDeal = $product->is_hot_deal
-                                    && $discountPercent > 0
-                                    && $product->deal_end_at
-                                    && \Carbon\Carbon::now()->lt($product->deal_end_at);
+                            $price = $product->price;
+                            $discountPercent = $product->discount_percent ?? 0;
+                            $isHotDeal = $product->is_hot_deal
+                            && $discountPercent > 0
+                            && $product->deal_end_at
+                            && \Carbon\Carbon::now()->lt($product->deal_end_at);
 
-                                $salePrice = $isHotDeal ? $price * (1 - $discountPercent / 100) : null;
+                            $salePrice = $isHotDeal ? $price * (1 - $discountPercent / 100) : null;
                             @endphp
                             @if ($isHotDeal)
-                                <div class="d-flex justify-content-between align-items-center bg-warning text-white p-2 rounded mb-2 w-100">
-                                    <strong class="ms-2">F⚡ASH SALE</strong>
-                                    <div class="me-2">
-                                        <i class="bi bi-clock-fill me-1"></i>
-                                        KẾT THÚC TRONG:
-                                        <span class="countdown-timer text-danger fw-bold"
-                                            data-deal-end="{{ \Carbon\Carbon::parse($product->deal_end_at)->timestamp * 1000 }}">
-                                            <span class="time-remaining">--:--:--</span>
-                                        </span>
-                                    </div>
+                            <div class="d-flex justify-content-between align-items-center bg-warning text-white p-2 rounded mb-2 w-100">
+                                <strong class="ms-2">F⚡ASH SALE</strong>
+                                <div class="me-2">
+                                    <i class="bi bi-clock-fill me-1"></i>
+                                    KẾT THÚC TRONG:
+                                    <span class="countdown-timer text-danger fw-bold"
+                                        data-deal-end="{{ \Carbon\Carbon::parse($product->deal_end_at)->timestamp * 1000 }}">
+                                        <span class="time-remaining">--:--:--</span>
+                                    </span>
                                 </div>
+                            </div>
                             @endif
                             <div class="product-price d-flex-center my-3">
                                 @if ($isHotDeal)
-                                    <span class="price fs-3 text-danger">
-                                        {{ number_format($salePrice, 0, ',', '.') }} ₫
-                                    </span>
-                                    <del class="text-muted ms-2">
-                                        {{ number_format($price, 0, ',', '.') }} ₫
-                                    </del>
-                                    <span class="text-danger fw-bold ms-2" style="font-size: 10px;">
-                                        -{{ $discountPercent }}%
-                                    </span>
+                                <span class="price fs-3 text-danger">
+                                    {{ number_format($salePrice, 0, ',', '.') }} ₫
+                                </span>
+                                <del class="text-muted ms-2">
+                                    {{ number_format($price, 0, ',', '.') }} ₫
+                                </del>
+                                <span class="text-danger fw-bold ms-2" style="font-size: 10px;">
+                                    -{{ $discountPercent }}%
+                                </span>
                                 @else
-                                    <span class="price fs-3" id="variant-price">
-                                        {{ number_format($price, 0, ',', '.') }} ₫
-                                    </span>
+                                <span class="price fs-3" id="variant-price">
+                                    {{ number_format($price, 0, ',', '.') }} ₫
+                                </span>
                                 @endif
-                                
+
                             </div>
                         </div>
                     </div>
@@ -239,12 +279,14 @@
                                             {{ old('color_id') == $color->id ? 'checked' : '' }}
                                             autocomplete="off">
 
-                                        <label class="btn color-swatch position-relative"
+                                        <label
+                                            class="btn color-swatch position-relative {{ strtolower($color->color_code) == '#ffffff' ? 'border-for-white' : '' }}"
                                             for="color-{{ $color->id }}"
                                             style="background-color: {{ $color->color_code }};"
                                             title="{{ $color->name }}">
                                             <span class="checkmark"></span>
                                         </label>
+
                                         @endforeach
                                     </div>
 
@@ -807,7 +849,7 @@
             // Bỏ active
             $('.size-btn').removeClass('active');
             $(this).addClass('active');
-            
+
             // Gán size_id
             const sizeId = $(this).data('size-id');
             $('#selected-size-id').val(sizeId);
@@ -908,7 +950,7 @@
 </script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const timers = document.querySelectorAll('.countdown-timer');
 
         timers.forEach(timer => {

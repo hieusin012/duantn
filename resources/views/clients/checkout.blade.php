@@ -140,6 +140,7 @@
     <form action="{{ route('checkout.process') }}" method="POST">
         @csrf
         <input type="hidden" name="voucher_code" value="{{ request('voucher_code') }}">
+        <input type="hidden" name="selected_items" value="{{ request()->input('selected_items') }}">
 
         <div class="row">
             <!-- Cột trái -->
