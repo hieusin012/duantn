@@ -94,7 +94,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:products,name',
             'image' => 'nullable|image|max:2048',
             'price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
@@ -106,37 +106,52 @@ class ProductController extends Controller
             'discount_percent' => 'nullable|integer|min:0|max:100',
             'deal_end_at' => 'nullable|date|after:now',
 
-        ]);
+        ], [
+    'name.unique' => 'Tên sản phẩm đã tồn tại.',
+    'name.required' => 'Vui lòng nhập tên sản phẩm.',
+    'price.required' => 'Vui lòng nhập giá sản phẩm.',
+    'category_id.required' => 'Vui lòng chọn danh mục.',
+    'brand_id.required' => 'Vui lòng chọn thương hiệu.',
+]);
 
         // Tạo mã code duy nhất
-        do {
-            $code = (string)random_int(100000, 999999);
-        } while (Product::where('code', $code)->exists());
+do {
+    $code = (string)random_int(100000, 999999);
+} while (Product::where('code', $code)->exists());
 
-        $slug = Str::slug($validated['name']);
-        $imagePath = null;
+// Tạo slug duy nhất
+$baseSlug = Str::slug($validated['name']);
+$slug = $baseSlug;
+$counter = 1;
 
-        if ($request->hasFile('image')) {
-            $imageName = time() . '_' . $request->file('image')->getClientOriginalName();
-            $request->file('image')->move(public_path('uploads/products'), $imageName);
-            $imagePath = 'uploads/products/' . $imageName;
-        }
+while (Product::where('slug', $slug)->exists()) {
+    $slug = $baseSlug . '-' . $counter++;
+}
 
-        Product::create([
-            'code' => $code,
-            'name' => $validated['name'],
-            'slug' => $slug,
-            'image' => $imagePath,
-            'price' => $validated['price'],
-            'description' => $validated['description'] ?? null,
-            'status' => $validated['status'],
-            'is_active' => $validated['is_active'],
-            'category_id' => $validated['category_id'],
-            'brand_id' => $validated['brand_id'],
-            'is_hot_deal' => $request->has('is_hot_deal'), // checkbox
-            'discount_percent' => $request->input('discount_percent'),
-            'deal_end_at' => $request->input('deal_end_at'),
-        ]);
+$imagePath = null;
+
+if ($request->hasFile('image')) {
+    $imageName = time() . '_' . $request->file('image')->getClientOriginalName();
+    $request->file('image')->move(public_path('uploads/products'), $imageName);
+    $imagePath = 'uploads/products/' . $imageName;
+}
+
+Product::create([
+    'code' => $code,
+    'name' => $validated['name'],
+    'slug' => $slug,
+    'image' => $imagePath,
+    'price' => $validated['price'],
+    'description' => $validated['description'] ?? null,
+    'status' => $validated['status'],
+    'is_active' => $validated['is_active'],
+    'category_id' => $validated['category_id'],
+    'brand_id' => $validated['brand_id'],
+    'is_hot_deal' => $request->has('is_hot_deal'),
+    'discount_percent' => $request->input('discount_percent'),
+    'deal_end_at' => $request->input('deal_end_at'),
+]);
+
 
         return redirect()->route('admin.products.index')->with('success', 'Thêm sản phẩm thành công');
     }
@@ -168,7 +183,7 @@ class ProductController extends Controller
 
         $validated = $request->validate([
             'code' => 'required|string|max:20|unique:products,code,' . $id,
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:products,name,' . $id,
             'image' => 'nullable|image|max:2048',
             'price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
