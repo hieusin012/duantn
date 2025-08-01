@@ -42,7 +42,7 @@
                         </form>
                         <form method="GET" action="{{ route('admin.users.index') }}" class="mb-3 d-inline-block">
                             @if(request('keyword'))
-                                <input type="hidden" name="keyword" value="{{ request('keyword') }}">
+                            <input type="hidden" name="keyword" value="{{ request('keyword') }}">
                             @endif
                             <select name="role" class="form-control d-inline-block w-auto" onchange="this.form.submit()">
                                 <option value="">-- Tất cả vai trò --</option>
@@ -52,8 +52,8 @@
                         </form>
                     </div>
                 </div>
-                <table class="table table-hover table-bordered" id="users-table">
-                    <thead>
+                <table class="table table-bordered table-hover align-middle text-center shadow-sm rounded bg-white" id="users-table">
+                    <thead class="table-dark">
                         <tr>
                             <th>ID</th>
                             <th>Họ tên</th>
@@ -65,38 +65,42 @@
                         </tr>
                     </thead>
                     <tbody>
-                    @foreach($users as $user)
+                        @foreach($users as $user)
                         <tr>
                             <td>{{ $user->id }}</td>
                             <td>{{ $user->fullname }}</td>
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->phone }}</td>
-                            <td>{{ $user->role === 'admin' ? 'Admin' : 'User' }}</td>
                             <td>
-                                <span class="badge {{ $user->status === 'active' ? 'bg-success' : 'bg-danger' }}">
+                                <span class="badge bg-{{ $user->role === 'admin' ? 'warning' : 'secondary' }}">
+                                    {{ $user->role === 'admin' ? 'Admin' : 'User' }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge bg-{{ $user->status === 'active' ? 'success' : 'danger' }}">
                                     {{ $user->status === 'active' ? 'Hoạt động' : 'Tạm khóa' }}
                                 </span>
                             </td>
-
                             <td>
-                                <a href="{{ route('admin.users.show', $user->id) }}" class="btn btn-info btn-sm" title="Xem">
+                                <a href="{{ route('admin.users.show', $user->id) }}" class="btn btn-sm btn-outline-info" title="Xem">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-primary btn-sm" title="Sửa">
+                                <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-outline-primary" title="Sửa">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa người dùng này không?');">
+                                <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa người dùng này không?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-primary btn-sm trash" title="Xóa">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Xóa">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </form>
                             </td>
                         </tr>
-                    @endforeach
+                        @endforeach
                     </tbody>
                 </table>
+
 
                 <div class="pagination">
                     {{ $users->links() }}

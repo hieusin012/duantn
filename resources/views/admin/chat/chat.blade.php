@@ -137,7 +137,7 @@
 
 
 <div class="container-fluid">
-    <div class="row" style="height: 80vh">
+    <div class="row mb-5" style="height: 80vh">
         <!-- Sidebar user list -->
         <div class="col-md-3 border-end overflow-auto">
             <h5 class="mt-3">Người dùng</h5>

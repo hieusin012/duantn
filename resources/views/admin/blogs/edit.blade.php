@@ -4,112 +4,127 @@
 
 @section('content')
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="tile">
-            <h3 class="tile-title">Chỉnh sửa bài viết</h3>
-            <div class="tile-body">
-                <form class="row" action="{{ route('admin.blogs.update', $blog->id) }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
+<div class="row justify-content-center mb-5">
+    <div class="col-lg-10">
+        <div class="card shadow-sm p-4">
+            <h4 class="mb-4 text-primary">✍️ Chỉnh sửa bài viết</h4>
 
-                    <div class="form-group col-md-4">
-                        <label for="title">Tiêu đề:</label>
-                        <input type="text" class="form-control" name="title" value="{{ old('title', $blog->title ?? '') }}">
-                        @error('title')<span class="text-danger">{{ $message }}</span>@enderror
+            <form class="row g-3" action="{{ route('admin.blogs.update', $blog->id) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+
+                {{-- Tiêu đề --}}
+                <div class="col-md-6">
+                    <label for="title" class="form-label">Tiêu đề</label>
+                    <input type="text" class="form-control" name="title" value="{{ old('title', $blog->title ?? '') }}">
+                    @error('title')<small class="text-danger">{{ $message }}</small>@enderror
+                </div>
+
+                {{-- Slug --}}
+                <div class="col-md-6">
+                    <label for="slug" class="form-label">Slug</label>
+                    <input type="text" class="form-control" name="slug" value="{{ old('slug', $blog->slug ?? '') }}">
+                    @error('slug')<small class="text-danger">{{ $message }}</small>@enderror
+                </div>
+
+                {{-- Danh mục --}}
+                <div class="col-md-4">
+                    <label class="form-label">Danh mục</label>
+                    <select class="form-control" name="category_id">
+                        <option value="">-- Chọn danh mục --</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}" {{ old('category_id', $blog->category_id) == $category->id ? 'selected' : '' }}>
+                                {{ $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('category_id')<small class="text-danger">{{ $message }}</small>@enderror
+                </div>
+
+                {{-- Người viết --}}
+                <div class="col-md-4">
+                    <label class="form-label">Người viết</label>
+                    <select class="form-control" name="user_id">
+                        <option value="">-- Chọn người viết --</option>
+                        @foreach($users as $user)
+                            <option value="{{ $user->id }}" {{ old('user_id', $blog->user_id) == $user->id ? 'selected' : '' }}>
+                                {{ $user->fullname }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('user_id')<small class="text-danger">{{ $message }}</small>@enderror
+                </div>
+
+                {{-- Trạng thái --}}
+                <div class="col-md-4">
+                    <label class="form-label d-block">Trạng thái</label>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" name="status" id="status" value="1" {{ old('status', $blog->status) ? 'checked' : '' }}>
+                        <label class="form-check-label" for="status">Đã đăng</label>
                     </div>
+                </div>
 
-                    <div class="form-group col-md-12">
-                        <label class="control-label">Nội dung:</label>
-                        <textarea class="form-control" name="content" id="mota">{{ old('content', $blog->content ?? '') }}</textarea>
-                        @error('content')<span class="text-danger">{{ $message }}</span>@enderror
-                    </div>
+                {{-- Nội dung --}}
+                <div class="col-md-12">
+                    <label class="form-label">Nội dung</label>
+                    <textarea class="form-control" name="content" id="mota" rows="5">{{ old('content', $blog->content ?? '') }}</textarea>
+                    @error('content')<small class="text-danger">{{ $message }}</small>@enderror
+                </div>
 
-                    <div class="form-group col-md-4">
-                        <label for="slug">Slug:</label>
-                        <input type="text" class="form-control" name="slug" value="{{ old('slug', $blog->slug ?? '') }}">
-                        @error('slug')<span class="text-danger">{{ $message }}</span>@enderror
-                    </div>
-
-                    <div class="form-group col-md-4">
-                        <label for="fullname">Danh mục:</label>
-                        <select class="form-control" name="category_id">
-                            <option value="">Chọn danh mục</option>
-                            @foreach($categories as $category)
-                                <option value="{{ $category->id }}" {{ old('category_id', $blog->category_id) == $category->id ? 'selected' : '' }}>
-                                    {{ $category->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('category_id')<span class="text-danger">{{ $message }}</span>@enderror
-                    </div>
-
-                    <div class="form-group col-md-4">
-                        <label for="user_id">Người viết:</label>
-                        <select class="form-control" name="user_id">
-                            <option value="">Chọn người viết</option>
-                            @foreach($users as $user)
-                                <option value="{{ $user->id }}" {{ old('user_id', $blog->user_id) == $user->id ? 'selected' : '' }}>
-                                    {{ $user->fullname }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('user_id')<span class="text-danger">{{ $message }}</span>@enderror
-                    </div>
-
-                    <div class="form-group col-md-4">
-                        <label for="status">Trạng thái:</label><br>
-                        <input type="checkbox" name="status" id="status" value="1" {{ old('status', $blog->status) ? 'checked' : '' }}>
-                        <label for="status">Đã đăng</label>
-                    </div>
-
-                    <div class="form-group col-md-12">
-                        <label class="control-label">Hình ảnh minh họa</label>
-                        <div id="myfileupload">
-                            <input type="file" id="uploadfile" name="image" onchange="readURL(this);" accept="image/*" />
+                {{-- Ảnh minh họa --}}
+                <div class="col-md-12">
+                    <label class="form-label">Hình ảnh minh họa</label>
+                    <div class="text-center border rounded p-3 mb-2">
+                        <img id="thumbimage" 
+                            src="{{ $blog->image ? Storage::url($blog->image) : '#' }}" 
+                            class="img-thumbnail" 
+                            style="max-height: 300px; {{ $blog->image ? '' : 'display:none;' }}">
+                        <br>
+                        <input type="file" id="uploadfile" name="image" accept="image/*" hidden onchange="readURL(this);">
+                        <div class="mt-2">
+                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="document.getElementById('uploadfile').click();">
+                                <i class="fas fa-upload me-1"></i> Chọn hình
+                            </button>
+                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="clearImage();">
+                                <i class="fas fa-trash me-1"></i> Xóa hình
+                            </button>
                         </div>
-                        <div id="thumbbox">
-                            @if ($blog->image)
-                                <img height="450" width="400" alt="Thumb image" id="thumbimage" src="{{ Storage::url($blog->image) }}" style="display: block" />
-                            @else
-                                <img height="450" width="400" alt="Thumb image" id="thumbimage" style="display: none" />
-                            @endif
-                            <a class="removeimg" href="javascript:" onclick="clearImage()">Xóa hình ảnh</a>
-                        </div>
-                        <div id="boxchoice">
-                            <a href="javascript:" class="Choicefile" onclick="document.getElementById('uploadfile').click();"><i class="fas fa-cloud-upload-alt"></i> Chọn hình ảnh</a>
-                            <p style="clear:both"></p>
-                        </div>
-                        @error('image')<span class="text-danger">{{ $message }}</span>@enderror
+                        @error('image')<div class="text-danger">{{ $message }}</div>@enderror
                     </div>
+                </div>
 
-                    <div class="form-group col-md-12">
-                        <button class="btn btn-save" type="submit">Lưu</button>
-                        <a class="btn btn-cancel" href="{{ route('admin.blogs.index') }}">Quay lại</a>
-                    </div>
-                </form>
-            </div>
+                {{-- Nút --}}
+                <div class="col-md-12 text-end mt-3">
+                    <button type="submit" class="btn btn-success me-2">
+                        <i class="fas fa-save me-1"></i> Lưu
+                    </button>
+                    <a href="{{ route('admin.blogs.index') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-1"></i> Quay lại
+                    </a>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
+{{-- Script ảnh --}}
 <script>
     function readURL(input) {
         if (input.files && input.files[0]) {
-            var reader = new FileReader();
+            let reader = new FileReader();
             reader.onload = function(e) {
-                var thumbImage = document.getElementById('thumbimage');
-                thumbImage.src = e.target.result;
-                thumbImage.style.display = 'block';
+                const img = document.getElementById('thumbimage');
+                img.src = e.target.result;
+                img.style.display = 'block';
             };
             reader.readAsDataURL(input.files[0]);
         }
     }
 
     function clearImage() {
-        var thumbImage = document.getElementById('thumbimage');
-        thumbImage.src = '';
-        thumbImage.style.display = 'none';
+        const img = document.getElementById('thumbimage');
+        img.src = '';
+        img.style.display = 'none';
         document.getElementById('uploadfile').value = '';
     }
 </script>

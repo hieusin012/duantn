@@ -16,34 +16,34 @@
                             <input type="text" name="keyword" class="form-control form-control-sm" placeholder="Tìm theo tên, mã sản phẩm..." value="{{ request('keyword') }}">
                         </div>
                         <div class="col-md-3">
-                            <select name="category_id" class="form-select form-select-sm">
+                            <select name="category_id" class="form-control form-select-sm">
                                 <option value="">Tất cả danh mục</option>
                                 @foreach ($categories as $category)
-                                    <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
-                                        {{ $category->name }}
-                                    </option>
+                                <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <select name="brand_id" class="form-select form-select-sm">
+                            <select name="brand_id" class="form-control form-select-sm">
                                 <option value="">Tất cả thương hiệu</option>
                                 @foreach ($brands as $brand)
-                                    <option value="{{ $brand->id }}" {{ request('brand_id') == $brand->id ? 'selected' : '' }}>
-                                        {{ $brand->name }}
-                                    </option>
+                                <option value="{{ $brand->id }}" {{ request('brand_id') == $brand->id ? 'selected' : '' }}>
+                                    {{ $brand->name }}
+                                </option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <select name="status" class="form-select form-select-sm">
+                            <select name="status" class="form-control form-select-sm">
                                 <option value="">Tất cả trạng thái</option>
                                 <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Còn hàng</option>
                                 <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Hết hàng</option>
                             </select>
                         </div>
                     </div>
-                
+
                     <div class="row g-2 mt-2">
                         {{-- Dòng 2 --}}
                         <div class="col-md-3">
@@ -60,11 +60,11 @@
                                 <i class="fa fa-times"></i> Xóa
                             </a>
                         </div>
-                     
+
                     </div>
                 </form>
-                
-                
+
+
 
                 <div class="row element-button">
                     <div class="col-sm-2">
@@ -92,58 +92,63 @@
                         <a class="btn btn-delete btn-sm" type="button" title="Xóa"><i class="fas fa-trash-alt"></i> Xóa tất cả</a>
                     </div>
                 </div>
-                <table class="table table-hover table-bordered" id="sampleTable">
-                    <thead>
+                <table class="table table-bordered table-hover align-middle text-center" id="sampleTable">
+                    <thead class="table-dark">
                         <tr>
-                            <th width="10"><input type="checkbox" id="all"></th>
-                            <th>Mã sản phẩm</th>
-                            <th>Tên sản phẩm</th>
-                            <th>Ảnh</th>
-                            <th>Giá tiền</th>
-                            <th>Tình trạng</th>
-                            <th>Danh mục</th>
-                            <th>Chức năng</th>
+                            <th scope="col"><input type="checkbox" id="all"></th>
+                            <th scope="col">Mã SP</th>
+                            <th scope="col">Tên sản phẩm</th>
+                            <th scope="col">Ảnh</th>
+                            <th scope="col">Giá</th>
+                            <th scope="col">Tình trạng</th>
+                            <th scope="col">Danh mục</th>
+                            <th scope="col">Thao tác</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($products as $product)
                         <tr>
-                            <td width="10"><input type="checkbox" name="check[]" value="{{ $product->id }}"></td>
+                            <td><input type="checkbox" name="check[]" value="{{ $product->id }}"></td>
                             <td>{{ $product->code }}</td>
-                            <td>{{ $product->name }}</td>
+                            <td class="text-start">{{ $product->name }}</td>
                             <td>
                                 @if ($product->image)
-                                    <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" height="80" width="80px;">
+                                <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="rounded shadow-sm" width="60" height="60">
                                 @else
-                                    <span>Không có ảnh</span>
+                                <span class="text-muted fst-italic">Không có ảnh</span>
                                 @endif
                             </td>
-                            <td>{{ number_format($product->price, 0, ',', '.') }} ₫</td>
+                            <td><b>{{ number_format($product->price, 0, ',', '.') }} ₫</b></td>
                             <td>
-                                <span class="badge {{ $product->is_active ? 'bg-success' : 'bg-danger' }}">
-                                    {{ $product->is_active ? 'Còn hàng' : 'Hết hàng' }}
-                                </span>
+                                @if ($product->is_active)
+                                <span class="badge bg-success">Còn hàng</span>
+                                @else
+                                <span class="badge bg-danger">Hết hàng</span>
+                                @endif
                             </td>
-                            <td>{{ $product->category ? $product->category->name : 'N/A' }}</td>
+                            <td>{{ $product->category->name ?? 'N/A' }}</td>
                             <td>
-                                <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-primary btn-sm edit" title="Sửa" data-toggle="modal" data-target="#ModalUP">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-primary btn-sm trash" title="Xóa">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </form>
-                                <a href="{{ route('admin.products.show', $product->id) }}" class="btn btn-primary btn-sm" title="View Details">
-                                    <i class="fas fa-eye"></i>
-                                </a>
+                                <div class="d-flex justify-content-center gap-1">
+                                    <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-sm btn-warning" title="Sửa">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger" title="Xóa">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                    <a href="{{ route('admin.products.show', $product->id) }}" class="btn btn-sm btn-info text-white" title="Chi tiết">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
+
                 <!-- Pagination Links -->
                 <div class="pagination">
                     {{ $products->links() }}

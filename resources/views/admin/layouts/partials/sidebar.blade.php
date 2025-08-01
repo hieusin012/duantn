@@ -8,12 +8,13 @@
       <ul class="app-menu">
             <!-- Nhóm: Tổng quan & Hỗ trợ -->
             <li class="app-menu__section">TỔNG QUAN</li>
+            <li><a class="app-menu__item {{ request()->routeIs('admin.dashboard.index') ? 'active' : '' }}" href="{{route('admin.dashboard.index')}}">
+                        <i class="app-menu__icon bx bx-tachometer"></i><span class="app-menu__label">Bảng điều khiển</span></a></li>
             <li><a class="app-menu__item {{ request()->routeIs('chat.index') ? 'active' : '' }}" href="{{ route('admin.chat') }}">
                         <i class="app-menu__icon fas fa-comment-dots"></i><span class="app-menu__label">Hỗ trợ khách hàng</span></a></li>
             <li><a class="app-menu__item {{ request()->is('phan-mem-ban-hang*') ? 'active' : '' }}" href="phan-mem-ban-hang.html">
                         <i class="app-menu__icon bx bx-cart-alt"></i><span class="app-menu__label">POS Bán Hàng</span></a></li>
-            <li><a class="app-menu__item {{ request()->routeIs('admin.dashboard.index') ? 'active' : '' }}" href="{{route('admin.dashboard.index')}}">
-                        <i class="app-menu__icon bx bx-tachometer"></i><span class="app-menu__label">Bảng điều khiển</span></a></li>
+            
 
             <!-- Nhóm: Quản lý nội dung -->
             <li class="app-menu__section">QUẢN LÝ NỘI DUNG</li>
@@ -86,7 +87,7 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
-            background: #6c757d;
+            background: #212529;
       }
 
       .app-sidebar__user {
@@ -144,7 +145,7 @@
       /* Sidebar bình thường */
       .app-sidebar {
             width: 250px;
-            background-color: #384047ff;
+            background-color: #212529;
             height: 100vh;
             position: fixed;
             top: 0;

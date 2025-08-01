@@ -158,8 +158,8 @@ class CartController extends Controller
         if (!$item->cart || $item->cart->user_id !== Auth::id()) {
             abort(403, 'Bạn không có quyền xóa sản phẩm này.');
         }
-        $item->delete();
         $item->update(['status', 'Đã xóa']);
+        $item->delete();
         return back()->with('success', 'Đã xóa sản phẩm khỏi giỏ hàng.');
     }
 }

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Voucher; // Đảm bảo import Voucher Model
 use App\Models\Cart;    // Đảm bảo import Cart Model
 use Carbon\Carbon;
+
 class ApplyVoucherController extends Controller
 {
     public function applyVoucher(Request $request)
@@ -53,6 +54,5 @@ class ApplyVoucherController extends Controller
             'discount_display' => number_format($discount, 0, ',', '.') . ' ₫',
             'total_display' => number_format($newTotal, 0, ',', '.') . ' ₫',
         ]);
-        
     }
 }
