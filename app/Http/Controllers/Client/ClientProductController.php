@@ -15,6 +15,7 @@ class ClientProductController extends Controller
     public function index()
     {
         $products = Product::where('is_active', 1)
+            ->where('status', 1)
             ->whereNull('deleted_at')
             ->latest()
             ->paginate(12);
@@ -29,6 +30,7 @@ class ClientProductController extends Controller
     {
         $product = Product::with(['galleries', 'variants.color', 'variants.size', 'brand', 'category'])
             ->where('slug', $slug)
+            ->where('status', 1)
             ->where('is_active', 1)
             ->whereNull('deleted_at')
             ->firstOrFail();
@@ -46,6 +48,7 @@ class ClientProductController extends Controller
         $relatedProducts = Product::with(['brand', 'galleries'])
             ->where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
+            ->where('status', 1)
             ->where('is_active', 1)
             ->whereNull('deleted_at')
             ->take(5)
@@ -58,6 +61,7 @@ class ClientProductController extends Controller
     public function search(Request $request)
     {
         $query = Product::query()
+            ->where('status', 1)
             ->where('is_active', 1)
             ->whereNull('deleted_at');
 

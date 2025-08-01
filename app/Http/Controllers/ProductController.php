@@ -46,6 +46,16 @@ class ProductController extends Controller
         }
 
         // Lọc theo trạng thái active nếu có
+        // if (!is_null($request->input('is_active'))) {
+        //     $query->where('is_active', $request->input('is_active'));
+        // }
+
+        // Lọc theo trạng thái ẩn/hiện
+        if (!is_null($request->input('status'))) {
+            $query->where('status', $request->input('status'));
+        }
+
+        // Lọc theo còn hàng/hết hàng
         if (!is_null($request->input('is_active'))) {
             $query->where('is_active', $request->input('is_active'));
         }

@@ -71,6 +71,11 @@
 </style>
 
 <div id="page-content">
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
     <!--Page Header-->
     <div class="page-header text-center">
         <div class="container">
@@ -607,6 +612,42 @@
     });
 </script>
 
+<script>
+document.getElementById('checkoutForm').addEventListener('submit', function (e) {
+    const allCheckboxes = document.querySelectorAll('.cart-checkbox');
+    const checkedCheckboxes = document.querySelectorAll('.cart-checkbox:checked');
+
+    // Trường hợp giỏ hàng trống
+    if (allCheckboxes.length === 0) {
+        e.preventDefault();
+        $.toast({
+            heading: 'Thất bại!',
+            text: 'Giỏ hàng của bạn đang trống.',
+            showHideTransition: 'slide',
+            icon: 'error',
+            position: { right: 1, top: 83 }
+        });
+        return;
+    }
+
+    // Trường hợp chưa chọn sản phẩm nào
+    if (checkedCheckboxes.length === 0) {
+        e.preventDefault();
+        $.toast({
+            heading: 'Thất bại!',
+            text: 'Vui lòng chọn ít nhất một sản phẩm để thanh toán.',
+            showHideTransition: 'slide',
+            icon: 'error',
+            position: { right: 1, top: 83 }
+        });
+        return;
+    }
+
+    // Gán danh sách ID đã chọn vào input hidden
+    const selectedIds = Array.from(checkedCheckboxes).map(cb => cb.value);
+    document.getElementById('selectedItemsInput').value = selectedIds.join(',');
+});
+</script>
 
 
 

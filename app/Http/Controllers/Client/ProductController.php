@@ -15,6 +15,7 @@ class ProductController extends Controller
     {
         // Thêm 'comments' vào eager loading
         $products = Product::with(['comments', 'wishlists']) // <--- SỬA DÒNG NÀY
+            ->where('status', 1)
             ->where('is_active', 1)
             ->whereNull('deleted_at')
             ->latest()
@@ -118,6 +119,7 @@ class ProductController extends Controller
 
 
         $query = Product::with(['comments', 'wishlists']) // <--- SỬA DÒNG NÀY
+            ->where('status', 1)
             ->where('is_active', 1)
             ->whereNull('deleted_at');
 
