@@ -10,6 +10,7 @@
             <div class="tile-body">
                 <p><strong>ID:</strong> {{ $size->id }}</p>
                 <p><strong>Tên:</strong> {{ $size->name }}</p>
+                <p><strong>Giá trị kích cỡ:</strong> {{ $size->value }}</p>
                 <p><strong>Ngày tạo:</strong> {{ $size->created_at }}</p>
                 <p><strong>Ngày cập nhật:</strong> {{ $size->updated_at }}</p>
 

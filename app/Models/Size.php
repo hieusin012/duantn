@@ -10,6 +10,12 @@ class Size extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'value'];
+
+    public function productVariants()
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
+
 }
 

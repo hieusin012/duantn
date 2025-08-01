@@ -33,22 +33,34 @@
                         <a class="btn btn-delete btn-sm" type="button" title="Delete All"><i class="fas fa-trash-alt"></i> Xóa tất cả</a>
                     </div>
                 </div>
+                <form method="GET" action="{{ route('admin.sizes.index') }}" class="mb-3 d-flex">
+                    <input type="text" name="keyword" class="form-control me-2" style="width: 350px;" placeholder="Tìm theo tên size..." value="{{ request('keyword') }}">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+                </form>
+                {{-- @if(session('success'))
+                    <div class="alert alert-success">{{ session('success') }}</div>
+                @endif
 
+                @if(session('error'))
+                    <div class="alert alert-danger">{{ session('error') }}</div>
+                @endif --}}
                 <table class="table table-hover table-bordered">
                     <thead>
                         <tr>
                             <th>ID</th>
                             <th>Tên</th>
+                            <th>Giá trị kích cỡ</th>
                             <th>Ngày tạo</th>
                             <th>Ngày cập nhật</th>
                             <th>Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($sizes as $size)
+                        @forelse ($sizes as $size)
                             <tr>
                                 <td>{{ $size->id }}</td>
                                 <td>{{ $size->name }}</td>
+                                <td>{{ $size->value }}</td>
                                 <td>{{ $size->created_at }}</td>
                                 <td>{{ $size->updated_at }}</td>
                                 <td>
@@ -67,7 +79,11 @@
                                     </form>
                                 </td>
                             </tr>
-                        @endforeach
+                            @empty
+                            <tr>
+                                <td colspan="6" class="text-center text-danger">Không tìm thấy kích cỡ nào phù hợp.</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
 

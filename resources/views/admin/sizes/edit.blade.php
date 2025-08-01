@@ -19,6 +19,13 @@
                             <div class="text-danger mt-1">{{ $message }}</div>
                         @enderror
                     </div>
+                    <div class="mb-3">
+                        <label for="value" class="form-label">Giá trị kích cỡ</label>
+                        <input type="number" class="form-control" id="value" name="value" value="{{ old('value', $size->value ?? '') }}" min="1" step="1">
+                        @error('value')
+                            <div class="text-danger mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
 
                     <button type="submit" class="btn btn-save btn-sm">
                         Cập nhật
