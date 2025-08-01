@@ -3,7 +3,7 @@
 @section('title', 'Bảng điều khiển')
 
 @section('content')
-<div class="row">
+<div class="row mb-4">
     <div class="col-md-12 col-lg-6">
         <div class="row">
             <div class="col-md-6">
@@ -122,9 +122,24 @@
             </div>
             <div class="col-md-12">
                 <div class="tile">
-                    <h3 class="tile-title">Thống kê 6 tháng doanh thu</h3>
-                    <div class="embed-responsive embed-responsive-16by9">
-                        <canvas class="embed-responsive-item" id="barChartDemo"></canvas>
+                    <h3 class="tile-title">Thống kê doanh thu</h3>
+                    <form method="GET" class="form-inline mb-3">
+                        <label class="mr-2">Từ ngày:</label>
+                        <input type="date" name="start_date" value="{{ $start }}" class="form-control mr-3">
+                        <label class="mr-2">Đến ngày:</label>
+                        <input type="date" name="end_date" value="{{ $end }}" class="form-control mr-3">
+                        <button type="submit" class="btn btn-success">Lọc</button>
+                    </form>
+                    <div class="mb-3">
+                        <h4 class="text-primary">Tổng doanh thu:
+                            <span class="text-success">{{ number_format($totalRevenue, 0, ',', '.') }} ₫</span>
+                        </h4>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <canvas id="revenueChart" height="100"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -193,4 +208,78 @@
         });
     }
 </script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('revenueChart').getContext('2d');
+    const revenueChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: @json($dates),
+            datasets: [{
+                label: 'Doanh thu',
+                data: @json($totals),
+                fill: true,
+                backgroundColor: 'rgba(55, 60, 65, 0.1)',
+                borderColor: '#007bff',
+                borderWidth: 3,
+                tension: 0.3, // Đường cong mượt
+                pointBackgroundColor: '#007bff',
+                pointRadius: 4,
+                pointHoverRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: false
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                    callbacks: {
+                        label: function(context) {
+                            return ' ' + new Intl.NumberFormat('vi-VN', {
+                                style: 'currency',
+                                currency: 'VND'
+                            }).format(context.parsed.y);
+                        }
+                    }
+                },
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        color: '#333',
+                        font: {
+                            size: 14
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        color: '#555'
+                    },
+                    grid: {
+                        display: false
+                    }
+                },
+                y: {
+                    ticks: {
+                        callback: function(value) {
+                            return value.toLocaleString('vi-VN') + ' đ';
+                        },
+                        color: '#555'
+                    },
+                    grid: {
+                        borderDash: [5, 5]
+                    }
+                }
+            }
+        }
+    });
+</script>
+
 @endpush

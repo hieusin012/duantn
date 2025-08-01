@@ -235,6 +235,7 @@
 
                                             <!-- Danh sách voucher -->
                                             <form id="voucher-form">
+                                                @if($voucher && $voucher->count())
                                                 @foreach($voucher as $item)
                                                 <div class="card mb-2 border rounded p-3">
                                                     <div class="d-flex justify-content-between align-items-center">
@@ -259,6 +260,11 @@
                                                     </div>
                                                 </div>
                                                 @endforeach
+                                                @else
+                                                <div class="text-center">
+                                                    <div class="alert alert-danger"><strong>Không có mã giảm giá nào !</strong></div>
+                                                </div>
+                                                @endif
 
                                                 <button type="button" class="btn btn-danger w-100" id="btnApplyRadio">ÁP DỤNG</button>
                                             </form>
