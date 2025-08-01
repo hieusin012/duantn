@@ -117,12 +117,16 @@ class ProductController extends Controller
             'deal_end_at' => 'nullable|date|after:now',
 
         ], [
-    'name.unique' => 'Tên sản phẩm đã tồn tại.',
-    'name.required' => 'Vui lòng nhập tên sản phẩm.',
-    'price.required' => 'Vui lòng nhập giá sản phẩm.',
-    'category_id.required' => 'Vui lòng chọn danh mục.',
-    'brand_id.required' => 'Vui lòng chọn thương hiệu.',
-]);
+            'name.unique' => 'Tên sản phẩm đã tồn tại.',
+            'name.required' => 'Vui lòng nhập tên sản phẩm.',
+            'status.required' => 'Vui lòng chọn trạng thái.',
+            'is_active.required' => 'Vui lòng chọn tình trạng.',
+            'price.required' => 'Vui lòng nhập giá sản phẩm.',
+            'category_id.required' => 'Vui lòng chọn danh mục.',
+            'brand_id.required' => 'Vui lòng chọn thương hiệu.',
+            'deal_end_at.after' => 'Thời gian kết thúc ưu đãi phải sau thời gian hiện tại.',
+            'deal_end_at.date' => 'Thời gian kết thúc ưu đãi phải đúng định dạng ngày giờ.',
+        ]);
 
         // Tạo mã code duy nhất
 do {
@@ -205,6 +209,16 @@ Product::create([
             'discount_percent' => 'nullable|integer|min:0|max:100',
             'deal_end_at' => 'nullable|date|after:now',
 
+        ], [
+            'name.unique' => 'Tên sản phẩm đã tồn tại.',
+            'name.required' => 'Vui lòng nhập tên sản phẩm.',
+            'status.required' => 'Vui lòng chọn trạng thái.',
+            'is_active.required' => 'Vui lòng chọn tình trạng.',
+            'price.required' => 'Vui lòng nhập giá sản phẩm.',
+            'category_id.required' => 'Vui lòng chọn danh mục.',
+            'brand_id.required' => 'Vui lòng chọn thương hiệu.',
+            'deal_end_at.after' => 'Thời gian kết thúc ưu đãi phải sau thời gian hiện tại.',
+            'deal_end_at.date' => 'Thời gian kết thúc ưu đãi phải đúng định dạng ngày giờ.',
         ]);
 
         $slug = Str::slug($validated['name']);
@@ -257,6 +271,10 @@ Product::create([
     {
         $product = Product::findOrFail($id);
 
+        // Kiểm tra nếu có đơn hàng liên quan
+        if ($product->orderDetails()->exists()) {
+            return redirect()->back()->with('error', 'Không thể xóa sản phẩm đã có trong đơn hàng.');
+        }
         // KHÔNG xóa file ảnh khi chỉ soft delete
         $product->delete();
 

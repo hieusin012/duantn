@@ -80,5 +80,16 @@ class Product extends Model
         'sale_start_date' => 'datetime',
         'sale_end_date' => 'datetime',
     ];
+    public function orderDetails()
+    {
+        return $this->hasManyThrough(
+            \App\Models\OrderDetail::class,      // Model cuối: OrderDetail
+            \App\Models\ProductVariant::class,   // Model trung gian: ProductVariant
+            'product_id',                        // FK trong ProductVariant trỏ đến Product
+            'variant_id',                        // FK trong OrderDetail trỏ đến ProductVariant
+            'id',                                // PK của Product
+            'id'                                 // PK của ProductVariant
+        );
+    }
 
 }
