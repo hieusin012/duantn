@@ -26,7 +26,13 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         $request->validate([
-            'fullname' => 'required|string|max:199',
+            'fullname' => [
+                'required',
+                'string',
+                'max:199',
+                // Nếu bạn muốn KHÔNG cho phép ký tự đặc biệt (TC10 không cho)
+                'regex:/^[a-zA-ZÀ-ỹ\s]+$/u'  // chỉ cho chữ cái và khoảng trắng
+            ],
             'avatar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'phone' => ['nullable', 'regex:/^(0)(3|5|7|8|9)[0-9]{8}$/'],
             'address' => 'nullable|string|max:255',
@@ -35,7 +41,9 @@ class ProfileController extends Controller
             'language' => 'nullable|string|max:50',
             'introduction' => 'nullable|string',
             ], [
-            'phone.regex' => 'Số điện thoại không hợp lệ. Vui lòng nhập đúng định dạng Việt Nam như 0901234567.',
+                'fullname.required' => 'Vui lòng nhập tên.',
+                'fullname.regex' => 'Tên không được chứa ký tự đặc biệt.',
+                'phone.regex' => 'Số điện thoại không hợp lệ. Vui lòng nhập đúng định dạng Việt Nam như 0901234567.',
             ]);
         $data = $request->except('avatar');
 
