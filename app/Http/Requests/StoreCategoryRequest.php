@@ -22,7 +22,7 @@ class StoreCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|max:200|unique:categories,name',
+            'name' => 'required|max:200|unique:categories,name|regex:/^[a-zA-Z0-9\sÀ-ỹđĐ]+$/u',
             'slug' => 'nullable|string|max:255|unique:categories,slug',
             // 'image' => 'nullable|image',
             'image' => 'required|image',
@@ -36,6 +36,7 @@ class StoreCategoryRequest extends FormRequest
             'name.required' => 'Trường tên danh mục là bắt buộc',
             'name.max' => 'Tên danh mục không được vượt quá 200 ký tự',
             'name.unique' => 'Tên danh mục đã tồn tại',
+            'name.regex' => 'Tên danh mục không được chứa ký tự đặc biệt',
             'slug.unique' => 'Slug đã tồn tại',
             'slug.max' => 'Slug không được vượt quá 255 ký tự',
             'image.required' => 'Trường hình ảnh là bắt buộc',

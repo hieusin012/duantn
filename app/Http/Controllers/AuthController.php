@@ -30,7 +30,8 @@ class AuthController extends Controller
 
         // ✅ Kiểm tra tài khoản bị khóa
         $user = \App\Models\User::where('email', $request->email)->first();
-        if ($user && $user->status === 'inactive') {
+        // if ($user && $user->status === 'inactive') {
+        if ($user && $user->status !== 'active') {
             return back()->withErrors([
                 'email' => 'Tài khoản của bạn đã bị khóa. Vui lòng liên hệ hỗ trợ.',
             ]);
@@ -101,6 +102,7 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
             'role' => 'member',
+            'status' => 'active', // ✅ Thêm dòng này
         ]);
 
         // ✅ Không login, mà redirect về login

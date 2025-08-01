@@ -18,11 +18,12 @@ class StoreUserRequest extends FormRequest
             'fullname' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
+            // 'password' => 'required|min:6|confirmed',
             'avatar' => 'nullable|image|max:2048',
             'phone' => ['nullable', 'regex:/^(0)(3|5|7|8|9)[0-9]{8}$/'],
             'address' => 'nullable|string',
-            'role' => 'nullable|in:member,admin',
-            'status' => 'nullable|boolean',
+            'role' => 'required|in:member,admin',
+            'status' => 'required|boolean',
             'gender' => 'nullable|in:Nam,Nữ,Khác',
             'birthday' => 'nullable|date',
             'language' => 'nullable|string',
@@ -42,6 +43,7 @@ class StoreUserRequest extends FormRequest
             'email.unique' => 'Email đã được sử dụng.',
 
             'password.required' => 'Mật khẩu không được để trống.',
+            // 'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
             'password.min' => 'Mật khẩu phải có ít nhất 6 ký tự.',
 
             'avatar.image' => 'Ảnh đại diện phải là file hình ảnh.',
@@ -51,6 +53,9 @@ class StoreUserRequest extends FormRequest
             'phone.regex' => 'Số điện thoại không hợp lệ. Vui lòng nhập đúng định dạng Việt Nam như 0901234567.',
 
             'address.string' => 'Địa chỉ phải là chuỗi ký tự.',
+
+            'role.required' => 'Vai trò không được để trống.',
+            'status.required' => 'Trạng thái không được để trống.',
 
             'role.in' => 'Vai trò không hợp lệ. Chỉ chấp nhận member hoặc admin.',
 

@@ -36,6 +36,10 @@ public function setPhoneAttribute($value)
     $value = preg_replace('/^\+84/', '0', $value);
     $this->attributes['phone'] = $value;
 }
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 
 
 }

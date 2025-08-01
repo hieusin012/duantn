@@ -22,7 +22,7 @@ class UpdateCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|max:200|unique:categories,name,' . $this->route('category')->id,
+            'name' => 'required|max:200|regex:/^[a-zA-Z0-9\sÀ-ỹđĐ]+$/u|unique:categories,name,' . $this->route('category')->id,
             'slug' => 'nullable|string|max:255|unique:categories,slug,' . $this->route('category')->id,
             'image' => 'nullable|image',
             'is_active' => 'boolean',
@@ -33,6 +33,7 @@ class UpdateCategoryRequest extends FormRequest
     {
         return [
             'name.required' => 'Trường tên danh mục là bắt buộc',
+            'name.regex' => 'Tên danh mục không được chứa ký tự đặc biệt',
             'name.unique' => 'Tên danh mục đã tồn tại',
             'slug.unique' => 'Slug đã tồn tại',
             'slug.max' => 'Slug không được vượt quá 255 ký tự',

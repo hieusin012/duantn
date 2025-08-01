@@ -46,8 +46,11 @@
                             <tr><th>🔐 Mật khẩu (hash)</th><td><code>{{ $user->password }}</code></td></tr>
                             <tr><th>👑 Vai trò</th><td>{{ $user->role === 'admin' ? 'Admin' : 'User' }}</td></tr>
                             <tr><th>⚙️ Trạng thái</th><td>
-                                <span class="badge {{ $user->status == 1 ? 'bg-success' : 'bg-danger' }}">
+                                {{-- <span class="badge {{ $user->status == 1 ? 'bg-success' : 'bg-danger' }}">
                                     {{ $user->status == 1 ? 'Hoạt động' : 'Tạm khóa' }}
+                                </span> --}}
+                                <span class="badge {{ $user->status === 'active' ? 'bg-success' : 'bg-danger' }}">
+                                    {{ $user->status === 'active' ? 'Hoạt động' : 'Tạm khóa' }}
                                 </span>
                             </td></tr>
                             <tr><th>🔢 OTP</th><td>{{ $user->otp ?? '-' }}</td></tr>

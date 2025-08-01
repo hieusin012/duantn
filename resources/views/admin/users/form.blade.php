@@ -106,9 +106,17 @@
 
                     <div class="col-md-4 mt-2">
                         <label class="form-label">Trạng thái</label>
-                        <select name="status" class="form-control">
+                        {{-- <select name="status" class="form-control">
                             <option value="1" {{ old('status', $user->status ?? '') == 1 ? 'selected' : '' }}>Hoạt động</option>
                             <option value="0" {{ old('status', $user->status ?? '') == 0 ? 'selected' : '' }}>Tạm khóa</option>
+                        </select> --}}
+                        @php
+                            $currentStatus = old('status', $user->status ?? '');
+                        @endphp
+
+                        <select name="status" class="form-control">
+                            <option value="active" {{ $currentStatus === 'active' ? 'selected' : '' }}>Hoạt động</option>
+                            <option value="" {{ $currentStatus !== 'active' ? 'selected' : '' }}>Tạm khóa</option>
                         </select>
                         @error('status')<div class="text-danger">{{ $message }}</div>@enderror
                     </div>
