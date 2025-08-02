@@ -23,7 +23,8 @@ class StoreUserRequest extends FormRequest
             'phone' => ['nullable', 'regex:/^(0)(3|5|7|8|9)[0-9]{8}$/'],
             'address' => 'nullable|string',
             'role' => 'required|in:member,admin',
-            'status' => 'required|boolean',
+            // 'status' => 'required|boolean',
+            'status' => 'required|in:active,inactive',
             'gender' => 'nullable|in:Nam,Nữ,Khác',
             'birthday' => 'nullable|date',
             'language' => 'nullable|string',
@@ -59,7 +60,8 @@ class StoreUserRequest extends FormRequest
 
             'role.in' => 'Vai trò không hợp lệ. Chỉ chấp nhận member hoặc admin.',
 
-            'status.boolean' => 'Trạng thái không hợp lệ.',
+            // 'status.boolean' => 'Trạng thái không hợp lệ.',
+            'status.in' => 'Trạng thái không hợp lệ. Chỉ chấp nhận Hoạt động hoặc Tạm khóa.',
 
             'gender.in' => 'Giới tính không hợp lệ. Chỉ chấp nhận Nam, Nữ hoặc Khác.',
 

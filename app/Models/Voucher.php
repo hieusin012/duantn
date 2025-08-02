@@ -25,6 +25,7 @@ class Voucher extends Model
     protected $casts = [
         'start_date' => 'datetime', // Cast sang datetime
         'end_date' => 'datetime',   // Cast sang datetime
+        'used' => 'integer',
     ];
 
     /**

@@ -8,9 +8,16 @@ use Illuminate\Http\Request;
 
 class VoucherController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $vouchers = Voucher::latest()->paginate(10);
+        $query = Voucher::query();
+
+        if ($request->has('keyword') && $request->keyword) {
+            $query->where('code', 'like', '%' . strtoupper($request->keyword) . '%');
+        }
+
+        $vouchers = $query->latest()->paginate(10);
+
         return view('admin.vouchers.index', compact('vouchers'));
     }
 
@@ -30,6 +37,25 @@ class VoucherController extends Controller
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'is_active' => 'required|boolean',
+        ], [
+            'code.required' => 'Vui lòng nhập mã khuyến mãi.',
+            'code.max' => 'Mã khuyến mãi tối đa 10 ký tự.',
+            'code.unique' => 'Mã khuyến mãi đã tồn tại.',
+            'discount.required' => 'Vui lòng nhập giá trị giảm.',
+            'discount.numeric' => 'Giá trị giảm phải là số.',
+            'discount.min' => 'Giá trị giảm không được âm.',
+            'discount_type.required' => 'Vui lòng chọn loại giảm.',
+            'discount_type.in' => 'Loại giảm không hợp lệ.',
+            'quantity.required' => 'Vui lòng nhập số lượng mã.',
+            'quantity.integer' => 'Số lượng phải là số nguyên.',
+            'quantity.min' => 'Số lượng phải lớn hơn 0.',
+            'max_price.numeric' => 'Giá giảm tối đa phải là số.',
+            'max_price.min' => 'Giá giảm tối đa không được âm.',
+            'start_date.date' => 'Ngày bắt đầu không hợp lệ.',
+            'end_date.date' => 'Ngày kết thúc không hợp lệ.',
+            'end_date.after_or_equal' => 'Ngày kết thúc phải sau hoặc bằng ngày bắt đầu.',
+            'is_active.required' => 'Vui lòng chọn trạng thái.',
+            'is_active.boolean' => 'Trạng thái không hợp lệ.',
         ]);
 
         Voucher::create([
@@ -66,6 +92,24 @@ class VoucherController extends Controller
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'used' => 'nullable|integer|min:0',
             'is_active' => 'required|boolean',
+        ], [
+            'discount.required' => 'Vui lòng nhập giá trị giảm.',
+            'discount.numeric' => 'Giá trị giảm phải là số.',
+            'discount.min' => 'Giá trị giảm không được âm.',
+            'discount_type.required' => 'Vui lòng chọn loại giảm.',
+            'discount_type.in' => 'Loại giảm không hợp lệ.',
+            'quantity.required' => 'Vui lòng nhập số lượng mã.',
+            'quantity.integer' => 'Số lượng phải là số nguyên.',
+            'quantity.min' => 'Số lượng phải lớn hơn 0.',
+            'max_price.numeric' => 'Giá giảm tối đa phải là số.',
+            'max_price.min' => 'Giá giảm tối đa không được âm.',
+            'start_date.date' => 'Ngày bắt đầu không hợp lệ.',
+            'end_date.date' => 'Ngày kết thúc không hợp lệ.',
+            'end_date.after_or_equal' => 'Ngày kết thúc phải sau hoặc bằng ngày bắt đầu.',
+            'used.integer' => 'Số lượt sử dụng phải là số nguyên.',
+            'used.min' => 'Số lượt sử dụng không được âm.',
+            'is_active.required' => 'Vui lòng chọn trạng thái.',
+            'is_active.boolean' => 'Trạng thái không hợp lệ.',
         ]);
 
         $voucher->update([
@@ -91,6 +135,11 @@ class VoucherController extends Controller
     public function destroy($id)
     {
         $voucher = Voucher::findOrFail($id);
+
+        if ($voucher->used > 0) {
+            return redirect()->route('admin.vouchers.index')->with('error', 'Không thể xóa khuyến mãi vì đang được sử dụng');
+        }
+
         $voucher->delete();
 
         return redirect()->route('admin.vouchers.index')->with('success', 'Xóa voucher thành công.');

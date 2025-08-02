@@ -21,7 +21,13 @@ class CartController extends Controller
             ->where('user_id', Auth::id())
             ->where('status', 'active') // ĐÚNG KIỂU string
             ->first();
-        $voucher = Voucher::where('end_date', '>=', now())->get();
+        // $voucher = Voucher::where('end_date', '>=', now())->get();
+        $voucher = Voucher::where('is_active', 1)
+            ->whereDate('start_date', '<=', now())
+            ->whereDate('end_date', '>=', now())
+            ->whereColumn('used', '<', 'quantity') // chỉ hiển thị voucher còn lượt dùng
+            ->get();
+
         $products = Product::where('is_active', 1)
             ->whereNull('deleted_at')
             ->latest()

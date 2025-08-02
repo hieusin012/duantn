@@ -29,7 +29,8 @@ class UpdateUserRequest extends FormRequest
             'phone' => ['nullable', 'regex:/^(\+84|0)\d{9,10}$/'],
             'address' => 'nullable|string',
             'role' => 'nullable|in:member,admin',
-            'status' => 'nullable|boolean',
+            // 'status' => 'nullable|boolean',
+            'status' => 'required|in:active,inactive',
             'gender' => 'nullable|in:Nam,Nữ,Khác',
             'birthday' => 'nullable|date',
             'language' => 'nullable|string',
@@ -60,7 +61,9 @@ class UpdateUserRequest extends FormRequest
 
             'role.in' => 'Vai trò không hợp lệ. Chỉ chấp nhận member hoặc admin.',
 
-            'status.boolean' => 'Trạng thái không hợp lệ.',
+            // 'status.boolean' => 'Trạng thái không hợp lệ.',
+
+            'status.in' => 'Trạng thái không hợp lệ. Chỉ chấp nhận Hoạt động hoặc Tạm khóa.',
 
             'gender.in' => 'Giới tính không hợp lệ. Chỉ chấp nhận Nam, Nữ hoặc Khác.',
 

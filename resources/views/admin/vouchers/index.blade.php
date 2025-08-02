@@ -14,6 +14,10 @@
                         <a class="btn btn-add btn-sm" href="{{ route('admin.vouchers.create') }}" title="Thêm"><i class="fas fa-plus"></i> Tạo mới voucher</a>
                     </div>
                 </div>
+                <form method="GET" action="{{ route('admin.vouchers.index') }}" class="mb-3">
+                    <input type="text" name="keyword" value="{{ request('keyword') }}" placeholder="Nhập mã khuyến mãi..." class="form-control w-25 d-inline-block" />
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+                </form>
 
                 <table class="table table-hover table-bordered">
                     <thead>
@@ -39,7 +43,12 @@
                                 <td>{{ $voucher->discount }} {{ $voucher->discount_type == 'percent' ? '%' : 'đ' }}</td>
                                 <td>{{ $voucher->max_price ? number_format($voucher->max_price) . ' đ' : 'Không giới hạn' }}</td>
                                 <td>{{ $voucher->quantity }}</td>
-                                <td>{{ $voucher->used }}</td>
+                                {{-- <td>{{ $voucher->used }}</td> --}}
+                                <td>
+                                    {{ $voucher->used }} / {{ $voucher->quantity }} đã dùng
+                                    <br>
+                                    <small>Còn lại: {{ $voucher->quantity - $voucher->used }}</small>
+                                </td>
                                 <td>
                                     @if ($voucher->start_date && $voucher->end_date)
                                         {{ $voucher->start_date }} - {{ $voucher->end_date }}

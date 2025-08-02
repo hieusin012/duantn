@@ -214,6 +214,13 @@ class CheckoutController extends Controller
                 'note' => $validatedData['note'] ?? null,
                 'voucher_id' => $cart->voucher_id,
             ]);
+            // ✅ THÊM VÀO SAU ĐÂY
+            if ($cart->voucher_id) {
+                $voucher = Voucher::find($cart->voucher_id);
+                if ($voucher) {
+                    $voucher->increment('used');
+                }
+            }
             foreach ($cartItems as $item) {
                 $variant = ProductVariant::with(['product', 'color', 'size'])->find($item->variant_id);
                 if ($variant) {
