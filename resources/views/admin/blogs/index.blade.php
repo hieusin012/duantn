@@ -20,6 +20,10 @@
                         <i class="fas fa-trash-alt me-1"></i> Dữ liệu đã xóa
                     </a>
                 </div>
+                <form method="GET" action="{{ route('admin.blogs.index') }}" class="mb-3">
+                    <input type="text" name="keyword" value="{{ request('keyword') }}" placeholder="Nhập tiêu đề bài viết..." class="form-control w-25 d-inline-block" />
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+                </form>
 
                 <!-- Bảng dữ liệu -->
                 <div class="table-responsive">

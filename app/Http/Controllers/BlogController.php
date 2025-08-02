@@ -142,14 +142,18 @@ use Illuminate\Support\Facades\Storage;
 
 class BlogController extends Controller
 {
-    public function index()
-    {
-        $blogs = Blog::with(['category', 'user'])
-            ->latest()
-            ->paginate(10);
+    public function index(Request $request)
+{
+    $query = Blog::with(['category', 'user']);
 
-        return view('admin.blogs.index', compact('blogs'));
+    if ($request->filled('keyword')) {
+        $query->where('title', 'like', '%' . $request->keyword . '%');
     }
+
+    $blogs = $query->latest()->paginate(10);
+    return view('admin.blogs.index', compact('blogs'));
+}
+
 
     public function show($id)
     {
@@ -169,14 +173,33 @@ class BlogController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'content' => 'required|string',
+            'content' => 'required|string|max:10000',
             'slug' => 'required|string|max:255|unique:blogs,slug',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'category_id' => 'required|exists:blog_categories,id',
             'user_id' => 'required|exists:users,id',
+        ], [
+            'title.required' => 'Tiêu đề là bắt buộc.',
+            'title.max' => 'Tiêu đề không được vượt quá 255 ký tự.',
+            'content.required' => 'Nội dung là bắt buộc.',
+            'content.max' => 'Nội dung không được vượt quá 10000 ký tự.',
+            'slug.required' => 'Slug là bắt buộc.',
+            'slug.unique' => 'Slug đã tồn tại.',
+            'slug.max' => 'Slug không được vượt quá 255 ký tự.',
+            'image.image' => 'Ảnh không hợp lệ.',
+            'image.mimes' => 'Ảnh phải có định dạng: jpeg, png, jpg, gif, svg, webp.',
+            'image.max' => 'Ảnh không được vượt quá 2MB.',
+            'category_id.required' => 'Danh mục là bắt buộc.',
+            'category_id.exists' => 'Danh mục không hợp lệ.',
+            'user_id.required' => 'Tác giả là bắt buộc.',
+            'user_id.exists' => 'Tác giả không hợp lệ.',
         ]);
 
         $data = $request->only(['title', 'content', 'slug', 'category_id', 'user_id']);
+
+        // Chặn mã độc trong nội dung
+        $data['content'] = strip_tags($data['content'], '<p><b><i><ul><ol><li><br><strong><em>');
+
         $data['status'] = $request->has('status');
 
         if ($request->hasFile('image')) {
@@ -201,16 +224,43 @@ class BlogController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'content' => 'required|string',
+            'content' => 'required|string|max:10000',
             'slug' => 'required|string|max:255|unique:blogs,slug,' . $id,
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'category_id' => 'required|exists:blog_categories,id',
             'user_id' => 'required|exists:users,id',
+        ], [
+            'title.required' => 'Vui lòng nhập tiêu đề bài viết.',
+            'title.string' => 'Tiêu đề bài viết phải là chuỗi ký tự.',
+            'title.max' => 'Tiêu đề bài viết không được vượt quá :max ký tự.',
+
+            'content.required' => 'Vui lòng nhập nội dung bài viết.',
+            'content.string' => 'Nội dung bài viết phải là chuỗi.',
+            'content.max' => 'Nội dung bài viết không được vượt quá :max ký tự.',
+
+            'slug.required' => 'Vui lòng nhập đường dẫn (slug).',
+            'slug.string' => 'Slug phải là chuỗi ký tự.',
+            'slug.max' => 'Slug không được vượt quá :max ký tự.',
+            'slug.unique' => 'Slug đã tồn tại. Vui lòng chọn slug khác.',
+
+            'image.image' => 'Tệp tải lên phải là hình ảnh.',
+            'image.mimes' => 'Hình ảnh phải có định dạng: jpeg, png, jpg, gif, svg hoặc webp.',
+            'image.max' => 'Hình ảnh không được vượt quá :max KB.',
+
+            'category_id.required' => 'Vui lòng chọn danh mục.',
+            'category_id.exists' => 'Danh mục đã chọn không hợp lệ.',
+
+            'user_id.required' => 'Vui lòng chọn tác giả.',
+            'user_id.exists' => 'Tác giả đã chọn không hợp lệ.',
         ]);
 
         $blog = Blog::findOrFail($id);
 
         $data = $request->only(['title', 'content', 'slug', 'category_id', 'user_id']);
+
+        // Chặn mã độc trong nội dung 
+        $data['content'] = strip_tags($data['content'], '<p><b><i><ul><ol><li><br><strong><em>');
+
         $data['status'] = $request->has('status');
 
         if ($request->hasFile('image')) {
@@ -228,6 +278,19 @@ class BlogController extends Controller
     public function destroy($id)
     {
         $blog = Blog::findOrFail($id);
+
+        // Nếu bài viết đang có danh mục liên kết thì không cho xóa
+        // if (!empty($blog->category_id)) {
+        //     return redirect()->route('admin.blogs.index')
+        //         ->with('error', 'Không thể xóa bài viết đang được liên kết.');
+        // }
+
+        // Cho phép xóa bài viết nếu danh mục đã bị ẩn hoặc đã xóa mềm
+        // if ($blog->category && ($blog->category->is_active == 1 || $blog->category->deleted_at != null)) {
+        //     return redirect()->route('admin.blogs.index')
+        //         ->with('error', 'Không thể xóa bài viết vì danh mục liên kết vẫn đang hoạt động.');
+        // }
+
         $blog->delete();
 
         return redirect()->route('admin.blogs.index')->with('success', 'Xóa bài viết thành công!');
