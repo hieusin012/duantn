@@ -3,6 +3,134 @@
 @section('title', 'Bảng điều khiển')
 
 @section('content')
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #f9fafb;
+    }
+
+    .widget-small {
+        display: flex;
+        align-items: center;
+        padding: 16px;
+        border-radius: 12px;
+        background: #ffffff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        margin-bottom: 20px;
+        transition: transform 0.2s ease;
+    }
+
+    .widget-small:hover {
+        transform: translateY(-2px);
+    }
+
+    .widget-small .icon {
+        font-size: 36px;
+        margin-right: 16px;
+        color: #3b82f6;
+    }
+
+    .widget-small.primary .icon {
+        color: #2563eb;
+    }
+
+    .widget-small.info .icon {
+        color: #0ea5e9;
+    }
+
+    .widget-small.warning .icon {
+        color: #f59e0b;
+    }
+
+    .widget-small.danger .icon {
+        color: #ef4444;
+    }
+
+    .widget-small .info h4 {
+        font-size: 16px;
+        margin: 0;
+        color: #374151;
+    }
+
+    .widget-small .info p {
+        margin: 4px 0;
+        font-size: 18px;
+        font-weight: 600;
+        color: #111827;
+    }
+
+    .info-tong {
+        font-size: 12px;
+        color: #6b7280;
+    }
+
+    .tile {
+        background-color: #fff;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+        margin-bottom: 20px;
+    }
+
+    .tile-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 16px;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #374151;
+    }
+
+    .btn {
+        border-radius: 8px;
+    }
+
+    .table th {
+        background-color: #f3f4f6;
+        color: #374151;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    .badge.bg-info {
+        background-color: #3b82f6 !important;
+        color: white;
+        padding: 4px 10px;
+        border-radius: 6px;
+    }
+
+    .tag-success {
+        background-color: #dcfce7;
+        color: #16a34a;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 14px;
+    }
+
+    .text-primary {
+        font-size: 20px;
+        font-weight: 600;
+        color: #2563eb !important;
+    }
+
+    .form-control {
+        border-radius: 8px;
+    }
+
+    input[type="date"] {
+        min-width: 160px;
+    }
+
+    canvas {
+        max-height: 320px;
+    }
+</style>
+
 <div class="row mb-4">
     <div class="col-md-12 col-lg-6">
         <div class="row">
@@ -114,31 +242,56 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="tile">
-                    <h3 class="tile-title">Khách hàng mới 6 tháng qua</h3>
-                    <div class="embed-responsive embed-responsive-16by9">
-                        <canvas class="embed-responsive-item" id="lineChartDemo"></canvas>
+                    <h3 class="tile-title">Thống kê tăng trưởng người dùng</h3>
+                    <form method="GET" class="row align-items-end g-2 mb-4">
+                        <div class="col-auto">
+                            <label for="user_start" class="form-label mb-0">Từ ngày</label>
+                            <input type="date" id="user_start" class="form-control" />
+                        </div>
+                        <div class="col-auto">
+                            <label for="user_end" class="form-label mb-0">Đến ngày</label>
+                            <input type="date" id="user_end" class="form-control" />
+                        </div>
+                        <div class="col-auto">
+                            <button type="button" onclick="loadUserChart()" class="btn btn-success">
+                                <i class="bx bx-bar-chart"></i> Xem biểu đồ
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="tile mt-4">
+                        <canvas id="userChart"></canvas>
                     </div>
                 </div>
             </div>
             <div class="col-md-12">
                 <div class="tile">
                     <h3 class="tile-title">Thống kê doanh thu</h3>
-                    <form method="GET" class="form-inline mb-3">
-                        <label class="mr-2">Từ ngày:</label>
-                        <input type="date" name="start_date" value="{{ $start }}" class="form-control mr-3">
-                        <label class="mr-2">Đến ngày:</label>
-                        <input type="date" name="end_date" value="{{ $end }}" class="form-control mr-3">
-                        <button type="submit" class="btn btn-success">Lọc</button>
+                    <form method="GET" class="row align-items-end g-2 mb-4">
+                        <div class="col-auto">
+                            <label for="revenue_start" class="form-label mb-0">Từ ngày</label>
+                            <input type="date" id="revenue_start" class="form-control" />
+                        </div>
+                        <div class="col-auto">
+                            <label for="revenue_end" class="form-label mb-0">Đến ngày</label>
+                            <input type="date" id="revenue_end" class="form-control" />
+                        </div>
+                        <div class="col-auto">
+                            <button type="button" onclick="loadRevenueChart()" class="btn btn-success">
+                                <i class="bx bx-line-chart"></i> Xem doanh thu
+                            </button>
+                        </div>
                     </form>
+
                     <div class="mb-3">
                         <h4 class="text-primary">Tổng doanh thu:
-                            <span class="text-success">{{ number_format($totalRevenue, 0, ',', '.') }} ₫</span>
+
                         </h4>
                     </div>
 
                     <div class="card mb-4">
                         <div class="card-body">
-                            <canvas id="revenueChart" height="100"></canvas>
+                            <canvas id="revenueChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -152,134 +305,156 @@
 {{-- Nhúng thư viện Chart.js từ CDN --}}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script type="text/javascript">
-    // --- Biểu đồ Doanh thu (Bar Chart) ---
-    const ctxBar = document.getElementById('barChartDemo');
-    if (ctxBar) {
-        new Chart(ctxBar, {
-            type: 'bar',
-            data: {
-                labels: @json($revenueLabels ?? []),
-                datasets: [{
-                    label: 'Doanh thu (VND)',
-                    data: @json($revenueValues ?? []),
-                    backgroundColor: 'rgba(220, 220, 220, 0.5)',
-                    borderColor: 'rgba(220, 220, 220, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
+<script>
+    let revenueChart;
+    let userChart;
+
+    const numberWithCommas = (x) => {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+
+    function loadRevenueChart() {
+        const start = document.getElementById('revenue_start').value;
+        const end = document.getElementById('revenue_end').value;
+
+        fetch(`/admin/dashboard/revenue-chart-data?start_date=${start}&end_date=${end}`)
+            .then(res => res.json())
+            .then(data => {
+                if (revenueChart) revenueChart.destroy();
+
+                revenueChart = new Chart(document.getElementById('revenueChart'), {
+                    type: 'line',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Tổng doanh thu',
+                            data: data.data,
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            pointRadius: 4,
+                            pointHoverRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const value = context.raw;
+                                        return ' ' + numberWithCommas(value) + ' đ';
+                                    }
+                                }
+                            },
+                            legend: {
+                                labels: {
+                                    color: '#333',
+                                    font: {
+                                        size: 14
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    color: '#555'
+                                },
+                                grid: {
+                                    display: false
+                                }
+                            },
+                            y: {
+                                ticks: {
+                                    color: '#555',
+                                    callback: value => numberWithCommas(value) + ' đ'
+                                },
+                                grid: {
+                                    borderDash: [5, 5],
+                                    color: '#eee'
+                                }
+                            }
+                        }
                     }
-                }
-            }
-        });
+                });
+
+                const total = data.data.reduce((sum, val) => sum + parseFloat(val), 0);
+                document.querySelector('.text-primary').textContent = `Tổng doanh thu: ${numberWithCommas(total)} đ`;
+            });
     }
 
-    // --- Biểu đồ Khách hàng mới (Line Chart) ---
-    const ctxLine = document.getElementById('lineChartDemo');
-    if (ctxLine) {
-        new Chart(ctxLine, {
-            type: 'line',
-            data: {
-                labels: @json($customerLabels ?? []),
-                datasets: [{
-                    label: 'Khách hàng mới',
-                    data: @json($customerValues ?? []),
-                    fill: false,
-                    borderColor: 'rgba(151, 187, 205, 1)',
-                    tension: 0.1
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            precision: 0 // <-- THÊM DÒNG NÀY ĐỂ BẮT BUỘC TRỤC Y LÀ SỐ NGUYÊN
+    function loadUserChart() {
+        const start = document.getElementById('user_start').value;
+        const end = document.getElementById('user_end').value;
+
+        fetch(`/admin/dashboard/user-chart-data?start_date=${start}&end_date=${end}`)
+            .then(res => res.json())
+            .then(data => {
+                if (userChart) userChart.destroy();
+
+                userChart = new Chart(document.getElementById('userChart'), {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                                label: 'Hoạt động',
+                                data: data.active,
+                                backgroundColor: '#10b981',
+                                borderRadius: 6
+                            },
+                            {
+                                label: 'Bị khóa',
+                                data: data.banned,
+                                backgroundColor: '#ef4444',
+                                borderRadius: 6
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: context => `${context.dataset.label}: ${context.raw} tài khoản`
+                                }
+                            },
+                            legend: {
+                                labels: {
+                                    color: '#333',
+                                    font: {
+                                        size: 14
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    color: '#444'
+                                },
+                                grid: {
+                                    display: false
+                                }
+                            },
+                            y: {
+                                ticks: {
+                                    color: '#444',
+                                    stepSize: 1
+                                },
+                                grid: {
+                                    borderDash: [5, 5],
+                                    color: '#eee'
+                                }
+                            }
                         }
                     }
-                }
-            }
-        });
+                });
+            });
     }
 </script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    const ctx = document.getElementById('revenueChart').getContext('2d');
-    const revenueChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: @json($dates),
-            datasets: [{
-                label: 'Doanh thu',
-                data: @json($totals),
-                fill: true,
-                backgroundColor: 'rgba(55, 60, 65, 0.1)',
-                borderColor: '#007bff',
-                borderWidth: 3,
-                tension: 0.3, // Đường cong mượt
-                pointBackgroundColor: '#007bff',
-                pointRadius: 4,
-                pointHoverRadius: 6
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                title: {
-                    display: false
-                },
-                tooltip: {
-                    mode: 'index',
-                    intersect: false,
-                    callbacks: {
-                        label: function(context) {
-                            return ' ' + new Intl.NumberFormat('vi-VN', {
-                                style: 'currency',
-                                currency: 'VND'
-                            }).format(context.parsed.y);
-                        }
-                    }
-                },
-                legend: {
-                    display: true,
-                    position: 'top',
-                    labels: {
-                        color: '#333',
-                        font: {
-                            size: 14
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    ticks: {
-                        color: '#555'
-                    },
-                    grid: {
-                        display: false
-                    }
-                },
-                y: {
-                    ticks: {
-                        callback: function(value) {
-                            return value.toLocaleString('vi-VN') + ' đ';
-                        },
-                        color: '#555'
-                    },
-                    grid: {
-                        borderDash: [5, 5]
-                    }
-                }
-            }
-        }
-    });
-</script>
+
+
 
 @endpush
