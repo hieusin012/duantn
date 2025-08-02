@@ -23,5 +23,10 @@ class Import extends Model
     public function details() {
         return $this->hasMany(ImportDetail::class);
     }
+    public function importDetails()
+    {
+        return $this->hasMany(ImportDetail::class, 'import_id');
+    }
+
 }
 

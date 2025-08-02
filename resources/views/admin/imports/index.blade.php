@@ -43,6 +43,10 @@
                     </div>
                 </div>
 
+                <form method="GET" action="{{ route('admin.imports.index') }}" class="mb-3">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Tìm theo mã hoặc nhà cung cấp" class="form-control w-25 d-inline-block" />
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+                </form>
                 <!-- Bảng dữ liệu -->
                 <table class="table table-hover table-bordered" id="imports-table">
                     <thead>
@@ -83,7 +87,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center text-muted">Không có phiếu nhập nào.</td>
+                                <td colspan="6" class="text-center text-danger">Không có phiếu nhập nào.</td>
                             </tr>
                         @endforelse
                     </tbody>

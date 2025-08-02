@@ -15,7 +15,16 @@ class UpdateImportRequest extends FormRequest
     {
         return [
             'supplier_id' => 'required|exists:suppliers,id',
-            'note' => 'nullable|string|max:1000',
+            'note' => [
+                'nullable',
+                'string',
+                'max:1000',
+                function ($attribute, $value, $fail) {
+                    if (preg_match('/<\s*script\b/i', $value)) {
+                        $fail('Thông tin không hợp lệ. Ghi chú không được chứa mã script.');
+                    }
+                }
+            ],
             'products' => 'required|array|min:1',
             'products.*.variant_id' => 'required|exists:product_variants,id',
             'products.*.quantity' => 'required|integer|min:1',

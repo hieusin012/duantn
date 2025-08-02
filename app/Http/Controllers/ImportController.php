@@ -14,9 +14,18 @@ use App\Http\Requests\UpdateImportRequest;
 
 class ImportController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $imports = Import::with('supplier', 'user')->latest()->paginate(10);
+        $query = Import::with('supplier', 'user')->latest();
+
+        if ($search = $request->input('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('code', 'like', "%$search%")
+                  ->orWhereHas('supplier', fn($q) => $q->where('name', 'like', "%$search%"));
+            });
+        }
+
+        $imports = $query->paginate(10);
         return view('admin.imports.index', compact('imports'));
     }
 
@@ -146,12 +155,29 @@ class ImportController extends Controller
         }
     }
 
+    // public function destroy($id)
+    // {
+    //     $import = Import::findOrFail($id);
+    //     foreach ($import->details as $detail) {
+    //         ProductVariant::where('id', $detail->variant_id)->decrement('quantity', $detail->quantity);
+    //     }
+    //     $import->delete();
+    //     return redirect()->route('admin.imports.index')->with('success', 'Đã xóa phiếu nhập');
+    // }
     public function destroy($id)
     {
-        $import = Import::findOrFail($id);
+        $import = Import::with('details')->findOrFail($id);
+
+        // Nếu phiếu nhập đã có sản phẩm thì không cho xóa
+        // if ($import->importDetails->count() > 0) {
+        //     return redirect()->back()->with('error', 'Không thể xóa phiếu nhập đã xác nhận.');
+        // }
+
         foreach ($import->details as $detail) {
             ProductVariant::where('id', $detail->variant_id)->decrement('quantity', $detail->quantity);
+            $detail->delete(); // thêm dòng này để dọn dẹp ImportDetail
         }
+
         $import->delete();
         return redirect()->route('admin.imports.index')->with('success', 'Đã xóa phiếu nhập');
     }

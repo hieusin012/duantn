@@ -3,7 +3,7 @@
 @section('title', 'Tạo phiếu nhập hàng')
 
 @section('content')
-@if ($errors->any())
+{{-- @if ($errors->any())
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
         <ul class="mb-0">
             @foreach ($errors->all() as $error)
@@ -12,7 +12,7 @@
         </ul>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-@endif
+@endif --}}
 
 @if (session('error'))
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -48,6 +48,9 @@
                         <div class="form-group col-md-8">
                             <label for="note" class="control-label">Ghi chú</label>
                             <textarea name="note" class="form-control" rows="1">{{ old('note') }}</textarea>
+                            @error('note')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
                     </div>
 
