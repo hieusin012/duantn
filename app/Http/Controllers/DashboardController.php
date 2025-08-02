@@ -15,13 +15,6 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        // --- LƯU Ý QUAN TRỌNG ---
-        // SẮP HẾT HÀNG: Model Product của bạn không có cột số lượng tồn kho (stock/quantity).
-        // Code đang tạm giả định tên cột là 'stock'. Bạn cần thêm cột này vào table `products`
-        // và thay đổi 'stock' nếu tên cột của bạn khác.
-        $start = $request->input('start_date') ?? Carbon::now()->startOfMonth()->toDateString();
-        $end = $request->input('end_date') ?? Carbon::now()->endOfMonth()->toDateString();
-
         // --- Lấy các chỉ số tổng quan ---
         $totalCustomers = User::where('role', 'member')->count(); // <-- ĐÃ SỬA
         $totalProducts = Product::count();
@@ -29,34 +22,7 @@ class DashboardController extends Controller
         $recentOrders = Order::with('user')->latest()->take(4)->get();
         $newCustomers = User::where('role', 'member')->latest()->take(4)->get(); // <-- ĐÃ SỬA
 
-        // --- Dữ liệu cho BIỂU ĐỒ DOANH THU 6 THÁNG ('barChartDemo')---
-        $revenueData = Order::select(
-            DB::raw("DATE(created_at) as date"),
-            DB::raw("SUM(total_price) as total")
-        )
-            ->where('status', 'Đã giao hàng')
-            ->whereBetween('created_at', [$start, $end])
-            ->groupBy(DB::raw("DATE(created_at)"))
-            ->orderBy('date')
-            ->get();
 
-        $dates = $revenueData->pluck('date');
-        $totals = $revenueData->pluck('total');
-        $totalRevenue = collect($revenueData)->sum('total');
-
-        // --- Dữ liệu cho BIỂU ĐỒ KHÁCH HÀNG MỚI 6 THÁNG ('lineChartDemo') ---
-        $newCustomerData = User::select(
-            DB::raw('COUNT(id) as count'),
-            DB::raw("DATE_FORMAT(created_at, '%Y-%m') as month")
-        )
-            ->where('role', 'member') // <-- ĐÃ SỬA
-            ->where('created_at', '>=', now()->subMonths(5)->startOfMonth())
-            ->groupBy('month')
-            ->orderBy('month', 'asc')
-            ->get();
-
-        $customerLabels = $newCustomerData->pluck('month');
-        $customerValues = $newCustomerData->pluck('count');
 
         // --- Gửi tất cả dữ liệu qua View ---
         return view('admin.dashboard', compact(
@@ -65,13 +31,59 @@ class DashboardController extends Controller
             'totalOrders',
             'recentOrders',
             'newCustomers',
-            'customerLabels',
-            'customerValues',
-            'dates',
-            'totals',
-            'start',
-            'end',
-            'totalRevenue'
+
         ));
+    }
+    public function getRevenueChartData(Request $request)
+    {
+        $start = Carbon::parse($request->start_date)->startOfDay();
+        $end = Carbon::parse($request->end_date)->endOfDay();
+
+        $orders = Order::whereBetween('created_at', [$start, $end])->get();
+
+        $grouped = $orders->groupBy(function ($order) {
+            return Carbon::parse($order->created_at)->format('d/m');
+        });
+
+        $labels = [];
+        $data = [];
+
+        foreach ($grouped as $date => $ordersOnDate) {
+            $labels[] = $date;
+            $data[] = $ordersOnDate->sum('total_price');
+        }
+
+        return response()->json([
+            'labels' => $labels,
+            'data' => $data
+        ]);
+    }
+
+    public function getUserChartData(Request $request)
+    {
+        $start = Carbon::parse($request->start_date)->startOfDay();
+        $end = Carbon::parse($request->end_date)->endOfDay();
+
+        $users = User::whereBetween('created_at', [$start, $end])->get();
+
+        $grouped = $users->groupBy(function ($user) {
+            return Carbon::parse($user->created_at)->format('d/m');
+        });
+
+        $labels = [];
+        $active = [];
+        $banned = [];
+
+        foreach ($grouped as $date => $usersOnDate) {
+            $labels[] = $date;
+            $active[] = $usersOnDate->where('status', 'active')->count();
+            $banned[] = $usersOnDate->where('status', 'inactive')->count();
+        }
+
+        return response()->json([
+            'labels' => $labels,
+            'active' => $active,
+            'banned' => $banned
+        ]);
     }
 }

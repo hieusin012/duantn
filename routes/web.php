@@ -67,6 +67,8 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     //Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/dashboard/revenue-chart-data', [DashboardController::class, 'getRevenueChartData'])->name('dashboard.revenueData');
+    Route::get('/dashboard/user-chart-data', [DashboardController::class, 'getUserChartData'])->name('dashboard.userData');
 
 
     // Product
@@ -94,7 +96,7 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     Route::get('product-variants/search', [ProductVariantController::class, 'search'])->name('variants.search');
     Route::resource('product-variants', ProductVariantController::class);
 
-    
+
     // Categories
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
     Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
@@ -415,4 +417,3 @@ Route::get('/blog/danh-muc/{slug}', [ClientBlogController::class, 'showByCategor
 Route::get('/about', function () {
     return view('clients.about');
 })->name('about');
-
