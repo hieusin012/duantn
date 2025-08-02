@@ -219,6 +219,7 @@ class BlogController extends Controller
 
         return redirect()->route('admin.blogs.index')->with('success', 'Thêm bài viết thành công!');
     }
+    
 
     public function edit($id)
     {
