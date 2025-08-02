@@ -173,7 +173,16 @@ class BlogController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'content' => 'required|string|max:10000',
+            'content' => [
+                'required',
+                'string',
+                'max:10000',
+                function ($attribute, $value, $fail) {
+                    if (preg_match('/<script\b[^>]*>(.*?)<\/script>/is', $value)) {
+                        $fail('Nội dung không hợp lệ – không được chứa mã script.');
+                    }
+                },
+            ],
             'slug' => 'required|string|max:255|unique:blogs,slug',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'category_id' => 'required|exists:blog_categories,id',
@@ -224,7 +233,16 @@ class BlogController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'content' => 'required|string|max:10000',
+            'content' => [
+                'required',
+                'string',
+                'max:10000',
+                function ($attribute, $value, $fail) {
+                    if (preg_match('/<script\b[^>]*>(.*?)<\/script>/is', $value)) {
+                        $fail('Nội dung không hợp lệ – không được chứa mã script.');
+                    }
+                },
+            ],
             'slug' => 'required|string|max:255|unique:blogs,slug,' . $id,
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'category_id' => 'required|exists:blog_categories,id',

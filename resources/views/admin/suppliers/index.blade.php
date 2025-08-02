@@ -59,7 +59,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($suppliers as $supplier)
+                        @forelse ($suppliers as $supplier)
                             <tr>
                                 <td>{{ $supplier->id }}</td>
                                 <td>{{ $supplier->name }}</td>
@@ -80,7 +80,11 @@
                                     </form>
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="7" class="text-center text-danger">Không tìm thấy nhà cung cấp phù hợp</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
 

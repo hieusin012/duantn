@@ -31,7 +31,7 @@
 
                     <div class="form-group col-md-4">
                         <label class="control-label">Số điện thoại</label>
-                        <input type="text" class="form-control" name="phone" value="{{ old('phone', $supplier->phone ?? '') }}">
+                        <input type="text" class="form-control" name="phone" value="{{ old('phone', $supplier->phone ?? '') }}" placeholder="VD: 0901234567">
                         @error('phone')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror

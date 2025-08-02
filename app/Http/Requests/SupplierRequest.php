@@ -15,10 +15,16 @@ class SupplierRequest extends FormRequest
     {
         $supplierId = $this->route('supplier');
         return [
-            'name'      => 'required|string|max:255|unique:suppliers,name,' . $supplierId,
-            'email'     => 'nullable|email|max:255',
-            'phone'     => 'required|nullable|string|max:20',
-            'address'   => 'nullable|string|max:255',
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                'unique:suppliers,name,' . $supplierId,
+                'not_regex:/<[^>]*script/'
+            ],
+            'email'     => 'required|email|max:255|unique:suppliers,email,' . $supplierId,
+            'phone'     => 'required|regex:/^[0-9]{10}$/',
+            'address'   => 'required|string|max:255',
             'note'      => 'nullable|string|max:500',
             'is_active' => 'required|in:0,1',
         ];
@@ -31,13 +37,15 @@ class SupplierRequest extends FormRequest
             'name.unique' => 'Tên nhà cung cấp đã tồn tại.',
             'name.max'           => 'Tên nhà cung cấp không được vượt quá 255 ký tự.',
             'name.string'        => 'Tên nhà cung cấp phải là chuỗi.',
+            'name.not_regex' => 'Tên nhà cung cấp chứa ký tự không hợp lệ.',
 
             'email.required'      => 'Vui lòng nhập email nhà cung cấp.',
             'email.email'        => 'Email không đúng định dạng.',
             'email.max'          => 'Email không được vượt quá 255 ký tự.',
+            'email.unique' => 'Email nhà cung cấp đã tồn tại.',
 
-            'phone.required'      => 'Vui lòng nhập số điện thoại nhà cung cấp.',
-            'phone.max'          => 'Số điện thoại không được vượt quá 10 ký tự.',
+            'phone.required' => 'Vui lòng nhập số điện thoại nhà cung cấp.',
+            'phone.regex'    => 'Số điện thoại phải gồm đúng 10 chữ số.',
             'phone.string'       => 'Số điện thoại phải là chuỗi.',
 
             'address.required'      => 'Vui lòng nhập địa chỉ nhà cung cấp.',
