@@ -557,7 +557,7 @@
                     {{-- RIGHT COLUMN: REVIEW FORM --}}
                     <div class="col-12 col-sm-12 col-md-12 col-lg-6 mb-4">
                         @auth
-                        <form method="post" action="{{ route('client.comments.store') }}" class="product-review-form new-review-form">
+                        <form method="post" action="{{ route('client.comments.store') }}" id="commentForm" class="product-review-form new-review-form">
                             @csrf
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
                             <h3 class="spr-form-title">Viết đánh giá của bạn</h3>
@@ -573,20 +573,26 @@
                                 </div>
 
                                 <div class="col-12 spr-form-review-rating form-group">
-                                    <label class="spr-form-label">Đánh giá của bạn *</label>
+                                    <label class="spr-form-label">Đánh giá của bạn <span class="required">*</span></label>
                                     <div class="rating-stars" id="formRatingStars">
-                                        <input type="radio" id="star5" name="rating" value="5" required><label for="star5"><i class="icon anm anm-star-o"></i></label>
+                                        <input type="radio" id="star5" name="rating" value="5"><label for="star5"><i class="icon anm anm-star-o"></i></label>
                                         <input type="radio" id="star4" name="rating" value="4"><label for="star4"><i class="icon anm anm-star-o"></i></label>
                                         <input type="radio" id="star3" name="rating" value="3"><label for="star3"><i class="icon anm anm-star-o"></i></label>
                                         <input type="radio" id="star2" name="rating" value="2"><label for="star2"><i class="icon anm anm-star-o"></i></label>
                                         <input type="radio" id="star1" name="rating" value="1"><label for="star1"><i class="icon anm anm-star-o"></i></label>
                                     </div>
+                                    @error('rating')
+                                        <div class="text-danger mt-1">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <div class="col-12 spr-form-review-body form-group">
-                                    <label class="spr-form-label" for="message">Nội dung đánh giá *</label>
+                                    <label class="spr-form-label" for="message">Nội dung đánh giá <span class="required">*</span></label>
                                     <div class="spr-form-input">
-                                        <textarea class="spr-form-input spr-form-input-textarea" id="message" name="content" rows="3" required></textarea>
+                                        <textarea class="spr-form-input spr-form-input-textarea" id="message" name="content" rows="3"></textarea>
                                     </div>
+                                    @error('content')
+                                        <div class="text-danger mt-1">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </fieldset>
                             <div class="spr-form-actions clearfix">
@@ -992,6 +998,58 @@
     });
 </script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('commentForm');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault(); // Ngăn reload trang
+
+            // Xóa lỗi cũ
+            document.querySelectorAll('.text-danger').forEach(el => el.remove());
+
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    $.toast({
+                        heading: 'Thành công!',
+                        text: 'Gửi đánh giá thành công!',
+                        showHideTransition: 'slide',
+                        icon: 'success',
+                        position: {
+                            right: 1,
+                            top: 83
+                        },
+                    });
+                    location.reload();
+                }else if (data.errors) {
+                    // Hiển thị lỗi dưới từng trường
+                    for (const [field, messages] of Object.entries(data.errors)) {
+                        const fieldElement = form.querySelector(`[name="${field}"]`);
+                        if (fieldElement) {
+                            const errorDiv = document.createElement('div');
+                            errorDiv.classList.add('text-danger', 'mt-1');
+                            errorDiv.textContent = messages[0];
+                            fieldElement.closest('.form-group').appendChild(errorDiv);
+                        }
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Lỗi gửi đánh giá:', error);
+            });
+        });
+    });
+</script>
 
 
 @endsection

@@ -15,7 +15,11 @@ class StoreUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'fullname' => 'required|string|max:255',
+            'fullname' => ['required', 'string', 'max:255', function ($attribute, $value, $fail) {
+                if (stripos($value, '<script') !== false) {
+                    $fail('Thông tin không hợp lệ. Họ tên không được chứa mã script.');
+                }
+            }],
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
             // 'password' => 'required|min:6|confirmed',

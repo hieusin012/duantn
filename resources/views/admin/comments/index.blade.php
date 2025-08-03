@@ -87,6 +87,10 @@
                         <a class="btn btn-delete btn-sm pdf-file" type="button" title="Export PDF"><i class="fas fa-file-pdf"></i> Xuất PDF</a>
                     </div>
                 </div>
+                <form method="GET" action="{{ route('admin.comments.index') }}" class="mb-3 d-flex">
+                    <input type="text" name="keyword" class="form-control me-2" style="width: 350px;" placeholder="Tìm theo ..." value="{{ request('keyword') }}">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+                </form>
 
                 <table class="table table-hover table-bordered mt-3" id="comments-table">
                     <thead class="table">

@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Validator;
 
 class CommentController extends Controller
 {
@@ -15,15 +15,14 @@ class CommentController extends Controller
     // Hiển thị danh sách bình luận
     public function index(Request $request)
     {
-        $query = Comment::with(['user', 'product']);
+        $query = Comment::with(['user', 'product'])->orderByDesc('created_at');
 
-        if ($keyword = $request->input('keyword')) {
-            $query->where('content', 'like', "%{$keyword}%")
-                ->orWhereHas('user', fn($q) => $q->where('name', 'like', "%{$keyword}%"))
-                ->orWhereHas('product', fn($q) => $q->where('name', 'like', "%{$keyword}%"));
+        if ($search = $request->input('keyword')) {
+            $query->where('content', 'like', '%' . $search . '%');
         }
 
-        $comments = $query->orderBy('created_at', 'desc')->paginate(10);
+        $comments = $query->paginate(10);
+
         return view('admin.comments.index', compact('comments'));
     }
 
@@ -39,12 +38,25 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-    'content' => 'required|string',
-    'rating' => 'nullable|integer|min:1|max:5',
-    'status' => 'required|boolean',
-]);
+            'content' => 'required|string|max:500',
+            'rating' => 'nullable|integer|min:1|max:5',
+            'status' => 'required|boolean',
+        ], [
+            'user_id.required' => 'Vui lòng chọn người dùng.',
+            'user_id.exists' => 'Người dùng không tồn tại.',
+            'product_id.required' => 'Vui lòng chọn sản phẩm.',
+            'product_id.exists' => 'Sản phẩm không tồn tại.',
+            'content.required' => 'Nội dung bình luận không được để trống.',
+            'content.min' => 'Nội dung phải có ít nhất :min ký tự.',
+            'content.max' => 'Nội dung không được vượt quá :max ký tự.',
+            'rating.integer' => 'Đánh giá phải là một số.',
+            'rating.min' => 'Đánh giá tối thiểu là :min sao.',
+            'rating.max' => 'Đánh giá tối đa là :max sao.',
+            'status.required' => 'Vui lòng chọn trạng thái.',
+            'status.boolean' => 'Trạng thái không hợp lệ.',
+        ]);
 
-Comment::create($request->only(['user_id', 'product_id', 'content', 'rating', 'status']));
+        Comment::create($request->only(['user_id', 'product_id', 'content', 'rating', 'status']));
 
 
         return redirect()->route('admin.comments.index')->with('success', 'Đã thêm bình luận.');
@@ -67,6 +79,19 @@ Comment::create($request->only(['user_id', 'product_id', 'content', 'rating', 's
             'content' => 'required|string|min:3',
             'rating' => 'nullable|integer|min:1|max:5',
             'status' => 'required|boolean',
+        ], [
+            'user_id.required' => 'Vui lòng chọn người dùng.',
+            'user_id.exists' => 'Người dùng không tồn tại.',
+            'product_id.required' => 'Vui lòng chọn sản phẩm.',
+            'product_id.exists' => 'Sản phẩm không tồn tại.',
+            'content.required' => 'Nội dung bình luận không được để trống.',
+            'content.min' => 'Nội dung phải có ít nhất :min ký tự.',
+            'content.max' => 'Nội dung không được vượt quá :max ký tự.',
+            'rating.integer' => 'Đánh giá phải là một số.',
+            'rating.min' => 'Đánh giá tối thiểu là :min sao.',
+            'rating.max' => 'Đánh giá tối đa là :max sao.',
+            'status.required' => 'Vui lòng chọn trạng thái.',
+            'status.boolean' => 'Trạng thái không hợp lệ.',
         ]);
 
         $comment->update($request->only(['user_id', 'product_id', 'content', 'rating', 'status']));
@@ -82,21 +107,44 @@ Comment::create($request->only(['user_id', 'product_id', 'content', 'rating', 's
         return redirect()->route('admin.comments.index')->with('success', 'Xóa bình luận thành công.');
     }
     public function storeClient(Request $request)
-{
-    $request->validate([
-        'product_id' => 'required|exists:products,id',
-        'content' => 'required|string|min:3',
-        'rating' => 'nullable|integer|min:1|max:5',
-    ]);
+    {
+        // $request->validate([
+        $validator = Validator::make($request->all(), [
+            'product_id' => 'required|exists:products,id',
+            'content' => 'required|string|max:500|min:10|not_regex:/<script\b[^>]*>(.*?)<\/script>/i',
+            'rating' => 'required|integer|min:1|max:5',
+        ], [
+            'product_id.required' => 'Vui lòng chọn sản phẩm.',
+            'product_id.exists' => 'Sản phẩm không tồn tại.',
+            'content.required' => 'Vui lòng nhập nội dung bình luận.',
+            'content.min' => 'Nội dung bình luận phải có ít nhất :min ký tự.',
+            'content.max' => 'Nội dung bình luận không được vượt quá :max ký tự.',
+            'content.not_regex' => 'Nội dung không hợp lệ.',
+            'rating.required' => 'Vui lòng chọn số sao đánh giá.',
+            'rating.integer' => 'Điểm đánh giá phải là một số.',
+            'rating.min' => 'Điểm đánh giá tối thiểu là :min.',
+            'rating.max' => 'Điểm đánh giá tối đa là :max.',
+        ]);
 
-    Comment::create([
-        'user_id' => Auth::id(),
-        'product_id' => $request->product_id,
-        'content' => $request->content,
-        'rating' => $request->rating,
-        'status' => true, // nếu cần duyệt thì set false
-    ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
 
-    return redirect()->back()->with('success', 'Bình luận đã được gửi.');
-}
+        Comment::create([
+            'user_id' => Auth::id(),
+            'product_id' => $request->product_id,
+            'content' => $request->content,
+            'rating' => $request->rating,
+            'status' => true, // nếu cần duyệt thì set false
+        ]);
+
+        // return redirect()->back()->with('success', 'Bình luận đã được gửi.');
+        return response()->json([
+            'success' => true,
+            'message' => 'Bình luận đã được gửi.'
+        ]);
+    }
 }

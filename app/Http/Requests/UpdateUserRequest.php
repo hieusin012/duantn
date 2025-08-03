@@ -18,7 +18,11 @@ class UpdateUserRequest extends FormRequest
         $userId = $this->route('user')->id;
 
         return [
-            'fullname' => 'required|string|max:255',
+            'fullname' => ['required', 'string', 'max:255', function ($attribute, $value, $fail) {
+                if (stripos($value, '<script') !== false) {
+                    $fail('Thông tin không hợp lệ. Họ tên không được chứa mã script.');
+                }
+            }],
             'email' => [
                 'required',
                 'email',
