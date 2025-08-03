@@ -7,6 +7,9 @@
     <div class="card shadow-lg rounded-4">
         <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
             <h4 class="mb-0"><i class="bi bi-plus-square me-2"></i> Tạo biến thể sản phẩm</h4>
+            <a href="{{ route('admin.product-variants.index') }}" class="btn btn-sm btn-light text-primary">
+                <i class="fas fa-arrow-left"></i> Quay lại
+            </a>
         </div>
 
         <div class="card-body">

@@ -115,7 +115,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($orders as $order)
+                            @forelse ($orders as $order)
                             <tr>
                                 <td><input type="checkbox" name="check[]" value="{{ $order->id }}"></td>
                                 <td class="fw-bold text-primary">{{ $order->code }}</td>
@@ -168,7 +168,11 @@
                                     </a>
                                 </td>
                             </tr>
-                            @endforeach
+                            @empty
+                                <tr>
+                                    <td colspan="10" class="text-danger text-center">Không tìm thấy đơn hàng phù hợp.</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>

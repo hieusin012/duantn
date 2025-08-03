@@ -37,17 +37,47 @@ class ProductVariantController extends Controller
             'product_id' => 'required|exists:products,id',
             'color_id' => 'required|exists:colors,id',
             'size_id' => 'required|exists:sizes,id',
-            'price' => 'required|numeric',
-            'sale_price' => 'nullable|numeric',
+            'price' => 'required|numeric|min:0',
+            'sale_price' => 'nullable|numeric|min:0',
             'sale_start_date' => 'nullable|date',
             'sale_end_date' => 'nullable|date|after_or_equal:sale_start_date',
             'quantity' => 'required|integer',
             'image' => 'nullable|max:2048'
+        ], [
+            'product_id.required' => 'Vui lòng chọn sản phẩm.',
+            'product_id.exists' => 'Sản phẩm không tồn tại.',
+            'color_id.required' => 'Vui lòng chọn màu sắc.',
+            'color_id.exists' => 'Màu sắc không hợp lệ.',
+            'size_id.required' => 'Vui lòng chọn kích thước.',
+            'size_id.exists' => 'Kích thước không hợp lệ.',
+            'price.required' => 'Vui lòng nhập giá.',
+            'price.numeric' => 'Giá phải là số.',
+            'price.min' => 'Giá phải lớn hơn hoặc bằng 0.',
+            'sale_price.numeric' => 'Giá khuyến mãi phải là số.',
+            'sale_price.min' => 'Giá khuyến mãi phải lớn hơn hoặc bằng 0.',
+            'sale_start_date.date' => 'Ngày bắt đầu khuyến mãi không hợp lệ.',
+            'sale_end_date.date' => 'Ngày kết thúc khuyến mãi không hợp lệ.',
+            'sale_end_date.after_or_equal' => 'Ngày kết thúc phải sau hoặc bằng ngày bắt đầu.',
+            'quantity.required' => 'Vui lòng nhập số lượng.',
+            'quantity.integer' => 'Số lượng phải là số nguyên.',
+            'image.image' => 'Tệp phải là hình ảnh.',
+            'image.max' => 'Ảnh không được vượt quá 2MB.'
         ]);
 
         $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('product_variants', 'public'); // lưu vào storage/app/public/product_variants
+        }
+        
+        // Biến thể này đã tồn tại
+        $exists = ProductVariant::where([
+            'product_id' => $request->product_id,
+            'color_id' => $request->color_id,
+            'size_id' => $request->size_id
+        ])->exists();
+
+        if ($exists) {
+            return back()->withErrors(['error' => 'Biến thể này đã tồn tại, vui lòng chọn thông tin khác'])->withInput();
         }
 
         ProductVariant::create([
@@ -85,13 +115,43 @@ class ProductVariantController extends Controller
             'product_id' => 'required|exists:products,id',
             'color_id' => 'required|exists:colors,id',
             'size_id' => 'required|exists:sizes,id',
-            'price' => 'required|numeric',
-            'sale_price' => 'nullable|numeric',
+            'price' => 'required|numeric|min:0',
+            'sale_price' => 'nullable|numeric|min:0',
             'sale_start_date' => 'nullable|date',
             'sale_end_date' => 'nullable|date|after_or_equal:sale_start_date',
             'quantity' => 'required|integer',
             'image' => 'nullable|image'
+        ], [
+            'product_id.required' => 'Vui lòng chọn sản phẩm.',
+            'product_id.exists' => 'Sản phẩm không tồn tại.',
+            'color_id.required' => 'Vui lòng chọn màu sắc.',
+            'color_id.exists' => 'Màu sắc không hợp lệ.',
+            'size_id.required' => 'Vui lòng chọn kích thước.',
+            'size_id.exists' => 'Kích thước không hợp lệ.',
+            'price.required' => 'Vui lòng nhập giá.',
+            'price.numeric' => 'Giá phải là số.',
+            'price.min' => 'Giá phải lớn hơn hoặc bằng 0.',
+            'sale_price.min' => 'Giá khuyến mãi phải lớn hơn hoặc bằng 0.',
+            'sale_price.numeric' => 'Giá khuyến mãi phải là số.',
+            'sale_start_date.date' => 'Ngày bắt đầu khuyến mãi không hợp lệ.',
+            'sale_end_date.date' => 'Ngày kết thúc khuyến mãi không hợp lệ.',
+            'sale_end_date.after_or_equal' => 'Ngày kết thúc phải sau hoặc bằng ngày bắt đầu.',
+            'quantity.required' => 'Vui lòng nhập số lượng.',
+            'quantity.integer' => 'Số lượng phải là số nguyên.',
+            'image.image' => 'Tệp phải là hình ảnh.'
         ]);
+
+        // Biến thể này đã tồn tại
+        // $exists = ProductVariant::where([
+        //     'product_id' => $request->product_id,
+        //     'color_id' => $request->color_id,
+        //     'size_id' => $request->size_id,
+        // ])->where('id', '!=', $productVariant->id)->exists();
+
+        // if ($exists) {
+        //     return back()->withErrors(['error' => 'Biến thể này đã tồn tại, vui lòng chọn thông tin khác'])->withInput();
+        // }
+
 
         $data = $request->only([
             'product_id',
@@ -120,16 +180,37 @@ class ProductVariantController extends Controller
     }
 
 
+    // public function destroy(ProductVariant $productVariant)
+    // {
+    //     if ($productVariant->image && Storage::disk('public')->exists($productVariant->image)) {
+    //         Storage::disk('public')->delete($productVariant->image);
+    //     }
+
+    //     $productVariant->delete();
+    //     return redirect()->route('admin.product-variants.index')
+    //         ->with('success', 'Product variant deleted successfully.');
+    // }
+
     public function destroy(ProductVariant $productVariant)
     {
+        // Kiểm tra nếu biến thể đang được dùng trong đơn hàng
+        $isUsedInOrders = $productVariant->orderDetails()->exists();
+
+        if ($isUsedInOrders) {
+            return redirect()->back()->with('error', 'Không thể xóa biến thể đang được sử dụng trong đơn hàng.');
+        }
+
+        // Nếu có ảnh thì xóa ảnh
         if ($productVariant->image && Storage::disk('public')->exists($productVariant->image)) {
             Storage::disk('public')->delete($productVariant->image);
         }
 
         $productVariant->delete();
+
         return redirect()->route('admin.product-variants.index')
-            ->with('success', 'Product variant deleted successfully.');
+            ->with('success', 'Đã xóa biến thể thành công.');
     }
+
 
     public function search(Request $request)
     {

@@ -91,7 +91,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($variants as $variant)
+                        @forelse ($variants as $variant)
                         <tr>
                             <td><input type="checkbox" name="check[]" value="{{ $variant->id }}"></td>
                             <td>{{ $variant->product->name ?? 'N/A' }}</td>
@@ -134,7 +134,11 @@
                                 </form>
                             </td>
                         </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="8" class="text-center">Không tìm thấy biến thể phù hợp.</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
 
