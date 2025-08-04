@@ -311,6 +311,9 @@
                                         @endforeach
                                         <input type="hidden" name="size_id" id="selected-size-id">
                                     </div>
+                                    <p id="out-of-stock-message" style="display: none; color: #dc3545; margin-top: 10px;">
+                                        Mặt hàng này đã hết, vui lòng chọn mặt hàng khác.
+                                    </p>
                                     <div id="stock-info"
                                         class="mt-3 px-3 py-2 rounded-3 d-inline-flex align-items-center bg-white border border-2 shadow-sm"
                                         style="display: none; font-size: 15px; min-width: 230px;">
@@ -1049,6 +1052,47 @@
             });
         });
     });
+</script>
+
+
+{{-- Nếu số lượng bằng 0 ➜ disable 2 nút. --}}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const sizeButtons = document.querySelectorAll('.size-btn');
+    const stockInfo = document.getElementById('stock-info');
+    const stockQuantityEl = document.getElementById('stock-quantity');
+    const addToCartBtn = document.getElementById('add-to-cart-btn');
+    const buyNowBtn = document.querySelector('.proceed-to-checkout');
+    const outOfStockMsg = document.getElementById('out-of-stock-message');
+
+    sizeButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const quantity = parseInt(this.dataset.variantQuantity);
+            const sizeId = this.dataset.sizeId;
+
+            document.getElementById('selected-size-id').value = sizeId;
+            stockQuantityEl.textContent = quantity;
+            stockInfo.style.display = 'flex';
+
+            sizeButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+
+            if (quantity <= 0) {
+                addToCartBtn.disabled = true;
+                buyNowBtn.disabled = true;
+                addToCartBtn.classList.add('disabled');
+                buyNowBtn.classList.add('disabled');
+                outOfStockMsg.style.display = 'block';
+            } else {
+                addToCartBtn.disabled = false;
+                buyNowBtn.disabled = false;
+                addToCartBtn.classList.remove('disabled');
+                buyNowBtn.classList.remove('disabled');
+                outOfStockMsg.style.display = 'none';
+            }
+        });
+    });
+});
 </script>
 
 
