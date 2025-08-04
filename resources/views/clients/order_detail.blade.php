@@ -170,7 +170,7 @@
                     </button> --}}
 
                     {{-- Nút Hủy đơn hàng --}}
-                    @if ($shouldShowCancel)
+                    {{-- @if ($shouldShowCancel)
                         <button type="button"
                             class="btn btn-outline-danger {{ $canCancel ? '' : 'disabled' }}"
                             data-bs-toggle="{{ $canCancel ? 'modal' : '' }}"
@@ -179,6 +179,27 @@
                             title="{{ $canCancel ? '' : 'Không thể hủy đơn ở trạng thái hiện tại' }}">
                             ❌ Hủy đơn hàng
                         </button>
+                    @endif --}}
+                    @if ($shouldShowCancel)
+                        @if ($canCancel)
+                            <!-- Nút bình thường -->
+                            <button type="button"
+                                class="btn btn-outline-danger"
+                                data-bs-toggle="modal"
+                                data-bs-target="#cancelModal">
+                                ❌ Hủy đơn hàng
+                            </button>
+                        @else
+                            <!-- Nút bị khóa + tooltip -->
+                            <span data-bs-toggle="tooltip" title="Không thể hủy đơn ở trạng thái hiện tại">
+                                <button type="button"
+                                    class="btn btn-outline-danger"
+                                    style="pointer-events: none; opacity: 0.5;"
+                                    disabled>
+                                    ❌ Hủy đơn hàng
+                                </button>
+                            </span>
+                        @endif
                     @endif
                     
                     <!-- Modal Hủy đơn hàng -->
@@ -197,7 +218,7 @@
                                         <p>Vui lòng chọn lý do hủy đơn hàng:</p>
 
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="cancel_reason" id="reason1" value="Đặt nhầm" checked>
+                                            <input class="form-check-input" type="radio" name="cancel_reason" id="reason1" value="Đặt nhầm" required>
                                             <label class="form-check-label" for="reason1">Đặt nhầm</label>
                                         </div>
                                         <div class="form-check">

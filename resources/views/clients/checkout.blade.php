@@ -165,22 +165,22 @@
                         <div class="mb-3">
                             <label for="fullname" class="form-label" data-icon="👤">Họ và Tên <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="fullname" name="fullname"
-                                value="{{ old('fullname', Auth::user()->fullname ?? '') }}" required>
+                                value="{{ old('fullname', Auth::user()->fullname ?? '') }}" placeholder="Nhập họ và tên (VD: Nguyễn Văn A)" required>
                         </div>
                         <div class="mb-3">
                             <label for="phone" class="form-label" data-icon="📞">Số Điện Thoại <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="phone" name="phone"
-                                value="{{ old('phone', Auth::user()->phone ?? '') }}" required>
+                                value="{{ old('phone', Auth::user()->phone ?? '') }}" placeholder="Nhập số điện thoại (VD: 0987654321)" pattern="[0-9]{10,11}" required>
                         </div>
                         <div class="mb-3">
                             <label for="address" class="form-label" data-icon="🏠">Địa Chỉ <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="address" name="address"
-                                value="{{ old('address', Auth::user()->address ?? '') }}" required>
+                                value="{{ old('address', Auth::user()->address ?? '') }}" placeholder="Nhập địa chỉ (VD: Số nhà 10, Ngõ 5, Đường Láng, Quận Đống Đa, Hà Nội)" required>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label" data-icon="📧">Email <span class="text-danger">*</span></label>
                             <input type="email" class="form-control" id="email" name="email"
-                                value="{{ old('email', Auth::user()->email ?? '') }}" required>
+                                value="{{ old('email', Auth::user()->email ?? '') }}" placeholder="Nhập email (VD: user@gmail.com)" required>
                         </div>
                         <div class="mb-3">
                             <label for="note" class="form-label" data-icon="📝">Ghi Chú (Tùy chọn)</label>
