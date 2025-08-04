@@ -43,7 +43,7 @@
                         @error('category_id')<span class="text-danger">{{ $message }}</span>@enderror
                     </div>
 
-                    <div class="form-group col-md-4">
+                    {{-- <div class="form-group col-md-4">
                         <label for="user_id">Người viết:</label>
                         <select class="form-control" name="user_id">
                             <option value="">Chọn người viết</option>
@@ -54,7 +54,12 @@
                             @endforeach
                         </select>
                         @error('user_id')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div> --}}
+                    <div class="form-group col-md-4">
+                        <label for="">Người viết:</label>
+                        <input type="text" class="form-control" value="{{ Auth::user()->fullname ?? Auth::user()->name }}" readonly>
                     </div>
+
 
                     <div class="form-group col-md-4">
                         <label for="status">Trạng thái:</label><br>
