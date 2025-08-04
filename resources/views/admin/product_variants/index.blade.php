@@ -136,7 +136,7 @@
                         </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="text-center">Không tìm thấy biến thể phù hợp.</td>
+                                <td colspan="9" class="text-center">Không tìm thấy biến thể phù hợp.</td>
                             </tr>
                         @endforelse
                     </tbody>

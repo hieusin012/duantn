@@ -41,6 +41,7 @@ class HotDealController extends Controller
         $hotDeals = Product::with('variants') // Tối ưu hiệu suất
             ->where('is_hot_deal', true)
             ->whereNotNull('discount_percent')
+            ->where('deal_start_at', '<=', $now)
             ->where('deal_end_at', '>', $now)
             ->orderBy('deal_end_at', 'asc')
             ->get();

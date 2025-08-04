@@ -113,8 +113,9 @@ class ProductController extends Controller
             'category_id' => 'required|exists:categories,id',
             'brand_id' => 'required|exists:brands,id',
             'is_hot_deal' => 'nullable|boolean',
-            'discount_percent' => 'nullable|integer|min:0|max:100',
-            'deal_end_at' => 'nullable|date|after:now',
+            'discount_percent' => 'nullable|required_if:is_hot_deal,1|integer|min:1|max:100',
+            'deal_start_at' => 'nullable|required_if:is_hot_deal,1|date|after:now|before:deal_end_at',
+            'deal_end_at' => 'nullable|required_if:is_hot_deal,1|date|after:now',
 
         ], [
             'name.unique' => 'Tên sản phẩm đã tồn tại.',
@@ -124,8 +125,14 @@ class ProductController extends Controller
             'price.required' => 'Vui lòng nhập giá sản phẩm.',
             'category_id.required' => 'Vui lòng chọn danh mục.',
             'brand_id.required' => 'Vui lòng chọn thương hiệu.',
-            'deal_end_at.after' => 'Thời gian kết thúc ưu đãi phải sau thời gian hiện tại.',
-            'deal_end_at.date' => 'Thời gian kết thúc ưu đãi phải đúng định dạng ngày giờ.',
+            'discount_percent.required_if' => 'Vui lòng nhập phần trăm giảm khi sản phẩm là ưu đãi.',
+            'discount_percent.min' => 'Phần trăm giảm phải lớn hơn 0%.',
+            'discount_percent.max' => 'Phần trăm giảm tối đa là 100%.',
+            'deal_start_at.required_if' => 'Vui lòng nhập thời gian bắt đầu ưu đãi.',
+            'deal_start_at.after' => 'Thời gian bắt đầu ưu đãi phải sau thời điểm hiện tại.',
+            'deal_start_at.before' => 'Thời gian bắt đầu ưu đãi phải trước thời gian kết thúc.',
+            'deal_end_at.required_if' => 'Vui lòng nhập thời gian kết thúc ưu đãi.',
+            'deal_end_at.after' => 'Thời gian kết thúc ưu đãi phải sau thời điểm hiện tại.',
         ]);
 
         // Tạo mã code duy nhất
@@ -163,6 +170,7 @@ Product::create([
     'brand_id' => $validated['brand_id'],
     'is_hot_deal' => $request->has('is_hot_deal'),
     'discount_percent' => $request->input('discount_percent'),
+    'deal_start_at' => $request->input('deal_start_at'),
     'deal_end_at' => $request->input('deal_end_at'),
 ]);
 
@@ -206,9 +214,9 @@ Product::create([
             'category_id' => 'required|exists:categories,id',
             'brand_id' => 'required|exists:brands,id',
             'is_hot_deal' => 'nullable|boolean',
-            'discount_percent' => 'nullable|integer|min:0|max:100',
-            'deal_end_at' => 'nullable|date|after:now',
-
+            'discount_percent' => 'nullable|required_if:is_hot_deal,1|integer|min:1|max:100',
+            'deal_start_at' => 'nullable|required_if:is_hot_deal,1|date|after:now|before:deal_end_at',
+            'deal_end_at' => 'nullable|required_if:is_hot_deal,1|date|after:now',
         ], [
             'name.unique' => 'Tên sản phẩm đã tồn tại.',
             'name.required' => 'Vui lòng nhập tên sản phẩm.',
@@ -217,8 +225,14 @@ Product::create([
             'price.required' => 'Vui lòng nhập giá sản phẩm.',
             'category_id.required' => 'Vui lòng chọn danh mục.',
             'brand_id.required' => 'Vui lòng chọn thương hiệu.',
-            'deal_end_at.after' => 'Thời gian kết thúc ưu đãi phải sau thời gian hiện tại.',
-            'deal_end_at.date' => 'Thời gian kết thúc ưu đãi phải đúng định dạng ngày giờ.',
+            'discount_percent.required_if' => 'Vui lòng nhập phần trăm giảm khi sản phẩm là ưu đãi.',
+            'discount_percent.min' => 'Phần trăm giảm phải lớn hơn 0%.',
+            'discount_percent.max' => 'Phần trăm giảm tối đa là 100%.',
+            'deal_start_at.required_if' => 'Vui lòng nhập thời gian bắt đầu ưu đãi.',
+            'deal_start_at.after' => 'Thời gian bắt đầu ưu đãi phải sau thời điểm hiện tại.',
+            'deal_start_at.before' => 'Thời gian bắt đầu ưu đãi phải trước thời gian kết thúc.',
+            'deal_end_at.required_if' => 'Vui lòng nhập thời gian kết thúc ưu đãi.',
+            'deal_end_at.after' => 'Thời gian kết thúc ưu đãi phải sau thời điểm hiện tại.',
         ]);
 
         $slug = Str::slug($validated['name']);
@@ -247,6 +261,7 @@ Product::create([
             'brand_id' => $validated['brand_id'],
             'is_hot_deal' => $request->has('is_hot_deal'),
             'discount_percent' => $request->input('discount_percent'),
+            'deal_start_at' => $request->input('deal_start_at'),
             'deal_end_at' => $request->input('deal_end_at'),
         ]);
 

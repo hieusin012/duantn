@@ -25,6 +25,7 @@ class Product extends Model
         'brand_id',
         'is_hot_deal',
         'discount_percent',
+        'deal_start_at',
         'deal_end_at'
     ];
 
