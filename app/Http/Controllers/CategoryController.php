@@ -13,29 +13,20 @@ use Illuminate\Support\Str;
 class CategoryController extends Controller
 {
     public function index(Request $request)
-{
-    $query = $request->input('q');
-    $showTrashed = $request->input('trashed') === 'true';
+    {
+        $query = $request->input('q');
 
-    $categories = Category::with('parent')
-        ->when($showTrashed, function ($q) {
-            $q->onlyTrashed();
-        }, function ($q) {
-            $q->whereNull('deleted_at'); 
+        $categories = Category::with('parent')
+            ->when($query, function ($q) use ($query) {
+                $q->where('name', 'like', '%' . $query . '%');
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
 
-        })
-        ->when($query, function ($q) use ($query) {
-            $q->where('name', 'like', '%' . $query . '%');
-        })
-        ->orderBy('created_at', 'desc')
-        ->paginate(10);
+        $categories->appends(['q' => $query]);
 
-    $categories->appends(['q' => $query, 'trashed' => $showTrashed]);
-
-    return view('admin.categories.index', compact('categories', 'query', 'showTrashed'));
-}
-
-
+        return view('admin.categories.index', compact('categories', 'query'));
+    }
 
     public function create()
     {
@@ -119,27 +110,4 @@ class CategoryController extends Controller
             'status' => $category->is_active
         ]);
     }
-    // Khôi phục bản ghi đã xoá mềm
-    public function restore($id)
-    {
-    $category = Category::onlyTrashed()->findOrFail($id);
-    $category->restore();
-
-    return redirect()->route('admin.categories.index')->with('success', 'Khôi phục danh mục thành công.');
-    }
-
-    // Xoá vĩnh viễn
-    public function forceDelete($id)
-    {
-    $category = Category::onlyTrashed()->findOrFail($id);
-    
-    if ($category->image) {
-        Storage::disk('public')->delete($category->image);
-    }
-
-    $category->forceDelete();
-
-    return redirect()->route('admin.categories.index')->with('success', 'Xoá vĩnh viễn thành công.');
-    }
-
 }
