@@ -230,7 +230,7 @@
                                     {{-- Sử dụng các cột từ model User --}}
                                     <td>{{ $customer->fullname }}</td>
                                     <td>{{ $customer->birthday ? $customer->birthday->format('d/m/Y') : 'Chưa có' }}</td>
-                                    <td><span class="tag tag-success">{{ $customer->phone }}</span></td>
+                                    <td><span class="tag tag-success">{{ $customer->phone ? $customer->phone : 'Chưa có' }}</span></td>
                                 </tr>
                                 @empty
                                 <tr>
