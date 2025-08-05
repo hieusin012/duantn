@@ -136,9 +136,32 @@ class OrderController extends Controller
         return view('admin.thongkedoanhthu.report', compact('orders', 'totalRevenue', 'totalOrders', 'startDate', 'endDate'));
     }
 
-    public function cancel($id)
+    // public function cancel($id)
+    // {
+    //     $order = Order::where('id', $id)
+    //         ->where('user_id', Auth::id())
+    //         ->where('status', 'Chờ xác nhận')
+    //         ->first();
+
+    //     if (!$order) {
+    //         return back()->with('error', 'Không thể hủy đơn hàng.');
+    //     }
+
+    //     // ✅ Cộng lại tồn kho cho từng biến thể sản phẩm
+    //     foreach ($order->orderDetails as $detail) {
+    //         ProductVariant::where('id', $detail->variant_id)
+    //             ->increment('quantity', $detail->quantity);
+    //     }
+
+    //     $order->status = 'Đơn hàng đã hủy';
+    //     $order->save();
+
+    //     return back()->with('success', 'Đơn hàng đã được hủy thành công.');
+    // }
+    public function cancel(Request $request, $id)
     {
-        $order = Order::where('id', $id)
+        $order = Order::with('orderDetails')
+            ->where('id', $id)
             ->where('user_id', Auth::id())
             ->where('status', 'Chờ xác nhận')
             ->first();
@@ -147,13 +170,16 @@ class OrderController extends Controller
             return back()->with('error', 'Không thể hủy đơn hàng.');
         }
 
-        // ✅ Cộng lại tồn kho cho từng biến thể sản phẩm
+        // ✅ Cộng lại tồn kho
         foreach ($order->orderDetails as $detail) {
             ProductVariant::where('id', $detail->variant_id)
                 ->increment('quantity', $detail->quantity);
         }
 
+        // ✅ Lưu trạng thái + lý do hủy (nếu có cột cancel_reason)
         $order->status = 'Đơn hàng đã hủy';
+        $order->cancel_reason = $request->cancel_reason;
+        $order->cancel_note = $request->cancel_note;
         $order->save();
 
         return back()->with('success', 'Đơn hàng đã được hủy thành công.');
@@ -185,8 +211,19 @@ class OrderController extends Controller
             $order->status = $nextStatus;
 
             // Nếu trạng thái mới là "Đã giao hàng" thì cập nhật trạng thái thanh toán
-            if ($nextStatus === 'Đã giao hàng' && $currentPaymentIndex === 0) {
-                $order->payment_status = $paymentStatuses[1]; // Đã thanh toán
+            // if ($nextStatus === 'Đã giao hàng' && $currentPaymentIndex === 0) {
+            //     $order->payment_status = $paymentStatuses[1]; // Đã thanh toán
+            // }
+            if ($nextStatus === 'Đã giao hàng') {
+                // Nếu đơn chưa có thời gian giao thì gán thời gian hiện tại
+                if (!$order->delivered_at) {
+                    $order->delivered_at = now();
+                }
+
+                // Nếu trạng thái thanh toán là "Chưa thanh toán", cập nhật sang "Đã thanh toán"
+                if ($currentPaymentIndex === 0) {
+                    $order->payment_status = $paymentStatuses[1];
+                }
             }
 
             $order->save();
@@ -205,19 +242,38 @@ class OrderController extends Controller
     }
 
     // Hoàn hàng tự động
+    // public function acceptReturn($id)
+    // {
+    //     $order = Order::findOrFail($id);
+
+    //     if ($order->status === 'Đã giao hàng') {
+    //         $order->status = 'Đã hoàn hàng';
+    //         $order->payment_status = 'Đã hoàn tiền';
+    //         $order->save();
+
+    //         return back()->with('success', 'Đơn hàng đã được cập nhật sang trạng thái "Đã hoàn hàng" và đã hoàn tiền.');
+    //     }
+
+    //     return back()->with('error', 'Chỉ có thể hoàn hàng khi đơn hàng đã giao.');
+    // }
     public function acceptReturn($id)
     {
         $order = Order::findOrFail($id);
 
-        if ($order->status === 'Đã giao hàng') {
-            $order->status = 'Đã hoàn hàng';
-            $order->payment_status = 'Đã hoàn tiền';
-            $order->save();
-
-            return back()->with('success', 'Đơn hàng đã được cập nhật sang trạng thái "Đã hoàn hàng" và đã hoàn tiền.');
+        if ($order->status !== 'Đã giao hàng') {
+            return back()->with('error', 'Chỉ có thể hoàn hàng khi đơn hàng đã giao.');
         }
 
-        return back()->with('error', 'Chỉ có thể hoàn hàng khi đơn hàng đã giao.');
+        // Kiểm tra nếu đã quá 7 ngày kể từ ngày giao hàng
+        if ($order->delivered_at && now()->diffInDays($order->delivered_at) > 7) {
+            return back()->with('error', 'Đơn hàng đã quá thời gian hoàn hàng (7 ngày).');
+        }
+
+        $order->status = 'Đã hoàn hàng';
+        $order->payment_status = 'Đã hoàn tiền';
+        $order->save();
+
+        return back()->with('success', 'Đơn hàng đã được cập nhật sang trạng thái "Đã hoàn hàng" và đã hoàn tiền.');
     }
 
 }

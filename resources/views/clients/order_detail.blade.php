@@ -245,9 +245,13 @@
                 @endif
 
                 {{-- Hoàn hàng nếu trong 7 ngày --}}
-                @php
+                {{-- @php
                     $isDelivered = $order->status === 'Đã giao hàng';
                     $canReturn = $isDelivered && $order->created_at->diffInDays(\Carbon\Carbon::now()) <= 7;
+                @endphp --}}
+                @php
+                    $isDelivered = $order->status === 'Đã giao hàng';
+                    $canReturn = $isDelivered && $order->delivered_at && now()->diffInDays($order->delivered_at) <= 7;
                 @endphp
 
                 @if ($canReturn)

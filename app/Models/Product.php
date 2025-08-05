@@ -80,6 +80,8 @@ class Product extends Model
     protected $casts = [
         'sale_start_date' => 'datetime',
         'sale_end_date' => 'datetime',
+        'deal_start_at' => 'datetime',
+        'deal_end_at' => 'datetime',
     ];
     public function orderDetails()
     {
