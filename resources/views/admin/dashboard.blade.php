@@ -260,7 +260,7 @@
                         </div>
                         <div class="col-auto">
                             <button type="button" onclick="loadUserChart()" class="btn btn-success">
-                                <i class="bx bx-bar-chart"></i> Xem biểu đồ
+                                <i class="bx bx-bar-chart"></i> Lọc
                             </button>
                         </div>
                     </form>
@@ -284,7 +284,7 @@
                         </div>
                         <div class="col-auto">
                             <button type="button" onclick="loadRevenueChart()" class="btn btn-success">
-                                <i class="bx bx-line-chart"></i> Xem doanh thu
+                                <i class="bx bx-line-chart"></i> Lọc
                             </button>
                         </div>
                     </form>
