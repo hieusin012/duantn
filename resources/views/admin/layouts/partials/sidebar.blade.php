@@ -185,7 +185,7 @@
       /* Sidebar bình thường */
       .app-sidebar {
             width: 250px;
-            background-color: #40667b;
+            background-color: #2c4857ff;
             height: 100vh;
             position: fixed;
             top: 0;
