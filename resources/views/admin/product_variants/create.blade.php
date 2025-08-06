@@ -37,7 +37,9 @@
                         <select name="product_id" id="product_id" class="form-control @error('product_id') is-invalid @enderror" required>
                             <option value="" disabled selected>-- Chọn sản phẩm --</option>
                             @foreach ($products as $product)
-                                <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                <option value="{{ $product->id }}" {{ old('product_id') == $product->id ? 'selected' : '' }}>
+                                    {{ $product->name }}
+                                </option>
                             @endforeach
                         </select>
                         @error('product_id')
@@ -50,7 +52,9 @@
                         <select name="color_id" id="color_id" class="form-control @error('color_id') is-invalid @enderror" required>
                             <option value="" disabled selected>-- Chọn màu sắc --</option>
                             @foreach ($colors as $color)
-                                <option value="{{ $color->id }}">{{ $color->name }}</option>
+                                <option value="{{ $color->id }}" {{ old('color_id') == $color->id ? 'selected' : '' }}>
+                                    {{ $color->name }}
+                                </option>
                             @endforeach
                         </select>
                         @error('color_id')
@@ -63,7 +67,9 @@
                         <select name="size_id" id="size_id" class="form-control @error('size_id') is-invalid @enderror" required>
                             <option value="" disabled selected>-- Chọn kích thước --</option>
                             @foreach ($sizes as $size)
-                                <option value="{{ $size->id }}">{{ $size->name }}</option>
+                                <option value="{{ $size->id }}" {{ old('size_id') == $size->id ? 'selected' : '' }}>
+                                    {{ $size->name }}
+                                </option>
                             @endforeach
                         </select>
                         @error('size_id')
@@ -73,7 +79,7 @@
 
                     <div class="col-md-6 mb-2">
                         <label for="price" class="form-label fw-semibold">Giá tiền <span class="text-danger">*</span></label>
-                        <input type="number" name="price" id="price" class="form-control @error('price') is-invalid @enderror" required min="0" step="0.01" placeholder="Nhập giá gốc">
+                        <input type="number" name="price" id="price" value="{{ old('price') }}" class="form-control @error('price') is-invalid @enderror" required min="0" step="0.01" placeholder="Nhập giá gốc">
                         @error('price')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -81,7 +87,7 @@
 
                     <div class="col-md-6 mb-2">
                         <label for="sale_price" class="form-label fw-semibold">Giá khuyến mãi</label>
-                        <input type="number" name="sale_price" id="sale_price" class="form-control @error('sale_price') is-invalid @enderror" min="0" step="0.01" placeholder="Nhập giá khuyến mãi nếu có">
+                        <input type="number" name="sale_price" id="sale_price" value="{{ old('sale_price') }}" class="form-control @error('sale_price') is-invalid @enderror" min="0" step="0.01" placeholder="Nhập giá khuyến mãi nếu có">
                         @error('sale_price')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -89,7 +95,7 @@
 
                     <div class="col-md-6 mb-2">
                         <label for="quantity" class="form-label fw-semibold">Số lượng <span class="text-danger">*</span></label>
-                        <input type="number" name="quantity" id="quantity" class="form-control @error('quantity') is-invalid @enderror" required min="0" placeholder="Nhập số lượng tồn kho">
+                        <input type="number" name="quantity" id="quantity" value="{{ old('quantity') }}" class="form-control @error('quantity') is-invalid @enderror" required min="0" placeholder="Nhập số lượng tồn kho">
                         @error('quantity')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -97,7 +103,7 @@
 
                     <div class="col-md-6 mb-2">
                         <label for="sale_start_date" class="form-label fw-semibold">Ngày bắt đầu giảm giá</label>
-                        <input type="date" name="sale_start_date" id="sale_start_date" class="form-control @error('sale_start_date') is-invalid @enderror">
+                        <input type="date" name="sale_start_date" id="sale_start_date" value="{{ old('sale_start_date') }}" class="form-control @error('sale_start_date') is-invalid @enderror">
                         @error('sale_start_date')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -105,7 +111,7 @@
 
                     <div class="col-md-6 mb-2">
                         <label for="sale_end_date" class="form-label fw-semibold">Ngày kết thúc giảm giá</label>
-                        <input type="date" name="sale_end_date" id="sale_end_date" class="form-control @error('sale_end_date') is-invalid @enderror">
+                        <input type="date" name="sale_end_date" id="sale_end_date" value="{{ old('sale_end_date') }}" class="form-control @error('sale_end_date') is-invalid @enderror">
                         @error('sale_end_date')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

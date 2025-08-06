@@ -30,6 +30,12 @@
                             @endif
                         </p>
                         <p><strong>Số lượng trong kho:</strong> {{ $productVariant->quantity }}</p>
+                        <p><strong>Ngày bắt đầu khuyến mãi:</strong> 
+                            {{ $productVariant->sale_start_date ? $productVariant->sale_start_date->format('d/m/Y') : 'Không có' }}
+                        </p>
+                        <p><strong>Ngày kết thúc khuyến mãi:</strong> 
+                            {{ $productVariant->sale_end_date ? $productVariant->sale_end_date->format('d/m/Y') : 'Không có' }}
+                        </p>
                     </div>
                     <div class="col-md-6 text-center">
                         <p><strong>Ảnh sản phẩm</strong></p>
