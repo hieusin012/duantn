@@ -173,12 +173,42 @@ class ImportController extends Controller
         //     return redirect()->back()->with('error', 'Không thể xóa phiếu nhập đã xác nhận.');
         // }
 
-        foreach ($import->details as $detail) {
-            ProductVariant::where('id', $detail->variant_id)->decrement('quantity', $detail->quantity);
-            $detail->delete(); // thêm dòng này để dọn dẹp ImportDetail
-        }
+        // Xóa phiếu nhập trừ số lượng sp nhập ở phiếu nhập đó
+        // foreach ($import->details as $detail) {
+        //     ProductVariant::where('id', $detail->variant_id)->decrement('quantity', $detail->quantity);
+        //     $detail->delete(); // thêm dòng này để dọn dẹp ImportDetail
+        // }
 
         $import->delete();
         return redirect()->route('admin.imports.index')->with('success', 'Đã xóa phiếu nhập');
+    }
+    public function delete()
+    {
+        $deletedImports = Import::onlyTrashed()->get();
+        return view('admin.imports.delete', compact('deletedImports'));
+    }
+
+    public function restore($id)
+    {
+        $import = Import::withTrashed()->findOrFail($id);
+        $import->restore();
+        return redirect()->route('admin.imports.index')->with('success', 'Khôi phục phiếu nhập thành công!');
+    }
+
+    public function eliminate($id)
+    {
+        $import = Import::withTrashed()->findOrFail($id);
+        $import->forceDelete();
+        return redirect()->route('admin.imports.delete')->with('success', 'Xóa vĩnh viễn thành công!');
+    }
+
+    public function forceDeleteAll()
+    {
+        $deletedImports = Import::onlyTrashed()->get();
+        foreach ($deletedImports as $import) {
+            $import->forceDelete();
+        }
+
+        return redirect()->route('admin.imports.delete')->with('success', 'Xóa vĩnh viễn tất cả thành công!');
     }
 }

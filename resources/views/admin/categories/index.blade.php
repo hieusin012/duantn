@@ -40,7 +40,7 @@
                             </a>
                         @else
                             <a class="btn btn-danger btn-sm" href="{{ route('admin.categories.index', ['trashed' => 'true']) }}">
-                                <i class="fas fa-trash"></i> Thùng rác
+                                <i class="fas fa-trash"></i> Dữ liệu đã xóa
                             </a>
                         @endif
                     </div>
@@ -115,7 +115,7 @@
                                     <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn btn-primary btn-sm" title="Edit">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this category?');">
+                                    <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa danh mục này không?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-primary btn-sm trash" title="Delete">

@@ -75,4 +75,36 @@ class BlogCategoryController extends Controller
         $blogCategory->delete();
         return back()->with('success', 'Đã xoá danh mục!');
     }
+    public function delete()
+    {
+        $deletedCategories = BlogCategory::onlyTrashed()->paginate(10);
+        return view('admin.blog_categories.delete', compact('deletedCategories'));
+    }
+
+    public function restore($id)
+    {
+        $category = BlogCategory::onlyTrashed()->findOrFail($id);
+        $category->restore();
+
+        return back()->with('success', 'Khôi phục danh mục thành công!');
+    }
+
+    public function eliminate($id)
+    {
+        $category = BlogCategory::onlyTrashed()->findOrFail($id);
+        $category->forceDelete();
+
+        return back()->with('success', 'Đã xóa vĩnh viễn danh mục!');
+    }
+    public function forceDeleteAll()
+    {
+        $deletedCategories = BlogCategory::onlyTrashed()->get();
+
+        foreach ($deletedCategories as $category) {
+            $category->forceDelete();
+        }
+
+        return back()->with('success', 'Đã xóa vĩnh viễn tất cả danh mục!');
+    }
+
 }
