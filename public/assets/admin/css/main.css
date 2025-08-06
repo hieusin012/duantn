@@ -15675,7 +15675,7 @@ html, body {
 footer.footer-custom {
   flex-shrink: 0;
   width: 100%;
-  background: linear-gradient(90deg, #212529, #343a40);
+  background: #42697aff;
   padding: 0;
   margin: 0;
 }
