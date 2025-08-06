@@ -73,6 +73,7 @@
                             <th>Trạng thái</th>
                             <th>Tổng tiền</th>
                             <th>Ngày mua</th>
+                            <th>Ngày nhận hàng</th>
                             <th>Hành động</th>
                         </tr>
                     </thead>
@@ -98,6 +99,20 @@
                             </td>
                             <td class="text-end">{{ number_format($order->total_price, 0, ',', '.') }} <small>₫</small></td>
                             <td>{{ $order->created_at->format('d/m/Y H:i:s') }}</td>
+                            {{-- <td>{{ $order->delivered_at ? $order->delivered_at->format('d/m/Y H:i:s') : 'Chưa giao' }}</td> --}}
+                            <td>
+                                @if ($order->delivered_at)
+                                    {{ $order->delivered_at->format('d/m/Y H:i:s') }}
+                                @else
+                                    @switch($order->status)
+                                        @case('Đơn hàng đã hủy')
+                                            Đơn hàng đã bị hủy
+                                            @break
+                                        @default
+                                            Chưa giao
+                                    @endswitch
+                                @endif
+                            </td>
                             <td>
                                 <a href="{{ route('order.details', $order->id) }}" class="btn btn-sm btn-outline-info shadow-sm">
                                     Chi tiết
