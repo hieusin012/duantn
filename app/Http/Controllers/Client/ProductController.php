@@ -199,8 +199,9 @@ class ProductController extends Controller
         $now = Carbon::now();
 
         $products = Product::with(['comments', 'wishlists'])
-            ->where('is_hot_deal', true)
+            // ->where('is_hot_deal', true)
             ->whereNotNull('discount_percent')
+            ->where('deal_start_at', '<=', $now)
             ->where('deal_end_at', '>', $now)
             ->where('is_active', true)
             ->whereNull('deleted_at')

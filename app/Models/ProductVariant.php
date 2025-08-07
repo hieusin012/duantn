@@ -54,5 +54,11 @@ class ProductVariant extends Model
     {
         return $this->sale_price ?? $this->price;
     }
-    
+    public function completedOrderDetails()
+    {
+        return $this->hasMany(OrderDetail::class, 'variant_id')
+            ->whereHas('order', function ($query) {
+                $query->whereIn('status', ['Đã giao hàng']);
+            });
+    }
 }

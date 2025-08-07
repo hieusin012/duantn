@@ -27,7 +27,7 @@ class SupplierController extends Controller
 
         return view('admin.suppliers.index', compact('suppliers'));
     }
-
+     
     public function create()
     {
         return view('admin.suppliers.create');

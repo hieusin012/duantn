@@ -25,6 +25,7 @@ class Product extends Model
         'brand_id',
         'is_hot_deal',
         'discount_percent',
+        'deal_start_at',
         'deal_end_at'
     ];
 
@@ -79,6 +80,8 @@ class Product extends Model
     protected $casts = [
         'sale_start_date' => 'datetime',
         'sale_end_date' => 'datetime',
+        'deal_start_at' => 'datetime',
+        'deal_end_at' => 'datetime',
     ];
     public function orderDetails()
     {

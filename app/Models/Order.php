@@ -18,6 +18,7 @@ class Order extends Model
         'email',
         'payment',
         'status',
+        'delivered_at',
         'payment_status',
         'shiping',
         'discount',

@@ -212,13 +212,27 @@
                             {{-- <span class="price fs-3" id="variant-price">
                                 {{ number_format($product->price, 0, ',', '.') }} ₫
                             </span> --}}
-                            @php
+                            {{-- @php
                             $price = $product->price;
                             $discountPercent = $product->discount_percent ?? 0;
                             $isHotDeal = $product->is_hot_deal
                             && $discountPercent > 0
                             && $product->deal_end_at
                             && \Carbon\Carbon::now()->lt($product->deal_end_at);
+
+                            $salePrice = $isHotDeal ? $price * (1 - $discountPercent / 100) : null;
+                            @endphp --}}
+                            @php
+                            $price = $product->price;
+                            $discountPercent = $product->discount_percent ?? 0;
+                            $now = \Carbon\Carbon::now();
+
+                            $isHotDeal = $product->is_hot_deal
+                                && $discountPercent > 0
+                                && $product->deal_start_at
+                                && $product->deal_start_at <= $now
+                                && $product->deal_end_at
+                                && $now < $product->deal_end_at;
 
                             $salePrice = $isHotDeal ? $price * (1 - $discountPercent / 100) : null;
                             @endphp

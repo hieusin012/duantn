@@ -15,7 +15,7 @@ class ReturnRequestController extends Controller
         $requests = ReturnRequest::where('user_id', Auth::id())
                                  ->with('order')
                                  ->latest()
-                                 ->paginate(10);
+                                 ->paginate(5);
         return view('clients.return_requests.index', compact('requests'));
     }
 

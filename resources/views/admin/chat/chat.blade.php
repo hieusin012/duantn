@@ -1,5 +1,5 @@
 @extends('admin.layouts.index')
-
+@section('title', 'Hỗ trợ khách hàng')
 @section('content')
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <style>

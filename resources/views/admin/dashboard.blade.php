@@ -230,7 +230,7 @@
                                     {{-- Sử dụng các cột từ model User --}}
                                     <td>{{ $customer->fullname }}</td>
                                     <td>{{ $customer->birthday ? $customer->birthday->format('d/m/Y') : 'Chưa có' }}</td>
-                                    <td><span class="tag tag-success">{{ $customer->phone }}</span></td>
+                                    <td><span class="tag tag-success">{{ $customer->phone ? $customer->phone : 'Chưa có' }}</span></td>
                                 </tr>
                                 @empty
                                 <tr>
@@ -260,7 +260,7 @@
                         </div>
                         <div class="col-auto">
                             <button type="button" onclick="loadUserChart()" class="btn btn-success">
-                                <i class="bx bx-bar-chart"></i> Xem biểu đồ
+                                <i class="bx bx-bar-chart"></i> Lọc
                             </button>
                         </div>
                     </form>
@@ -284,7 +284,7 @@
                         </div>
                         <div class="col-auto">
                             <button type="button" onclick="loadRevenueChart()" class="btn btn-success">
-                                <i class="bx bx-line-chart"></i> Xem doanh thu
+                                <i class="bx bx-line-chart"></i> Lọc
                             </button>
                         </div>
                     </form>
