@@ -1,8 +1,26 @@
 <aside id="sidebar" class="app-sidebar" style="width: 250px">
       <div class="app-sidebar__user text-center py-4">
-            <img class="app-sidebar__user-avatar shadow" src="{{ asset('assets/admin/ckeditor/samples/img/logo.png') }}" width="100" style="border-radius: 50%;" alt="User Image">
-            <p class="app-sidebar__user-name fw-bold mt-3 mb-1 text-white">Trang quản lí</p>
+            @auth
+            <div class="d-flex flex-column align-items-center">
+                  <div class="position-relative mb-2">
+                        <a href="{{ route('admin.users.show', Auth::user()->id ) }}">
+                        <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('images/avatar_trang.jpg') }}"
+                              class="rounded-circle shadow border border-2 border-white"
+                              width="90" height="90"
+                              style="object-fit: cover; transition: transform 0.3s ease;"
+                              alt="Avatar"
+                              onmouseover="this.style.transform='scale(1.05)'"
+                              onmouseout="this.style.transform='scale(1)'"></a>
+                  </div>
+                  <div class="mt-2">
+                        <span class="d-block fw-bold" style="font-size: 30px; color: white;">
+                              {{ Auth::user()->fullname }}
+                        </span>
+                  </div>
+            </div>
+            @endauth
       </div>
+
       <hr>
 
       <ul class="app-menu">
@@ -14,7 +32,7 @@
                         <i class="app-menu__icon fas fa-comment-dots"></i><span class="app-menu__label">Hỗ trợ khách hàng</span></a></li>
             <li><a class="app-menu__item {{ request()->is('phan-mem-ban-hang*') ? 'active' : '' }}" href="phan-mem-ban-hang.html">
                         <i class="app-menu__icon bx bx-cart-alt"></i><span class="app-menu__label">POS Bán Hàng</span></a></li>
-            
+
 
             <!-- Nhóm: Quản lý nội dung -->
             <li class="app-menu__section">QUẢN LÝ NỘI DUNG</li>
