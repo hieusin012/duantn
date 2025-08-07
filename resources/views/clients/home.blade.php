@@ -33,29 +33,7 @@
 @endpush
 @push('styles')
 <style>
-    .category-card {
-        transition: all 0.3s ease-in-out;
-        padding: 15px;
-        border-radius: 12px;
-        background-color: #fff;
-        box-shadow: 0 7px 15px rgba(0, 0, 0, 0.05);
-        /* bóng nhẹ mặc định */
-        border: 0.2px solid grey;
-    }
-
-    .category-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        /* bóng đậm hơn khi hover */
-        background-color: #f9f9f9;
-    }
-
-    .category-image {
-        width: 100px;
-        height: 100px;
-        object-fit: cover;
-        border-radius: 8px;
-    }
+    
 
     /* css bài viết */
     .card-img-top:hover {
