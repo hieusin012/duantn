@@ -328,7 +328,7 @@
 
 
 .category-card:hover {
-    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
     transform: translateY(-4px);
 }
 
@@ -338,7 +338,7 @@
     object-fit: cover;
 }
 body {
-    background-color: #f3f5f7ff; /* Bootstrap mặc định, hoặc thử #f5f5f5 */
+    background-color: #fafbfcff; /* Bootstrap mặc định, hoặc thử #f5f5f5 */
 }
 
 
