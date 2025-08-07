@@ -62,14 +62,14 @@
 
                     <div class="form-group col-md-4">
                         <label class="control-label">Ngày bắt đầu</label>
-                        <input class="form-control" type="date" name="start_date" value="{{ old('start_date', $voucher->start_date) }}">
+                        <input class="form-control" type="date" name="start_date" value="{{ old('start_date', optional($voucher->start_date)->format('Y-m-d')) }}">
                         @error('start_date')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="form-group col-md-4">
                         <label class="control-label">Ngày kết thúc</label>
-                        <input class="form-control" type="date" name="end_date" value="{{ old('end_date', $voucher->end_date) }}">
+                        <input class="form-control" type="date" name="end_date" value="{{ old('end_date', optional($voucher->end_date)->format('Y-m-d')) }}">
                         @error('end_date')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror

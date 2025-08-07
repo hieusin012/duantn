@@ -64,8 +64,20 @@
 
             <!-- Nhóm: Thống kê & Báo cáo -->
             <li class="app-menu__section">BÁO CÁO</li>
-            <li><a class="app-menu__item {{ request()->routeIs('admin.thongke.*') ? 'active' : '' }}" href="{{ route('admin.thongke.index') }}">
-                        <i class="app-menu__icon bx bx-bar-chart-alt"></i><span class="app-menu__label">Thống kê</span></a></li>
+            <li>
+                  <a class="app-menu__item {{ request()->routeIs('admin.thongke.index') ? 'active' : '' }}"
+                        href="{{ route('admin.thongke.index') }}">
+                        <i class="app-menu__icon bx bx-bar-chart-alt"></i>
+                        <span class="app-menu__label">Thống kê</span>
+                  </a>
+            </li>
+            <li>
+                  <a class="app-menu__item {{ request()->routeIs('admin.thongke.bienthe.*') ? 'active' : '' }}"
+                        href="{{ route('admin.thongke.bienthe.index') }}">
+                        <i class="app-menu__icon bx bx-bar-chart-alt"></i>
+                        <span class="app-menu__label">Thống kê biến thể</span>
+                  </a>
+            </li>
             <li><a class="app-menu__item {{ request()->is('quan-ly-bao-cao*') ? 'active' : '' }}" href="{{route('admin.orders.report')}}">
                         <i class="app-menu__icon bx bx-pie-chart-alt-2"></i><span class="app-menu__label">Doanh thu</span></a></li>
 

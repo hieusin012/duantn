@@ -40,7 +40,7 @@
                             </a>
                         @else
                             <a class="btn btn-danger btn-sm" href="{{ route('admin.categories.index', ['trashed' => 'true']) }}">
-                                <i class="fas fa-trash"></i> Dữ liệu đã xóa
+                                <i class="fas fa-trash-alt"></i> Dữ liệu đã xóa
                             </a>
                         @endif
                     </div>

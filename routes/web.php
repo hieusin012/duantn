@@ -92,6 +92,11 @@ Route::middleware('web')->group(function () {
         Route::delete('/products/force-delete-all', [ProductController::class, 'forceDeleteAll'])->name('products.force-delete-all');
     });
 
+    // XÓA MỀM Product Variant
+    Route::get('/product-variants/delete', [ProductVariantController::class, 'delete'])->name('variants.delete');
+    Route::get('/product-variants/restore/{id}', [ProductVariantController::class, 'restore'])->name('variants.restore');
+    Route::delete('/product-variants/eliminate/{id}', [ProductVariantController::class, 'eliminate'])->name('variants.eliminate');
+    Route::delete('/product-variants/all-eliminate', [ProductVariantController::class, 'forceDeleteAll'])->name('variants.all-eliminate');
     // Product Variant
     Route::get('product-variants/search', [ProductVariantController::class, 'search'])->name('variants.search');
     Route::resource('product-variants', ProductVariantController::class);
@@ -416,6 +421,11 @@ Route::get('/hot-deals', [HotDealController::class, 'index'])->name('hot-deals.i
 Route::get('/admin/thong-ke/san-pham', [ThongKeController::class, 'index'])->name('admin.thongke.index');
 Route::get('/admin/thong-ke/data', [ThongKeController::class, 'getData'])->name('admin.thongke.data');
 
+// Thống kê theo biến thể
+Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
+    Route::get('thong-ke-bien-the', [\App\Http\Controllers\ThongKeBienTheController::class, 'index'])->name('admin.thongke.bienthe.index');
+    Route::get('thong-ke-bien-the/data', [\App\Http\Controllers\ThongKeBienTheController::class, 'getData'])->name('admin.thongke.bienthe.data');
+});
 
 //end minigame
 // Yêu cầu trả hàng Client
