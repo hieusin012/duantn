@@ -99,7 +99,7 @@
         font-weight: bold;
         transform: rotate(-45deg);
         z-index: 10;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
         text-align: center;
         pointer-events: none;
     }
@@ -116,7 +116,6 @@
         object-fit: cover;
         border-radius: 12px;
     }
-
 </style>
 
 
@@ -131,10 +130,14 @@
         <div class="row justify-content-center">
             @foreach($category as $categories)
             <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4 d-flex justify-content-center">
-                <a href="{{ route('products.byCategory', $categories->slug) }}" class="text-decoration-none text-dark category-card text-center">
-                    <img src="{{ Storage::url($categories->image) }}" class="img-fluid rounded shadow-sm mb-2 category-image" alt="{{ $categories->name }}">
+                <a href="{{ route('products.byCategory', $categories->slug) }}"
+                    class="text-decoration-none text-dark text-center p-3 bg-white shadow-sm rounded-3 category-card">
+                    <img src="{{ Storage::url($categories->image) }}"
+                        class="img-fluid rounded mb-2 category-image"
+                        alt="{{ $categories->name }}">
                     <p class="mb-0 fw-medium">{{ $categories->name }}</p>
                 </a>
+
             </div>
             @endforeach
         </div>
@@ -219,10 +222,10 @@
 @if(isset($banners) && !$banners->isEmpty())
 <div class="home-slideshow slick-arrow-dots">
     @foreach($banners as $banner)
-            <img class="blur-up lazyload slideshow-img" 
-                 src="{{ asset('storage/' . $banner->image) }}" 
-                 alt="{{ $banner->title }}" 
-                 title="{{ $banner->title }}" />
+    <img class="blur-up lazyload slideshow-img"
+        src="{{ asset('storage/' . $banner->image) }}"
+        alt="{{ $banner->title }}"
+        title="{{ $banner->title }}" />
     @endforeach
 </div>
 @endif
@@ -314,4 +317,30 @@
     });
 </script>
 
+<style>
+.category-card {
+    background-color: white;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12); /* mạnh hơn tí */
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    border: none !important;
+}
+
+
+.category-card:hover {
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    transform: translateY(-4px);
+}
+
+.category-card img {
+    border: none !important; /* Chặn viền từ hình ảnh */
+    border-radius: 12px;
+    object-fit: cover;
+}
+body {
+    background-color: #f3f5f7ff; /* Bootstrap mặc định, hoặc thử #f5f5f5 */
+}
+
+
+</style>
 @endsection
