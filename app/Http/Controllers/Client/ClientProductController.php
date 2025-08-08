@@ -120,6 +120,7 @@ class ClientProductController extends Controller
 
         $availableSizes = ProductVariant::where('product_id', $productId)
             ->where('color_id', $colorId)
+            ->whereNull('deleted_at')
             ->pluck('size_id')
             ->toArray();
 

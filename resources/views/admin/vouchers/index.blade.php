@@ -41,7 +41,7 @@
                                 <td><strong>{{ $voucher->code }}</strong></td>
                                 <td>{{ $voucher->discount_type == 'percent' ? 'Phần trăm' : 'Cố định' }}</td>
                                 <td>{{ $voucher->discount }} {{ $voucher->discount_type == 'percent' ? '%' : 'đ' }}</td>
-                                <td>{{ $voucher->max_price ? number_format($voucher->max_price) . ' đ' : 'Không giới hạn' }}</td>
+                                <td>{{ $voucher->max_price ? number_format($voucher->max_price) . ' đ' : '-' }}</td>
                                 <td>{{ $voucher->quantity }}</td>
                                 {{-- <td>{{ $voucher->used }}</td> --}}
                                 <td>
@@ -53,7 +53,7 @@
                                     @if ($voucher->start_date && $voucher->end_date)
                                         {{ $voucher->start_date }} - {{ $voucher->end_date }}
                                     @else
-                                        Không giới hạn
+                                        -
                                     @endif
                                 </td>
                                 <td>

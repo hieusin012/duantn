@@ -197,8 +197,9 @@
 
     @yield('content')
 
-    @include('admin.layouts.partials.footer')
+    
   </main>
+  @include('admin.layouts.partials.footer')
 
   <!-- JS: jQuery, Bootstrap, Chart.js -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

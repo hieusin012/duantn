@@ -271,7 +271,8 @@
                 @endphp --}}
                 @php
                     $isDelivered = $order->status === 'Đã giao hàng';
-                    $canReturn = $isDelivered && $order->delivered_at && now()->diffInDays($order->delivered_at) <= 7;
+                    // $canReturn = $isDelivered && $order->delivered_at && now()->diffInDays($order->delivered_at) <= 7;
+                    $canReturn = $isDelivered && now()->lessThanOrEqualTo($order->delivered_at->copy()->addDays(7));
                 @endphp
 
                 @if ($canReturn)

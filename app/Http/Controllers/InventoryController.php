@@ -20,7 +20,7 @@ class InventoryController extends Controller
             'orderDetails.order' => function ($query) {
                 $query->whereIn('status', ['delivered', 'completed']);
             }
-        ])->orderBy('quantity', 'asc')->get();
+        ])->orderBy('quantity', 'asc')->paginate(10);
 
         $lowStockThreshold = 10;
 

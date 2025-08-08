@@ -9,9 +9,18 @@
         <div class="tile">
             <div class="tile-body">
                 <div class="row element-button">
-                    <div class="col-sm-4">
+                    {{-- <div class="col-sm-4">
                         <label><strong>Chọn tháng/năm:</strong></label>
                         <input type="month" id="filter-month" class="form-control">
+                    </div> --}}
+                    <div class="col-sm-3">
+                        <label><strong>Từ ngày:</strong></label>
+                        <input type="date" id="filter-from-date" class="form-control">
+                    </div>
+
+                    <div class="col-sm-3">
+                        <label><strong>Đến ngày:</strong></label>
+                        <input type="date" id="filter-to-date" class="form-control">
                     </div>
                     <div class="col-sm-2 align-self-end">
                         <button id="loadData" class="btn btn-primary btn-sm">
@@ -36,11 +45,21 @@
     const dataUrl = "{{ route('admin.thongke.data') }}";
 
     $('#loadData').on('click', function () {
-        const value = $('#filter-month').val();
-        const month = value ? new Date(value).getMonth() + 1 : null;
-        const year = value ? new Date(value).getFullYear() : null;
+        // const value = $('#filter-month').val();
+        // const month = value ? new Date(value).getMonth() + 1 : null;
+        // const year = value ? new Date(value).getFullYear() : null;
 
-        fetch(`${dataUrl}?month=${month}&year=${year}`)
+        const fromDate = $('#filter-from-date').val();
+        const toDate = $('#filter-to-date').val();
+
+        const params = new URLSearchParams({
+            // ...(month && { month }),
+            // ...(year && { year }),
+            ...(fromDate && { from_date: fromDate }),
+            ...(toDate && { to_date: toDate }),
+        });
+
+        fetch(`${dataUrl}?${params.toString()}`)
             .then(res => res.json())
             .then(data => {
                 const labels = data.map(item => item.category_name);

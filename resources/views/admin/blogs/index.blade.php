@@ -12,7 +12,7 @@
         <div class="tile">
             <div class="tile-body">
                 <!-- Nút thao tác -->
-                <div class="d-flex justify-content-between mb-3">
+                <div class="mb-3">
                     <a class="btn btn-success btn-sm" href="{{ route('admin.blogs.create') }}">
                         <i class="fas fa-plus me-1"></i> Thêm bài viết
                     </a>

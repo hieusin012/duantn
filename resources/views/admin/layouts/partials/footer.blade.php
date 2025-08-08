@@ -1,4 +1,4 @@
-<footer class="footer-custom py-3 text-center text-white shadow">
+<footer class="footer-custom py-3 text-center text-white shadow" style="background-color: #2c4857ff;">
 
 
     <p class="mb-0 fw-semibold" style="font-size: 14px;">
