@@ -51,7 +51,10 @@
 
         const fromDate = $('#filter-from-date').val();
         const toDate = $('#filter-to-date').val();
-
+        if (!fromDate && !toDate) {
+            alert('Vui lòng nhập ít nhất một ngày (Từ ngày hoặc Đến ngày)!');
+            return;
+        }
         const params = new URLSearchParams({
             // ...(month && { month }),
             // ...(year && { year }),

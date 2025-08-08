@@ -35,6 +35,7 @@ class ThongKeController extends Controller
             ->when($toDate, function ($query) use ($toDate) {
                 $query->whereDate('products.created_at', '<=', $toDate);
             })
+            ->whereNull('products.deleted_at')
             ->groupBy('categories.name')
             ->get();
 

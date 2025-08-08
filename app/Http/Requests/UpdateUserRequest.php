@@ -18,7 +18,7 @@ class UpdateUserRequest extends FormRequest
         $userId = $this->route('user')->id;
 
         return [
-            'fullname' => ['required', 'string', 'max:255', function ($attribute, $value, $fail) {
+            'fullname' => ['required', 'string', 'max:255', 'regex:/^[\p{L}\p{M}\s\'\-]+$/u', function ($attribute, $value, $fail) {
                 if (stripos($value, '<script') !== false) {
                     $fail('Thông tin không hợp lệ. Họ tên không được chứa mã script.');
                 }
@@ -28,7 +28,7 @@ class UpdateUserRequest extends FormRequest
                 'email',
                 Rule::unique('users', 'email')->ignore($userId),
             ],
-            'password' => 'nullable|min:6',
+            'password' => 'nullable|min:8|max:20|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
             'avatar' => 'nullable|image|max:2048',
             'phone' => ['nullable', 'regex:/^(\+84|0)\d{9,10}$/'],
             'address' => 'nullable|string',
@@ -48,18 +48,21 @@ class UpdateUserRequest extends FormRequest
             'fullname.required' => 'Họ và tên không được để trống.',
             'fullname.string' => 'Họ và tên phải là chuỗi ký tự.',
             'fullname.max' => 'Họ và tên không được vượt quá 255 ký tự.',
+            'fullname.regex' => 'Họ tên không được chứa ký tự đặc biệt. Chỉ bao gồm chữ cái, khoảng trắng, gạch nối (-) hoặc dấu nháy đơn (\').',
 
             'email.required' => 'Email không được để trống.',
             'email.email' => 'Email không đúng định dạng.',
             'email.unique' => 'Email đã được sử dụng.',
 
-            'password.min' => 'Mật khẩu phải có ít nhất 6 ký tự.',
+            'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
+            'password.max' => 'Mật khẩu không được vượt quá 20 ký tự.',
+            'password.regex' => 'Mật khẩu phải chứa ít nhất một chữ hoa, một chữ thường, một số và một ký tự đặc biệt.',
 
             'avatar.image' => 'Ảnh đại diện phải là file hình ảnh.',
             'avatar.max' => 'Ảnh đại diện không được lớn hơn 2MB.',
 
             'phone.string' => 'Số điện thoại phải là chuỗi ký tự.',
-            'phone.regex' => 'Số điện thoại không hợp lệ. Ví dụ: +84901234567 hoặc 0901234567.',
+            'phone.regex' => 'Số điện thoại không hợp lệ. Ví dụ 10 số: 0333333333 hay 0888888888 hoặc 0901234567.',
 
             'address.string' => 'Địa chỉ phải là chuỗi ký tự.',
 

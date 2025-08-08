@@ -90,8 +90,12 @@
         const fromDate = $('input[name="from_date"]').val();
         const toDate = $('input[name="to_date"]').val();
 
-        if (!fromDate || !toDate) {
-            alert('Vui lòng chọn khoảng thời gian!');
+        // if (!fromDate || !toDate) {
+        //     alert('Vui lòng chọn khoảng thời gian!');
+        //     return;
+        // }
+        if (!fromDate && !toDate) {
+            alert('Vui lòng nhập ít nhất một ngày (Từ ngày hoặc Đến ngày)!');
             return;
         }
 

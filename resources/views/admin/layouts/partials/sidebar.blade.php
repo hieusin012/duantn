@@ -32,7 +32,7 @@
                         <i class="app-menu__icon fas fa-comment-dots"></i><span class="app-menu__label">Hỗ trợ khách hàng</span></a></li>
             <li><a class="app-menu__item {{ request()->is('phan-mem-ban-hang*') ? 'active' : '' }}" href="phan-mem-ban-hang.html">
                         <i class="app-menu__icon bx bx-cart-alt"></i><span class="app-menu__label">POS Bán Hàng</span></a></li>
-
+                                   
 
             <!-- Nhóm: Quản lý nội dung -->
             <li class="app-menu__section">QUẢN LÝ NỘI DUNG</li>
@@ -62,7 +62,9 @@
 
             <!-- Nhóm: Đơn hàng & Kho -->
             <li class="app-menu__section">ĐƠN HÀNG & KHO</li>
-            <li><a class="app-menu__item {{ request()->routeIs('admin.orders*') ? 'active' : '' }}" href="{{ route('admin.orders.index') }}">
+            {{-- <li><a class="app-menu__item {{ request()->routeIs('admin.orders*') ? 'active' : '' }}" href="{{ route('admin.orders.index') }}">
+                        <i class="app-menu__icon fas fa-shopping-cart"></i><span class="app-menu__label">Đơn hàng</span></a></li> --}}
+                  <li><a class="app-menu__item {{ request()->routeIs('admin.orders.index') ? 'active' : '' }}" href="{{ route('admin.orders.index') }}">
                         <i class="app-menu__icon fas fa-shopping-cart"></i><span class="app-menu__label">Đơn hàng</span></a></li>
             <li><a class="app-menu__item {{ request()->routeIs('admin.return-requests.*') ? 'active' : '' }}" href="{{ route('admin.return-requests.index') }}">
                         <i class="app-menu__icon fas fa-undo"></i><span class="app-menu__label">Hoàn trả</span></a></li>
@@ -86,19 +88,20 @@
                   <a class="app-menu__item {{ request()->routeIs('admin.thongke.index') ? 'active' : '' }}"
                         href="{{ route('admin.thongke.index') }}">
                         <i class="app-menu__icon bx bx-bar-chart-alt"></i>
-                        <span class="app-menu__label">Thống kê</span>
+                        <span class="app-menu__label">Thống kê sản phẩm</span>
                   </a>
             </li>
             <li>
                   <a class="app-menu__item {{ request()->routeIs('admin.thongke.bienthe.*') ? 'active' : '' }}"
                         href="{{ route('admin.thongke.bienthe.index') }}">
-                        <i class="app-menu__icon bx bx-bar-chart-alt"></i>
+                        <i class="app-menu__icon bx bx-line-chart"></i>
                         <span class="app-menu__label">Thống kê biến thể</span>
                   </a>
             </li>
-            <li><a class="app-menu__item {{ request()->is('quan-ly-bao-cao*') ? 'active' : '' }}" href="{{route('admin.orders.report')}}">
-                        <i class="app-menu__icon bx bx-pie-chart-alt-2"></i><span class="app-menu__label">Doanh thu</span></a></li>
-
+            {{-- <li><a class="app-menu__item {{ request()->is('quan-ly-bao-cao*') ? 'active' : '' }}" href="{{route('admin.orders.report')}}">
+                        <i class="app-menu__icon bx bx-pie-chart-alt-2"></i><span class="app-menu__label">Doanh thu</span></a></li> --}}
+            <li><a class="app-menu__item {{ request()->routeIs('admin.orders.report') ? 'active' : '' }}" href="{{ route('admin.orders.report') }}">
+                        <i class="app-menu__icon bx bx-pie-chart-alt-2"></i><span class="app-menu__label">Doanh thu</span></a></li>      
             <!-- Nhóm: Cấu hình hệ thống -->
             <li class="app-menu__section">HỆ THỐNG</li>
             <li><a class="app-menu__item {{ request()->routeIs('admin.banners.*') ? 'active' : '' }}" href="{{ route('admin.banners.index') }}">

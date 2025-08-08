@@ -579,7 +579,7 @@
                             @csrf
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
                             <h3 class="spr-form-title">Viết đánh giá của bạn</h3>
-                            <p>Email của bạn sẽ không được công khai. Các trường bắt buộc được đánh dấu *</p>
+                            <p>Email của bạn sẽ không được công khai. Các trường bắt buộc được đánh dấu <span class="required">*</span></p>
                             <fieldset class="row spr-form-contact">
                                 <div class="col-sm-6 spr-form-contact-name form-group">
                                     <label class="spr-form-label" for="nickname">Tên <span class="required">*</span></label>
