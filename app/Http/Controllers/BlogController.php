@@ -139,6 +139,7 @@ use App\Models\BlogCategory;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class BlogController extends Controller
 {
@@ -186,7 +187,7 @@ class BlogController extends Controller
             'slug' => 'required|string|max:255|unique:blogs,slug',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'category_id' => 'required|exists:blog_categories,id',
-            'user_id' => 'required|exists:users,id',
+            // 'user_id' => 'required|exists:users,id',
         ], [
             'title.required' => 'Tiêu đề là bắt buộc.',
             'title.max' => 'Tiêu đề không được vượt quá 255 ký tự.',
@@ -200,11 +201,14 @@ class BlogController extends Controller
             'image.max' => 'Ảnh không được vượt quá 2MB.',
             'category_id.required' => 'Danh mục là bắt buộc.',
             'category_id.exists' => 'Danh mục không hợp lệ.',
-            'user_id.required' => 'Tác giả là bắt buộc.',
-            'user_id.exists' => 'Tác giả không hợp lệ.',
+            // 'user_id.required' => 'Tác giả là bắt buộc.',
+            // 'user_id.exists' => 'Tác giả không hợp lệ.',
         ]);
 
         $data = $request->only(['title', 'content', 'slug', 'category_id', 'user_id']);
+
+        // Gán user_id từ người dùng đang đăng nhập
+        $data['user_id'] = Auth::id();
 
         // Chặn mã độc trong nội dung
         $data['content'] = strip_tags($data['content'], '<p><b><i><ul><ol><li><br><strong><em>');
@@ -247,7 +251,7 @@ class BlogController extends Controller
             'slug' => 'required|string|max:255|unique:blogs,slug,' . $id,
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'category_id' => 'required|exists:blog_categories,id',
-            'user_id' => 'required|exists:users,id',
+            // 'user_id' => 'required|exists:users,id',
         ], [
             'title.required' => 'Vui lòng nhập tiêu đề bài viết.',
             'title.string' => 'Tiêu đề bài viết phải là chuỗi ký tự.',
@@ -269,8 +273,8 @@ class BlogController extends Controller
             'category_id.required' => 'Vui lòng chọn danh mục.',
             'category_id.exists' => 'Danh mục đã chọn không hợp lệ.',
 
-            'user_id.required' => 'Vui lòng chọn tác giả.',
-            'user_id.exists' => 'Tác giả đã chọn không hợp lệ.',
+            // 'user_id.required' => 'Vui lòng chọn tác giả.',
+            // 'user_id.exists' => 'Tác giả đã chọn không hợp lệ.',
         ]);
 
         $blog = Blog::findOrFail($id);

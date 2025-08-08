@@ -72,7 +72,7 @@
 
 <div id="page-content">
     @if (session('error'))
-        <div class="alert alert-danger">
+        <div class="alert alert-danger text-center">
             {{ session('error') }}
         </div>
     @endif

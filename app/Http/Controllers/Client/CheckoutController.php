@@ -95,6 +95,17 @@ class CheckoutController extends Controller
         $shippingCost = 0;
         $totalPrice = $subtotal + $shippingCost - $discount;
 
+        // Kiểm tra số lượng tồn kho tại bước hiển thị trang thanh toán
+        foreach ($cartItems as $item) {
+            if (!$item->variant || $item->variant->quantity < $item->quantity) {
+                $variantInfo = '';
+                if ($item->variant) {
+                    $variantInfo = ' (' . ($item->variant->color->name ?? 'N/A') . ' - ' . ($item->variant->size->name ?? 'N/A') . ')';
+                }
+                return redirect()->route('client.cart')->with('error', 'Sản phẩm "' . ($item->product->name ?? 'N/A') . $variantInfo . '" không đủ số lượng trong kho. Vui lòng kiểm tra lại giỏ hàng.');
+            }
+        }
+
         return view('clients.checkout', compact(
             'cart',
             'cartItems',

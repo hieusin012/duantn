@@ -173,7 +173,7 @@
             </div>
             <div class="col-md-12">
                 <div class="tile">
-                    <h3 class="tile-title">Tình trạng đơn hàng</h3>
+                    <h3 class="tile-title">Đơn hàng chờ xử lý</h3>
                     <div>
                         <table class="table table-bordered">
                             <thead>
@@ -182,6 +182,7 @@
                                     <th>Tên khách hàng</th>
                                     <th>Tổng tiền</th>
                                     <th>Trạng thái</th>
+                                    <th>Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -193,6 +194,11 @@
                                     {{-- Sử dụng total_price từ model Order --}}
                                     <td>{{ number_format($order->total_price, 0, ',', '.') }} đ</td>
                                     <td><span class="badge bg-info">{{ $order->status }}</span></td>
+                                    <td>
+                                        <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-outline-success btn-sm" title="Xem chi tiết">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
                                 </tr>
                                 @empty
                                 <tr>

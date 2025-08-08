@@ -21,7 +21,8 @@ class CategoryController extends Controller
         ->when($showTrashed, function ($q) {
             $q->onlyTrashed();
         }, function ($q) {
-            $q->whereNull('deleted_at'); // lọc xoá mềm mặc định
+            $q->whereNull('deleted_at'); 
+
         })
         ->when($query, function ($q) use ($query) {
             $q->where('name', 'like', '%' . $query . '%');
@@ -33,6 +34,7 @@ class CategoryController extends Controller
 
     return view('admin.categories.index', compact('categories', 'query', 'showTrashed'));
 }
+
 
 
     public function create()

@@ -19,7 +19,7 @@ class DashboardController extends Controller
         $totalCustomers = User::where('role', 'member')->count(); // <-- ĐÃ SỬA
         $totalProducts = Product::count();
         $totalOrders = Order::whereMonth('created_at', now()->month)->count();
-        $recentOrders = Order::with('user')->latest()->take(4)->get();
+        $recentOrders = Order::with('user')->where('status', 'Chờ xác nhận')->latest()->take(4)->get();
         $newCustomers = User::where('role', 'member')->latest()->take(4)->get(); // <-- ĐÃ SỬA
 
 
@@ -50,7 +50,7 @@ class DashboardController extends Controller
 
         foreach ($grouped as $date => $ordersOnDate) {
             $labels[] = $date;
-            $data[] = $ordersOnDate->sum('total_price');
+            $data[] = $ordersOnDate->where('status', 'Đã giao hàng')->where('payment_status', 'Đã thanh toán')->sum('total_price');
         }
 
         return response()->json([
