@@ -137,7 +137,12 @@
 
                             {{-- Tên và thông tin --}}
                             <td class="cart-meta">
-                                <strong>{{ $item->product->name }}</strong><br>
+                                {{-- <strong>{{ $item->product->name }}</strong><br> --}}
+                                <strong>
+                                    <a href="{{ route('client.products.show', ['slug' => $item->product->slug]) }}" title="Bấm vào tên sản phẩm để sang trang chi tiết sản phẩm">
+                                        {{ $item->product->name }}
+                                    </a>
+                                </strong><br>
                                 Màu: {{ $item->variant->color->name ?? '—' }},
                                 Size: {{ $item->variant->size->name ?? '—' }}
                             </td>

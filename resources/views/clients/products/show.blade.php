@@ -212,13 +212,27 @@
                             {{-- <span class="price fs-3" id="variant-price">
                                 {{ number_format($product->price, 0, ',', '.') }} ₫
                             </span> --}}
-                            @php
+                            {{-- @php
                             $price = $product->price;
                             $discountPercent = $product->discount_percent ?? 0;
                             $isHotDeal = $product->is_hot_deal
                             && $discountPercent > 0
                             && $product->deal_end_at
                             && \Carbon\Carbon::now()->lt($product->deal_end_at);
+
+                            $salePrice = $isHotDeal ? $price * (1 - $discountPercent / 100) : null;
+                            @endphp --}}
+                            @php
+                            $price = $product->price;
+                            $discountPercent = $product->discount_percent ?? 0;
+                            $now = \Carbon\Carbon::now();
+
+                            $isHotDeal = $product->is_hot_deal
+                                && $discountPercent > 0
+                                && $product->deal_start_at
+                                && $product->deal_start_at <= $now
+                                && $product->deal_end_at
+                                && $now < $product->deal_end_at;
 
                             $salePrice = $isHotDeal ? $price * (1 - $discountPercent / 100) : null;
                             @endphp
@@ -302,7 +316,8 @@
                                             data-size-id="{{ $variant->size_id }}"
                                             data-variant-quantity="{{ $variant->quantity }}"
                                             data-image="{{ asset('storage/' . $variant->image) }}"
-                                            data-price="{{ $variant->sale_price ?? $variant->price }}">
+                                            data-price="{{ $variant->display_price }}">
+                                            {{-- data-price="{{ $variant->sale_price ?? $variant->price }}"> --}}
                                             {{-- data-price="{{ $variant->price }}"> --}}
                                             {{ $variant->size->name }}
                                         </button>
@@ -564,7 +579,7 @@
                             @csrf
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
                             <h3 class="spr-form-title">Viết đánh giá của bạn</h3>
-                            <p>Email của bạn sẽ không được công khai. Các trường bắt buộc được đánh dấu *</p>
+                            <p>Email của bạn sẽ không được công khai. Các trường bắt buộc được đánh dấu <span class="required">*</span></p>
                             <fieldset class="row spr-form-contact">
                                 <div class="col-sm-6 spr-form-contact-name form-group">
                                     <label class="spr-form-label" for="nickname">Tên <span class="required">*</span></label>

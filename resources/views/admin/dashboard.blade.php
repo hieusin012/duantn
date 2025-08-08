@@ -135,31 +135,37 @@
     <div class="col-md-12 col-lg-6">
         <div class="row">
             <div class="col-md-6">
-                <div class="widget-small primary coloured-icon"><i class='icon bx bxs-user-account fa-3x'></i>
-                    <div class="info">
-                        <h4>Tổng khách hàng</h4>
-                        <p><b>{{ $totalCustomers ?? 0 }} khách hàng</b></p>
-                        <p class="info-tong">Tổng số khách hàng được quản lý.</p>
+                <a href="{{ route('admin.users.index') }}">
+                    <div class="widget-small primary coloured-icon"><i class='icon bx bxs-user-account fa-3x'></i>
+                        <div class="info">
+                            <h4>Tổng khách hàng</h4>
+                            <p><b>{{ $totalCustomers ?? 0 }} khách hàng</b></p>
+                            <p class="info-tong">Tổng số khách hàng được quản lý.</p>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             <div class="col-md-6">
-                <div class="widget-small info coloured-icon"><i class='icon bx bxs-data fa-3x'></i>
-                    <div class="info">
-                        <h4>Tổng sản phẩm</h4>
-                        <p><b>{{ $totalProducts ?? 0 }} sản phẩm</b></p>
-                        <p class="info-tong">Tổng số sản phẩm được quản lý.</p>
+                <a href="{{ route('admin.products.index') }}">
+                    <div class="widget-small info coloured-icon"><i class='icon bx bxs-data fa-3x'></i>
+                        <div class="info">
+                            <h4>Tổng sản phẩm</h4>
+                            <p><b>{{ $totalProducts ?? 0 }} sản phẩm</b></p>
+                            <p class="info-tong">Tổng số sản phẩm được quản lý.</p>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             <div class="col-md-6">
-                <div class="widget-small warning coloured-icon"><i class='icon bx bxs-shopping-bags fa-3x'></i>
-                    <div class="info">
-                        <h4>Tổng đơn hàng</h4>
-                        <p><b>{{ $totalOrders ?? 0 }} đơn hàng</b></p>
-                        <p class="info-tong">Tổng số hóa đơn bán hàng trong tháng.</p>
+                <a href="{{ route('admin.orders.index') }}">
+                    <div class="widget-small warning coloured-icon"><i class='icon bx bxs-shopping-bags fa-3x'></i>
+                        <div class="info">
+                            <h4>Tổng đơn hàng</h4>
+                            <p><b>{{ $totalOrders ?? 0 }} đơn hàng</b></p>
+                            <p class="info-tong">Tổng số đơn hàng đang chờ xử lý</p>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             <div class="col-md-6">
                 <div class="widget-small danger coloured-icon"><i class='icon bx bxs-error-alt fa-3x'></i>
@@ -193,7 +199,14 @@
                                     <td>{{ $order->user->fullname ?? $order->fullname }}</td>
                                     {{-- Sử dụng total_price từ model Order --}}
                                     <td>{{ number_format($order->total_price, 0, ',', '.') }} đ</td>
-                                    <td><span class="badge bg-info">{{ $order->status }}</span></td>
+                                    @php
+                                    $statusClass = match($order->status) {
+                                    'Chờ xác nhận' => 'bg-warning',
+
+                                    default => 'bg-light text-dark'
+                                    };
+                                    @endphp
+                                    <td><span class="badge {{ $statusClass }}">{{ $order->status }}</span></td>
                                     <td>
                                         <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-outline-success btn-sm" title="Xem chi tiết">
                                             <i class="fas fa-eye"></i>
@@ -230,7 +243,7 @@
                                     {{-- Sử dụng các cột từ model User --}}
                                     <td>{{ $customer->fullname }}</td>
                                     <td>{{ $customer->birthday ? $customer->birthday->format('d/m/Y') : 'Chưa có' }}</td>
-                                    <td><span class="tag tag-success">{{ $customer->phone }}</span></td>
+                                    <td><span class="tag tag-success">{{ $customer->phone ? $customer->phone : 'Chưa có' }}</span></td>
                                 </tr>
                                 @empty
                                 <tr>
@@ -260,11 +273,13 @@
                         </div>
                         <div class="col-auto">
                             <button type="button" onclick="loadUserChart()" class="btn btn-success">
-                                <i class="bx bx-bar-chart"></i> Xem biểu đồ
+                                <i class="bx bx-bar-chart"></i> Lọc
                             </button>
                         </div>
                     </form>
-
+                    <div class="mb-3">
+                        <p id="totalUsers" style="font-weight: bold; margin-top: 1rem; font-size: 20px;"></p>
+                    </div>
                     <div class="tile mt-4">
                         <canvas id="userChart"></canvas>
                     </div>
@@ -284,15 +299,13 @@
                         </div>
                         <div class="col-auto">
                             <button type="button" onclick="loadRevenueChart()" class="btn btn-success">
-                                <i class="bx bx-line-chart"></i> Xem doanh thu
+                                <i class="bx bx-line-chart"></i> Lọc
                             </button>
                         </div>
                     </form>
 
                     <div class="mb-3">
-                        <h4 class="text-primary">Tổng doanh thu:
-
-                        </h4>
+                        <h4 class="text-primary">Tổng doanh thu:</h4>
                     </div>
 
                     <div class="card mb-4">
@@ -399,6 +412,11 @@
             .then(res => res.json())
             .then(data => {
                 if (userChart) userChart.destroy();
+                const totalActive = data.active.reduce((sum, val) => sum + val, 0);
+                const totalBanned = data.banned.reduce((sum, val) => sum + val, 0);
+                const totalUsers = totalActive + totalBanned;
+                document.getElementById('totalUsers').innerHTML =
+                    `Tổng tài khoản: <b>${totalUsers}</b><br>Hoạt động: <span style="color:#10b981">${totalActive}</span>, Bị khóa: <span style="color:#ef4444">${totalBanned}</span>`;
 
                 userChart = new Chart(document.getElementById('userChart'), {
                     type: 'bar',

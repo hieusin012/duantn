@@ -111,11 +111,19 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
+                    <div class="form-group col-md-3">
+                        <label class="control-label">Thời gian bắt đầu ưu đãi</label>
+                        <input type="datetime-local" class="form-control" name="deal_start_at" 
+                            value="{{ old('deal_start_at', $product->deal_start_at ? \Carbon\Carbon::parse($product->deal_start_at)->format('Y-m-d\TH:i') : '') }}">
+                        @error('deal_start_at')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
 
                     <div class="form-group col-md-3">
                         <label class="control-label">Thời gian kết thúc ưu đãi</label>
                         <input type="datetime-local" class="form-control" name="deal_end_at" 
-                            value="{{ old('deal_end_at', \Carbon\Carbon::parse($product->deal_end_at)->format('Y-m-d\TH:i')) }}">
+                            value="{{ old('deal_end_at', $product->deal_end_at ? \Carbon\Carbon::parse($product->deal_end_at)->format('Y-m-d\TH:i') : '') }}">
                         @error('deal_end_at')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror

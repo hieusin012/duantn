@@ -49,6 +49,26 @@
                     <p><strong>Mã đơn hàng:</strong> <span
                             class="text-dark">{{ $order->code ?? str_pad($order->id, 5, '0', STR_PAD_LEFT) }}</span></p>
                     <p><strong>Ngày đặt hàng:</strong> {{ $order->created_at->format('d/m/Y H:i:s') }}</p>
+                    {{-- <p><strong>Ngày nhận hàng:</strong> 
+                        {{ $order->delivered_at ? $order->delivered_at->format('d/m/Y H:i:s') : 'Chưa nhận' }}
+                    </p> --}}
+                    <p><strong>Ngày nhận hàng:</strong> 
+                        @php
+                            switch ($order->status) {
+                                case 'Đã giao hàng':
+                                case 'Đã hoàn hàng':
+                                    echo $order->delivered_at 
+                                        ? $order->delivered_at->format('d/m/Y H:i:s') 
+                                        : 'Đã giao nhưng thiếu thời gian';
+                                    break;
+                                case 'Đơn hàng đã hủy':
+                                    echo 'Đơn hàng đã bị hủy';
+                                    break;
+                                default:
+                                    echo 'Chưa giao';
+                            }
+                        @endphp
+                    </p>
                     <p>
                         <strong>Trạng thái:</strong>
                         @php
@@ -245,15 +265,20 @@
                 @endif
 
                 {{-- Hoàn hàng nếu trong 7 ngày --}}
-                @php
+                {{-- @php
                     $isDelivered = $order->status === 'Đã giao hàng';
                     $canReturn = $isDelivered && $order->created_at->diffInDays(\Carbon\Carbon::now()) <= 7;
+                @endphp --}}
+                @php
+                    $isDelivered = $order->status === 'Đã giao hàng';
+                    // $canReturn = $isDelivered && $order->delivered_at && now()->diffInDays($order->delivered_at) <= 7;
+                    $canReturn = $isDelivered && now()->lessThanOrEqualTo($order->delivered_at->copy()->addDays(7));
                 @endphp
 
                 @if ($canReturn)
                     <a href="{{ route('client.return-requests.create', $order->id) }}"
                     class="btn btn-outline-warning"
-                    onclick="return confirm('Bạn có chắc muốn gửi yêu cầu trả hàng cho đơn này?')">
+                    onclick="return confirm('Bạn có chắc muốn gửi yêu cầu trả hàng cho đơn này?')" title="Hoàn hàng trong vòng 7 ngày kể từ ngày nhận hàng">
                     ↩️ Hoàn lại đơn hàng
                     </a>
                 @endif

@@ -40,7 +40,7 @@ class AdminReturnRequestController extends Controller
 
     public function update(Request $request, $id)
     {
-        $return = ReturnRequest::findOrFail($id);
+        $return = ReturnRequest::with(['user', 'order.orderDetails'])->findOrFail($id);
         $oldStatus = $return->status;
         $newStatus = $request->status;
 
@@ -66,6 +66,13 @@ class AdminReturnRequestController extends Controller
                 'status' => 'Đã hoàn hàng',
                 'payment_status' => 'Đã hoàn tiền',
             ]);
+            // Cộng lại số lượng cho từng sản phẩm
+            foreach ($return->order->orderDetails as $detail) {
+                $variant = $detail->variant;
+                if ($variant) {
+                    $variant->increment('quantity', $detail->quantity);
+                }
+            }
         }
 
         return redirect()->route('admin.return-requests.index')->with('success', 'Cập nhật trạng thái thành công.');

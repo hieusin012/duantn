@@ -66,6 +66,11 @@
                                     @endforeach
                                 </select>
                             </div>
+                            <div class="mb-3">
+                                <label class="form-label">Ngày bắt đầu giảm giá</label>
+                                <input type="date" name="sale_start_date" class="form-control"
+                                    value="{{ old('sale_start_date', optional($productVariant->sale_start_date)->format('Y-m-d')) }}">
+                            </div>
                         </div>
 
                         <!-- Cột phải -->
@@ -83,6 +88,11 @@
                             <div class="mb-3">
                                 <label class="form-label">Số lượng <span class="text-danger">*</span></label>
                                 <input type="number" name="quantity" class="form-control" required value="{{ old('quantity', $productVariant->quantity) }}">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Ngày kết thúc giảm giá</label>
+                                <input type="date" name="sale_end_date" class="form-control"
+                                    value="{{ old('sale_end_date', optional($productVariant->sale_end_date)->format('Y-m-d')) }}">
                             </div>
                         </div>
                     </div>

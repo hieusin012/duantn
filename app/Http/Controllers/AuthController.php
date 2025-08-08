@@ -28,7 +28,7 @@ class AuthController extends Controller
             'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
         ]);
 
-        // ✅ Kiểm tra tài khoản bị khóa
+        // Kiểm tra tài khoản bị khóa
         $user = \App\Models\User::where('email', $request->email)->first();
         // if ($user && $user->status === 'inactive') {
         if ($user && $user->status !== 'active') {
@@ -37,7 +37,7 @@ class AuthController extends Controller
             ]);
         }
 
-        // ✅ Giới hạn 5 lần đăng nhập sai
+        // Giới hạn 5 lần đăng nhập sai
         $throttleKey = strtolower($request->input('email')) . '|' . $request->ip();
         if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
             $seconds = RateLimiter::availableIn($throttleKey);
@@ -47,7 +47,7 @@ class AuthController extends Controller
         }
 
         if (Auth::attempt($credentials)) {
-            RateLimiter::clear($throttleKey); // ✅ Reset đếm nếu login đúng
+            RateLimiter::clear($throttleKey); // Reset đếm nếu login đúng
             $request->session()->regenerate();
 
             // Kiểm tra role admin hoặc user
@@ -57,7 +57,7 @@ class AuthController extends Controller
                 return redirect('/')->with('success', 'Đăng nhập thành công');
             }
         }
-        RateLimiter::hit($throttleKey, 900); // ✅ Đếm sai, 900 giây = 15 phút
+        RateLimiter::hit($throttleKey, 900); // Đếm sai, 900 giây = 15 phút
 
         return back()->withErrors([
             'email' => 'Thông tin đăng nhập không chính xác.',
@@ -80,6 +80,7 @@ class AuthController extends Controller
                 'required',
                 'confirmed',
                 'min:8',
+                'max:20',
                 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/'
             ],
 
@@ -94,6 +95,7 @@ class AuthController extends Controller
             'password.required' => 'Vui lòng nhập mật khẩu.',
             'password.confirmed' => 'Mật khẩu xác nhận không khớp.',
             'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
+            'password.max' => 'Mật khẩu không được vượt quá 20 ký tự.',
             'password.regex' => 'Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt.',
         ]);
 
@@ -102,10 +104,10 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
             'role' => 'member',
-            'status' => 'active', // ✅ Thêm dòng này
+            'status' => 'active', // Thêm dòng này
         ]);
 
-        // ✅ Không login, mà redirect về login
+        // Không login, mà redirect về login
         return redirect()->route('login')->with('success', 'Đăng ký thành công! Vui lòng đăng nhập.');
     }
 

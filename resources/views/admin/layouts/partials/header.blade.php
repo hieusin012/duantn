@@ -1,5 +1,5 @@
 <!-- HEADER -->
-<header class="app-header d-flex justify-content-between align-items-center px-4 py-2 shadow-sm border-bottom" style="background-color: #212529;">
+<header class="app-header d-flex justify-content-between align-items-center px-4 py-2 shadow-sm border-bottom" style="background-color: #2c4857ff;">
   <!-- Logo hoặc tiêu đề bên trái -->
   <div class="d-flex align-items-center text-white">
     <i class='bx bx-menu fs-4 me-3' id="sidebarToggle" style="cursor: pointer;"></i>

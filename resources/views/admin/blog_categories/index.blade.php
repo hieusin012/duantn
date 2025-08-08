@@ -15,6 +15,9 @@
                             <i class="fas fa-plus"></i> Thêm danh mục
                         </a>
                     </div>
+                    <div class="col-sm-2 mb-2">
+                        <a class="btn btn-danger btn-sm" type="button" title="Xóa" href="{{ route('admin.blog-categories.delete') }}"><i class="fas fa-trash-alt"></i> Dữ liệu đã xóa</a>
+                    </div>
                 </div>
 
                 <table class="table table-hover table-bordered">
@@ -24,7 +27,7 @@
                             <th>Tên</th>
                             <th>Slug</th>
                             <th>Danh mục cha</th>
-                            <th>Hiển thị</th>
+                            <th>Trạng thái</th>
                             <th>Hành động</th>
                         </tr>
                     </thead>

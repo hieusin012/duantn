@@ -81,4 +81,32 @@ class SizeController extends Controller
         $size->delete();
         return redirect()->route('admin.sizes.index')->with('success', 'Đã xóa kích cỡ thành công.');
     }
+    public function delete()
+    {
+        $deletedSizes = Size::onlyTrashed()->get();
+        return view('admin.sizes.delete', compact('deletedSizes'));
+    }
+
+    public function restore($id)
+    {
+        $size = Size::withTrashed()->findOrFail($id);
+        $size->restore();
+        return redirect()->route('admin.sizes.index')->with('success', 'Khôi phục size thành công!');
+    }
+
+    public function eliminate($id)
+    {
+        $size = Size::withTrashed()->findOrFail($id);
+        $size->forceDelete();
+        return redirect()->route('admin.sizes.delete')->with('success', 'Xóa vĩnh viễn thành công!');
+    }
+
+    public function forceDeleteAll()
+    {
+        $sizes = Size::onlyTrashed()->get();
+        foreach ($sizes as $size) {
+            $size->forceDelete();
+        }
+        return redirect()->route('admin.sizes.delete')->with('success', 'Xóa vĩnh viễn tất cả size thành công!');
+    }
 }

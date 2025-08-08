@@ -101,7 +101,7 @@
                                 </option>
                             @endforeach
                         </select>
-                        <input type="hidden" name="user_id" value="{{ $user->id }}"> {{-- Không cho sửa nhưng vẫn gửi dữ liệu Giữ disabled + thêm <input type="hidden"> --}}
+                        <input type="hidden" name="user_id" value="{{ $comment->user_id }}"> {{-- Không cho sửa nhưng vẫn gửi dữ liệu Giữ disabled + thêm <input type="hidden"> --}}
                     </div>
 
                     <div class="form-group col-md-6">
@@ -115,6 +115,18 @@
                         </select>
                         <input type="hidden" name="product_id" value="{{ $comment->product_id }}"> {{-- Không cho sửa nhưng vẫn gửi dữ liệu Giữ disabled + thêm <input type="hidden"> --}}
                     </div>
+
+                    {{-- <div class="form-group col-md-6">
+                        <label class="control-label">Người dùng</label>
+                        <input type="text" class="form-control" value="{{ $comment->user->fullname }}" readonly>
+                        <input type="hidden" name="user_id" value="{{ $comment->user_id }}">
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label class="control-label">Sản phẩm</label>
+                        <input type="text" class="form-control" value="{{ $comment->product->name }}" readonly>
+                        <input type="hidden" name="product_id" value="{{ $comment->product_id }}">
+                    </div> --}}
 
                     <div class="form-group col-md-12">
                         <label class="control-label">Nội dung</label>

@@ -1,8 +1,26 @@
 <aside id="sidebar" class="app-sidebar" style="width: 250px">
       <div class="app-sidebar__user text-center py-4">
-            <img class="app-sidebar__user-avatar shadow" src="{{ asset('assets/admin/ckeditor/samples/img/logo.png') }}" width="100" style="border-radius: 50%;" alt="User Image">
-            <p class="app-sidebar__user-name fw-bold mt-3 mb-1 text-white">Trang quản lí</p>
+            @auth
+            <div class="d-flex flex-column align-items-center">
+                  <div class="position-relative mb-2">
+                        <a href="{{ route('admin.users.show', Auth::user()->id ) }}">
+                        <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('images/avatar_trang.jpg') }}"
+                              class="rounded-circle shadow border border-2 border-white"
+                              width="90" height="90"
+                              style="object-fit: cover; transition: transform 0.3s ease;"
+                              alt="Avatar"
+                              onmouseover="this.style.transform='scale(1.05)'"
+                              onmouseout="this.style.transform='scale(1)'"></a>
+                  </div>
+                  <div class="mt-2">
+                        <span class="d-block fw-bold" style="font-size: 30px; color: white;">
+                              {{ Auth::user()->fullname }}
+                        </span>
+                  </div>
+            </div>
+            @endauth
       </div>
+
       <hr>
 
       <ul class="app-menu">
@@ -14,7 +32,7 @@
                         <i class="app-menu__icon fas fa-comment-dots"></i><span class="app-menu__label">Hỗ trợ khách hàng</span></a></li>
             <li><a class="app-menu__item {{ request()->is('phan-mem-ban-hang*') ? 'active' : '' }}" href="phan-mem-ban-hang.html">
                         <i class="app-menu__icon bx bx-cart-alt"></i><span class="app-menu__label">POS Bán Hàng</span></a></li>
-            
+                                   
 
             <!-- Nhóm: Quản lý nội dung -->
             <li class="app-menu__section">QUẢN LÝ NỘI DUNG</li>
@@ -44,7 +62,9 @@
 
             <!-- Nhóm: Đơn hàng & Kho -->
             <li class="app-menu__section">ĐƠN HÀNG & KHO</li>
-            <li><a class="app-menu__item {{ request()->routeIs('admin.orders*') ? 'active' : '' }}" href="{{ route('admin.orders.index') }}">
+            {{-- <li><a class="app-menu__item {{ request()->routeIs('admin.orders*') ? 'active' : '' }}" href="{{ route('admin.orders.index') }}">
+                        <i class="app-menu__icon fas fa-shopping-cart"></i><span class="app-menu__label">Đơn hàng</span></a></li> --}}
+                  <li><a class="app-menu__item {{ request()->routeIs('admin.orders.index') ? 'active' : '' }}" href="{{ route('admin.orders.index') }}">
                         <i class="app-menu__icon fas fa-shopping-cart"></i><span class="app-menu__label">Đơn hàng</span></a></li>
             <li><a class="app-menu__item {{ request()->routeIs('admin.return-requests.*') ? 'active' : '' }}" href="{{ route('admin.return-requests.index') }}">
                         <i class="app-menu__icon fas fa-undo"></i><span class="app-menu__label">Hoàn trả</span></a></li>
@@ -64,11 +84,24 @@
 
             <!-- Nhóm: Thống kê & Báo cáo -->
             <li class="app-menu__section">BÁO CÁO</li>
-            <li><a class="app-menu__item {{ request()->routeIs('admin.thongke.*') ? 'active' : '' }}" href="{{ route('admin.thongke.index') }}">
-                        <i class="app-menu__icon bx bx-bar-chart-alt"></i><span class="app-menu__label">Thống kê</span></a></li>
-            <li><a class="app-menu__item {{ request()->is('quan-ly-bao-cao*') ? 'active' : '' }}" href="{{route('admin.orders.report')}}">
-                        <i class="app-menu__icon bx bx-pie-chart-alt-2"></i><span class="app-menu__label">Doanh thu</span></a></li>
-
+            <li>
+                  <a class="app-menu__item {{ request()->routeIs('admin.thongke.index') ? 'active' : '' }}"
+                        href="{{ route('admin.thongke.index') }}">
+                        <i class="app-menu__icon bx bx-bar-chart-alt"></i>
+                        <span class="app-menu__label">Thống kê sản phẩm</span>
+                  </a>
+            </li>
+            <li>
+                  <a class="app-menu__item {{ request()->routeIs('admin.thongke.bienthe.*') ? 'active' : '' }}"
+                        href="{{ route('admin.thongke.bienthe.index') }}">
+                        <i class="app-menu__icon bx bx-line-chart"></i>
+                        <span class="app-menu__label">Thống kê biến thể</span>
+                  </a>
+            </li>
+            {{-- <li><a class="app-menu__item {{ request()->is('quan-ly-bao-cao*') ? 'active' : '' }}" href="{{route('admin.orders.report')}}">
+                        <i class="app-menu__icon bx bx-pie-chart-alt-2"></i><span class="app-menu__label">Doanh thu</span></a></li> --}}
+            <li><a class="app-menu__item {{ request()->routeIs('admin.orders.report') ? 'active' : '' }}" href="{{ route('admin.orders.report') }}">
+                        <i class="app-menu__icon bx bx-pie-chart-alt-2"></i><span class="app-menu__label">Doanh thu</span></a></li>      
             <!-- Nhóm: Cấu hình hệ thống -->
             <li class="app-menu__section">HỆ THỐNG</li>
             <li><a class="app-menu__item {{ request()->routeIs('admin.banners.*') ? 'active' : '' }}" href="{{ route('admin.banners.index') }}">
@@ -87,7 +120,7 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
-            background: #212529;
+            background: #40667b;
       }
 
       .app-sidebar__user {
@@ -126,15 +159,55 @@
             margin-bottom: 10px;
       }
 
-      .app-menu__item.active {
-            background-color: #f6c23e;
-            color: #000;
-            font-weight: bold;
-      }
+      .app-menu__item {
+    color: #fff;
+    background-color: transparent;
+    transition: all 0.3s ease;
+}
 
-      .app-menu__item:hover {
-            background: #ffe599;
-      }
+.app-menu__item i {
+    color: inherit;
+}
+
+/* Hover */
+.app-menu__item {
+    color: #fff;
+    background-color: transparent;
+    transition: all 0.3s ease;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin: 4px 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.app-menu__item i {
+    color: inherit;
+}
+
+/* Hover */
+.app-menu__item:hover {
+    background-color: #4e7c92;
+    color: #fff;
+    border: none;
+}
+
+/* Active */
+.app-menu__item.active {
+    background-color: #ffda44;
+    color: #000;
+    font-weight: bold;
+    border: none;
+}
+/* Active */
+.app-menu__item.active {
+    background-color: #ffda44;
+    color: #000;
+    font-weight: bold;
+}
 
       /* Ẩn sidebar ban đầu (khi có class 'collapsed') */
       .app-sidebar.collapsed {
@@ -145,7 +218,7 @@
       /* Sidebar bình thường */
       .app-sidebar {
             width: 250px;
-            background-color: #212529;
+            background-color: #2c4857ff;
             height: 100vh;
             position: fixed;
             top: 0;

@@ -18,6 +18,7 @@ class Order extends Model
         'email',
         'payment',
         'status',
+        'delivered_at',
         'payment_status',
         'shiping',
         'discount',
@@ -61,4 +62,7 @@ class Order extends Model
     {
         return $this->hasMany(OrderDetail::class, 'order_id');
     }
+    protected $casts = [
+        'delivered_at' => 'datetime',
+    ];
 }

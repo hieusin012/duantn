@@ -123,6 +123,14 @@
                     </div>
 
                     <div class="form-group col-md-3">
+                        <label class="control-label">Thời gian bắt đầu ưu đãi</label>
+                        <input type="datetime-local" class="form-control" name="deal_start_at" value="{{ old('deal_start_at') }}">
+                        @error('deal_start_at')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="form-group col-md-3">
                         <label class="control-label">Thời gian kết thúc ưu đãi</label>
                         <input type="datetime-local" class="form-control" name="deal_end_at" value="{{ old('deal_end_at') }}">
                         @error('deal_end_at')

@@ -15661,3 +15661,21 @@ text-align:center;
   background-color: white;
   color: white;
 }
+html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-content {
+  flex: 1 0 auto;
+}
+
+footer.footer-custom {
+  flex-shrink: 0;
+  width: 100%;
+  background: #42697aff;
+  padding: 0;
+  margin: 0;
+}

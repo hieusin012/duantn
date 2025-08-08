@@ -40,7 +40,7 @@
                             </a>
                         @else
                             <a class="btn btn-danger btn-sm" href="{{ route('admin.categories.index', ['trashed' => 'true']) }}">
-                                <i class="fas fa-trash"></i> Thùng rác
+                                <i class="fas fa-trash-alt"></i> Dữ liệu đã xóa
                             </a>
                         @endif
                     </div>
@@ -81,7 +81,9 @@
                                 @if (request('trashed') !== 'true')
                                     <input type="checkbox" class="toggle-status" data-id="{{ $category->id }}" {{ $category->is_active ? 'checked' : '' }}>
                                 @else
-                                    <span class="text-muted">--</span>
+                                    <span class="{{ $category->is_active ? 'text-success' : 'text-danger' }}">
+                                        {{ $category->is_active ? 'Hiển thị' : 'Ẩn' }}
+                                    </span>
                                 @endif
                             </td>
                             <td>{{ $category->name }}</td>
@@ -115,7 +117,7 @@
                                     <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn btn-primary btn-sm" title="Edit">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this category?');">
+                                    <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa danh mục này không?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-primary btn-sm trash" title="Delete">

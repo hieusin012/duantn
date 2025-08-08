@@ -16,9 +16,14 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         // --- Lấy các chỉ số tổng quan ---
-        $totalCustomers = User::where('role', 'member')->count(); // <-- ĐÃ SỬA
+        $totalCustomers = User::where('role', 'member')->where('status', 'active')->count(); // <-- ĐÃ SỬA
         $totalProducts = Product::count();
-        $totalOrders = Order::whereMonth('created_at', now()->month)->count();
+        $totalOrders = Order::whereIn('status', [
+            'Chờ xác nhận',
+            'Đã xác nhận',
+            'Đang chuẩn bị hàng',
+            'Đang giao hàng'
+        ])->count();
         $recentOrders = Order::with('user')->where('status', 'Chờ xác nhận')->latest()->take(4)->get();
         $newCustomers = User::where('role', 'member')->latest()->take(4)->get(); // <-- ĐÃ SỬA
 
@@ -76,8 +81,8 @@ class DashboardController extends Controller
 
         foreach ($grouped as $date => $usersOnDate) {
             $labels[] = $date;
-            $active[] = $usersOnDate->where('status', 'active')->count();
-            $banned[] = $usersOnDate->where('status', 'inactive')->count();
+            $active[] = $usersOnDate->where('status', 'active')->where('role', 'member')->count();
+            $banned[] = $usersOnDate->where('status', 'inactive')->where('role', 'member')->count();
         }
 
         return response()->json([

@@ -87,6 +87,10 @@
                 <div class="product-detail-value">{{ $product->discount_percent ? $product->discount_percent . '%' : '0%' }}</div>
             </div>
             <div class="col-md-3">
+                <div class="product-detail-label">Bắt đầu ưu đãi:</div>
+                <div class="product-detail-value">{{ $product->deal_start_at ? \Carbon\Carbon::parse($product->deal_start_at)->format('H:i d/m/Y') : 'Không có' }}</div>
+            </div>
+            <div class="col-md-3">
                 <div class="product-detail-label">Hết hạn ưu đãi:</div>
                 <div class="product-detail-value">{{ $product->deal_end_at ? \Carbon\Carbon::parse($product->deal_end_at)->format('H:i d/m/Y') : 'Không có' }}</div>
             </div>

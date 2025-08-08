@@ -30,7 +30,8 @@
                             <td>{{ $variant->color->name ?? '-' }}</td>
                             <td>{{ $variant->size->name ?? '-' }}</td>
                             <td>{{ $variant->quantity }}</td>
-                            <td>{{ $variant->orderDetails->sum('quantity') }}</td>
+                            {{-- <td>{{ $variant->orderDetails->sum('quantity') }}</td> --}}
+                            <td>{{ $variant->completedOrderDetails->sum('quantity') }}</td>
                             <td>
                                 @if($variant->quantity == 0)
                                 <span class="badge bg-danger">Hết hàng</span>
@@ -50,6 +51,9 @@
                     @endif
                 </tbody>
             </table>
+            <div class="d-flex justify-content-center mt-3">
+                {{ $variants->links() }}
+            </div>
         </div>
     </div>
 </div>

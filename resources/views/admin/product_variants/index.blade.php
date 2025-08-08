@@ -52,6 +52,9 @@
                             title="Thêm"><i class="fas fa-plus"></i> Tạo mới biến thể</a>
                     </div>
                     <div class="col-sm-2">
+                        <a class="btn btn-danger btn-sm" type="button" title="Xóa" href="{{ route('admin.variants.delete') }}"><i class="fas fa-trash-alt"></i> Dữ liệu đã xóa</a>
+                    </div>
+                    <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm nhap-tu-file" type="button" title="Nhập"><i
                                 class="fas fa-file-upload"></i> Tải từ file</a>
                     </div>
@@ -136,7 +139,7 @@
                         </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="text-center">Không tìm thấy biến thể phù hợp.</td>
+                                <td colspan="9" class="text-center">Không tìm thấy biến thể phù hợp.</td>
                             </tr>
                         @endforelse
                     </tbody>

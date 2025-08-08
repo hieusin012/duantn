@@ -142,15 +142,15 @@ class ProductVariantController extends Controller
         ]);
 
         // Biến thể này đã tồn tại
-        // $exists = ProductVariant::where([
-        //     'product_id' => $request->product_id,
-        //     'color_id' => $request->color_id,
-        //     'size_id' => $request->size_id,
-        // ])->where('id', '!=', $productVariant->id)->exists();
+        $exists = ProductVariant::where([
+            'product_id' => $request->product_id,
+            'color_id' => $request->color_id,
+            'size_id' => $request->size_id,
+        ])->where('id', '!=', $productVariant->id)->exists();
 
-        // if ($exists) {
-        //     return back()->withErrors(['error' => 'Biến thể này đã tồn tại, vui lòng chọn thông tin khác'])->withInput();
-        // }
+        if ($exists) {
+            return back()->withErrors(['error' => 'Biến thể này đã tồn tại, vui lòng chọn thông tin khác'])->withInput();
+        }
 
 
         $data = $request->only([
@@ -201,9 +201,9 @@ class ProductVariantController extends Controller
         }
 
         // Nếu có ảnh thì xóa ảnh
-        if ($productVariant->image && Storage::disk('public')->exists($productVariant->image)) {
-            Storage::disk('public')->delete($productVariant->image);
-        }
+        // if ($productVariant->image && Storage::disk('public')->exists($productVariant->image)) {
+        //     Storage::disk('public')->delete($productVariant->image);
+        // }
 
         $productVariant->delete();
 
@@ -245,5 +245,47 @@ class ProductVariantController extends Controller
         $size = Size::all();
 
         return view('admin.product_variants.index', compact('variants', 'color', 'size'));
+    }
+    // Hiển thị danh sách đã xóa mềm
+    public function delete()
+    {
+        $deletedVariants = ProductVariant::onlyTrashed()->with(['product', 'color', 'size'])->get();
+        return view('admin.product_variants.delete', compact('deletedVariants'));
+    }
+
+    // Khôi phục 1 biến thể
+    public function restore($id)
+    {
+        $variant = ProductVariant::withTrashed()->findOrFail($id);
+        $variant->restore();
+        return redirect()->route('admin.product-variants.index')->with('success', 'Khôi phục biến thể thành công!');
+    }
+
+    // Xóa vĩnh viễn 1 biến thể
+    public function eliminate($id)
+    {
+        $variant = ProductVariant::withTrashed()->findOrFail($id);
+
+        // XÓA ảnh nếu tồn tại
+        if ($variant->image && Storage::disk('public')->exists($variant->image)) {
+            Storage::disk('public')->delete($variant->image);
+        }
+        $variant->forceDelete();
+        return redirect()->route('admin.product-variants.delete')->with('success', 'Xóa vĩnh viễn biến thể thành công!');
+    }
+
+    // Xóa vĩnh viễn tất cả
+    public function forceDeleteAll()
+    {
+        $variants = ProductVariant::onlyTrashed()->get();
+        foreach ($variants as $variant) {
+        // XÓA ảnh nếu tồn tại
+        if ($variant->image && Storage::disk('public')->exists($variant->image)) {
+            Storage::disk('public')->delete($variant->image);
+        }
+
+            $variant->forceDelete();
+        }
+        return redirect()->route('admin.product-variants.delete')->with('success', 'Xóa vĩnh viễn tất cả biến thể thành công!');
     }
 }
