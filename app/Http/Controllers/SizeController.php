@@ -74,10 +74,10 @@ class SizeController extends Controller
 
     public function destroy(Size $size)
     {
-        if ($size->productVariants()->exists()) {
-            return redirect()->route('admin.sizes.index')
-                ->with('error', 'Không thể xóa kích thước đang được sử dụng');
-        }
+        // if ($size->productVariants()->exists()) {
+        //     return redirect()->route('admin.sizes.index')
+        //         ->with('error', 'Không thể xóa kích thước đang được sử dụng');
+        // }
         $size->delete();
         return redirect()->route('admin.sizes.index')->with('success', 'Đã xóa kích cỡ thành công.');
     }

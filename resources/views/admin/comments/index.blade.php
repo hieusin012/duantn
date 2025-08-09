@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container mt-4">
-    <h2 class="mb-4">Danh sách bình luận</h2>
+    <h2 class="mb-4">Danh sách đánh giá</h2>
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
@@ -17,7 +17,7 @@
                 <th>Nội dung</th>
                 <th>Đánh giá</th>
                 <th>Trạng thái</th>
-                <th>Ngày bình luận</th>
+                <th>Ngày đánh giá</th>
                 <th>Thao tác</th>
             </tr>
         </thead>
@@ -47,7 +47,7 @@
                 </td>
             </tr>
         @empty
-            <tr><td colspan="8">Không có bình luận nào.</td></tr>
+            <tr><td colspan="8">Không có đánh giá nào.</td></tr>
         @endforelse
         </tbody>
     </table>
@@ -59,7 +59,7 @@
 
 @extends('admin.layouts.index')
 
-@section('title', 'Quản lý bình luận')
+@section('title', 'Quản lý đánh giá')
 
 @section('content')
 @if (session('success'))
@@ -88,7 +88,7 @@
                     </div>
                 </div>
                 <form method="GET" action="{{ route('admin.comments.index') }}" class="mb-3 d-flex">
-                    <input type="text" name="keyword" class="form-control me-2" style="width: 350px;" placeholder="Tìm theo ..." value="{{ request('keyword') }}">
+                    <input type="text" name="keyword" class="form-control me-2" style="width: 350px;" placeholder="Tìm theo nội dung đánh giá ..." value="{{ request('keyword') }}">
                     <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
                 </form>
 
@@ -101,7 +101,7 @@
                             <th>Nội dung</th>
                             <th>Đánh giá</th>
                             <th>Trạng thái</th>
-                            <th>Ngày bình luận</th>
+                            <th>Ngày đánh giá</th>
                             <th>Hành động</th>
                         </tr>
                     </thead>
@@ -125,7 +125,7 @@
                                     <a href="{{ route('admin.comments.edit', $comment->id) }}" class="btn btn-primary btn-sm" title="Sửa">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('admin.comments.destroy', $comment->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn chắc chắn muốn xóa bình luận này?');">
+                                    <form action="{{ route('admin.comments.destroy', $comment->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn chắc chắn muốn xóa đánh giá này?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm" title="Xóa">
@@ -136,7 +136,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="text-center">Không có bình luận nào.</td>
+                                <td colspan="8" class="text-center">Không có đánh giá nào.</td>
                             </tr>
                         @endforelse
                     </tbody>

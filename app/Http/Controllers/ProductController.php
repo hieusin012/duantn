@@ -287,9 +287,9 @@ Product::create([
         $product = Product::findOrFail($id);
 
         // Kiểm tra nếu có đơn hàng liên quan
-        if ($product->orderDetails()->exists()) {
-            return redirect()->back()->with('error', 'Không thể xóa sản phẩm đã có trong đơn hàng.');
-        }
+        // if ($product->orderDetails()->exists()) {
+        //     return redirect()->back()->with('error', 'Không thể xóa sản phẩm đã có trong đơn hàng.');
+        // }
         // KHÔNG xóa file ảnh khi chỉ soft delete
         $product->delete();
 

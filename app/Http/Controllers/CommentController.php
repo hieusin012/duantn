@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 class CommentController extends Controller
 {
     //
-    // Hiển thị danh sách bình luận
+    // Hiển thị danh sách đánh giá
     public function index(Request $request)
     {
         $query = Comment::with(['user', 'product'])->orderByDesc('created_at');
@@ -26,7 +26,7 @@ class CommentController extends Controller
         return view('admin.comments.index', compact('comments'));
     }
 
-    // Hiển thị form thêm bình luận
+    // Hiển thị form thêm đánh giá
     public function create()
     {
         $users = User::all();
@@ -34,7 +34,7 @@ class CommentController extends Controller
         return view('admin.comments.create', compact('users', 'products'));
     }
 
-    // Lưu bình luận mới
+    // Lưu đánh giá mới
     public function store(Request $request)
     {
         $request->validate([
@@ -46,7 +46,7 @@ class CommentController extends Controller
             'user_id.exists' => 'Người dùng không tồn tại.',
             'product_id.required' => 'Vui lòng chọn sản phẩm.',
             'product_id.exists' => 'Sản phẩm không tồn tại.',
-            'content.required' => 'Nội dung bình luận không được để trống.',
+            'content.required' => 'Nội dung đánh giá không được để trống.',
             'content.min' => 'Nội dung phải có ít nhất :min ký tự.',
             'content.max' => 'Nội dung không được vượt quá :max ký tự.',
             'rating.integer' => 'Đánh giá phải là một số.',
@@ -59,7 +59,7 @@ class CommentController extends Controller
         Comment::create($request->only(['user_id', 'product_id', 'content', 'rating', 'status']));
 
 
-        return redirect()->route('admin.comments.index')->with('success', 'Đã thêm bình luận.');
+        return redirect()->route('admin.comments.index')->with('success', 'Đã thêm đánh giá.');
     }
 
     // Hiển thị form chỉnh sửa
@@ -70,7 +70,7 @@ class CommentController extends Controller
         return view('admin.comments.edit', compact('comment', 'users', 'products'));
     }
 
-    // Cập nhật bình luận
+    // Cập nhật đánh giá
     public function update(Request $request, Comment $comment)
     {
         $request->validate([
@@ -84,7 +84,7 @@ class CommentController extends Controller
             'user_id.exists' => 'Người dùng không tồn tại.',
             'product_id.required' => 'Vui lòng chọn sản phẩm.',
             'product_id.exists' => 'Sản phẩm không tồn tại.',
-            'content.required' => 'Nội dung bình luận không được để trống.',
+            'content.required' => 'Nội dung đánh giá không được để trống.',
             'content.min' => 'Nội dung phải có ít nhất :min ký tự.',
             'content.max' => 'Nội dung không được vượt quá :max ký tự.',
             'rating.integer' => 'Đánh giá phải là một số.',
@@ -100,11 +100,11 @@ class CommentController extends Controller
     }
 
 
-    // Xóa bình luận
+    // Xóa đánh giá
     public function destroy(Comment $comment)
     {
         $comment->delete();
-        return redirect()->route('admin.comments.index')->with('success', 'Xóa bình luận thành công.');
+        return redirect()->route('admin.comments.index')->with('success', 'Xóa đánh giá thành công.');
     }
     public function storeClient(Request $request)
     {
@@ -116,9 +116,9 @@ class CommentController extends Controller
         ], [
             'product_id.required' => 'Vui lòng chọn sản phẩm.',
             'product_id.exists' => 'Sản phẩm không tồn tại.',
-            'content.required' => 'Vui lòng nhập nội dung bình luận.',
-            'content.min' => 'Nội dung bình luận phải có ít nhất :min ký tự.',
-            'content.max' => 'Nội dung bình luận không được vượt quá :max ký tự.',
+            'content.required' => 'Vui lòng nhập nội dung đánh giá.',
+            'content.min' => 'Nội dung đánh giá phải có ít nhất :min ký tự.',
+            'content.max' => 'Nội dung đánh giá không được vượt quá :max ký tự.',
             'content.not_regex' => 'Nội dung không hợp lệ.',
             'rating.required' => 'Vui lòng chọn số sao đánh giá.',
             'rating.integer' => 'Điểm đánh giá phải là một số.',
@@ -144,7 +144,7 @@ class CommentController extends Controller
         // return redirect()->back()->with('success', 'Bình luận đã được gửi.');
         return response()->json([
             'success' => true,
-            'message' => 'Bình luận đã được gửi.'
+            'message' => 'Đánh giá đã được gửi.'
         ]);
     }
 }

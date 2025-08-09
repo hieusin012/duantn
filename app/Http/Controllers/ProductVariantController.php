@@ -196,9 +196,9 @@ class ProductVariantController extends Controller
         // Kiểm tra nếu biến thể đang được dùng trong đơn hàng
         $isUsedInOrders = $productVariant->orderDetails()->exists();
 
-        if ($isUsedInOrders) {
-            return redirect()->back()->with('error', 'Không thể xóa biến thể đang được sử dụng trong đơn hàng.');
-        }
+        // if ($isUsedInOrders) {
+        //     return redirect()->back()->with('error', 'Không thể xóa biến thể đang được sử dụng trong đơn hàng.');
+        // }
 
         // Nếu có ảnh thì xóa ảnh
         // if ($productVariant->image && Storage::disk('public')->exists($productVariant->image)) {
