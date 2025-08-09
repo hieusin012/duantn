@@ -13,7 +13,7 @@ class OrderDetail extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'order_id', 'variant_id','product_name','color', 'size','product_image', 'price', 'quantity', 'total_price'
+        'order_id', 'variant_id','product_id','product_name','color', 'size','product_image', 'price', 'quantity', 'total_price'
     ];
 
     public function order()

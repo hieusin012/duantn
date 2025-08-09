@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -28,82 +29,96 @@ class ProductController extends Controller
     }
 
     public function show($slug)
-    {
-        // $product = Product::where('slug', $slug)->firstOrFail();
-        $product = Product::with(['variants']) // <-- load quan hệ
-            ->where('slug', $slug)
-            ->firstOrFail();
+{
+    $product = Product::with(['variants'])
+        ->where('slug', $slug)
+        ->firstOrFail();
 
-        // Tải các mối quan hệ cần thiết
-        $product->load([
-            'galleries',
-            'category',
-            'brand',
-            'variants' => function ($q) {
-                $q->withTrashed()->with(['color', 'size']);
-            },
-            'comments' // Eager load comments để tối ưu
-        ]);
+    $product->load([
+        'galleries',
+        'category',
+        'brand',
+        'variants' => function ($q) {
+            $q->withTrashed()->with(['color', 'size']);
+        },
+        'comments'
+    ]);
 
-        // Lấy sản phẩm liên quan
-        $relatedProducts = Product::where('category_id', $product->category_id)
-            ->where('id', '!=', $product->id)
-            ->latest()
-            ->take(15)
-            ->get();
+    $relatedProducts = Product::where('category_id', $product->category_id)
+        ->where('id', '!=', $product->id)
+        ->latest()
+        ->take(15)
+        ->get();
 
-        $productImages = $product->galleries;
-        $variants = $product->variants;
+    $productImages = $product->galleries;
+    $variants = $product->variants;
 
-        $colors = $product->variants->pluck('color')->unique('id')->values();
-        $sizes = $product->variants->pluck('size')->unique('id')->values();
-        $quantity = $product->variants->pluck('quantity')->unique('id')->values();
+    $colors = $product->variants->pluck('color')->unique('id')->values();
+    $sizes = $product->variants->pluck('size')->unique('id')->values();
+    $quantity = $product->variants->pluck('quantity')->unique('id')->values();
 
-        // ================= LOGIC MỚI CHO PHẦN ĐÁNH GIÁ =================
-        // Lấy tất cả bình luận đã được duyệt cho sản phẩm này
-        $comments = $product->comments()->where('status', 1)->with('user')->latest()->get();
+    // ================= LOGIC MỚI CHO PHẦN ĐÁNH GIÁ =================
+    $comments = $product->comments()
+        ->where('status', 1)
+        ->with('user')
+        ->latest()
+        ->get();
 
-        $totalReviews = $comments->count();
-        $averageRating = 0;
-        $ratingPercentages = [
-            '5' => 0,
-            '4' => 0,
-            '3' => 0,
-            '2' => 0,
-            '1' => 0
-        ];
+    $totalReviews = $comments->count();
+    $averageRating = 0;
+    $ratingPercentages = [
+        '5' => 0,
+        '4' => 0,
+        '3' => 0,
+        '2' => 0,
+        '1' => 0
+    ];
 
-        if ($totalReviews > 0) {
-            // Tính rating trung bình
-            $averageRating = round($comments->avg('rating'), 1);
+    if ($totalReviews > 0) {
+        $averageRating = round($comments->avg('rating'), 1);
+        $ratingCounts = $comments->groupBy('rating')->map->count();
 
-            // Đếm số lượng review cho mỗi mức sao
-            $ratingCounts = $comments->groupBy('rating')->map->count();
-
-            // Tính phần trăm cho mỗi mức sao
-            foreach ($ratingCounts as $rating => $count) {
-                if (isset($ratingPercentages[$rating])) {
-                    $ratingPercentages[$rating] = round(($count / $totalReviews) * 100);
-                }
+        foreach ($ratingCounts as $rating => $count) {
+            if (isset($ratingPercentages[$rating])) {
+                $ratingPercentages[$rating] = round(($count / $totalReviews) * 100);
             }
         }
-        // =================== KẾT THÚC LOGIC MỚI =======================
-
-
-        return view('clients.products.show', compact(
-            'product',
-            'productImages',
-            'relatedProducts',
-            'variants',
-            'colors',
-            'sizes',
-            // Truyền các biến mới sang view
-            'comments',
-            'totalReviews',
-            'averageRating',
-            'ratingPercentages'
-        ));
     }
+
+    // ===== THÊM KIỂM TRA ĐÃ MUA & CHƯA ĐÁNH GIÁ =====
+    if (Auth::check()) {
+        $userId = Auth::id();
+
+        // Đã mua hàng
+        $hasPurchased = \App\Models\OrderDetail::whereHas('order', function($q) use ($userId) {
+            $q->where('user_id', $userId)
+              ->where('status', 'Đã giao hàng');
+        })->where('product_id', $product->id)->exists();
+
+        // Chưa đánh giá
+        $hasReviewed = \App\Models\Comment::where('user_id', $userId)
+            ->where('product_id', $product->id)
+            ->exists();
+
+    }
+    // =================== KẾT THÚC LOGIC MỚI =======================
+
+    return view('clients.products.show', compact(
+        'product',
+        'productImages',
+        'relatedProducts',
+        'variants',
+        'colors',
+        'sizes',
+        'comments',
+        'totalReviews',
+        'averageRating',
+        'ratingPercentages',
+        'hasPurchased',
+        'hasReviewed' // truyền sang view để ẩn/hiện form
+    ));
+}
+
 
 
 

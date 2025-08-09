@@ -100,6 +100,7 @@
         transition: 0.2s;
         position: relative;
     }
+
     .border-for-white {
         border: 2px solid #888 !important;
         /* hoặc #000 cho rõ */
@@ -228,45 +229,45 @@
                             $now = \Carbon\Carbon::now();
 
                             $isHotDeal = $product->is_hot_deal
-                                && $discountPercent > 0
-                                && $product->deal_start_at
-                                && $product->deal_start_at <= $now
+                            && $discountPercent > 0
+                            && $product->deal_start_at
+                            && $product->deal_start_at <= $now
                                 && $product->deal_end_at
                                 && $now < $product->deal_end_at;
 
-                            $salePrice = $isHotDeal ? $price * (1 - $discountPercent / 100) : null;
-                            @endphp
-                            @if ($isHotDeal)
-                            <div class="d-flex justify-content-between align-items-center bg-warning text-white p-2 rounded mb-2 w-100">
-                                <strong class="ms-2">F⚡ASH SALE</strong>
-                                <div class="me-2">
-                                    <i class="bi bi-clock-fill me-1"></i>
-                                    KẾT THÚC TRONG:
-                                    <span class="countdown-timer text-danger fw-bold"
-                                        data-deal-end="{{ \Carbon\Carbon::parse($product->deal_end_at)->timestamp * 1000 }}">
-                                        <span class="time-remaining">--:--:--</span>
-                                    </span>
-                                </div>
-                            </div>
-                            @endif
-                            <div class="product-price d-flex-center my-3">
-                                @if ($isHotDeal)
-                                <span class="price fs-3 text-danger">
-                                    {{ number_format($salePrice, 0, ',', '.') }} ₫
-                                </span>
-                                <del class="text-muted ms-2">
-                                    {{ number_format($price, 0, ',', '.') }} ₫
-                                </del>
-                                <span class="text-danger fw-bold ms-2" style="font-size: 10px;">
-                                    -{{ $discountPercent }}%
-                                </span>
-                                @else
-                                <span class="price fs-3" id="variant-price">
-                                    {{ number_format($price, 0, ',', '.') }} ₫
-                                </span>
-                                @endif
+                                    $salePrice = $isHotDeal ? $price * (1 - $discountPercent / 100) : null;
+                                    @endphp
+                                    @if ($isHotDeal)
+                                    <div class="d-flex justify-content-between align-items-center bg-warning text-white p-2 rounded mb-2 w-100">
+                                        <strong class="ms-2">F⚡ASH SALE</strong>
+                                        <div class="me-2">
+                                            <i class="bi bi-clock-fill me-1"></i>
+                                            KẾT THÚC TRONG:
+                                            <span class="countdown-timer text-danger fw-bold"
+                                                data-deal-end="{{ \Carbon\Carbon::parse($product->deal_end_at)->timestamp * 1000 }}">
+                                                <span class="time-remaining">--:--:--</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    @endif
+                                    <div class="product-price d-flex-center my-3">
+                                        @if ($isHotDeal)
+                                        <span class="price fs-3 text-danger">
+                                            {{ number_format($salePrice, 0, ',', '.') }} ₫
+                                        </span>
+                                        <del class="text-muted ms-2">
+                                            {{ number_format($price, 0, ',', '.') }} ₫
+                                        </del>
+                                        <span class="text-danger fw-bold ms-2" style="font-size: 10px;">
+                                            -{{ $discountPercent }}%
+                                        </span>
+                                        @else
+                                        <span class="price fs-3" id="variant-price">
+                                            {{ number_format($price, 0, ',', '.') }} ₫
+                                        </span>
+                                        @endif
 
-                            </div>
+                                    </div>
                         </div>
                     </div>
 
@@ -575,6 +576,7 @@
                     {{-- RIGHT COLUMN: REVIEW FORM --}}
                     <div class="col-12 col-sm-12 col-md-12 col-lg-6 mb-4">
                         @auth
+                        @if($hasPurchased && !$hasReviewed)
                         <form method="post" action="{{ route('client.comments.store') }}" id="commentForm" class="product-review-form new-review-form">
                             @csrf
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
@@ -600,7 +602,7 @@
                                         <input type="radio" id="star1" name="rating" value="1"><label for="star1"><i class="icon anm anm-star-o"></i></label>
                                     </div>
                                     @error('rating')
-                                        <div class="text-danger mt-1">{{ $message }}</div>
+                                    <div class="text-danger mt-1">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="col-12 spr-form-review-body form-group">
@@ -609,7 +611,7 @@
                                         <textarea class="spr-form-input spr-form-input-textarea" id="message" name="content" rows="3"></textarea>
                                     </div>
                                     @error('content')
-                                        <div class="text-danger mt-1">{{ $message }}</div>
+                                    <div class="text-danger mt-1">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </fieldset>
@@ -617,6 +619,19 @@
                                 <input type="submit" class="btn btn-primary spr-button spr-button-primary" value="Gửi đánh giá" />
                             </div>
                         </form>
+                        @elseif(!$hasPurchased)
+                        <div class="alert alert-warning d-flex align-items-center" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            <span>Bạn cần mua hàng để đánh giá sản phẩm này.</span>
+                        </div>
+                        @else
+                        <div class="alert alert-success d-flex align-items-center" role="alert">
+                            <i class="bi bi-check-circle-fill me-2"></i>
+                            <span>Bạn đã đánh giá sản phẩm này rồi.</span>
+                        </div>
+                        @endif
+
+
                         @else
                         <div class="text-center p-4 border rounded">
                             <h4 class="mb-3">Viết đánh giá</h4>
@@ -1017,10 +1032,10 @@
 </script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const form = document.getElementById('commentForm');
 
-        form.addEventListener('submit', function (e) {
+        form.addEventListener('submit', function(e) {
             e.preventDefault(); // Ngăn reload trang
 
             // Xóa lỗi cũ
@@ -1029,42 +1044,42 @@
             const formData = new FormData(form);
 
             fetch(form.action, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                },
-                body: formData
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    $.toast({
-                        heading: 'Thành công!',
-                        text: 'Gửi đánh giá thành công!',
-                        showHideTransition: 'slide',
-                        icon: 'success',
-                        position: {
-                            right: 1,
-                            top: 83
-                        },
-                    });
-                    location.reload();
-                }else if (data.errors) {
-                    // Hiển thị lỗi dưới từng trường
-                    for (const [field, messages] of Object.entries(data.errors)) {
-                        const fieldElement = form.querySelector(`[name="${field}"]`);
-                        if (fieldElement) {
-                            const errorDiv = document.createElement('div');
-                            errorDiv.classList.add('text-danger', 'mt-1');
-                            errorDiv.textContent = messages[0];
-                            fieldElement.closest('.form-group').appendChild(errorDiv);
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        $.toast({
+                            heading: 'Thành công!',
+                            text: 'Gửi đánh giá thành công!',
+                            showHideTransition: 'slide',
+                            icon: 'success',
+                            position: {
+                                right: 1,
+                                top: 83
+                            },
+                        });
+                        location.reload();
+                    } else if (data.errors) {
+                        // Hiển thị lỗi dưới từng trường
+                        for (const [field, messages] of Object.entries(data.errors)) {
+                            const fieldElement = form.querySelector(`[name="${field}"]`);
+                            if (fieldElement) {
+                                const errorDiv = document.createElement('div');
+                                errorDiv.classList.add('text-danger', 'mt-1');
+                                errorDiv.textContent = messages[0];
+                                fieldElement.closest('.form-group').appendChild(errorDiv);
+                            }
                         }
                     }
-                }
-            })
-            .catch(error => {
-                console.error('Lỗi gửi đánh giá:', error);
-            });
+                })
+                .catch(error => {
+                    console.error('Lỗi gửi đánh giá:', error);
+                });
         });
     });
 </script>
@@ -1072,42 +1087,42 @@
 
 {{-- Nếu số lượng bằng 0 ➜ disable 2 nút. --}}
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const sizeButtons = document.querySelectorAll('.size-btn');
-    const stockInfo = document.getElementById('stock-info');
-    const stockQuantityEl = document.getElementById('stock-quantity');
-    const addToCartBtn = document.getElementById('add-to-cart-btn');
-    const buyNowBtn = document.querySelector('.proceed-to-checkout');
-    const outOfStockMsg = document.getElementById('out-of-stock-message');
+    document.addEventListener('DOMContentLoaded', function() {
+        const sizeButtons = document.querySelectorAll('.size-btn');
+        const stockInfo = document.getElementById('stock-info');
+        const stockQuantityEl = document.getElementById('stock-quantity');
+        const addToCartBtn = document.getElementById('add-to-cart-btn');
+        const buyNowBtn = document.querySelector('.proceed-to-checkout');
+        const outOfStockMsg = document.getElementById('out-of-stock-message');
 
-    sizeButtons.forEach(button => {
-        button.addEventListener('click', function () {
-            const quantity = parseInt(this.dataset.variantQuantity);
-            const sizeId = this.dataset.sizeId;
+        sizeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const quantity = parseInt(this.dataset.variantQuantity);
+                const sizeId = this.dataset.sizeId;
 
-            document.getElementById('selected-size-id').value = sizeId;
-            stockQuantityEl.textContent = quantity;
-            stockInfo.style.display = 'flex';
+                document.getElementById('selected-size-id').value = sizeId;
+                stockQuantityEl.textContent = quantity;
+                stockInfo.style.display = 'flex';
 
-            sizeButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
+                sizeButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
 
-            if (quantity <= 0) {
-                addToCartBtn.disabled = true;
-                buyNowBtn.disabled = true;
-                addToCartBtn.classList.add('disabled');
-                buyNowBtn.classList.add('disabled');
-                outOfStockMsg.style.display = 'block';
-            } else {
-                addToCartBtn.disabled = false;
-                buyNowBtn.disabled = false;
-                addToCartBtn.classList.remove('disabled');
-                buyNowBtn.classList.remove('disabled');
-                outOfStockMsg.style.display = 'none';
-            }
+                if (quantity <= 0) {
+                    addToCartBtn.disabled = true;
+                    buyNowBtn.disabled = true;
+                    addToCartBtn.classList.add('disabled');
+                    buyNowBtn.classList.add('disabled');
+                    outOfStockMsg.style.display = 'block';
+                } else {
+                    addToCartBtn.disabled = false;
+                    buyNowBtn.disabled = false;
+                    addToCartBtn.classList.remove('disabled');
+                    buyNowBtn.classList.remove('disabled');
+                    outOfStockMsg.style.display = 'none';
+                }
+            });
         });
     });
-});
 </script>
 
 
