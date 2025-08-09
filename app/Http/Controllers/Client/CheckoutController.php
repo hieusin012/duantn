@@ -238,6 +238,7 @@ class CheckoutController extends Controller
                     OrderDetail::create([
                         'order_id'     => $order->id,
                         'variant_id'   => $item->variant_id,
+                        'product_id'   => $item->product_id,
                         'product_name' => optional($variant->product)->name ?? 'Không rõ',
                         'color'        => optional($variant->color)->name ?? 'Không rõ',
                         'size'         => optional($variant->size)->name ?? 'Không rõ',
