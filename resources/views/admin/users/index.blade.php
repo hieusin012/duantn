@@ -18,21 +18,21 @@
                     <div class="col-sm-2">
                         <a class="btn btn-danger btn-sm" type="button" title="Xóa" href="{{ route('admin.users.deleted') }}"><i class="fas fa-trash-alt"></i> Dữ liệu đã xóa</a>
                     </div>
-                    <div class="col-sm-2">
+                    {{-- <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm nhap-tu-file" type="button" title="Import"><i class="fas fa-file-upload"></i> Nhập tệp</a>
-                    </div>
-                    <div class="col-sm-2">
+                    </div> --}}
+                    {{-- <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm print-file" type="button" title="Print"><i class="fas fa-print"></i> In dữ liệu</a>
-                    </div>
-                    <div class="col-sm-2">
+                    </div> --}}
+                    {{-- <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm js-textareacopybtn" type="button" title="Copy"><i class="fas fa-copy"></i> Sao chép</a>
-                    </div>
-                    <div class="col-sm-2">
+                    </div> --}}
+                    {{-- <div class="col-sm-2">
                         <a class="btn btn-excel btn-sm" href="#" title="Export"><i class="fas fa-file-excel"></i> Xuất sang Excel</a>
-                    </div>
-                    <div class="col-sm-2">
+                    </div> --}}
+                    {{-- <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm pdf-file" type="button" title="Export PDF"><i class="fas fa-file-pdf"></i> Xuất sang PDF</a>
-                    </div>
+                    </div> --}}
                     <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm" type="button" title="Delete All"><i class="fas fa-trash-alt"></i> Xóa tất cả</a>
                     </div>
