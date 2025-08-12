@@ -35,6 +35,7 @@
                             <th>Email</th>
                             <th>Điện thoại</th>
                             <th>Địa chỉ</th>
+                            <th>Trạng thái</th>
                             <th>Hành động</th>
                         </tr>
                     </thead>
@@ -46,6 +47,7 @@
                             <td>{{ $supplier->email ?? 'Không có' }}</td>
                             <td>{{ $supplier->phone ?? 'Không có' }}</td>
                             <td>{{ $supplier->address ?? 'Không có' }}</td>
+                            <td>{{ $supplier->is_active ? 'Hoạt động' : 'Tạm khóa' }}</td>
                             <td>
                                 <form action="{{ route('admin.suppliers.restore', $supplier->id) }}" method="POST" style="display:inline-block;">
                                     @csrf

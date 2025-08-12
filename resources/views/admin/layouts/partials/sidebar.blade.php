@@ -87,7 +87,7 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
-            background: #212529;
+            background: #40667b;
       }
 
       .app-sidebar__user {
@@ -126,15 +126,55 @@
             margin-bottom: 10px;
       }
 
-      .app-menu__item.active {
-            background-color: #f6c23e;
-            color: #000;
-            font-weight: bold;
-      }
+      .app-menu__item {
+    color: #fff;
+    background-color: transparent;
+    transition: all 0.3s ease;
+}
 
-      .app-menu__item:hover {
-            background: #ffe599;
-      }
+.app-menu__item i {
+    color: inherit;
+}
+
+/* Hover */
+.app-menu__item {
+    color: #fff;
+    background-color: transparent;
+    transition: all 0.3s ease;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin: 4px 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.app-menu__item i {
+    color: inherit;
+}
+
+/* Hover */
+.app-menu__item:hover {
+    background-color: #4e7c92;
+    color: #fff;
+    border: none;
+}
+
+/* Active */
+.app-menu__item.active {
+    background-color: #ffda44;
+    color: #000;
+    font-weight: bold;
+    border: none;
+}
+/* Active */
+.app-menu__item.active {
+    background-color: #ffda44;
+    color: #000;
+    font-weight: bold;
+}
 
       /* Ẩn sidebar ban đầu (khi có class 'collapsed') */
       .app-sidebar.collapsed {
@@ -145,7 +185,7 @@
       /* Sidebar bình thường */
       .app-sidebar {
             width: 250px;
-            background-color: #212529;
+            background-color: #2c4857ff;
             height: 100vh;
             position: fixed;
             top: 0;

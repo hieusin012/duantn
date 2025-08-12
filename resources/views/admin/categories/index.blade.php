@@ -12,24 +12,24 @@
                         <a class="btn btn-add btn-sm" href="{{ route('admin.categories.create') }}" title="Add"><i class="fas fa-plus"></i> Thêm danh mục</a>
                     </div>
 
-                    <div class="col-sm-2">
+                    {{-- <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm nhap-tu-file" type="button" title="Import"><i class="fas fa-file-upload"></i> Nhập tệp</a>
-                    </div>
+                    </div> --}}
 
-                    <div class="col-sm-2">
+                    {{-- <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm print-file" type="button" title="Print"><i class="fas fa-print"></i> In dữ liệu</a>
-                    </div>
+                    </div> --}}
 
-                    <div class="col-sm-2">
+                    {{-- <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm js-textareacopybtn" type="button" title="Copy"><i class="fas fa-copy"></i> Sao chép</a>
-                    </div>
+                    </div> --}}
                     
-                    <div class="col-sm-2">
+                    {{-- <div class="col-sm-2">
                         <a class="btn btn-excel btn-sm" href="#" title="Export"><i class="fas fa-file-excel"></i> Xuất sang Excel</a>
-                    </div>
-                    <div class="col-sm-2">
+                    </div> --}}
+                    {{-- <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm pdf-file" type="button" title="Export PDF"><i class="fas fa-file-pdf"></i> Xuất sang PDF</a>
-                    </div>
+                    </div> --}}
                     <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm" type="button" title="Delete All"><i class="fas fa-trash-alt"></i> Xóa tất cả</a>
                     </div>
@@ -40,7 +40,7 @@
                             </a>
                         @else
                             <a class="btn btn-danger btn-sm" href="{{ route('admin.categories.index', ['trashed' => 'true']) }}">
-                                <i class="fas fa-trash"></i> Thùng rác
+                                <i class="fas fa-trash"></i> Dữ liệu đã xóa
                             </a>
                         @endif
                     </div>
@@ -115,7 +115,7 @@
                                     <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn btn-primary btn-sm" title="Edit">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this category?');">
+                                    <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa danh mục này không?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-primary btn-sm trash" title="Delete">

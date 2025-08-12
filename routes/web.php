@@ -63,8 +63,8 @@ Route::middleware('web')->group(function () {
 
 // Nhóm route admin
 
-Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(function () { // Nếu dùng bảo vệ url http: 127.0.0.1:8000/admin thì bỏ cmt dòng này. Cmt lại dòng dưới.
-    //Route::prefix('admin')->name('admin.')->group(function () {
+// Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(function () { // Nếu dùng bảo vệ url http: 127.0.0.1:8000/admin thì bỏ cmt dòng này. Cmt lại dòng dưới.
+    Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/dashboard/revenue-chart-data', [DashboardController::class, 'getRevenueChartData'])->name('dashboard.revenueData');
@@ -118,6 +118,10 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
     Route::delete('/banners/{banner}', [BannerController::class, 'destroy'])->name('banners.destroy');
 
     // Sizes
+    Route::get('/sizes/delete', [SizeController::class, 'delete'])->name('sizes.delete');
+    Route::delete('/sizes/all-eliminate', [SizeController::class, 'forceDeleteAll'])->name('sizes.all-eliminate');
+    Route::delete('/sizes/eliminate/{id}', [SizeController::class, 'eliminate'])->name('sizes.eliminate');
+    Route::get('/sizes/restore/{id}', [SizeController::class, 'restore'])->name('sizes.restore');
     Route::get('/sizes', [SizeController::class, 'index'])->name('sizes.index');
     Route::get('/sizes/create', [SizeController::class, 'create'])->name('sizes.create');
     Route::post('/sizes', [SizeController::class, 'store'])->name('sizes.store');
@@ -132,6 +136,10 @@ Route::prefix('admin')->middleware('auth', 'admin')->name('admin.')->group(funct
 
 
     // Users
+    Route::get('/users/deleted', [UserController::class, 'deleted'])->name('users.deleted');
+    Route::get('/users/restore/{id}', [UserController::class, 'restore'])->name('users.restore');
+    Route::delete('/users/eliminate/{id}', [UserController::class, 'eliminate'])->name('users.eliminate');
+    Route::delete('/users/all-eliminate', [UserController::class, 'forceDeleteAll'])->name('users.all-eliminate');
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
@@ -247,6 +255,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 // Quản lý nhập hàng(Phiếu nhập)
 Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
+    Route::get('/imports/delete', [\App\Http\Controllers\ImportController::class, 'delete'])->name('imports.delete');
+    Route::get('/imports/restore/{id}', [\App\Http\Controllers\ImportController::class, 'restore'])->name('imports.restore');
+    Route::delete('/imports/eliminate/{id}', [\App\Http\Controllers\ImportController::class, 'eliminate'])->name('imports.eliminate');
+    Route::delete('/imports/all-eliminate', [\App\Http\Controllers\ImportController::class, 'forceDeleteAll'])->name('imports.all-eliminate');
     Route::resource('imports', \App\Http\Controllers\ImportController::class);
 });
 
@@ -267,6 +279,10 @@ Route::post('/tra-cuu-don-hang', [App\Http\Controllers\OrderLookupController::cl
 use App\Http\Controllers\BlogCategoryController;
 
 Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+    Route::get('/blog-categories/delete', [BlogCategoryController::class, 'delete'])->name('blog-categories.delete');
+    Route::get('/blog-categories/restore/{id}', [BlogCategoryController::class, 'restore'])->name('blog-categories.restore');
+    Route::delete('/blog-categories/eliminate/{id}', [BlogCategoryController::class, 'eliminate'])->name('blog-categories.eliminate');
+    Route::delete('/blog-categories/all-eliminate', [BlogCategoryController::class, 'forceDeleteAll'])->name('blog-categories.all-eliminate');
     Route::resource('blog-categories', BlogCategoryController::class);
 });
 

@@ -62,4 +62,7 @@ class Order extends Model
     {
         return $this->hasMany(OrderDetail::class, 'order_id');
     }
+    protected $casts = [
+        'delivered_at' => 'datetime',
+    ];
 }

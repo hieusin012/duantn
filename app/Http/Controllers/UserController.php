@@ -91,6 +91,34 @@ class UserController extends Controller
         $user->delete();
         return redirect()->route('admin.users.index')->with('success', 'Xóa người dùng thành công.');
     }
+    public function deleted()
+    {
+        $deletedUsers = User::onlyTrashed()->get();
+        return view('admin.users.deleted', compact('deletedUsers'));
+    }
+
+    public function restore($id)
+    {
+        $user = User::withTrashed()->findOrFail($id);
+        $user->restore();
+        return redirect()->route('admin.users.index')->with('success', 'Khôi phục người dùng thành công!');
+    }
+
+    public function eliminate($id)
+    {
+        $user = User::withTrashed()->findOrFail($id);
+        $user->forceDelete();
+        return redirect()->route('admin.users.deleted')->with('success', 'Xóa vĩnh viễn người dùng thành công!');
+    }
+
+    public function forceDeleteAll()
+    {
+        $deletedUsers = User::onlyTrashed()->get();
+        foreach ($deletedUsers as $user) {
+            $user->forceDelete();
+        }
+        return redirect()->route('admin.users.deleted')->with('success', 'Đã xóa vĩnh viễn tất cả người dùng đã xóa mềm!');
+    }
 
 
     

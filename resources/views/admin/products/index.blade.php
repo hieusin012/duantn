@@ -70,21 +70,21 @@
                     <div class="col-sm-2">
                         <a class="btn btn-add btn-sm" href="{{ route('admin.products.create') }}" title="Thêm"><i class="fas fa-plus"></i> Tạo mới sản phẩm</a>
                     </div>
-                    <div class="col-sm-2">
+                    {{-- <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm nhap-tu-file" type="button" title="Nhập"><i class="fas fa-file-upload"></i> Tải từ file</a>
-                    </div>
-                    <div class="col-sm-2">
+                    </div> --}}
+                    {{-- <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm print-file" type="button" title="In"><i class="fas fa-print"></i> In dữ liệu</a>
-                    </div>
-                    <div class="col-sm-2">
+                    </div> --}}
+                    {{-- <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm js-textareacopybtn" type="button" title="Sao chép"><i class="fas fa-copy"></i> Sao chép</a>
-                    </div>
-                    <div class="col-sm-2">
+                    </div> --}}
+                    {{-- <div class="col-sm-2">
                         <a class="btn btn-excel btn-sm" href="#" title="In"><i class="fas fa-file-excel"></i> Xuất Excel</a>
-                    </div>
-                    <div class="col-sm-2">
+                    </div> --}}
+                    {{-- <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm pdf-file" type="button" title="In"><i class="fas fa-file-pdf"></i> Xuất PDF</a>
-                    </div>
+                    </div> --}}
                     <div class="col-sm-2">
                         <a class="btn btn-danger btn-sm" type="button" title="Xóa" href="{{ route('admin.products.trash') }}"><i class="fas fa-trash-alt"></i> Dữ liệu đã xóa</a>
                     </div>

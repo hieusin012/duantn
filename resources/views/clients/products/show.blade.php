@@ -316,7 +316,8 @@
                                             data-size-id="{{ $variant->size_id }}"
                                             data-variant-quantity="{{ $variant->quantity }}"
                                             data-image="{{ asset('storage/' . $variant->image) }}"
-                                            data-price="{{ $variant->sale_price ?? $variant->price }}">
+                                            data-price="{{ $variant->display_price }}">
+                                            {{-- data-price="{{ $variant->sale_price ?? $variant->price }}"> --}}
                                             {{-- data-price="{{ $variant->price }}"> --}}
                                             {{ $variant->size->name }}
                                         </button>
