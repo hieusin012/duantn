@@ -1,6 +1,7 @@
 <aside id="sidebar" class="app-sidebar" style="width: 250px">
       <div class="app-sidebar__user text-center py-4">
             @auth
+            
             <div class="d-flex flex-column align-items-center">
                   <div class="position-relative mb-2">
                         <a href="{{ route('admin.users.show', Auth::user()->id ) }}">

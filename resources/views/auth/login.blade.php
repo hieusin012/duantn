@@ -16,7 +16,7 @@
                             class="form-control @error('email') is-invalid @enderror"
                             value="{{ old('email') }}" placeholder="Nhập email...">
                         @error('email')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger mt-1">{{ $message }}</div>
                         @enderror
                     </div>
 
@@ -31,6 +31,12 @@
                     </div>
                     <div class="form-check mb-3">
                         <a href="{{ route('forgot-password') }}" class="float-end">Quên mật khẩu?</a>
+                    </div>
+                    <div class="mb-3">
+                        <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
+                        @error('g-recaptcha-response')
+                        <div class="text-danger mt-1">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="d-grid">

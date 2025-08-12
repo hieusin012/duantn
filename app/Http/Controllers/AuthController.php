@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Http;
 
 class AuthController extends Controller
 {
@@ -18,26 +19,39 @@ class AuthController extends Controller
     // Xử lý đăng nhập
     public function login(Request $request)
     {
-        $credentials = $request->validate([
+        // 1. Validate đầu vào
+        $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required', 'min:8'],
+            'g-recaptcha-response' => 'required',
         ], [
             'email.required' => 'Vui lòng nhập email.',
             'email.email' => 'Email không đúng định dạng.',
             'password.required' => 'Vui lòng nhập mật khẩu.',
             'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
+            'g-recaptcha-response.required' => 'Vui lòng xác nhận bạn không phải robot.',
         ]);
 
-        // Kiểm tra tài khoản bị khóa
+        // 2. Xác thực reCAPTCHA với Google
+        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+            'secret' => env('RECAPTCHA_SECRET_KEY'),
+            'response' => $request->input('g-recaptcha-response'),
+            'remoteip' => $request->ip(),
+        ]);
+
+        if (!$response->json('success')) {
+            return back()->withErrors('captcha', 'Xác thực reCAPTCHA thất bại.');
+        }
+
+        // 3. Kiểm tra tài khoản bị khóa
         $user = \App\Models\User::where('email', $request->email)->first();
-        // if ($user && $user->status === 'inactive') {
         if ($user && $user->status !== 'active') {
             return back()->withErrors([
                 'email' => 'Tài khoản của bạn đã bị khóa. Vui lòng liên hệ hỗ trợ.',
             ]);
         }
 
-        // Giới hạn 5 lần đăng nhập sai
+        // 4. Giới hạn 5 lần đăng nhập sai
         $throttleKey = strtolower($request->input('email')) . '|' . $request->ip();
         if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
             $seconds = RateLimiter::availableIn($throttleKey);
@@ -46,23 +60,26 @@ class AuthController extends Controller
             ]);
         }
 
+        // 5. Chỉ lấy email & password để Auth
+        $credentials = $request->only('email', 'password');
+
         if (Auth::attempt($credentials)) {
-            RateLimiter::clear($throttleKey); // Reset đếm nếu login đúng
+            RateLimiter::clear($throttleKey);
             $request->session()->regenerate();
 
-            // Kiểm tra role admin hoặc user
             if (Auth::user()->role === 'admin') {
                 return redirect()->intended('/admin')->with('success', 'Đăng nhập thành công');
-            } else {
-                return redirect('/')->with('success', 'Đăng nhập thành công');
             }
+            return redirect('/')->with('success', 'Đăng nhập thành công');
         }
-        RateLimiter::hit($throttleKey, 900); // Đếm sai, 900 giây = 15 phút
+
+        RateLimiter::hit($throttleKey, 900);
 
         return back()->withErrors([
             'email' => 'Thông tin đăng nhập không chính xác.',
         ]);
     }
+
 
     // Hiển thị form đăng ký (dành cho người dùng bình thường)
     public function showRegister()
@@ -118,10 +135,8 @@ class AuthController extends Controller
         Auth::logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
-        return redirect('login')->with('success', 'Bạn đã đăng xuất tài khoản');
+        return redirect()->route('login')->with('success', 'Bạn đã đăng xuất thành công.');
     }
-    
 }

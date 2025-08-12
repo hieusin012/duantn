@@ -102,7 +102,7 @@
                             <th>Đánh giá</th>
                             <th>Trạng thái</th>
                             <th>Ngày đánh giá</th>
-                            <th>Hành động</th>
+                            <!-- <th>Hành động</th> -->
                         </tr>
                     </thead>
                     <tbody>
@@ -121,7 +121,7 @@
                                     @endif
                                 </td>
                                 <td>{{ $comment->created_at->format('d/m/Y') }}</td>
-                                <td>
+                                <!-- <td>
                                     <a href="{{ route('admin.comments.edit', $comment->id) }}" class="btn btn-primary btn-sm" title="Sửa">
                                         <i class="fas fa-edit"></i>
                                     </a>
@@ -132,7 +132,7 @@
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
                                     </form>
-                                </td>
+                                </td> -->
                             </tr>
                         @empty
                             <tr>
