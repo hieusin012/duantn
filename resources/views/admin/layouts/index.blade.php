@@ -195,10 +195,15 @@
       </div>
     </div>
 
-    @yield('content')
+    <div id="main-content">
+      @yield('content')
+    </div>
 
-    @include('admin.layouts.partials.footer')
+    
   </main>
+  <div class="app-wrapper d-flex flex-column min-vh-100" style="margin-left: 250px;">
+    @include('admin.layouts.partials.footer')
+  </div>
 
   <!-- JS: jQuery, Bootstrap, Chart.js -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -265,5 +270,65 @@
   <!-- Yield scripts from children views -->
   @yield('scripts')
   @stack('scripts')
+  {{-- Muốn Sidebar không load lại thì bật comment <script> ở dưới --}}
+  {{-- <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        function ajaxLoadContent(url) {
+            fetch(url, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const newContent = doc.querySelector('#main-content')?.innerHTML;
+                if (newContent) {
+                    document.querySelector('#main-content').innerHTML = newContent;
+                    history.pushState(null, '', url);
+                    highlightActiveMenu(url);
+                } else {
+                    alert("Không thể tải nội dung.");
+                }
+            })
+            .catch(error => {
+                console.error('Lỗi khi tải nội dung:', error);
+            });
+        }
+
+        function highlightActiveMenu(url) {
+          const currentPath = new URL(url, location.origin).pathname.replace(/\/+$/, ''); // bỏ dấu / cuối
+
+          let matched = false;
+
+          document.querySelectorAll('.app-menu__item').forEach(link => {
+              const linkPath = new URL(link.href, location.origin).pathname.replace(/\/+$/, '');
+
+              if (!matched && linkPath === currentPath) {
+                  link.classList.add('active');
+                  matched = true; // Đảm bảo chỉ đánh dấu đúng 1 cái đầu tiên match
+              } else {
+                  link.classList.remove('active');
+              }
+          });
+        }
+
+        document.querySelectorAll('.app-menu__item').forEach(link => {
+            link.addEventListener('click', function (e) {
+              const url = this.getAttribute('href');
+              if (url.startsWith('http') || url.startsWith('/')) {
+                  e.preventDefault();
+                  ajaxLoadContent(url);
+              }
+          });
+        });
+        
+        // Hỗ trợ nút Back/Forward của trình duyệt
+        window.addEventListener('popstate', () => {
+            ajaxLoadContent(location.pathname);
+        });
+    });
+  </script> --}}
 </body>
 </html>

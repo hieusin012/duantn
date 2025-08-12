@@ -15,14 +15,14 @@ class StoreUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'fullname' => ['required', 'string', 'max:255', function ($attribute, $value, $fail) {
+            'fullname' => ['required', 'string', 'max:255', 'regex:/^[\p{L}\p{M}\s\'\-]+$/u', function ($attribute, $value, $fail) {
                 if (stripos($value, '<script') !== false) {
                     $fail('Thông tin không hợp lệ. Họ tên không được chứa mã script.');
                 }
             }],
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
-            // 'password' => 'required|min:6|confirmed',
+            'password' => 'required|min:8|max:20|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
+            // 'password' => 'required|min:8|confirmed',
             'avatar' => 'nullable|image|max:2048',
             'phone' => ['nullable', 'regex:/^(0)(3|5|7|8|9)[0-9]{8}$/'],
             'address' => 'nullable|string',
@@ -42,6 +42,7 @@ class StoreUserRequest extends FormRequest
             'fullname.required' => 'Họ và tên không được để trống.',
             'fullname.string' => 'Họ và tên phải là chuỗi ký tự.',
             'fullname.max' => 'Họ và tên không được vượt quá 255 ký tự.',
+            'fullname.regex' => 'Họ tên không được chứa ký tự đặc biệt. Chỉ bao gồm chữ cái, khoảng trắng, gạch nối (-) hoặc dấu nháy đơn (\').',
 
             'email.required' => 'Email không được để trống.',
             'email.email' => 'Email không đúng định dạng.',
@@ -49,7 +50,9 @@ class StoreUserRequest extends FormRequest
 
             'password.required' => 'Mật khẩu không được để trống.',
             // 'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
-            'password.min' => 'Mật khẩu phải có ít nhất 6 ký tự.',
+            'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
+            'password.max' => 'Mật khẩu không được vượt quá 20 ký tự.',
+            'password.regex' => 'Mật khẩu phải chứa ít nhất một chữ hoa, một chữ thường, một số và một ký tự đặc biệt.',
 
             'avatar.image' => 'Ảnh đại diện phải là file hình ảnh.',
             'avatar.max' => 'Ảnh đại diện không được lớn hơn 2MB.',

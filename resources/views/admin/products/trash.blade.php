@@ -32,6 +32,8 @@
                             <th>Tên sản phẩm</th>
                             <th>Ảnh</th>
                             <th>Giá</th>
+                            <th>Tình trạng</th>
+                            <th>Danh mục</th>
                             <th>Hành động</th>
                         </tr>
                     </thead>
@@ -49,6 +51,14 @@
                                 @endif
                             </td>
                             <td>{{ number_format($product->price, 0, ',', '.') }} đ</td>
+                            <td>
+                                @if ($product->is_active)
+                                <span class="badge bg-success">Còn hàng</span>
+                                @else
+                                <span class="badge bg-danger">Hết hàng</span>
+                                @endif
+                            </td>
+                            <td>{{ $product->category->name ?? 'N/A' }}</td>
                             <td>
                                 <a class="btn btn-primary btn-sm" href="{{ route('admin.products.restore', $product->id) }}" title="Khôi phục"><i class="fas fa-undo"></i></a>
                                 <form action="{{ route('admin.products.force-delete', $product->id) }}" method="POST" style="display:inline-block;">

@@ -15,18 +15,27 @@ class ThongKeController extends Controller
 
     public function getData(Request $request)
     {
-        $month = $request->month;
-        $year = $request->year;
+        // $month = $request->month;
+        // $year = $request->year;
+        $fromDate = $request->from_date;
+        $toDate = $request->to_date;
 
         $data = DB::table('products')
             ->select('categories.name as category_name', DB::raw('count(products.id) as total'))
             ->join('categories', 'categories.id', '=', 'products.category_id')
-            ->when($month, function ($query) use ($month) {
-                $query->whereMonth('products.created_at', $month);
+            // ->when($month, function ($query) use ($month) {
+            //     $query->whereMonth('products.created_at', $month);
+            // })
+            // ->when($year, function ($query) use ($year) {
+            //     $query->whereYear('products.created_at', $year);
+            // })
+            ->when($fromDate, function ($query) use ($fromDate) {
+                $query->whereDate('products.created_at', '>=', $fromDate);
             })
-            ->when($year, function ($query) use ($year) {
-                $query->whereYear('products.created_at', $year);
+            ->when($toDate, function ($query) use ($toDate) {
+                $query->whereDate('products.created_at', '<=', $toDate);
             })
+            ->whereNull('products.deleted_at')
             ->groupBy('categories.name')
             ->get();
 

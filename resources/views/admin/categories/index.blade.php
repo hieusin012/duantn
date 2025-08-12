@@ -40,7 +40,7 @@
                             </a>
                         @else
                             <a class="btn btn-danger btn-sm" href="{{ route('admin.categories.index', ['trashed' => 'true']) }}">
-                                <i class="fas fa-trash"></i> Dữ liệu đã xóa
+                                <i class="fas fa-trash-alt"></i> Dữ liệu đã xóa
                             </a>
                         @endif
                     </div>
@@ -81,7 +81,9 @@
                                 @if (request('trashed') !== 'true')
                                     <input type="checkbox" class="toggle-status" data-id="{{ $category->id }}" {{ $category->is_active ? 'checked' : '' }}>
                                 @else
-                                    <span class="text-muted">--</span>
+                                    <span class="{{ $category->is_active ? 'text-success' : 'text-danger' }}">
+                                        {{ $category->is_active ? 'Hiển thị' : 'Ẩn' }}
+                                    </span>
                                 @endif
                             </td>
                             <td>{{ $category->name }}</td>
