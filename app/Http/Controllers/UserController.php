@@ -84,10 +84,10 @@ class UserController extends Controller
     }
     public function destroy(User $user)
     {
-        if ($user->orders()->exists()) {
-            return redirect()->route('admin.users.index')
-                ->with('error', 'Không thể xóa tài khoản vì có đơn hàng liên quan');
-        }
+        // if ($user->orders()->exists()) {
+        //     return redirect()->route('admin.users.index')
+        //         ->with('error', 'Không thể xóa tài khoản vì có đơn hàng liên quan');
+        // }
         $user->delete();
         return redirect()->route('admin.users.index')->with('success', 'Xóa người dùng thành công.');
     }

@@ -201,7 +201,7 @@
 
     
   </main>
-  <div class="app-wrapper d-flex flex-column min-vh-100" style="margin-left: 250px;">
+  <div class="app-wrapper d-flex flex-column min-vh-100" style="margin-left: 240px; margin-right: -10px;">
     @include('admin.layouts.partials.footer')
   </div>
 
@@ -270,8 +270,8 @@
   <!-- Yield scripts from children views -->
   @yield('scripts')
   @stack('scripts')
-  {{-- Muốn Sidebar không load lại thì bật comment <script> ở dưới --}}
-  {{-- <script>
+ 
+  <!-- <script>
     document.addEventListener('DOMContentLoaded', function () {
         function ajaxLoadContent(url) {
             fetch(url, {
@@ -329,6 +329,6 @@
             ajaxLoadContent(location.pathname);
         });
     });
-  </script> --}}
+  </script>  -->
 </body>
 </html>

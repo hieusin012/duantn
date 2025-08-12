@@ -1,6 +1,7 @@
 <aside id="sidebar" class="app-sidebar" style="width: 250px">
       <div class="app-sidebar__user text-center py-4">
             @auth
+            
             <div class="d-flex flex-column align-items-center">
                   <div class="position-relative mb-2">
                         <a href="{{ route('admin.users.show', Auth::user()->id ) }}">
@@ -43,7 +44,7 @@
             <li><a class="app-menu__item {{ request()->routeIs('admin.blog-categories.*') ? 'active' : '' }}" href="{{ route('admin.blog-categories.index') }}">
                         <i class="app-menu__icon fas fa-folder-open"></i><span class="app-menu__label">Danh mục bài viết</span></a></li>
             <li><a class="app-menu__item {{ request()->routeIs('admin.comments.*') ? 'active' : '' }}" href="{{ route('admin.comments.index') }}">
-                        <i class="app-menu__icon fas fa-comments"></i><span class="app-menu__label">Bình luận</span></a></li>
+                        <i class="app-menu__icon fas fa-comments"></i><span class="app-menu__label">Đánh giá</span></a></li>
 
             <!-- Nhóm: Quản lý sản phẩm -->
             <li class="app-menu__section">QUẢN LÝ SẢN PHẨM</li>

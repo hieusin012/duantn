@@ -94,9 +94,9 @@ class ColorController extends Controller
     {
         $color = Color::findOrFail($id);
 
-        if ($color->productVariants()->count() > 0) {
-            return redirect()->back()->with('error', 'Không thể xóa vì màu đang được sử dụng.');
-        }
+        // if ($color->productVariants()->count() > 0) {
+        //     return redirect()->back()->with('error', 'Không thể xóa vì màu đang được sử dụng.');
+        // }
         $color->delete();
         return redirect()->route('admin.colors.index')->with('success', 'Xóa màu thành công!');
     }
