@@ -432,6 +432,7 @@
             <li rel="size-chart"><a class="tablink">Bảng kích thước</a></li>
             <li rel="shipping-return"><a class="tablink">Vận chuyển &amp; Trả lại</a></li>
             <li rel="reviews"><a class="tablink">Đánh giá</a></li>
+            <li rel="comments"><a class="tablink">Bình luận</a></li>
         </ul>
 
 
@@ -567,7 +568,7 @@
                                     </div>
                                 </div>
                                 @empty
-                                <p>Hãy là người đầu tiên để lại bình luận.</p>
+                                <p>Hãy là người đầu tiên để lại đánh giá.</p>
                                 @endforelse
                             </div>
                         </div>
@@ -639,6 +640,26 @@
                         </div>
                         @endguest
                     </div>
+                </div>
+            </div>
+
+            <div id="comments" class="tab-content">
+                <h3 rel="comments">Bình luận của khách hàng</h3>
+                <div id="comments-section">
+                    <div id="comment-list"></div>
+
+                    @auth
+                    <form id="comment-form" class="mt-3">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <input type="hidden" name="parent_id" id="parent_id">
+                        <textarea name="content" class="form-control" placeholder="Nhập bình luận..." required></textarea>
+                        <button type="submit" class="btn btn-primary mt-2">Gửi</button>
+                        <button type="button" class="btn btn-secondary mt-2" id="cancel-reply" style="display:none">Hủy</button>
+                    </form>
+                    @else
+                    <p>Bạn cần <a href="{{ route('login') }}">đăng nhập</a> để bình luận</p>
+                    @endauth
                 </div>
             </div>
         </div>
@@ -835,6 +856,96 @@
         box-shadow: 0 0 0 2px #00000010;
     }
 </style>
+<style>
+    #comment-list {
+        max-height: 400px;
+        /* chiều cao tối đa, có thể chỉnh tùy ý */
+        overflow-y: auto;
+        /* cho phép cuộn dọc */
+        padding-right: 10px;
+        /* để tránh thanh cuộn đè lên nội dung */
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background: #f9f9f9;
+    }
+
+    /* Cuộn mượt */
+    #comment-list::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    #comment-list::-webkit-scrollbar-thumb {
+        background: #bbb;
+        border-radius: 4px;
+    }
+
+    #comment-list::-webkit-scrollbar-thumb:hover {
+        background: #999;
+    }
+
+    .comment-item {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 15px;
+        align-items: flex-start;
+    }
+
+    .comment-avatar {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #ddd;
+    }
+
+    .comment-body {
+        flex: 1;
+    }
+
+    .comment-content {
+        background: #ffffff;
+        padding: 10px 14px;
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        border: 1px solid #e6e6e6;
+    }
+
+    .comment-content strong {
+        font-size: 14px;
+        color: #333;
+    }
+
+    .comment-content small {
+        color: #888;
+        font-size: 12px;
+        margin-left: 6px;
+    }
+
+    .comment-content p {
+        margin: 5px 0 0 0;
+        font-size: 14px;
+        color: #444;
+    }
+
+    .reply-btn {
+        font-size: 13px;
+        color: #1877f2;
+        cursor: pointer;
+        display: inline-block;
+        margin-top: 5px;
+    }
+
+    .reply-btn:hover {
+        text-decoration: underline;
+    }
+
+    .reply-container {
+        margin-left: 60px;
+        border-left: 2px solid #f0f0f0;
+        padding-left: 10px;
+    }
+</style>
+
 <script>
     $(document).ready(function() {
         // Khi click size
@@ -1125,5 +1236,91 @@
     });
 </script>
 
+// bình luận
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let productId = "{{ $product->id }}";
+        loadComments();
+
+        function loadComments() {
+            fetch(`/comments/${productId}`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('comment-list').innerHTML = renderComments(data);
+                });
+        }
+
+        function renderComments(comments, level = 0) {
+            let html = '';
+            comments.forEach(c => {
+                let avatar = c.user.avatar ? `/storage/${c.user.avatar}` : 'https://via.placeholder.com/45';
+                html += `
+            <div class="comment-item" style="margin-left:${level > 0 ? 0 : 0}px">
+                <img src="${avatar}" class="comment-avatar">
+                <div class="comment-body">
+                    <div class="comment-content">
+                        <strong>${c.user.fullname}</strong>
+                        <small>${formatDate(c.created_at)}</small>
+                        <p>${c.content}</p>
+                    </div>
+                    @auth
+                    <div><span class="reply-btn" data-id="${c.id}">Trả lời</span></div>
+                    @endauth
+                </div>
+            </div>
+        `;
+                if (c.replies && c.replies.length > 0) {
+                    html += `<div class="reply-container">`;
+                    html += renderComments(c.replies, level + 1);
+                    html += `</div>`;
+                }
+            });
+            return html;
+        }
+
+
+        function formatDate(dateString) {
+            let date = new Date(dateString);
+            return date.toLocaleString('vi-VN');
+        }
+
+        @auth
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('reply-btn')) {
+                e.preventDefault();
+                document.getElementById('parent_id').value = e.target.getAttribute('data-id');
+                document.getElementById('cancel-reply').style.display = 'inline-block';
+            }
+        });
+
+        document.getElementById('cancel-reply').addEventListener('click', function() {
+            document.getElementById('parent_id').value = '';
+            this.style.display = 'none';
+        });
+
+        document.getElementById('comment-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let formData = new FormData(this);
+
+            fetch("{{ route('comments.store') }}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        this.reset();
+                        document.getElementById('parent_id').value = '';
+                        document.getElementById('cancel-reply').style.display = 'none';
+                        loadComments();
+                    }
+                });
+        });
+        @endauth
+    });
+</script>
 
 @endsection

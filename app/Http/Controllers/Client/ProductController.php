@@ -85,21 +85,22 @@ class ProductController extends Controller
         }
     }
 
+    // ===== GÁN GIÁ TRỊ MẶC ĐỊNH =====
+    $hasPurchased = false;
+    $hasReviewed = false;
+
     // ===== THÊM KIỂM TRA ĐÃ MUA & CHƯA ĐÁNH GIÁ =====
     if (Auth::check()) {
         $userId = Auth::id();
 
-        // Đã mua hàng
         $hasPurchased = \App\Models\OrderDetail::whereHas('order', function($q) use ($userId) {
             $q->where('user_id', $userId)
               ->where('status', 'Đã giao hàng');
         })->where('product_id', $product->id)->exists();
 
-        // Chưa đánh giá
         $hasReviewed = \App\Models\Comment::where('user_id', $userId)
             ->where('product_id', $product->id)
             ->exists();
-
     }
     // =================== KẾT THÚC LOGIC MỚI =======================
 
@@ -115,7 +116,7 @@ class ProductController extends Controller
         'averageRating',
         'ratingPercentages',
         'hasPurchased',
-        'hasReviewed' // truyền sang view để ẩn/hiện form
+        'hasReviewed'
     ));
 }
 
