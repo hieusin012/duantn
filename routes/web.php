@@ -39,6 +39,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\AdminReturnRequestController;
 use App\Http\Controllers\ShipperController;
+use App\Http\Controllers\Client\ProductCommentController;
 
 // Auth
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -445,3 +446,10 @@ Route::get('/blog/danh-muc/{slug}', [ClientBlogController::class, 'showByCategor
 Route::get('/about', function () {
     return view('clients.about');
 })->name('about');
+
+
+// bình luận
+Route::middleware('auth')->group(function () {
+    Route::post('/comments', [ProductCommentController::class, 'store'])->name('comments.store');
+});
+Route::get('/comments/{productId}', [ProductCommentController::class, 'list'])->name('comments.list');
