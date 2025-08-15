@@ -96,6 +96,25 @@ class DashboardController extends Controller
             $bannedUsers[] = $usersOnDate->where('status', 'inactive')->where('role', 'member')->count();
         }
 
+        // thống kê đơn hàng bán chạy
+        $topProducts = DB::table('order_details')
+            ->join('orders', 'order_details.order_id', '=', 'orders.id')
+            ->join('products', 'order_details.product_id', '=', 'products.id')
+            ->select(
+                'products.code',
+                'products.name',
+                'products.image',
+                'products.price',
+                DB::raw('SUM(order_details.quantity) as total_sold')
+            )
+            ->where('orders.status', 'Đã giao hàng')
+            ->whereBetween('orders.created_at', [$start, $end])
+            ->groupBy('products.id', 'products.name', 'products.image', 'products.price')
+            ->orderByDesc('total_sold')
+            ->limit(5)
+            ->get();
+
+
         return response()->json([
             'revenue' => [
                 'labels' => $revenueLabels,
@@ -113,6 +132,7 @@ class DashboardController extends Controller
                 'completed' => $orderCompleted,
                 'processing' => $orderProcessing,
             ],
+            'top_products' => $topProducts,
         ]);
     }
 }
