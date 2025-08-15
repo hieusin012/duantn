@@ -39,56 +39,80 @@ class DashboardController extends Controller
 
         ));
     }
-    public function getRevenueChartData(Request $request)
+    public function chartData(Request $request)
     {
-        $start = Carbon::parse($request->start_date)->startOfDay();
-        $end = Carbon::parse($request->end_date)->endOfDay();
+        $start = $request->start_date
+            ? Carbon::parse($request->start_date)->startOfDay()
+            : now()->subDays(7)->startOfDay();
 
+        $end = $request->end_date
+            ? Carbon::parse($request->end_date)->endOfDay()
+            : now()->endOfDay();
+
+        // --- Biểu đồ doanh thu ---
         $orders = Order::whereBetween('created_at', [$start, $end])->get();
+        $revenueGrouped = $orders->groupBy(fn($order) => $order->created_at->format('d/m'));
 
-        $grouped = $orders->groupBy(function ($order) {
-            return Carbon::parse($order->created_at)->format('d/m');
-        });
-
-        $labels = [];
-        $data = [];
-
-        foreach ($grouped as $date => $ordersOnDate) {
-            $labels[] = $date;
-            $data[] = $ordersOnDate->where('status', 'Đã giao hàng')->where('payment_status', 'Đã thanh toán')->sum('total_price');
+        $revenueLabels = [];
+        $revenueData = [];
+        foreach ($revenueGrouped as $date => $ordersOnDate) {
+            $revenueLabels[] = $date;
+            $revenueData[] = $ordersOnDate
+                ->where('status', 'Đã giao hàng')
+                ->where('payment_status', 'Đã thanh toán')
+                ->sum('total_price');
+        }
+        // Thống kê số đơn hàng
+        $orderLabels = [];
+        $orderSuccess = [];
+        $orderCanceled = [];
+        $orderCompleted = [];
+        $orderProcessing = [];
+        foreach ($revenueGrouped as $date => $ordersOnDate) {
+            $orderLabels[] = $date;
+            $orderSuccess[] = $ordersOnDate->where('status', 'Đã giao hàng')->count();
+            $orderCanceled[] = $ordersOnDate->where('status', 'Đơn hàng đã hủy')->count();
+            $orderCompleted[] = $ordersOnDate->where('status', 'Đã hoàn hàng')->count();
+            $orderProcessing[] = $ordersOnDate
+                ->whereIn('status', [
+                    'Chờ xác nhận',
+                    'Đã xác nhận',
+                    'Đang chuẩn bị hàng',
+                    'Đang giao hàng'
+                ])
+                ->count();
         }
 
-        return response()->json([
-            'labels' => $labels,
-            'data' => $data
-        ]);
-    }
-
-    public function getUserChartData(Request $request)
-    {
-        $start = Carbon::parse($request->start_date)->startOfDay();
-        $end = Carbon::parse($request->end_date)->endOfDay();
-
+        // --- Biểu đồ tăng trưởng người dùng ---
         $users = User::whereBetween('created_at', [$start, $end])->get();
+        $userGrouped = $users->groupBy(fn($user) => $user->created_at->format('d/m'));
 
-        $grouped = $users->groupBy(function ($user) {
-            return Carbon::parse($user->created_at)->format('d/m');
-        });
-
-        $labels = [];
-        $active = [];
-        $banned = [];
-
-        foreach ($grouped as $date => $usersOnDate) {
-            $labels[] = $date;
-            $active[] = $usersOnDate->where('status', 'active')->where('role', 'member')->count();
-            $banned[] = $usersOnDate->where('status', 'inactive')->where('role', 'member')->count();
+        $userLabels = [];
+        $activeUsers = [];
+        $bannedUsers = [];
+        foreach ($userGrouped as $date => $usersOnDate) {
+            $userLabels[] = $date;
+            $activeUsers[] = $usersOnDate->where('status', 'active')->where('role', 'member')->count();
+            $bannedUsers[] = $usersOnDate->where('status', 'inactive')->where('role', 'member')->count();
         }
 
         return response()->json([
-            'labels' => $labels,
-            'active' => $active,
-            'banned' => $banned
+            'revenue' => [
+                'labels' => $revenueLabels,
+                'data' => $revenueData,
+            ],
+            'users' => [
+                'labels' => $userLabels,
+                'active' => $activeUsers,
+                'banned' => $bannedUsers,
+            ],
+            'orders' => [
+                'labels' => $orderLabels,
+                'success' => $orderSuccess,
+                'canceled' => $orderCanceled,
+                'completed' => $orderCompleted,
+                'processing' => $orderProcessing,
+            ],
         ]);
     }
 }

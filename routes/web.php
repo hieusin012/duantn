@@ -68,8 +68,7 @@ Route::middleware('web')->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
-    Route::get('/dashboard/revenue-chart-data', [DashboardController::class, 'getRevenueChartData'])->name('dashboard.revenueData');
-    Route::get('/dashboard/user-chart-data', [DashboardController::class, 'getUserChartData'])->name('dashboard.userData');
+    Route::get('dashboard/chart-data', [DashboardController::class, 'chartData'])->name('dashboard.chartData');
 
 
     // Product
