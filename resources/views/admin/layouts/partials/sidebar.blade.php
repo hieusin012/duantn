@@ -73,16 +73,6 @@
                         <i class="app-menu__icon bx bx-box"></i><span class="app-menu__label">Kho hàng</span></a></li>
             <li><a class="app-menu__item {{ request()->routeIs('admin.vouchers*') ? 'active' : '' }}" href="{{ route('admin.vouchers.index') }}">
                         <i class="app-menu__icon fas fa-ticket-alt"></i><span class="app-menu__label">Vouchers</span></a></li>
-
-            <!-- Nhóm: Vận chuyển -->
-            <li class="app-menu__section">VẬN CHUYỂN</li>
-            <li><a class="app-menu__item {{ request()->routeIs('admin.shiptypes*') ? 'active' : '' }}" href="{{ route('admin.shiptypes.index') }}">
-                        <i class="app-menu__icon fa fa-shipping-fast"></i><span class="app-menu__label">Loại shipper</span></a></li>
-            <li><a class="app-menu__item {{ request()->routeIs('admin.shipper.orders*') ? 'active' : '' }}" href="{{ route('admin.shipper.orders.index') }}">
-                        <i class="app-menu__icon fa fa-shipping-fast"></i><span class="app-menu__label">Đơn hàng shipper</span></a></li>
-            <li><a class="app-menu__item {{ request()->routeIs('admin.shipper.persons*') ? 'active' : '' }}" href="{{ route('admin.shipper.persons.index') }}">
-                        <i class="app-menu__icon fa fa-shipping-fast"></i><span class="app-menu__label">Danh sách shipper</span></a></li>
-
             <!-- Nhóm: Thống kê & Báo cáo -->
             <li class="app-menu__section">BÁO CÁO</li>
             <li>
