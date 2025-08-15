@@ -239,43 +239,21 @@
     <div class="col-lg-6">
         <div class="card shadow-sm">
             <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Đơn hàng chờ xử lý</h5>
+                <h5 class="mb-0">Top 5 sản phẩm bán chạy</h5>
             </div>
-            <div class="card-body table-responsive">
-                <table class="table table-bordered table-hover align-middle">
+            <div class="card-body table-responsive" style="height:400px;">
+                <table id="topProductsTable" class="table table-bordered table-hover align-middle">
                     <thead class="table-light">
                         <tr>
-                            <th>Mã đơn</th>
-                            <th>Khách hàng</th>
-                            <th>Tổng tiền</th>
-                            <th>Trạng thái</th>
-                            <th>Hành động</th>
+                            <th>Mã sản phẩm</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Ảnh</th>
+                            <th>Giá tiền</th>
+                            <th>Số lượng bán</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($recentOrders as $order)
-                        <tr>
-                            <td>{{ $order->code }}</td>
-                            <td>{{ $order->user->fullname ?? $order->fullname }}</td>
-                            <td>{{ number_format($order->total_price, 0, ',', '.') }} đ</td>
-                            <td>
-                                <span class="badge 
-                                    {{ $order->status === 'Chờ xác nhận' ? 'bg-warning' : 'bg-secondary' }}">
-                                    {{ $order->status }}
-                                </span>
-                            </td>
-                            <td>
-                                <a href="{{ route('admin.orders.show', $order->id) }}"
-                                    class="btn btn-outline-success btn-sm">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="5" class="text-center text-muted">Không có đơn hàng nào gần đây</td>
-                        </tr>
-                        @endforelse
+                        
                     </tbody>
                 </table>
             </div>
@@ -551,7 +529,21 @@
                     }
 
                 });
+                // Cập nhật bảng top sản phẩm
+                const topProductsTbody = document.querySelector('#topProductsTable tbody');
+                topProductsTbody.innerHTML = ''; // Xóa dữ liệu cũ nếu có
 
+                data.top_products.forEach(product => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+        <td>#${product.code}</td>
+        <td>${product.name}</td>
+        <td><img src="${product.image}" style="max-width:50px;" /></td>
+        <td>${numberWithCommas(product.price)} đ</td>
+        <td>${product.total_sold}</td>
+    `;
+                    topProductsTbody.appendChild(tr);
+                });
 
             });
     }
