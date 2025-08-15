@@ -452,3 +452,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/comments', [ProductCommentController::class, 'store'])->name('comments.store');
 });
 Route::get('/comments/{productId}', [ProductCommentController::class, 'list'])->name('comments.list');
+
+// Trạng thái đơn hàng client tự cập nhật không câng load lại trang
+Route::get('/order/status/{id}', [\App\Http\Controllers\Client\ClientOrderController::class, 'getStatus'])->name('order.status'); 

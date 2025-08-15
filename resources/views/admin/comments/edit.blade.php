@@ -69,7 +69,7 @@
 
 @extends('admin.layouts.index')
 
-@section('title', 'Chỉnh sửa bình luận')
+@section('title', 'Chỉnh sửa đánh giá')
 
 @section('content')
 @if($errors->any())
@@ -86,7 +86,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="tile">
-            <h3 class="tile-title">Chỉnh sửa bình luận</h3>
+            <h3 class="tile-title">Chỉnh sửa đánh giá</h3>
             <div class="tile-body">
                 <form class="row" action="{{ route('admin.comments.update', $comment->id) }}" method="POST">
                     @csrf
@@ -130,7 +130,7 @@
 
                     <div class="form-group col-md-12">
                         <label class="control-label">Nội dung</label>
-                        <textarea name="content" class="form-control" rows="4" required>{{ old('content', $comment->content) }}</textarea>
+                        <textarea name="content" class="form-control" rows="4" required readonly>{{ old('content', $comment->content) }}</textarea>
                         @error('content')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -138,7 +138,7 @@
 
                     <div class="form-group col-md-6">
                         <label class="control-label">Đánh giá (1-5)</label>
-                        <input type="number" name="rating" min="1" max="5" class="form-control" value="{{ old('rating', $comment->rating) }}">
+                        <input type="number" name="rating" min="1" max="5" class="form-control" value="{{ old('rating', $comment->rating) }}" readonly>
                         @error('rating')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror

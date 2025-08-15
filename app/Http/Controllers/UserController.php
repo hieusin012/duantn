@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -76,7 +77,17 @@ class UserController extends Controller
             unset($data['password']);
         }
 
-        $data['status'] = $request->input('status', 'active'); // FIX HERE
+        // Chặn admin thay đổi role/status admin khác
+        if (Auth::user()->role === 'admin' && $user->role === 'admin') {
+            unset($data['role']);
+            unset($data['status']);
+        } else {
+            // Nếu là tạo hoặc sửa user member, nhận giá trị từ request
+            $data['role'] = $request->input('role', 'member');
+            $data['status'] = $request->input('status', 'active');
+        }
+
+        // $data['status'] = $request->input('status', 'active'); // FIX HERE
 
         $user->update($data);
 
@@ -84,6 +95,13 @@ class UserController extends Controller
     }
     public function destroy(User $user)
     {
+        if ($user->id === Auth::id()) {
+            return redirect()->route('admin.users.index')
+                            ->with('error', 'Bạn không thể xóa tài khoản đang đăng nhập.');
+        }
+        if ($user->role === 'admin' && Auth::user()->role !== 'super_admin') {
+            return redirect()->back()->with('error', 'Bạn không có quyền xóa tài khoản admin khác!');
+        }
         // if ($user->orders()->exists()) {
         //     return redirect()->route('admin.users.index')
         //         ->with('error', 'Không thể xóa tài khoản vì có đơn hàng liên quan');

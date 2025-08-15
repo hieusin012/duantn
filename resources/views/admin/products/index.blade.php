@@ -88,9 +88,9 @@
                     <div class="col-sm-2">
                         <a class="btn btn-danger btn-sm" type="button" title="Xóa" href="{{ route('admin.products.trash') }}"><i class="fas fa-trash-alt"></i> Dữ liệu đã xóa</a>
                     </div>
-                    <div class="col-sm-2">
+                    {{-- <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm" type="button" title="Xóa"><i class="fas fa-trash-alt"></i> Xóa tất cả</a>
-                    </div>
+                    </div> --}}
                 </div>
                 <table class="table table-bordered table-hover align-middle text-center" id="sampleTable">
                     <thead class="table-dark">

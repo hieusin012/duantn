@@ -42,8 +42,20 @@ class ProfileController extends Controller
             'introduction' => 'nullable|string',
             ], [
                 'fullname.required' => 'Vui lòng nhập tên.',
+                'fullname.string'   => 'Họ và tên phải là chuỗi ký tự.',
+                'fullname.max'      => 'Họ và tên không được vượt quá 199 ký tự.',
                 'fullname.regex' => 'Tên không được chứa ký tự đặc biệt.',
+                'avatar.image' => 'Ảnh đại diện phải là một tệp hình ảnh.',
+                'avatar.mimes' => 'Ảnh đại diện phải có định dạng: jpg, jpeg, png.',
+                'avatar.max'   => 'Ảnh đại diện không được vượt quá 2MB.',
                 'phone.regex' => 'Số điện thoại không hợp lệ. Vui lòng nhập đúng định dạng Việt Nam như 0901234567.',
+                'address.string' => 'Địa chỉ phải là chuỗi ký tự.',
+                'address.max'    => 'Địa chỉ không được vượt quá 255 ký tự.',
+                'gender.in' => 'Giới tính không hợp lệ. Chỉ được chọn Nam, Nữ hoặc Khác.',
+                'birthday.date' => 'Ngày sinh phải là ngày hợp lệ.',
+                'language.string' => 'Ngôn ngữ phải là chuỗi ký tự.',
+                'language.max'    => 'Ngôn ngữ không được vượt quá 50 ký tự.',
+                'introduction.string' => 'Giới thiệu phải là chuỗi ký tự.',
             ]);
         $data = $request->except('avatar');
 

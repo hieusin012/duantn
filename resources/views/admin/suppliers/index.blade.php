@@ -12,13 +12,13 @@
                     <div class="col-sm-2">
                         <a class="btn btn-add btn-sm" href="{{ route('admin.suppliers.create') }}" title="Thêm"><i class="fas fa-plus"></i> Thêm nhà cung cấp</a>
                     </div>
-                    <div class="col-sm-2">
+                    {{-- <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm nhap-tu-file" type="button" title="Import"><i class="fas fa-file-upload"></i> Nhập tệp</a>
-                    </div>
+                    </div> --}}
                     <div class="col-sm-2">
                         <a class="btn btn-danger btn-sm" type="button" title="Dữ liệu đã xóa" href="{{ route('admin.suppliers.delete') }}"><i class="fas fa-trash-alt"></i> Dữ liệu đã xóa</a>
                     </div>
-                    <div class="col-sm-2">
+                    {{-- <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm print-file" type="button" title="Print"><i class="fas fa-print"></i> In dữ liệu</a>
                     </div>
                     <div class="col-sm-2">
@@ -32,7 +32,7 @@
                     </div>
                     <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm" type="button" title="Delete All"><i class="fas fa-trash-alt"></i> Xóa tất cả</a>
-                    </div>
+                    </div> --}}
                 </div>
 
                 <div class="row mb-3">

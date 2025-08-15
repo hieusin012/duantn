@@ -74,10 +74,10 @@
                         <a class="btn btn-delete btn-sm pdf-file" type="button" title="In"><i
                                 class="fas fa-file-pdf"></i> Xuất PDF</a>
                     </div> --}}
-                    <div class="col-sm-2">
+                    {{-- <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm" type="button" title="Xóa"><i
                                 class="fas fa-trash-alt"></i> Xóa tất cả</a>
-                    </div>
+                    </div> --}}
                 </div>
                 <table class="table table-bordered table-hover text-center align-middle" id="sampleTable">
                     <thead class="thead-dark">

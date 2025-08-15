@@ -164,13 +164,25 @@
                     <tbody>
                         @foreach ($order->orderDetails as $detail)
                         <tr>
-                            <td class="fw-medium text-nowrap">{{ $detail->variant->product->name ?? 'N/A' }}</td>
+                            {{-- <td class="fw-medium text-nowrap">{{ $detail->variant->product->name ?? 'N/A' }}</td>
                             <td>
                                 <img src="{{ $detail->variant->image ? asset('storage/' . $detail->variant->image) : asset('images/no-image.jpg') }}"
                                     width="60" class="img-thumbnail border border-secondary" alt="Ảnh sản phẩm" />
                             </td>
                             <td class="text-nowrap">{{ $detail->variant->color->name ?? 'N/A' }}</td>
-                            <td class="text-nowrap">{{ $detail->variant->size->name ?? 'N/A' }}</td>
+                            <td class="text-nowrap">{{ $detail->variant->size->name ?? 'N/A' }}</td> --}}
+                            <td class="fw-medium text-nowrap">{{ $detail->product_name ?? 'N/A' }}</td>
+                            <td>
+                                @if ($detail->product_image)
+                                    <img src="{{ asset('storage/' . $detail->product_image) }}" width="60"
+                                        class="img-thumbnail border border-secondary" alt="Ảnh sản phẩm" />
+                                @else
+                                    <img src="{{ asset('images/no-image.jpg') }}" width="60"
+                                        class="img-thumbnail border border-secondary" alt="Ảnh sản phẩm" />
+                                @endif
+                            </td>
+                            <td class="text-nowrap">{{ $detail->color ?? 'N/A' }}</td>
+                            <td class="text-nowrap">{{ $detail->size ?? 'N/A' }}</td>
                             <td class="text-nowrap text-danger fw-semibold">{{ number_format($detail->price, 0, ',', '.') }} <sup>₫</sup></td>
                             <td class="text-nowrap">{{ $detail->quantity }}</td>
                             <td class="text-nowrap text-success fw-semibold">{{ number_format($detail->total_price, 0, ',', '.') }} <sup>₫</sup></td>

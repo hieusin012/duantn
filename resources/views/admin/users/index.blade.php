@@ -33,9 +33,9 @@
                     {{-- <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm pdf-file" type="button" title="Export PDF"><i class="fas fa-file-pdf"></i> Xuất sang PDF</a>
                     </div> --}}
-                    <div class="col-sm-2">
+                    {{-- <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm" type="button" title="Delete All"><i class="fas fa-trash-alt"></i> Xóa tất cả</a>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-4">
