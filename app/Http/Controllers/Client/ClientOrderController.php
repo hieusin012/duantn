@@ -139,5 +139,16 @@ class ClientOrderController extends Controller
 
         return redirect()->route('order.history')->with('success', 'Đơn hàng đã được hủy.');
     }
+    // Thêm method mới
+    public function getStatus($id)
+    {
+        $order = Order::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
 
+        return response()->json([
+            'status' => $order->status,
+            'payment_status' => $order->payment_status
+        ]);
+    }
 }

@@ -131,193 +131,173 @@
     }
 </style>
 
-<div class="row mb-4">
-    <div class="col-md-12 col-lg-6">
-        <div class="row">
-            <div class="col-md-6">
-                <a href="{{ route('admin.users.index') }}">
-                    <div class="widget-small primary coloured-icon"><i class='icon bx bxs-user-account fa-3x'></i>
-                        <div class="info">
-                            <h4>Tổng khách hàng</h4>
-                            <p><b>{{ $totalCustomers ?? 0 }} khách hàng</b></p>
-                            <p class="info-tong">Tổng số khách hàng được quản lý.</p>
-                        </div>
+<div class="row mb-4 g-4">
+    <!-- Bộ lọc doanh thu -->
+    <div class="col-12 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form class="d-flex align-items-end justify-content-center gap-3 flex-wrap">
+                    <div class="mr-3">
+                        <label for="start" class="form-label mb-1">Từ ngày</label>
+                        <input type="date" id="start" class="form-control form-control-sm" />
                     </div>
-                </a>
-            </div>
-            <div class="col-md-6">
-                <a href="{{ route('admin.products.index') }}">
-                    <div class="widget-small info coloured-icon"><i class='icon bx bxs-data fa-3x'></i>
-                        <div class="info">
-                            <h4>Tổng sản phẩm</h4>
-                            <p><b>{{ $totalProducts ?? 0 }} sản phẩm</b></p>
-                            <p class="info-tong">Tổng số sản phẩm được quản lý.</p>
-                        </div>
+                    <div class="mr-3">
+                        <label for="end" class="form-label mb-1">Đến ngày</label>
+                        <input type="date" id="end" class="form-control form-control-sm" />
                     </div>
-                </a>
-            </div>
-            <div class="col-md-6">
-                <a href="{{ route('admin.orders.index') }}">
-                    <div class="widget-small warning coloured-icon"><i class='icon bx bxs-shopping-bags fa-3x'></i>
-                        <div class="info">
-                            <h4>Tổng đơn hàng</h4>
-                            <p><b>{{ $totalOrders ?? 0 }} đơn hàng</b></p>
-                            <p class="info-tong">Tổng số đơn hàng đang chờ xử lý</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-6">
-                <div class="widget-small danger coloured-icon"><i class='icon bx bxs-error-alt fa-3x'></i>
-                    <div class="info">
-                        <h4>Sắp hết hàng</h4>
-                        {{-- Biến $lowStockProducts đang bị tạm khóa trong Controller, hãy mở lại sau khi bạn có cột stock --}}
-                        <p><b>{{ $lowStockProducts ?? 'N/A' }} sản phẩm</b></p>
-                        <p class="info-tong">Số sản phẩm cảnh báo hết cần nhập thêm.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="tile">
-                    <h3 class="tile-title">Đơn hàng chờ xử lý</h3>
                     <div>
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>ID đơn hàng</th>
-                                    <th>Tên khách hàng</th>
-                                    <th>Tổng tiền</th>
-                                    <th>Trạng thái</th>
-                                    <th>Hành động</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($recentOrders as $order)
-                                <tr>
-                                    <td>{{ $order->code }}</td>
-                                    {{-- Sử dụng fullname từ model User liên kết qua order --}}
-                                    <td>{{ $order->user->fullname ?? $order->fullname }}</td>
-                                    {{-- Sử dụng total_price từ model Order --}}
-                                    <td>{{ number_format($order->total_price, 0, ',', '.') }} đ</td>
-                                    @php
-                                    $statusClass = match($order->status) {
-                                    'Chờ xác nhận' => 'bg-warning',
-
-                                    default => 'bg-light text-dark'
-                                    };
-                                    @endphp
-                                    <td><span class="badge {{ $statusClass }}">{{ $order->status }}</span></td>
-                                    <td>
-                                        <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-outline-success btn-sm" title="Xem chi tiết">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="4">Không có đơn hàng nào gần đây.</td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+                        <button type="button" onclick="loadCharts()" class="btn btn-success btn-sm mt-4">
+                            <i class="bx bx-line-chart me-1"></i> Lọc
+                        </button>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="tile">
-                    <h3 class="tile-title">Khách hàng mới</h3>
-                    <div>
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Tên khách hàng</th>
-                                    <th>Ngày sinh</th>
-                                    <th>Số điện thoại</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($newCustomers as $customer)
-                                <tr>
-                                    <td>#{{ $customer->id }}</td>
-                                    {{-- Sử dụng các cột từ model User --}}
-                                    <td>{{ $customer->fullname }}</td>
-                                    <td>{{ $customer->birthday ? $customer->birthday->format('d/m/Y') : 'Chưa có' }}</td>
-                                    <td><span class="tag tag-success">{{ $customer->phone ? $customer->phone : 'Chưa có' }}</span></td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="4">Không có khách hàng mới nào.</td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
-    <div class="col-md-12 col-lg-6">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="tile">
-                    <h3 class="tile-title">Thống kê tăng trưởng người dùng</h3>
-                    <form method="GET" class="row align-items-end g-2 mb-4">
-                        <div class="col-auto">
-                            <label for="user_start" class="form-label mb-0">Từ ngày</label>
-                            <input type="date" id="user_start" class="form-control" />
-                        </div>
-                        <div class="col-auto">
-                            <label for="user_end" class="form-label mb-0">Đến ngày</label>
-                            <input type="date" id="user_end" class="form-control" />
-                        </div>
-                        <div class="col-auto">
-                            <button type="button" onclick="loadUserChart()" class="btn btn-success">
-                                <i class="bx bx-bar-chart"></i> Lọc
-                            </button>
-                        </div>
-                    </form>
-                    <div class="mb-3">
-                        <p id="totalUsers" style="font-weight: bold; margin-top: 1rem; font-size: 20px;"></p>
-                    </div>
-                    <div class="tile mt-4">
-                        <canvas id="userChart"></canvas>
-                    </div>
+
+    <div class="col-md-6">
+        <a href="{{ route('admin.users.index') }}">
+            <div class="widget-small primary coloured-icon"><i class='icon bx bxs-user-account fa-3x'></i>
+                <div class="info">
+                    <h4>Tổng khách hàng</h4>
+                    <p><b>{{ $totalCustomers ?? 0 }} khách hàng</b></p>
+                    <p class="info-tong">Tổng số khách hàng được quản lý.</p>
                 </div>
             </div>
-            <div class="col-md-12">
-                <div class="tile">
-                    <h3 class="tile-title">Thống kê doanh thu</h3>
-                    <form method="GET" class="row align-items-end g-2 mb-4">
-                        <div class="col-auto">
-                            <label for="revenue_start" class="form-label mb-0">Từ ngày</label>
-                            <input type="date" id="revenue_start" class="form-control" />
-                        </div>
-                        <div class="col-auto">
-                            <label for="revenue_end" class="form-label mb-0">Đến ngày</label>
-                            <input type="date" id="revenue_end" class="form-control" />
-                        </div>
-                        <div class="col-auto">
-                            <button type="button" onclick="loadRevenueChart()" class="btn btn-success">
-                                <i class="bx bx-line-chart"></i> Lọc
-                            </button>
-                        </div>
-                    </form>
-
-                    <div class="mb-3">
-                        <h4 class="text-primary">Tổng doanh thu:</h4>
-                    </div>
-
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <canvas id="revenueChart"></canvas>
-                        </div>
-                    </div>
+        </a>
+    </div>
+    <div class="col-md-6">
+        <a href="{{ route('admin.products.index') }}">
+            <div class="widget-small info coloured-icon"><i class='icon bx bxs-data fa-3x'></i>
+                <div class="info">
+                    <h4>Tổng sản phẩm</h4>
+                    <p><b>{{ $totalProducts ?? 0 }} sản phẩm</b></p>
+                    <p class="info-tong">Tổng số sản phẩm được quản lý.</p>
                 </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6">
+        <a href="{{ route('admin.orders.index') }}">
+            <div class="widget-small warning coloured-icon"><i class='icon bx bxs-shopping-bags fa-3x'></i>
+                <div class="info">
+                    <h4>Số đơn hàng cần xử lý</h4>
+                    <p><b>{{ $totalOrders ?? 0 }} đơn hàng</b></p>
+                    <p class="info-tong">Tổng số đơn hàng đang chờ xử lý</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6">
+        <div class="widget-small danger coloured-icon"><i class='icon bx bxs-error-alt fa-3x'></i>
+            <div class="info">
+                <h4>Sắp hết hàng</h4>
+                {{-- Biến $lowStockProducts đang bị tạm khóa trong Controller, hãy mở lại sau khi bạn có cột stock --}}
+                <p><b>{{ $lowStockProducts ?? '0' }} sản phẩm</b></p>
+                <p class="info-tong">Số sản phẩm cảnh báo hết cần nhập thêm.</p>
+            </div>
+        </div>
+    </div>
+    <!-- Biểu đồ -->
+    <div class="col-lg-6">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Thống kê tăng trưởng người dùng</h5>
+            </div>
+            <div class="card-body" style="height: 400px;">
+                <div class="mb-3">
+                    <p id="totalUsers" class="fw-bold fs-5"></p>
+                </div>
+                <canvas id="userChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Thống kê doanh thu</h5>
+            </div>
+            <div class="card-body" style="height: 400px;">
+                <h4 class="text-primary mb-3">Tổng doanh thu:</h4>
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Thống kê số đơn hàng</h5>
+            </div>
+            <div class="card-body">
+                <h4 class="text-danger mb-3">Tổng đơn hàng:</h4>
+                <canvas id="orderPieChart" style="height:400px;"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Top 5 sản phẩm bán chạy</h5>
+            </div>
+            <div class="card-body table-responsive" style="height:400px;">
+                <table id="topProductsTable" class="table table-bordered table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Mã sản phẩm</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Ảnh</th>
+                            <th>Giá tiền</th>
+                            <th>Số lượng bán</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Khách hàng mới -->
+    <div class="col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">Khách hàng mới</h5>
+            </div>
+            <div class="card-body table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên</th>
+                            <th>Ngày sinh</th>
+                            <th>SĐT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($newCustomers as $customer)
+                        <tr>
+                            <td>#{{ $customer->id }}</td>
+                            <td>{{ $customer->fullname }}</td>
+                            <td>{{ $customer->birthday ? $customer->birthday->format('d/m/Y') : 'Chưa có' }}</td>
+                            <td>{{ $customer->phone ?? 'Chưa có' }}</td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="4" class="text-center text-muted">Không có khách hàng mới</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
+
+
+
 @endsection
 
 @push('scripts')
@@ -327,31 +307,32 @@
 <script>
     let revenueChart;
     let userChart;
+    let orderPieChart;
 
     const numberWithCommas = (x) => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
 
-    function loadRevenueChart() {
-        const start = document.getElementById('revenue_start').value;
-        const end = document.getElementById('revenue_end').value;
+    function loadCharts() {
+        const start = document.getElementById('start').value;
+        const end = document.getElementById('end').value;
 
-        fetch(`/admin/dashboard/revenue-chart-data?start_date=${start}&end_date=${end}`)
+        fetch(`/admin/dashboard/chart-data?start_date=${start}&end_date=${end}`)
             .then(res => res.json())
             .then(data => {
+                // --- Biểu đồ doanh thu ---
                 if (revenueChart) revenueChart.destroy();
-
                 revenueChart = new Chart(document.getElementById('revenueChart'), {
                     type: 'line',
                     data: {
-                        labels: data.labels,
+                        labels: data.revenue.labels,
                         datasets: [{
                             label: 'Tổng doanh thu',
-                            data: data.data,
-                            borderColor: '#3b82f6',
-                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            data: data.revenue.data,
+                            borderColor: '#0051ffff',
+                            backgroundColor: 'rgba(0, 170, 255, 0.3)',
                             tension: 0.4,
-                            fill: true,
+                            fill: 'start',
                             pointRadius: 4,
                             pointHoverRadius: 6
                         }]
@@ -399,40 +380,43 @@
                     }
                 });
 
-                const total = data.data.reduce((sum, val) => sum + parseFloat(val), 0);
-                document.querySelector('.text-primary').textContent = `Tổng doanh thu: ${numberWithCommas(total)} đ`;
-            });
-    }
+                const totalRevenue = data.revenue.data.reduce((sum, val) => sum + parseFloat(val), 0);
+                document.querySelector('.text-primary').textContent =
+                    `Tổng doanh thu: ${numberWithCommas(totalRevenue)} đ`;
 
-    function loadUserChart() {
-        const start = document.getElementById('user_start').value;
-        const end = document.getElementById('user_end').value;
-
-        fetch(`/admin/dashboard/user-chart-data?start_date=${start}&end_date=${end}`)
-            .then(res => res.json())
-            .then(data => {
+                // --- Biểu đồ người dùng ---
                 if (userChart) userChart.destroy();
-                const totalActive = data.active.reduce((sum, val) => sum + val, 0);
-                const totalBanned = data.banned.reduce((sum, val) => sum + val, 0);
+                const totalActive = data.users.active.reduce((sum, val) => sum + val, 0);
+                const totalBanned = data.users.banned.reduce((sum, val) => sum + val, 0);
                 const totalUsers = totalActive + totalBanned;
                 document.getElementById('totalUsers').innerHTML =
-                    `Tổng tài khoản: <b>${totalUsers}</b><br>Hoạt động: <span style="color:#10b981">${totalActive}</span>, Bị khóa: <span style="color:#ef4444">${totalBanned}</span>`;
+                    `Tổng tài khoản: <b>${totalUsers}</b><br>
+                     Hoạt động: <span style="color:#10b981">${totalActive}</span>, 
+                     Bị khóa: <span style="color:#ef4444">${totalBanned}</span>`;
 
                 userChart = new Chart(document.getElementById('userChart'), {
-                    type: 'bar',
+                    type: 'line',
                     data: {
-                        labels: data.labels,
+                        labels: data.users.labels,
                         datasets: [{
                                 label: 'Hoạt động',
-                                data: data.active,
-                                backgroundColor: '#10b981',
-                                borderRadius: 6
+                                data: data.users.active,
+                                borderColor: '#00ff5dff',
+                                backgroundColor: 'rgba(153, 253, 163, 0.3)',
+                                tension: 0.4,
+                                fill: 'start',
+                                pointRadius: 4,
+                                pointHoverRadius: 6
                             },
                             {
                                 label: 'Bị khóa',
-                                data: data.banned,
-                                backgroundColor: '#ef4444',
-                                borderRadius: 6
+                                data: data.users.banned,
+                                borderColor: '#ff0000ff',
+                                backgroundColor: 'rgba(253, 153, 153, 0.3)',
+                                tension: 0.4,
+                                fill: 'start',
+                                pointRadius: 4,
+                                pointHoverRadius: 6
                             }
                         ]
                     },
@@ -475,10 +459,94 @@
                         }
                     }
                 });
+
+                // --- Biểu đồ đơn hàng (Pie chart) ---
+                const orders = data.orders; // ✅ Lấy orders từ API
+                const totalSuccess = orders.success.reduce((a, b) => a + b, 0);
+                const totalCanceled = orders.canceled.reduce((a, b) => a + b, 0);
+                const totalCompleted = orders.completed.reduce((a, b) => a + b, 0);
+                const totalProcessing = orders.processing.reduce((a, b) => a + b, 0);
+
+                const totalOrders = totalSuccess + totalCanceled + totalCompleted + totalProcessing;
+                document.querySelector('.text-danger.mb-3').textContent =
+                    `Tổng đơn hàng: ${totalOrders.toLocaleString()} đơn hàng`;
+
+                if (orderPieChart) orderPieChart.destroy(); // ✅ Hủy chart cũ trước khi vẽ mới
+
+                const ctx = document.getElementById('orderPieChart').getContext('2d');
+                orderPieChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Đã giao hàng', 'Đã hủy', 'Hoàn hàng', 'Đang xử lý'],
+                        datasets: [{
+                            data: [totalSuccess, totalCanceled, totalCompleted, totalProcessing],
+                            backgroundColor: [
+                                'rgba(40, 167, 69, 0.85)', // Xanh lá
+                                'rgba(220, 53, 69, 0.85)', // Đỏ
+                                'rgba(7, 127, 255, 0.85)', // Vàng
+                                'rgba(246, 197, 0, 1)' // Hồng
+                            ],
+                            borderColor: '#fff',
+                            borderWidth: 2,
+                            hoverOffset: 20, // Khi hover sẽ nổi ra
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                                labels: {
+                                    color: '#333',
+                                    font: {
+                                        size: 14,
+                                        weight: 'bold'
+                                    },
+                                    padding: 20
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                titleFont: {
+                                    size: 16,
+                                    weight: 'bold'
+                                },
+                                bodyFont: {
+                                    size: 14
+                                },
+                                callbacks: {
+                                    label: function(context) {
+                                        const value = context.raw;
+                                        return `${context.label}: ${value} đơn`;
+                                    }
+                                }
+                            }
+                        },
+                        animation: {
+                            animateScale: true,
+                            animateRotate: true
+                        }
+                    }
+
+                });
+                // Cập nhật bảng top sản phẩm
+                const topProductsTbody = document.querySelector('#topProductsTable tbody');
+                topProductsTbody.innerHTML = ''; // Xóa dữ liệu cũ nếu có
+
+                data.top_products.forEach(product => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+        <td>#${product.code}</td>
+        <td>${product.name}</td>
+        <td><img src="${product.image}" style="max-width:50px;" /></td>
+        <td>${numberWithCommas(product.price)} đ</td>
+        <td>${product.total_sold}</td>
+    `;
+                    topProductsTbody.appendChild(tr);
+                });
+
             });
     }
 </script>
-
-
 
 @endpush

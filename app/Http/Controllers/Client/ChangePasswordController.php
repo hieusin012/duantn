@@ -29,6 +29,7 @@ class ChangePasswordController extends Controller
             'new_password.required' => 'Vui lòng nhập mật khẩu mới.',
             'new_password.min' => 'Mật khẩu mới phải có ít nhất 6 ký tự.',
             'new_password_confirmation.required' => 'Vui lòng xác nhận mật khẩu mới.',
+            'new_password.different' => 'Mật khẩu mới phải khác mật khẩu hiện tại.',
             'new_password.confirmed' => 'Mật khẩu mới và xác nhận không khớp.',
         ]);
         /** @var \App\Models\User $user */

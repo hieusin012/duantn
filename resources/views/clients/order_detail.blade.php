@@ -80,11 +80,14 @@
                                 'Đang giao hàng' => 'primary',
                                 'Đã giao hàng' => 'success',
                                 'Đơn hàng đã hủy' => 'danger',
-                                'Đã hoàn hàng' => 'dark',
+                                'Đã hoàn hàng' => 'secondary',
                                 default => 'secondary',
                             };
                         @endphp
-                        <span class="badge bg-{{ $badgeClass }} px-3 py-2">{{ $statusText }}</span>
+                        {{-- <span class="badge bg-{{ $badgeClass }} px-3 py-2">{{ $statusText }}</span> --}}
+                        <span class="badge bg-{{ $badgeClass }} px-3 py-2 order-status" data-order-id="{{ $order->id }}">
+                            {{ $statusText }}
+                        </span>
                     </p>
                 </div>
             </div>
@@ -301,4 +304,33 @@
 
 
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    function fetchOrderStatus(orderId) {
+        $.get(`/order/status/${orderId}`, function(data) {
+            const span = $('.order-status[data-order-id="'+orderId+'"]');
+            if (span.text() !== data.status) { // chỉ update khi khác
+                let badgeClass = 'secondary';
+                switch(data.status) {
+                    case 'Chờ xác nhận': badgeClass='warning'; break;
+                    case 'Đã xác nhận': 
+                    case 'Đang chuẩn bị hàng':
+                    case 'Đang giao hàng': badgeClass='primary'; break;
+                    case 'Đã giao hàng': badgeClass='success'; break;
+                    case 'Đơn hàng đã hủy': badgeClass='danger'; break;
+                    case 'Đã hoàn hàng': badgeClass='secondary'; break;
+                }
+                span.text(data.status)
+                    .removeClass()
+                    .addClass('badge bg-'+badgeClass+' px-3 py-2 order-status');
+            }
+        });
+    }
+
+    // Chỉ update trạng thái đơn hàng hiện tại
+    setInterval(function() {
+        const orderId = $('.order-status').data('order-id');
+        fetchOrderStatus(orderId);
+    }, 1000);
+    </script>
 @endsection

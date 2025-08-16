@@ -94,8 +94,11 @@
                         <tr>
                             <td><strong>{{ $order->code ?? str_pad($order->id, 5, '0', STR_PAD_LEFT) }}</strong></td>
                             <td><span class="text-uppercase">{{ $order->payment }}</span></td>
-                            <td>
+                            {{-- <td>
                                 <span class="badge bg-{{ $badgeClass }} px-3 py-2">{{ $status }}</span>
+                            </td> --}}
+                            <td>
+                                <span class="badge bg-{{ $badgeClass }} px-3 py-2 order-status" data-order-id="{{ $order->id }}">{{ $status }}</span>
                             </td>
                             <td class="text-end">{{ number_format($order->total_price, 0, ',', '.') }} <small>₫</small></td>
                             <td>{{ $order->created_at->format('d/m/Y H:i:s') }}</td>
@@ -130,4 +133,29 @@
     </div>
     @endif
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function fetchOrderStatuses() {
+        $('.order-status').each(function() {
+            const span = $(this);
+            const orderId = span.data('order-id');
+
+            $.get(`/order/status/${orderId}`, function(data) {
+                let badgeClass = 'secondary';
+                switch(data.status) {
+                    case 'Chờ xác nhận': badgeClass='warning'; break;
+                    case 'Đã xác nhận': badgeClass='primary'; break;
+                    case 'Đang chuẩn bị hàng': badgeClass='primary'; break;
+                    case 'Đang giao hàng': badgeClass='primary'; break;
+                    case 'Đã giao hàng': badgeClass='success'; break;
+                    case 'Đơn hàng đã hủy': badgeClass='danger'; break;
+                }
+                span.text(data.status).removeClass().addClass('badge bg-'+badgeClass+' px-3 py-2 order-status');
+            });
+        });
+    }
+
+    // Polling mỗi 1 giây
+    setInterval(fetchOrderStatuses, 1000);
+</script>
 @endsection

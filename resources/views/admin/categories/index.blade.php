@@ -30,9 +30,9 @@
                     {{-- <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm pdf-file" type="button" title="Export PDF"><i class="fas fa-file-pdf"></i> Xuất sang PDF</a>
                     </div> --}}
-                    <div class="col-sm-2">
+                    {{-- <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm" type="button" title="Delete All"><i class="fas fa-trash-alt"></i> Xóa tất cả</a>
-                    </div>
+                    </div> --}}
                     <div class="col-sm-2">
                         @if(request()->has('trashed') && request()->trashed == 'true')
                             <a class="btn btn-secondary btn-sm" href="{{ route('admin.categories.index') }}">

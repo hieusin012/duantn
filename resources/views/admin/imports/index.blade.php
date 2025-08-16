@@ -19,7 +19,7 @@
                     <div class="col-sm-2 mb-2">
                         <a class="btn btn-danger btn-sm" type="button" title="Xóa" href="{{ route('admin.imports.delete') }}"><i class="fas fa-trash-alt"></i> Dữ liệu đã xóa</a>
                     </div>
-                    <div class="col-sm-2 mb-2">
+                    {{-- <div class="col-sm-2 mb-2">
                         <a class="btn btn-delete btn-sm print-file" type="button" title="In">
                             <i class="fas fa-print"></i> In dữ liệu
                         </a>
@@ -43,7 +43,7 @@
                         <a class="btn btn-delete btn-sm" type="button" title="Xóa tất cả">
                             <i class="fas fa-trash-alt"></i> Xóa tất cả
                         </a>
-                    </div>
+                    </div> --}}
                 </div>
 
                 <form method="GET" action="{{ route('admin.imports.index') }}" class="mb-3">
