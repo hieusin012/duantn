@@ -147,18 +147,18 @@
 
                     <!-- Hover Buttons -->
                     <div class="button-set style1">
-                        <a href="#" class="btn-icon quickview" data-bs-toggle="tooltip" title="Quick View">
+                        {{-- <a href="#" class="btn-icon quickview" data-bs-toggle="tooltip" title="Quick View">
                             <i class="icon anm anm-search-plus-l"></i>
-                        </a>
+                        </a> --}}
                         <a href="javascript:void(0);" class="btn-icon wishlist-toggle"
                             data-id="{{ $product->id }}"
                             data-bs-toggle="tooltip"
                             title="{{ auth()->check() && $product->wishlists->where('user_id', auth()->id())->count() ? 'Bỏ yêu thích' : 'Thêm vào yêu thích' }}">
                             <i class="icon anm anm-heart {{ auth()->check() && $product->wishlists->where('user_id', auth()->id())->count() ? 'text-danger' : '' }}"></i>
                         </a>
-                        <a href="#" class="btn-icon compare" data-bs-toggle="tooltip" title="Add to Compare">
+                        {{-- <a href="#" class="btn-icon compare" data-bs-toggle="tooltip" title="Add to Compare">
                             <i class="icon anm anm-random-r"></i>
-                        </a>
+                        </a> --}}
                     </div>
                 </div>
 

@@ -132,8 +132,8 @@
                     @foreach ($order->orderDetails as $detail)
                     <tr>
                         <td>{{ $detail->product_name ?? 'N/A' }}</td>
-                        <td>{{ $detail->color-> ?? 'N/A' }}</td>
-                        <td>{{ $detail->size-> ?? 'N/A' }}</td>
+                        <td>{{ $detail->color ?? 'N/A' }}</td>
+                        <td>{{ $detail->size ?? 'N/A' }}</td>
                         <td>{{ number_format($detail->price, 0, ',', '.') }} đ</td>
                         <td>{{ $detail->quantity }}</td>
                         <td>{{ number_format($detail->total_price, 0, ',', '.') }} đ</td>

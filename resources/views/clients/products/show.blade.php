@@ -181,12 +181,12 @@
                                 <div class="zoompro-span"><img id="main-image" class="zoompro rounded-0 img-thumbnail rounded shadow" src="{{ asset($product->image) }}" data-zoom-image="{{ asset($product->image) }}" alt="product" width="625" height="808" /></div>
                             </div>
                         </div>
-                        <div class="social-sharing d-flex-center justify-content-center mt-3 mt-md-4 lh-lg">
+                        {{-- <div class="social-sharing d-flex-center justify-content-center mt-3 mt-md-4 lh-lg">
                             <span class="sharing-lbl fw-600">Share :</span>
                             <a href="#" class="d-flex-center btn btn-link btn--share share-facebook"><i class="icon anm anm-facebook-f"></i><span class="share-title">Facebook</span></a>
                             <a href="#" class="d-flex-center btn btn-link btn--share share-twitter"><i class="icon anm anm-twitter"></i><span class="share-title">Tweet</span></a>
                             <a href="#" class="d-flex-center btn btn-link btn--share share-pinterest"><i class="icon anm anm-pinterest-p"></i> <span class="share-title">Pin it</span></a>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
 

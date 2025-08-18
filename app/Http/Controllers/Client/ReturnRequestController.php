@@ -81,5 +81,16 @@ class ReturnRequestController extends Controller
 
         return redirect()->route('client.return-requests.index')->with('success', 'Gửi yêu cầu trả hàng thành công.');
     }
+    public function getStatus($id)
+    {
+        $request = ReturnRequest::where('id', $id)
+            ->where('user_id', Auth::id()) // đảm bảo chỉ xem được của chính mình
+            ->firstOrFail();
+
+        return response()->json([
+            'status' => $request->status,
+            'admin_note' => $request->admin_note
+        ]);
+    }
 
 }

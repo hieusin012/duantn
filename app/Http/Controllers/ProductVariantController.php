@@ -168,7 +168,7 @@ class ProductVariantController extends Controller
         if ($request->hasFile('image')) {
             // Xoá ảnh cũ nếu có
             if ($productVariant->image) {
-                Storage::disk('public')->delete($productVariant->image);
+                Storage::disk('public');
             }
 
             $data['image'] = $request->file('image')->store('product_variants', 'public');

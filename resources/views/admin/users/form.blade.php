@@ -4,6 +4,11 @@
 
 @section('content')
 
+@php
+    $isSelf = isset($user) && $user->id === Auth::id();
+    $canEditRoleStatus = auth()->user()->role === 'super_admin' || ($user?->role ?? '') !== 'admin';
+@endphp
+
 <div class="row justify-content-center mb-5">
     <div class="col-lg-10">
         <div class="card shadow-sm p-4">
@@ -22,7 +27,9 @@
                         src="{{ !empty($user->avatar) ? asset('storage/' . $user->avatar) : '#' }}"
                         class="rounded-circle mb-2"
                         style="width: 120px; height: 120px; object-fit: cover; {{ empty($user->avatar) ? 'display: none;' : '' }}">
-                    @if(!isset($user))
+                    
+                    {{-- Chỉ cho upload avatar khi tạo mới hoặc admin đang sửa chính mình --}}
+                    @if(!isset($user) || $isSelf)
                         <div>
                             <input type="file" id="uploadfile" name="avatar" onchange="readURL(this);" accept="image/*" hidden>
                             <button type="button" class="btn btn-outline-primary btn-sm me-2" onclick="document.getElementById('uploadfile').click();">
@@ -42,53 +49,60 @@
                     <div class="col-md-4 mt-2">
                         <label class="form-label">Họ tên</label>
                         <input type="text" name="fullname" class="form-control"
-                            value="{{ old('fullname', $user->fullname ?? '') }}" @if(isset($user)) readonly @endif>
+                            value="{{ old('fullname', $user->fullname ?? '') }}" 
+                            {{ isset($user) && !$isSelf ? 'readonly' : '' }}>
                         @error('fullname')<div class="text-danger">{{ $message }}</div>@enderror
                     </div>
 
                     <div class="col-md-4 mt-2">
-                        <label class="form-label">Email</label>
+<label class="form-label">Email</label>
                         <input type="email" name="email" class="form-control"
-                            value="{{ old('email', $user->email ?? '') }}" @if(isset($user)) readonly @endif>
+                            value="{{ old('email', $user->email ?? '') }}" 
+                            {{ isset($user) && !$isSelf ? 'readonly' : '' }}>
                         @error('email')<div class="text-danger">{{ $message }}</div>@enderror
                     </div>
 
                     <div class="col-md-4 mt-2">
                         <label class="form-label">Mật khẩu</label>
-                        <input type="password" name="password" class="form-control" placeholder="@if(isset($user))Để trống nếu không đổi @endif" @if(isset($user)) readonly @endif>
+                        <input type="password" name="password" class="form-control"
+                            placeholder="@if(isset($user))Để trống nếu không đổi @endif"
+                            {{ isset($user) && !$isSelf ? 'readonly' : '' }}>
                         @error('password')<div class="text-danger">{{ $message }}</div>@enderror
                     </div>
 
                     <div class="col-md-4 mt-2">
                         <label class="form-label">Số điện thoại</label>
                         <input type="text" name="phone" class="form-control"
-                            value="{{ old('phone', $user->phone ?? '') }}" @if(isset($user)) readonly @endif>
+                            value="{{ old('phone', $user->phone ?? '') }}" 
+                            {{ isset($user) && !$isSelf ? 'readonly' : '' }}>
                         @error('phone')<div class="text-danger">{{ $message }}</div>@enderror
                     </div>
 
                     <div class="col-md-4 mt-2">
                         <label class="form-label">Địa chỉ</label>
                         <input type="text" name="address" class="form-control"
-                            value="{{ old('address', $user->address ?? '') }}" @if(isset($user)) readonly @endif>
+                            value="{{ old('address', $user->address ?? '') }}" 
+                            {{ isset($user) && !$isSelf ? 'readonly' : '' }}>
                         @error('address')<div class="text-danger">{{ $message }}</div>@enderror
                     </div>
 
                     <div class="col-md-4 mt-2">
                         <label class="form-label">Ngày sinh</label>
                         <input type="date" name="birthday" class="form-control"
-                            value="{{ old('birthday', isset($user->birthday) ? $user->birthday->format('Y-m-d') : '') }}" @if(isset($user)) readonly @endif>
+                            value="{{ old('birthday', isset($user->birthday) ? $user->birthday->format('Y-m-d') : '') }}" 
+                            {{ isset($user) && !$isSelf ? 'readonly' : '' }}>
                         @error('birthday')<div class="text-danger">{{ $message }}</div>@enderror
                     </div>
 
                     <div class="col-md-4 mt-2">
                         <label class="form-label">Giới tính</label>
-                        <select name="gender" class="form-control" @if(isset($user)) disabled @endif>
+                        <select name="gender" class="form-control" {{ isset($user) && !$isSelf ? 'disabled' : '' }}>
                             <option value="">-- Chọn --</option>
                             <option value="Nam" {{ old('gender', $user->gender ?? '') == 'Nam' ? 'selected' : '' }}>Nam</option>
                             <option value="Nữ" {{ old('gender', $user->gender ?? '') == 'Nữ' ? 'selected' : '' }}>Nữ</option>
-                            <option value="Khác" {{ old('gender', $user->gender ?? '') == 'Khác' ? 'selected' : '' }}>Khác</option>
+<option value="Khác" {{ old('gender', $user->gender ?? '') == 'Khác' ? 'selected' : '' }}>Khác</option>
                         </select>
-                        @if(isset($user))
+                        @if(isset($user) && !$isSelf)
                             <input type="hidden" name="gender" value="{{ old('gender', $user->gender ?? '') }}">
                         @endif
                         @error('gender')<div class="text-danger">{{ $message }}</div>@enderror
@@ -100,27 +114,6 @@
                 {{-- Thông tin hệ thống --}}
                 <h4>Cài đặt hệ thống</h4>
                 <div class="row g-3">
-                    {{-- <div class="col-md-4 mt-2">
-                        <label class="form-label">Vai trò</label>
-                        <select name="role" class="form-control">
-                            <option value="admin" {{ old('role', $user->role ?? '') == 'admin' ? 'selected' : '' }}>Admin</option>
-                            <option value="member" {{ old('role', $user->role ?? '') == 'member' ? 'selected' : '' }}>User</option>
-                        </select>
-                        @error('role')<div class="text-danger">{{ $message }}</div>@enderror
-                    </div>
-
-                    <div class="col-md-4 mt-2">
-                        <label class="form-label">Trạng thái</label>
-                        <select name="status" class="form-control"> 
-                            <option value="active" {{ old('status', $user->status ?? '') === 'active' ? 'selected' : '' }}>Hoạt động</option> 
-                            <option value="inactive" {{ old('status', $user->status ?? '') === 'inactive' ? 'selected' : '' }}>Tạm khóa</option> 
-                        </select>
-                        @error('status')<div class="text-danger">{{ $message }}</div>@enderror
-                    </div> --}}
-                    @php
-                        $canEditRoleStatus = auth()->user()->role === 'super_admin' || ($user?->role ?? '') !== 'admin';
-                    @endphp
-
                     <div class="col-md-4 mt-2">
                         <label class="form-label">Vai trò</label>
                         <select name="role" class="form-control" {{ $canEditRoleStatus ? '' : 'disabled' }}>
@@ -147,13 +140,15 @@
                     <div class="col-md-4 mt-2">
                         <label class="form-label">Ngôn ngữ</label>
                         <input type="text" name="language" class="form-control"
-                            value="{{ old('language', $user->language ?? '') }}" @if(isset($user)) readonly @endif>
+                            value="{{ old('language', $user->language ?? '') }}" 
+                            {{ isset($user) && !$isSelf ? 'readonly' : '' }}>
                         @error('language')<div class="text-danger">{{ $message }}</div>@enderror
                     </div>
 
                     <div class="col-md-12 mt-3">
                         <label class="form-label">Giới thiệu</label>
-                        <textarea name="introduction" rows="3" class="form-control" @if(isset($user)) readonly @endif>{{ old('introduction', $user->introduction ?? '') }}</textarea>
+                        <textarea name="introduction" rows="3" class="form-control"
+{{ isset($user) && !$isSelf ? 'readonly' : '' }}>{{ old('introduction', $user->introduction ?? '') }}</textarea>
                         @error('introduction')<div class="text-danger">{{ $message }}</div>@enderror
                     </div>
                 </div>

@@ -210,14 +210,14 @@
                             </label>
                         </div>
 
-                        <div class="payment-option {{ $selected == 'Thanh toán bằng mã QR' ? 'selected' : '' }}">
+                        {{-- <div class="payment-option {{ $selected == 'Thanh toán bằng mã QR' ? 'selected' : '' }}">
                             <input class="form-check-input" type="radio" name="payment" id="paymentQr"
                                 value="Thanh toán bằng mã QR" {{ $selected == 'Thanh toán bằng mã QR' ? 'checked' : '' }} required>
                             <label for="paymentQr" class="d-flex align-items-center w-100 mb-0">
                                 <span class="payment-icon">📱</span>
                                 <span class="payment-label">Thanh toán bằng mã QR (chuyển khoản)</span>
                             </label>
-                        </div>
+                        </div> --}}
 
                         <div class="payment-option {{ $selected == 'Thanh toán qua VNPay' ? 'selected' : '' }}">
                             <input class="form-check-input" type="radio" name="payment" id="paymentVnPay"

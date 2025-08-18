@@ -91,13 +91,13 @@
                                 <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-outline-primary" title="Sửa">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa người dùng này không?');">
+                                {{-- <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa người dùng này không?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-outline-danger" title="Xóa">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
-                                </form>
+                                </form> --}}
                             </td>
                         </tr>
                         @empty

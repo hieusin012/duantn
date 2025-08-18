@@ -453,5 +453,8 @@ Route::middleware('auth')->group(function () {
 });
 Route::get('/comments/{productId}', [ProductCommentController::class, 'list'])->name('comments.list');
 
-// Trạng thái đơn hàng client tự cập nhật không câng load lại trang
+// Trạng thái đơn hàng client tự cập nhật không cần load lại trang
 Route::get('/order/status/{id}', [\App\Http\Controllers\Client\ClientOrderController::class, 'getStatus'])->name('order.status'); 
+
+// Trạng thái hoàn hàng client tự cập nhật không cần load lại trang
+Route::get('/return-request/status/{id}', [\App\Http\Controllers\Client\ReturnRequestController::class, 'getStatus'])->name('return-request.status'); 

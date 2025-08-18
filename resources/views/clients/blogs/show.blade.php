@@ -80,7 +80,7 @@
                     </div>
 
                     <!-- Comments Section Placeholder -->
-                    <div class="mt-5">
+                    {{-- <div class="mt-5">
                         <h4>Để lại một bình luận</h4>
                         <form action="#" method="GET">
                             
@@ -95,7 +95,7 @@
                             </div>
                             <button type="submit" class="btn btn-primary">Gửi bình luận</button>
                         </form>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>

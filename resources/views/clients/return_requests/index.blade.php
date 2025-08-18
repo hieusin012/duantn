@@ -27,7 +27,7 @@
                     <td class="fw-semibold text-primary">{{ $item->order->code ?? 'Không rõ' }}</td>
                     <td>{{ $item->created_at->format('d/m/Y H:i') }}</td>
                     <td class="text-start">{{ $item->reason }}</td>
-                    <td>
+                    <td class="order-status" data-request-id="{{ $item->id }}">
                         @switch($item->status)
                             @case('pending')
                                 <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i>Chờ xác nhận</span>
@@ -63,7 +63,7 @@
                             <span class="text-muted">Không có</span>
                         @endif
                     </td>
-                    <td>
+                    <td id="note-{{ $item->id }}">
                         @if($item->admin_note)
                             <span class="text-muted fst-italic">{{ $item->admin_note }}</span>
                         @else
@@ -81,4 +81,40 @@
     </div>
     @endif
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function fetchReturnStatuses() {
+        $('.order-status').each(function() {
+            const cell = $(this);
+            const requestId = cell.data('request-id');
+
+            $.get(`/return-request/status/${requestId}`, function(data) {
+                let badgeHtml = '';
+                switch(data.status) {
+                    case 'pending':
+                        badgeHtml = '<span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i>Chờ xác nhận</span>';
+                        break;
+                    case 'approved':
+                        badgeHtml = '<span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Đã duyệt</span>';
+                        break;
+                    case 'rejected':
+                        badgeHtml = '<span class="badge bg-danger"><i class="bi bi-x-circle me-1"></i>Từ chối</span>';
+                        break;
+                    case 'refunded':
+                        badgeHtml = '<span class="badge bg-info text-dark"><i class="bi bi-wallet2 me-1"></i>Đã hoàn tiền</span>';
+                        break;
+                    default:
+                        badgeHtml = '<span class="badge bg-secondary">Không rõ</span>';
+                }
+                cell.html(badgeHtml);
+
+                // cập nhật luôn ghi chú của admin (nếu có)
+                $(`#note-${requestId}`).text(data.admin_note || '-');
+            });
+        });
+    }
+
+    // Polling mỗi 3 giây (1 giây hơi nặng)
+    setInterval(fetchReturnStatuses, 1000);
+</script>
 @endsection

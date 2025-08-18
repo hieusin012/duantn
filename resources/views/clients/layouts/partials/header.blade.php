@@ -127,7 +127,7 @@
                                 <li><a href="{{ route('profile.show') }}"><i class="icon anm anm-user-al"></i>Tài khoản</a></li>
                                 <li><a href="{{ route('profile.edit') }}"><i class="icon anm anm-edit"></i>Chỉnh sửa</a></li>
                                 <li><a href="{{ route('wishlist.index') }}"><i class="icon anm anm-heart-l"></i>Yêu thích</a></li>
-                                <li><a href="#"><i class="icon anm anm-random-r"></i>So sánh</a></li>
+                                {{-- <li><a href="#"><i class="icon anm anm-random-r"></i>So sánh</a></li> --}}
                                 <li><a href="{{ route('order.history') }}"><i class="hdr-icon icon anm anm-bag-l"></i>Đơn hàng</a></li>
                                 <li><a href="{{ route('client.return-requests.index') }}"><i class="icon anm anm-undo-l"></i>Trả hàng</a></li>
                                 <li>
