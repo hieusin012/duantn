@@ -224,7 +224,9 @@ Route::middleware('web')->group(function () {
     });
 
     //comment
-    Route::resource('comments', CommentController::class);
+
+    Route::get('/comments', [CommentController::class, 'index'])->name('comments.index');
+    Route::patch('/comments/{comment}/toggle', [CommentController::class, 'toggle'])->name('comments.toggle');
 
     // Yêu cầu trả hàng (Admin)
     Route::prefix('return-requests')->name('return-requests.')->group(function () {

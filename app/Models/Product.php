@@ -52,10 +52,16 @@ class Product extends Model
     {
         return $this->hasMany(Wishlist::class);
     }
+    // public function comments()
+    // {
+    //     return $this->hasMany(Comment::class);
+    // }
     public function comments()
     {
-        return $this->hasMany(Comment::class);
+    // nếu khóa ngoại là product_id (chuẩn bạn đang dùng)
+    return $this->hasMany(\App\Models\ProductComment::class, 'product_id');
     }
+
     public function getAverageRatingAttribute()
     {
         $approvedComments = $this->comments()->where('status', 1);

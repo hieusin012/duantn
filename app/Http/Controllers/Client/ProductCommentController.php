@@ -32,12 +32,16 @@ class ProductCommentController extends Controller
 
     public function list($productId)
     {
-        $comments = ProductComment::with(['user', 'replies'])
-            ->where('product_id', $productId)
-            ->whereNull('parent_id')
-            ->latest()
-            ->limit(10)
-            ->get();
+       $comments = ProductComment::with(['user', 'replies' => function($q) {
+        $q->where('status', 1); // chỉ lấy reply đang hiện
+    }])
+    ->where('product_id', $productId)
+    ->where('status', 1)        // chỉ lấy comment đang hiện
+    ->whereNull('parent_id')
+    ->latest()
+    ->limit(10)
+    ->get();
+
 
         return response()->json($comments);
     }
