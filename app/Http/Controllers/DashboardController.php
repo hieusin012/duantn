@@ -24,7 +24,6 @@ class DashboardController extends Controller
             'Đang chuẩn bị hàng',
             'Đang giao hàng'
         ])->count();
-        $recentOrders = Order::with('user')->where('status', 'Chờ xác nhận')->latest()->take(4)->get();
         $newCustomers = User::where('role', 'member')->latest()->take(4)->get(); // <-- ĐÃ SỬA
 
 
@@ -34,7 +33,6 @@ class DashboardController extends Controller
             'totalCustomers',
             'totalProducts',
             'totalOrders',
-            'recentOrders',
             'newCustomers',
 
         ));
