@@ -6,11 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProductComment extends Model
 {
-    protected $table = 'product_comments'; // nếu bảng tên vậy
-    protected $fillable = ['product_id','user_id','content','parent_id','status'];
-    protected $casts = [
-        'status' => 'integer',
-    ];
+    protected $fillable = ['product_id', 'user_id', 'content', 'parent_id'];
+
     public function user()
     {
         return $this->belongsTo(User::class);
