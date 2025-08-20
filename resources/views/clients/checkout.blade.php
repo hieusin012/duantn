@@ -9,6 +9,9 @@
         font-weight: 600;
         color: #333;
     }
+    .card-header{
+        background-color: #2f415d;
+    }
 
     .form-section .form-control {
         border-radius: 10px;
@@ -104,6 +107,11 @@
         transform: scale(1.1);
         margin-right: 12px;
         margin-top: 0;
+    }
+    .form-check-input {
+        margin-right: 12px;
+        margin-top: 0;
+
     }
 
     .payment-icon {
@@ -238,7 +246,7 @@
             <div class="col-md-4">
                 <h3 class="mb-4">Tóm Tắt Đơn Hàng</h3>
                 <div class="card shadow-lg rounded-4">
-                    <div class="card-header bg-dark text-white fw-bold">
+                    <div class="card-header text-white fw-bold">
                         <i class="bi bi-truck me-2"></i>Thông tin sản phẩm
                     </div>
                     <div class="card-body">
