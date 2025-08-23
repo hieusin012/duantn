@@ -9,6 +9,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\BrandController;
 
+
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\BannerController;
 
@@ -25,6 +26,7 @@ use App\Http\Controllers\Client\CartItemController;
 use App\Http\Controllers\Client\FacebookController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\GoogleAuthController;
+use App\Http\Controllers\AdminProductCommentController;
 
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\ProductVariantController;
@@ -225,6 +227,11 @@ Route::middleware('web')->group(function () {
 
     //comment
     Route::resource('comments', CommentController::class);
+
+    Route::get('product_comments', [AdminProductCommentController::class, 'index'])->name('product_comments.index');
+    Route::patch('product_comments/{comment}/toggle', [AdminProductCommentController::class, 'toggle'])->name('product_comments.toggle');
+    Route::get('/products/{id}/comments', [\App\Http\Controllers\Client\ProductCommentController::class, 'list']);
+
 
     // Yêu cầu trả hàng (Admin)
     Route::prefix('return-requests')->name('return-requests.')->group(function () {

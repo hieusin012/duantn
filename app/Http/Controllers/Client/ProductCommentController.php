@@ -31,14 +31,17 @@ class ProductCommentController extends Controller
     }
 
     public function list($productId)
-    {
-        $comments = ProductComment::with(['user', 'replies'])
-            ->where('product_id', $productId)
-            ->whereNull('parent_id')
-            ->latest()
-            ->limit(10)
-            ->get();
+{
+    $comments = ProductComment::where('product_id', $productId)
+        ->visible() // chỉ lấy comment hiện
+        ->whereNull('parent_id')
+        ->with(['user', 'replies' => function ($q) {
+            $q->visible()->with('user', 'replies');
+        }])
+        ->latest()
+        ->limit(10)
+        ->get();
 
-        return response()->json($comments);
-    }
+    return response()->json($comments);
+}
 }

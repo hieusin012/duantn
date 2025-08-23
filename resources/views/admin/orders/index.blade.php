@@ -66,14 +66,14 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-2">
+                        <!-- <div class="col-md-2">
                             <select name="user_id" class="form-control form-control-sm">
                                 <option value="">-- Khách hàng --</option>
                                 @foreach ($users as $user)
                                 <option value="{{ $user->id }}" {{ request('user_id') == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
                                 @endforeach
                             </select>
-                        </div>
+                        </div> -->
                         <div class="col-md-1">
                             <input type="number" name="min_price" class="form-control form-control-sm" placeholder="Từ" value="{{ request('min_price') }}">
                         </div>
@@ -110,7 +110,7 @@
                                 <th>Trạng thái</th>
                                 <th>Lý do hủy</th>
                                 <th>Thanh toán</th>
-                                <th>Khách hàng</th>
+                                <!-- <th>Khách hàng</th> -->
                                 <th>Hành động</th>
                             </tr>
                         </thead>
@@ -161,7 +161,7 @@
                                         {{ $order->payment_status }}
                                     </span>
                                 </td>
-                                <td>{{ $order->user->name ?? 'Khách vãng lai' }}</td>
+                                <!-- <td>{{ $order->user->name ?? 'Khách vãng lai' }}</td> -->
                                 <td>
                                     <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-outline-success btn-sm" title="Xem chi tiết">
                                         <i class="fas fa-eye"></i>

@@ -94,5 +94,18 @@ class Product extends Model
             'id'                                 // PK của ProductVariant
         );
     }
+    // ➜ Bình luận kiểu mới (bảng product_comments)
+    public function productComments()
+    {
+    return $this->hasMany(\App\Models\ProductComment::class, 'product_id')
+                ->orderByDesc('id');
+    }
+
+// ➜ Chỉ lấy bình luận đang hiển thị (is_visible = true)
+    public function visibleProductComments()
+    {
+    return $this->productComments()->where('is_visible', true);
+    }
+
 
 }
