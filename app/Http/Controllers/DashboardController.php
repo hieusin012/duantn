@@ -111,8 +111,25 @@ class DashboardController extends Controller
             ->orderByDesc('total_sold')
             ->limit(5)
             ->get();
-
-
+        // thống kê khách hàng mua nhiều nhất
+        $topCustomers = DB::table('orders')
+            ->join('users', 'orders.user_id', '=', 'users.id')
+            ->join('order_details', 'orders.id', '=', 'order_details.order_id')
+            ->select(
+                'users.id',
+                'users.fullname',
+                'users.avatar',
+                'users.email',
+                DB::raw('COUNT(DISTINCT orders.id) as orders_count'),
+                DB::raw('SUM(order_details.quantity) as total_qty'),
+                DB::raw('SUM(order_details.quantity * order_details.price) as total_spent')
+            )
+            ->where('orders.status', 'Đã giao hàng')
+            ->whereBetween('orders.created_at', [$start, $end])
+            ->groupBy('users.id', 'users.fullname', 'users.avatar', 'users.email')
+            ->orderByDesc('total_spent') // hoặc orderByDesc('total_spent') nếu muốn theo doanh thu
+            ->limit(10)
+            ->get();
         return response()->json([
             'revenue' => [
                 'labels' => $revenueLabels,
@@ -131,6 +148,7 @@ class DashboardController extends Controller
                 'processing' => $orderProcessing,
             ],
             'top_products' => $topProducts,
+            'top_customers' => $topCustomers,
         ]);
     }
 }

@@ -204,7 +204,7 @@
             <div class="card-header bg-dark text-white">
                 <h5 class="mb-0">Thống kê tăng trưởng người dùng</h5>
             </div>
-            <div class="card-body" style="height: 400px;">
+            <div class="card-body" style="height: 450px;">
                 <div class="mb-3">
                     <p id="totalUsers" class="fw-bold fs-5"></p>
                 </div>
@@ -218,7 +218,7 @@
             <div class="card-header bg-dark text-white">
                 <h5 class="mb-0">Thống kê doanh thu</h5>
             </div>
-            <div class="card-body" style="height: 400px;">
+            <div class="card-body" style="height: 450px;">
                 <h4 class="text-primary mb-3">Tổng doanh thu:</h4>
                 <canvas id="revenueChart"></canvas>
             </div>
@@ -230,9 +230,9 @@
             <div class="card-header bg-dark text-white">
                 <h5 class="mb-0">Thống kê số đơn hàng</h5>
             </div>
-            <div class="card-body">
+            <div class="card-body" style="height: 450px;">
                 <h4 class="text-danger mb-3">Tổng đơn hàng:</h4>
-                <canvas id="orderPieChart" style="height:400px;"></canvas>
+                <canvas id="orderPieChart"></canvas>
             </div>
         </div>
     </div>
@@ -241,7 +241,7 @@
             <div class="card-header bg-primary text-white">
                 <h5 class="mb-0">Top 5 sản phẩm bán chạy</h5>
             </div>
-            <div class="card-body table-responsive" style="height:400px;">
+            <div class="card-body table-responsive" style="height:450px;">
                 <table id="topProductsTable" class="table table-bordered table-hover align-middle">
                     <thead class="table-light">
                         <tr>
@@ -253,7 +253,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
+
                     </tbody>
                 </table>
             </div>
@@ -261,34 +261,25 @@
     </div>
 
     <!-- Khách hàng mới -->
-    <div class="col-lg-6">
+    <div class="col-lg-12">
         <div class="card shadow-sm">
-            <div class="card-header bg-info text-white">
-                <h5 class="mb-0">Khách hàng mới</h5>
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Top 10 khách hàng chi tiêu nhiều nhất</h5>
             </div>
-            <div class="card-body table-responsive">
-                <table class="table table-hover align-middle">
+            <div class="card-body table-responsive" style="height: 500px;">
+                <table id="topCustomersTable" class="table table-bordered table-hover align-middle">
                     <thead class="table-light">
                         <tr>
-                            <th>ID</th>
-                            <th>Tên</th>
-                            <th>Ngày sinh</th>
-                            <th>SĐT</th>
+                            <th style="width: 50px;">ID</th>
+                            <th>Tên khách hàng</th>
+                            <th>Ảnh đại diện</th>
+                            <th>Email</th>
+                            <th>Số đơn hàng</th>
+                            <th>Tổng chi tiêu</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($newCustomers as $customer)
-                        <tr>
-                            <td>#{{ $customer->id }}</td>
-                            <td>{{ $customer->fullname }}</td>
-                            <td>{{ $customer->birthday ? $customer->birthday->format('d/m/Y') : 'Chưa có' }}</td>
-                            <td>{{ $customer->phone ?? 'Chưa có' }}</td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="4" class="text-center text-muted">Không có khách hàng mới</td>
-                        </tr>
-                        @endforelse
+
                     </tbody>
                 </table>
             </div>
@@ -536,17 +527,36 @@
                 data.top_products.forEach(product => {
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
-        <td>#${product.code}</td>
-        <td>${product.name}</td>
-        <td><img src="${product.image}" style="max-width:50px;" /></td>
-        <td>${numberWithCommas(product.price)} đ</td>
-        <td>${product.total_sold}</td>
-    `;
+                        <td>#${product.code}</td>
+                        <td>${product.name}</td>
+                        <td><img src="${product.image}" style="max-width:50px;" /></td>
+                        <td>${numberWithCommas(product.price)} đ</td>
+                        <td>${product.total_sold}</td>
+                    `;
                     topProductsTbody.appendChild(tr);
+                });
+
+                const topCustomersTbody = document.querySelector('#topCustomersTable tbody');
+                topCustomersTbody.innerHTML = ''; // Xóa dữ liệu cũ nếu có
+
+                data.top_customers.forEach(customer => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>#${customer.id}</td>
+                        <td>${customer.fullname}</td>
+                        <td><img src="storage/${customer.avatar}" 
+             onerror="this.onerror=null;this.src='images/avatar_trang.jpg';" 
+             style="max-width:50px; border-radius:50%;" /></td>
+                        <td>${customer.email}</td>
+                        <td>${customer.orders_count}</td>
+                        <td>${numberWithCommas(customer.total_spent)} đ</td>
+                    `;
+                    topCustomersTbody.appendChild(tr);
                 });
 
             });
     }
 </script>
+
 
 @endpush
