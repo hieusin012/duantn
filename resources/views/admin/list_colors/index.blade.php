@@ -14,7 +14,7 @@
                     </div>
                     
                     <div class="col-sm-2">
-                        <a class="btn btn-danger btn-sm" type="button" title="Xóa" href="{{ route('admin.colors.delete') }}"><i class="fas fa-trash-alt"></i> Dữ liệu đã xóa</a>
+                        <a class="btn btn-danger btn-sm" type="button" title="Ẩn" href="{{ route('admin.colors.delete') }}"><i class="fas fa-eye-slash"></i> Dữ liệu đã ẩn</a>
                     </div>
                 </div>
                 <form method="GET" action="{{ route('admin.colors.index') }}" class="mb-3 d-flex">
@@ -71,7 +71,7 @@
                                     <form action="{{ route('admin.colors.destroy', $color->id) }}" method="POST" style="display:inline-block;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                                        <button type="submit" class="btn btn-danger btn-sm" title="Ẩn"><i class="fas fa-eye-slash"></i></button>
                                     </form>
                                 </td>
                             </tr>

@@ -11,17 +11,6 @@
                     <div class="col-sm-2">
                         <a class="btn btn-add btn-sm" href="{{ route('admin.imports.index') }}" title="Quay lại"><i class="fas fa-arrow-left"></i> Quay lại</a>
                     </div>
-
-                    <form action="{{ route('admin.imports.all-eliminate') }}" method="POST" style="display:inline-block;">
-                        @csrf
-                        @method('DELETE')
-                        <div class="col-sm-3">
-                            <button type="submit" class="btn btn-danger btn-sm" title="Xóa tất cả"
-                                onclick="return confirm('Bạn có chắc chắn muốn xóa vĩnh viễn tất cả phiếu nhập đã xóa mềm?')">
-                                <i class="fas fa-trash-alt"></i> Xóa tất cả
-                            </button>
-                        </div>
-                    </form>
                 </div>
 
                 <table class="table table-hover table-bordered" id="sampleTable">
@@ -47,14 +36,6 @@
                             <td>{{ number_format($import->total_price, 0, ',', '.') }} VND</td>
                             <td>
                                 <a class="btn btn-primary btn-sm" href="{{ route('admin.imports.restore', $import->id) }}" title="Khôi phục"><i class="fas fa-undo"></i></a>
-                                <form action="{{ route('admin.imports.eliminate', $import->id) }}" method="POST" style="display:inline-block;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" title="Xóa"
-                                        onclick="return confirm('Bạn có chắc muốn xóa vĩnh viễn phiếu nhập {{ $import->code }} không?')">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </form>
                             </td>
                         </tr>
                         @empty

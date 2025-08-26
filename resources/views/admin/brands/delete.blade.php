@@ -13,17 +13,6 @@
                     <div class="col-sm-2">
                         <a class="btn btn-add btn-sm" href="{{ route('admin.brands.index') }}" title="Thêm"><i class="fas fa-arrow-left"></i>  Quay lại</a>
                     </div>
-
-                    <div class="col-sm-2">
-                        <form action="{{ route('admin.brands.all-eliminate') }}" method="POST" style="display:inline-block;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" title="Xóa tất cả"
-                                onclick="return confirm('Bạn có chắc chắn muốn xóa vĩnh viễn tất cả thương hiệu đã xóa mềm?')">
-                                <i class="fas fa-trash-alt"></i>  Xóa tất cả
-                            </button>
-                        </form>
-                    </div>
                 </div>
 
                 <table class="table table-hover table-bordered " id="sampleTable">
@@ -49,11 +38,6 @@
                             </td>
                             <td class="text-center align-middle">
                                 <a class="btn btn-primary btn-sm" href="{{ route('admin.brands.restore', $brand->id) }}" title="Khôi phục"><i class="fas fa-undo"></i></a>
-                                <form action="{{ route('admin.brands.eliminate', $brand->id) }}" method="POST" style="display:inline-block;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" title="Xóa" onclick="return confirm('Bạn có chắc muốn xóa {{ $brand->name }} không ?')"><i class="fas fa-trash-alt"></i></button>
-                                </form>
                             </td>
                         </tr>
                         @endforeach

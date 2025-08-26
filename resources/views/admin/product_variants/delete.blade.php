@@ -1,6 +1,6 @@
 @extends('admin.layouts.index')
 
-@section('title', 'Danh sách biến thể đã xóa mềm')
+@section('title', 'Danh sách biến thể đã ẩn')
 
 @section('content')
 <div class="row">
@@ -13,17 +13,6 @@
                             <i class="fas fa-arrow-left"></i> Quay lại
                         </a>
                     </div>
-
-                    <form action="{{ route('admin.variants.all-eliminate') }}" method="POST" style="display:inline-block;">
-                        @csrf
-                        @method('DELETE')
-                        <div class="col-sm-2">
-                            <button type="submit" class="btn btn-danger btn-sm"
-                                onclick="return confirm('Bạn có chắc muốn xóa vĩnh viễn tất cả biến thể đã xóa mềm?')">
-                                <i class="fas fa-trash-alt"></i> Xóa tất cả
-                            </button>
-                        </div>
-                    </form>
                 </div>
 
                 <table class="table table-hover table-bordered" id="sampleTable">
@@ -68,16 +57,6 @@
                                 <a class="btn btn-primary btn-sm"
                                     href="{{ route('admin.variants.restore', $variant->id) }}"
                                     title="Khôi phục"><i class="fas fa-undo"></i></a>
-
-                                <form action="{{ route('admin.variants.eliminate', $variant->id) }}" method="POST"
-                                    style="display:inline-block;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" title="Xóa vĩnh viễn"
-                                        onclick="return confirm('Bạn có chắc muốn xóa vĩnh viễn biến thể này không?')">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </form>
                             </td>
                         </tr>
                         @empty

@@ -75,22 +75,6 @@
                         <i class="app-menu__icon fas fa-ticket-alt"></i><span class="app-menu__label">Vouchers</span></a></li>
             <!-- Nhóm: Thống kê & Báo cáo -->
             <li class="app-menu__section">THỐNG KÊ & BÁO CÁO</li>
-            <li>
-                  <a class="app-menu__item {{ request()->routeIs('admin.thongke.index') ? 'active' : '' }}"
-                        href="{{ route('admin.thongke.index') }}">
-                        <i class="app-menu__icon bx bx-bar-chart-alt"></i>
-                        <span class="app-menu__label">Thống kê sản phẩm</span>
-                  </a>
-            </li>
-            <li>
-                  <a class="app-menu__item {{ request()->routeIs('admin.thongke.bienthe.*') ? 'active' : '' }}"
-                        href="{{ route('admin.thongke.bienthe.index') }}">
-                        <i class="app-menu__icon bx bx-line-chart"></i>
-                        <span class="app-menu__label">Thống kê biến thể</span>
-                  </a>
-            </li>
-            {{-- <li><a class="app-menu__item {{ request()->is('quan-ly-bao-cao*') ? 'active' : '' }}" href="{{route('admin.orders.report')}}">
-                        <i class="app-menu__icon bx bx-pie-chart-alt-2"></i><span class="app-menu__label">Doanh thu</span></a></li> --}}
             <li><a class="app-menu__item {{ request()->routeIs('admin.orders.report') ? 'active' : '' }}" href="{{ route('admin.orders.report') }}">
                         <i class="app-menu__icon bx bx-pie-chart-alt-2"></i><span class="app-menu__label">Doanh thu</span></a></li>      
             <!-- Nhóm: Cấu hình hệ thống -->

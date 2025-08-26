@@ -52,7 +52,7 @@
                             title="Thêm"><i class="fas fa-plus"></i> Tạo mới biến thể</a>
                     </div>
                     <div class="col-sm-2">
-                        <a class="btn btn-danger btn-sm" type="button" title="Xóa" href="{{ route('admin.variants.delete') }}"><i class="fas fa-trash-alt"></i> Dữ liệu đã xóa</a>
+                        <a class="btn btn-danger btn-sm" type="button" title="Ẩn" href="{{ route('admin.variants.delete') }}"><i class="fas fa-eye-slash"></i> Dữ liệu đã ẩn</a>
                     </div>
                     {{-- <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm nhap-tu-file" type="button" title="Nhập"><i
@@ -128,11 +128,11 @@
                                 </a>
                                 <form action="{{ route('admin.product-variants.destroy', $variant->id) }}"
                                     method="POST" style="display:inline;"
-                                    onsubmit="return confirm('Bạn có chắc muốn xóa biến thể này?');">
+                                    onsubmit="return confirm('Bạn có chắc muốn ẩn biến thể này?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-outline-danger btn-sm" title="Xóa">
-                                        <i class="fas fa-trash-alt"></i>
+                                    <button type="submit" class="btn btn-outline-danger btn-sm" title="Ẩn">
+                                       <i class="fas fa-eye-slash"></i>
                                     </button>
                                 </form>
                             </td>

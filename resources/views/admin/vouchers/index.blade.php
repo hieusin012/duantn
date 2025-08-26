@@ -65,11 +65,11 @@
                                     <a href="{{ route('admin.vouchers.edit', $voucher->id) }}" class="btn btn-primary btn-sm">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('admin.vouchers.destroy', $voucher->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc muốn xóa voucher này?');">
+                                    <!-- <form action="{{ route('admin.vouchers.destroy', $voucher->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc muốn xóa voucher này?');">
                                         @csrf
                                         @method('DELETE')
                                         <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-                                    </form>
+                                    </form> -->
                                     <a href="{{ route('admin.vouchers.show', $voucher->id) }}" class="btn btn-info btn-sm">
                                         <i class="fas fa-eye"></i>
                                     </a>

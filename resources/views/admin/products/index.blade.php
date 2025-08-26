@@ -86,7 +86,7 @@
                         <a class="btn btn-delete btn-sm pdf-file" type="button" title="In"><i class="fas fa-file-pdf"></i> Xuất PDF</a>
                     </div> --}}
                     <div class="col-sm-2">
-                        <a class="btn btn-danger btn-sm" type="button" title="Xóa" href="{{ route('admin.products.trash') }}"><i class="fas fa-trash-alt"></i> Dữ liệu đã xóa</a>
+                        <a class="btn btn-danger btn-sm" type="button" title="Xóa" href="{{ route('admin.products.trash') }}"><i class="fas fa-trash-alt"></i> Dữ liệu đã ẩn</a>
                     </div>
                     {{-- <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm" type="button" title="Xóa"><i class="fas fa-trash-alt"></i> Xóa tất cả</a>
@@ -132,11 +132,11 @@
                                     <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-sm btn-warning" title="Sửa">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này?');">
+                                    <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc muốn ẩn sản phẩm này?');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger" title="Xóa">
-                                            <i class="fas fa-trash-alt"></i>
+                                        <button type="submit" class="btn btn-sm btn-danger" title="Ẩn">
+                                            <i class="fas fa-eye-slash" ></i>
                                         </button>
                                     </form>
                                     <a href="{{ route('admin.products.show', $product->id) }}" class="btn btn-sm btn-info text-white" title="Chi tiết">
