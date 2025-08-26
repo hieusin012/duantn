@@ -16,16 +16,6 @@
                         </a>
                     </div>
 
-                    <form action="{{ route('admin.blog-categories.all-eliminate') }}" method="POST" style="display:inline-block;">
-                        @csrf
-                        @method('DELETE')
-                        <div class="col-sm-2">
-                            <button type="submit" class="btn btn-danger btn-sm" title="Xóa tất cả"
-                                onclick="return confirm('Bạn có chắc chắn muốn xóa vĩnh viễn tất cả danh mục đã xóa mềm?')">
-                                <i class="fas fa-trash-alt"></i> Xóa tất cả
-                            </button>
-                        </div>
-                    </form>
                 </div>
 
                 <table class="table table-hover table-bordered" id="sampleTable">
@@ -55,19 +45,11 @@
                                 <a class="btn btn-primary btn-sm" href="{{ route('admin.blog-categories.restore', $category->id) }}" title="Khôi phục">
                                     <i class="fas fa-undo"></i>
                                 </a>
-                                <form action="{{ route('admin.blog-categories.eliminate', $category->id) }}" method="POST" style="display:inline-block;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" title="Xóa"
-                                        onclick="return confirm('Bạn có chắc muốn xóa vĩnh viễn {{ $category->name }} không?')">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </form>
                             </td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="6" class="text-center text-danger">Không có danh mục bài viết nào đã xóa.</td>
+                            <td colspan="6" class="text-center text-danger">Không có danh mục bài viết nào đã ẩn.</td>
                         </tr>
                         @endforelse
                     </tbody>

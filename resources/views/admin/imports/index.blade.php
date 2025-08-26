@@ -17,7 +17,7 @@
                         </a>
                     </div>
                     <div class="col-sm-2 mb-2">
-                        <a class="btn btn-danger btn-sm" type="button" title="Xóa" href="{{ route('admin.imports.delete') }}"><i class="fas fa-trash-alt"></i> Dữ liệu đã xóa</a>
+                        <a class="btn btn-danger btn-sm" type="button" title="Ẩn" href="{{ route('admin.imports.delete') }}"><i class="fas fa-eye-slash"></i> Dữ liệu đã ẩn</a>
                     </div>
                     {{-- <div class="col-sm-2 mb-2">
                         <a class="btn btn-delete btn-sm print-file" type="button" title="In">
@@ -79,11 +79,11 @@
                                         <i class="fas fa-edit"></i>
                                     </a>
 
-                                    <form action="{{ route('admin.imports.destroy', $import->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa phiếu này không?');">
+                                    <form action="{{ route('admin.imports.destroy', $import->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc chắn muốn ẩn phiếu này không?');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" title="Xóa">
-                                            <i class="fas fa-trash-alt"></i>
+                                        <button type="submit" class="btn btn-danger btn-sm" title="Ẩn">
+                                            <i class="fas fa-eye-slash"></i>
                                         </button>
                                     </form>
                                 </td>

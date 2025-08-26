@@ -17,7 +17,7 @@
                         <i class="fas fa-plus me-1"></i> Thêm bài viết
                     </a>
                     <a class="btn btn-danger btn-sm" href="{{ route('admin.blogs.delete') }}">
-                        <i class="fas fa-trash-alt me-1"></i> Dữ liệu đã xóa
+                        <i class="fas fa-trash-alt me-1"></i> Dữ liệu đã ẩn
                     </a>
                 </div>
                 <form method="GET" action="{{ route('admin.blogs.index') }}" class="mb-3">
@@ -74,11 +74,11 @@
                                         <a href="{{ route('admin.blogs.edit', $blog->id) }}" class="btn btn-sm btn-primary" title="Sửa">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('admin.blogs.destroy', $blog->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc muốn xóa bài viết này?')">
+                                        <form action="{{ route('admin.blogs.destroy', $blog->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc muốn ẩn bài viết này?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" title="Xóa">
-                                                <i class="fas fa-trash-alt"></i>
+                                            <button type="submit" class="btn btn-sm btn-danger" title="Ẩn">
+                                                <i class="fas fa-eye-slash"></i>
                                             </button>
                                         </form>
                                     </div>

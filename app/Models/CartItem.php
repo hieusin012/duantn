@@ -19,6 +19,7 @@ class CartItem extends Model
         'total_price',
         'price_at_purchase'
     ];
+    protected $dates = ['deleted_at'];
 
     public function user()
     {

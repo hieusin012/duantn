@@ -232,13 +232,16 @@
             </div>
             <div class="card-body" style="height: 450px;">
                 <h4 class="text-danger mb-3">Tổng đơn hàng:</h4>
+                <div class="mb-3">
+                    <p id="totalOrder" class="fw-bold fs-5"></p>
+                </div>
                 <canvas id="orderPieChart"></canvas>
             </div>
         </div>
     </div>
     <div class="col-lg-6">
         <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">
+            <div class="card-header bg-dark text-white">
                 <h5 class="mb-0">Top 5 sản phẩm bán chạy</h5>
             </div>
             <div class="card-body table-responsive" style="height:450px;">
@@ -463,6 +466,11 @@
                     `Tổng đơn hàng: ${totalOrders.toLocaleString()} đơn hàng`;
 
                 if (orderPieChart) orderPieChart.destroy(); // ✅ Hủy chart cũ trước khi vẽ mới
+                document.getElementById('totalOrder').innerHTML =
+                    `Đã giao hàng: <span style="color:#10b981">${totalSuccess}</span>, 
+                     Đã hủy: <span style="color:#ef4444">${totalCanceled}</span>,
+                     Hoàn hàng: <span style="color:#007bff">${totalCompleted}</span>,
+                     Đang xử lý: <span style="color:#f6c700">${totalProcessing}</span>`;
 
                 const ctx = document.getElementById('orderPieChart').getContext('2d');
                 orderPieChart = new Chart(ctx, {

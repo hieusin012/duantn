@@ -16,16 +16,6 @@
                         </a>
                     </div>
 
-                    <form action="{{ route('admin.sizes.all-eliminate') }}" method="POST" style="display:inline-block;">
-                        @csrf
-                        @method('DELETE')
-                        <div class="col-sm-2">
-                            <button type="submit" class="btn btn-danger btn-sm" title="Xóa tất cả"
-                                onclick="return confirm('Bạn có chắc chắn muốn xóa vĩnh viễn tất cả size đã xóa mềm?')">
-                                <i class="fas fa-trash-alt"></i> Xóa tất cả
-                            </button>
-                        </div>
-                    </form>
                 </div>
 
                 <table class="table table-hover table-bordered" id="sampleTable">
@@ -51,19 +41,11 @@
                                 <a class="btn btn-primary btn-sm" href="{{ route('admin.sizes.restore', $size->id) }}" title="Khôi phục">
                                     <i class="fas fa-undo"></i>
                                 </a>
-                                <form action="{{ route('admin.sizes.eliminate', $size->id) }}" method="POST" style="display:inline-block;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" title="Xóa"
-                                        onclick="return confirm('Bạn có chắc muốn xóa {{ $size->name }} vĩnh viễn không?')">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </form>
                             </td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="4" class="text-center text-danger">Không có size nào đã xóa mềm.</td>
+                            <td colspan="4" class="text-center text-danger">Không có size nào đã ẩn.</td>
                         </tr>
                         @endforelse
                     </tbody>

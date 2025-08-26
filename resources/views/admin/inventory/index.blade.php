@@ -24,30 +24,30 @@
                 </thead>
                 <tbody>
                     @foreach($variants as $index => $variant)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ $variant->product->name }}</td>
-                            <td>{{ $variant->color->name ?? '-' }}</td>
-                            <td>{{ $variant->size->name ?? '-' }}</td>
-                            <td>{{ $variant->quantity }}</td>
-                            {{-- <td>{{ $variant->orderDetails->sum('quantity') }}</td> --}}
-                            <td>{{ $variant->completedOrderDetails->sum('quantity') }}</td>
-                            <td>
-                                @if($variant->quantity == 0)
-                                <span class="badge bg-danger">Hết hàng</span>
-                                @elseif($variant->quantity < $lowStockThreshold)
+                    <tr>
+                        <td>{{ $index + 1 }}</td>
+                        <td>{!! $variant->product->name ?? '<p class="text-danger">Sản phẩm đã ẩn</p>' !!}</td>
+                        <td>{{ $variant->color->name ?? '-' }}</td>
+                        <td>{{ $variant->size->name ?? '-' }}</td>
+                        <td>{{ $variant->quantity }}</td>
+                        {{-- <td>{{ $variant->orderDetails->sum('quantity') }}</td> --}}
+                        <td>{{ $variant->completedOrderDetails->sum('quantity') }}</td>
+                        <td>
+                            @if($variant->quantity == 0)
+                            <span class="badge bg-danger">Hết hàng</span>
+                            @elseif($variant->quantity < $lowStockThreshold)
                                 <span class="badge bg-light text-danger border border-danger">Sắp hết hàng</span>
                                 @else
                                 <span class="badge bg-success">Còn hàng</span>
                                 @endif
 
-                            </td>
-                        </tr>
+                        </td>
+                    </tr>
                     @endforeach
                     @if($variants->isEmpty())
-                        <tr>
-                            <td colspan="7">Không có dữ liệu tồn kho.</td>
-                        </tr>
+                    <tr>
+                        <td colspan="7">Không có dữ liệu tồn kho.</td>
+                    </tr>
                     @endif
                 </tbody>
             </table>
@@ -58,4 +58,3 @@
     </div>
 </div>
 @endsection
-

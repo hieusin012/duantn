@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Models\ProductVariant;
 
 
 class DashboardController extends Controller
@@ -25,8 +26,7 @@ class DashboardController extends Controller
             'Đang giao hàng'
         ])->count();
         $newCustomers = User::where('role', 'member')->latest()->take(4)->get(); // <-- ĐÃ SỬA
-
-
+        $lowStockProducts = ProductVariant::where('quantity', '<', 10)->where('quantity', '>', 0)->count();
 
         // --- Gửi tất cả dữ liệu qua View ---
         return view('admin.dashboard', compact(
@@ -34,6 +34,7 @@ class DashboardController extends Controller
             'totalProducts',
             'totalOrders',
             'newCustomers',
+            'lowStockProducts'
 
         ));
     }

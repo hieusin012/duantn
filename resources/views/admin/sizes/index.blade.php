@@ -15,7 +15,7 @@
                         </a>
                     </div>
                     <div class="col-sm-2">
-                        <a class="btn btn-danger btn-sm" type="button" title="Xóa" href="{{ route('admin.sizes.delete') }}"><i class="fas fa-trash-alt"></i> Dữ liệu đã xóa</a>
+                        <a class="btn btn-danger btn-sm" type="button" title="Ẩn" href="{{ route('admin.sizes.delete') }}"><i class="fas fa-eye-slash"></i> Dữ liệu đã ẩn</a>
                     </div>
                     {{-- <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm nhap-tu-file" type="button" title="Import"><i class="fas fa-file-upload"></i> Nhập tệp</a>
@@ -73,11 +73,11 @@
                                     <a href="{{ route('admin.sizes.edit', $size->id) }}" class="btn btn-primary btn-sm" title="Sửa">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('admin.sizes.destroy', $size->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa kích cỡ này không?');">
+                                    <form action="{{ route('admin.sizes.destroy', $size->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc chắn muốn ẩn kích cỡ này không?');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-primary btn-sm trash" title="Xóa">
-                                            <i class="fas fa-trash-alt"></i>
+                                        <button type="submit" class="btn btn-primary btn-sm trash" title="Ẩn">
+                                            <i class="fas fa-eye-slash"></i>
                                         </button>
                                     </form>
                                 </td>

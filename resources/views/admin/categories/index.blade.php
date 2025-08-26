@@ -33,7 +33,7 @@
                     {{-- <div class="col-sm-2">
                         <a class="btn btn-delete btn-sm" type="button" title="Delete All"><i class="fas fa-trash-alt"></i> Xóa tất cả</a>
                     </div> --}}
-                    <div class="col-sm-2">
+                    <!-- <div class="col-sm-2">
                         @if(request()->has('trashed') && request()->trashed == 'true')
                             <a class="btn btn-secondary btn-sm" href="{{ route('admin.categories.index') }}">
                                 <i class="fas fa-list"></i> Danh sách hiện tại
@@ -43,7 +43,7 @@
                                 <i class="fas fa-trash-alt"></i> Dữ liệu đã xóa
                             </a>
                         @endif
-                    </div>
+                    </div> -->
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-4 d-flex align-items-center">
@@ -117,12 +117,12 @@
                                     <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn btn-primary btn-sm" title="Edit">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa danh mục này không?');">
+                                    <!-- <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa danh mục này không?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-primary btn-sm trash" title="Delete">
                                             <i class="fas fa-trash-alt"></i>
-                                        </button>
+                                        </button> -->
                                     </form>
                                 @endif
                             </td>

@@ -48,7 +48,7 @@
                             </tr>
                             <tr>
                                 <th>Ngày sinh:</th>
-                                <td>{{ $user->birthday }}</td>
+                                <td>{{ $user->birthday->format('d/m/Y') }}</td>
                             </tr>
                             <tr>
                                 <th>Ngôn ngữ:</th>

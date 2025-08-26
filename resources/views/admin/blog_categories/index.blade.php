@@ -16,7 +16,7 @@
                         </a>
                     </div>
                     <div class="col-sm-2 mb-2">
-                        <a class="btn btn-danger btn-sm" type="button" title="Xóa" href="{{ route('admin.blog-categories.delete') }}"><i class="fas fa-trash-alt"></i> Dữ liệu đã xóa</a>
+                        <a class="btn btn-danger btn-sm" type="button" title="Ẩn" href="{{ route('admin.blog-categories.delete') }}"><i class="fas fa-trash-alt"></i> Dữ liệu đã ẩn</a>
                     </div>
                 </div>
 
@@ -47,11 +47,11 @@
                                     <a href="{{ route('admin.blog-categories.edit', $item->id) }}" class="btn btn-primary btn-sm" title="Sửa">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('admin.blog-categories.destroy', $item->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xoá?')">
+                                    <form action="{{ route('admin.blog-categories.destroy', $item->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc chắn muốn ẩn danh mục này?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" title="Xoá">
-                                            <i class="fas fa-trash-alt"></i>
+                                        <button type="submit" class="btn btn-danger btn-sm" title="Ẩn">
+                                            <i class="fas fa-eye-slash"></i>
                                         </button>
                                     </form>
                                 </td>

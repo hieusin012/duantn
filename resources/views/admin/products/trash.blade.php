@@ -1,6 +1,6 @@
 @extends('admin.layouts.index')
 
-@section('title', 'Dữ liệu đã xóa sản phẩm')
+@section('title', 'Dữ liệu đã ẩn sản phẩm')
 
 @section('content')
 
@@ -12,16 +12,6 @@
                     <div class="col-sm-2">
                         <a class="btn btn-cancel btn-sm" href="{{ route('admin.products.index') }}" title="Quay lại">Quay lại</a>
                     </div>
-                    <form action="{{ route('admin.products.force-delete-all') }}" method="POST" style="display:inline-block;">
-                        @csrf
-                        @method('DELETE')
-                        <div class="col-sm-2">
-                            <button type="submit" class="btn btn-dark btn-sm" title="Xóa tất cả"
-                                onclick="return confirm('Bạn có chắc chắn muốn xóa vĩnh viễn tất cả sản phẩm đã xóa mềm?')">
-                                <i class="fas fa-trash-alt"></i> Xóa tất cả
-                            </button>
-                        </div>
-                    </form>
                 </div>
 
                 <table class="table table-hover table-bordered" id="sampleTable">
@@ -61,13 +51,6 @@
                             <td>{{ $product->category->name ?? 'N/A' }}</td>
                             <td>
                                 <a class="btn btn-primary btn-sm" href="{{ route('admin.products.restore', $product->id) }}" title="Khôi phục"><i class="fas fa-undo"></i></a>
-                                <form action="{{ route('admin.products.force-delete', $product->id) }}" method="POST" style="display:inline-block;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" title="Xóa vĩnh viễn" onclick="return confirm('Bạn có chắc muốn xóa {{ $product->name }} vĩnh viễn không?')">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </form>
                             </td>
                         </tr>
                         @endforeach
