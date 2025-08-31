@@ -61,7 +61,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="7" class="text-center">Không có biến thể nào đã bị xóa.</td>
+                            <td colspan="9" class="text-center">Không có biến thể nào đã bị xóa.</td>
                         </tr>
                         @endforelse
                     </tbody>

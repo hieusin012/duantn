@@ -197,7 +197,7 @@
     </div>
 
 </div>
-@if(isset($banners) && !$banners->isEmpty())
+<!-- @if(isset($banners) && !$banners->isEmpty())
 <div class="home-slideshow slick-arrow-dots">
     @foreach($banners as $banner)
     <img class="blur-up lazyload slideshow-img"
@@ -206,7 +206,7 @@
         title="{{ $banner->title }}" />
     @endforeach
 </div>
-@endif
+@endif -->
 <div class="container py-5">
     <h2 class="text-center mb-4 fs-3 fw-bold border-bottom pb-2 d-inline-block">
         TIN TỨC THỂ THAO & KHUYẾN MÃI

@@ -163,7 +163,10 @@ class OrderController extends Controller
         $order = Order::with('orderDetails')
             ->where('id', $id)
             ->where('user_id', Auth::id())
-            ->where('status', 'Chờ xác nhận')
+            ->where(function ($query) {
+                $query->where('status', 'Chờ xác nhận')
+                    ->orWhere('status', 'Đã xác nhận');
+            })
             ->first();
 
         if (!$order) {
@@ -176,14 +179,16 @@ class OrderController extends Controller
                 ->increment('quantity', $detail->quantity);
         }
 
-        // ✅ Lưu trạng thái + lý do hủy (nếu có cột cancel_reason)
+        // ✅ Lưu trạng thái + lý do hủy
         $order->status = 'Đơn hàng đã hủy';
+        $order->payment_status = 'Đã hoàn tiền';
         $order->cancel_reason = $request->cancel_reason;
-        $order->cancel_note = $request->cancel_note;
+        $order->cancel_note   = $request->cancel_note;
         $order->save();
 
         return back()->with('success', 'Đơn hàng đã được hủy thành công.');
     }
+
 
     public function updateStatus(Order $order)
     {
@@ -275,5 +280,4 @@ class OrderController extends Controller
 
         return back()->with('success', 'Đơn hàng đã được cập nhật sang trạng thái "Đã hoàn hàng" và đã hoàn tiền.');
     }
-
 }

@@ -45,7 +45,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="4" class="text-center text-danger">Không có size nào đã ẩn.</td>
+                            <td colspan="7" class="text-center text-danger">Không có size nào đã ẩn.</td>
                         </tr>
                         @endforelse
                     </tbody>
