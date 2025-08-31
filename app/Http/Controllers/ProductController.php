@@ -293,7 +293,7 @@ Product::create([
         // KHÔNG xóa file ảnh khi chỉ soft delete
         $product->delete();
 
-        return redirect()->route('admin.products.index')->with('success', 'Xóa sản phẩm thành công');
+        return redirect()->route('admin.products.index')->with('success', 'Ẩn sản phẩm thành công');
     }
 
     public function trash()

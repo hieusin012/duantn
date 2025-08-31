@@ -1,6 +1,6 @@
 @extends('admin.layouts.index')
 
-@section('title', 'Dữ liệu đã xóa thương hiệu')
+@section('title', 'Dữ liệu đã ẩn thương hiệu')
 @section('color')
 @endsection
 @section('content')

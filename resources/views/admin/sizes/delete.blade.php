@@ -1,6 +1,6 @@
 @extends('admin.layouts.index')
 
-@section('title', 'Dữ liệu đã xóa size')
+@section('title', 'Dữ liệu đã ẩn size')
 @section('size')
 @endsection
 

@@ -208,7 +208,7 @@ class ProductVariantController extends Controller
         $productVariant->delete();
 
         return redirect()->route('admin.product-variants.index')
-            ->with('success', 'Đã xóa biến thể thành công.');
+            ->with('success', 'Đã ẩn biến thể thành công.');
     }
 
 

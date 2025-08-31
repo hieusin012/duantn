@@ -1,6 +1,6 @@
 @extends('admin.layouts.index')
 
-@section('title', 'Dữ liệu đã xóa phiếu nhập')
+@section('title', 'Dữ liệu đã ẩn phiếu nhập')
 
 @section('content')
 <div class="row">

@@ -61,7 +61,7 @@ class SupplierController extends Controller
     {
         $supplier = Supplier::findOrFail($id);
         $supplier->delete();
-        return redirect()->route('admin.suppliers.index')->with('success', 'Xóa nhà cung cấp thành công');
+        return redirect()->route('admin.suppliers.index')->with('success', 'Ẩn nhà cung cấp thành công');
     }
     public function trash()
     {

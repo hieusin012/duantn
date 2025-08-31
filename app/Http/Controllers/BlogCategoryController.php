@@ -73,7 +73,7 @@ class BlogCategoryController extends Controller
     public function destroy(BlogCategory $blogCategory)
     {
         $blogCategory->delete();
-        return back()->with('success', 'Đã xoá danh mục!');
+        return back()->with('success', 'Đã ẩn danh mục!');
     }
     public function delete()
     {

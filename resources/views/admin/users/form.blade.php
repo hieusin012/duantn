@@ -9,6 +9,12 @@
     $canEditRoleStatus = auth()->user()->role === 'super_admin' || ($user?->role ?? '') !== 'admin';
 @endphp
 
+{{-- @php
+    $isSelf = isset($user) && $user->id === Auth::id();
+    $canEditRoleStatus = (auth()->user()?->role === 'super_admin')
+                        || (($user?->role ?? '') !== 'admin');
+@endphp --}}
+
 <div class="row justify-content-center mb-5">
     <div class="col-lg-10">
         <div class="card shadow-sm p-4">

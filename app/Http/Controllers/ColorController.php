@@ -98,7 +98,7 @@ class ColorController extends Controller
         //     return redirect()->back()->with('error', 'Không thể xóa vì màu đang được sử dụng.');
         // }
         $color->delete();
-        return redirect()->route('admin.colors.index')->with('success', 'Xóa màu thành công!');
+        return redirect()->route('admin.colors.index')->with('success', 'Ẩn màu thành công!');
     }
 
     public function delete()

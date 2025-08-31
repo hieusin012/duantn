@@ -79,7 +79,7 @@ class SizeController extends Controller
         //         ->with('error', 'Không thể xóa kích thước đang được sử dụng');
         // }
         $size->delete();
-        return redirect()->route('admin.sizes.index')->with('success', 'Đã xóa kích cỡ thành công.');
+        return redirect()->route('admin.sizes.index')->with('success', 'Đã ẩn kích cỡ thành công.');
     }
     public function delete()
     {

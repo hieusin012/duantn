@@ -315,7 +315,7 @@ class BlogController extends Controller
 
         $blog->delete();
 
-        return redirect()->route('admin.blogs.index')->with('success', 'Xóa bài viết thành công!');
+        return redirect()->route('admin.blogs.index')->with('success', 'Ẩn bài viết thành công!');
     }
 
     public function delete()

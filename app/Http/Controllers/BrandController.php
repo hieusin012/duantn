@@ -74,7 +74,7 @@ class BrandController extends Controller
     {
         $brand = Brand::findOrFail($id);
         $brand->delete();
-        return redirect()->route('admin.brands.index')->with('success', 'Xóa thương hiệu thành công!');
+        return redirect()->route('admin.brands.index')->with('success', 'Ẩn thương hiệu thành công!');
     }
     public function delete(){
         $deletedbrands = Brand::onlyTrashed()->get();

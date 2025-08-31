@@ -2,7 +2,7 @@
 @php
     use Illuminate\Support\Str;
 @endphp
-@section('title', 'Quản lý bài viết')
+@section('title', 'Dữ liệu đã ẩn')
 @section('content')
 
 <div class="row">

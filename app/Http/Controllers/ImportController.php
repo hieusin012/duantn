@@ -180,7 +180,7 @@ class ImportController extends Controller
         // }
 
         $import->delete();
-        return redirect()->route('admin.imports.index')->with('success', 'Đã xóa phiếu nhập');
+        return redirect()->route('admin.imports.index')->with('success', 'Đã ẩn phiếu nhập');
     }
     public function delete()
     {

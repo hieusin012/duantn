@@ -1,6 +1,6 @@
 @extends('admin.layouts.index')
 
-@section('title', 'Dữ liệu đã xóa màu sắc')
+@section('title', 'Dữ liệu đã ẩn màu sắc')
 @section('color')
 @endsection
 @section('content')

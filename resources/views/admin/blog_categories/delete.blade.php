@@ -1,6 +1,6 @@
 @extends('admin.layouts.index')
 
-@section('title', 'Dữ liệu đã xóa danh mục bài viết')
+@section('title', 'Dữ liệu đã ẩn danh mục bài viết')
 @section('blog-categories')
 @endsection
 
