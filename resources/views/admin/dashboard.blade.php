@@ -189,6 +189,7 @@
         </a>
     </div>
     <div class="col-md-6">
+        <a href="{{ route('admin.inventory.index') }}">
         <div class="widget-small danger coloured-icon"><i class='icon bx bxs-error-alt fa-3x'></i>
             <div class="info">
                 <h4>Sắp hết hàng</h4>
@@ -197,6 +198,7 @@
                 <p class="info-tong">Số sản phẩm cảnh báo hết cần nhập thêm.</p>
             </div>
         </div>
+        </a>
     </div>
     <!-- Biểu đồ -->
     <div class="col-lg-6">

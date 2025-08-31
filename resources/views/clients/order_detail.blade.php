@@ -182,7 +182,7 @@
                 @endif --}}
 
                 @php
-                    $canCancel = $order->status === 'Chờ xác nhận';
+                    $canCancel = $order->status === 'Chờ xác nhận' || $order->status === 'Đã xác nhận';
                     $shouldShowCancel = in_array($order->status, ['Chờ xác nhận', 'Đã xác nhận', 'Đang chuẩn bị hàng', 'Đang giao hàng']);
                 @endphp
 

@@ -19,7 +19,7 @@
 <h1 style="font-size: 24px;">🛒 Xác nhận đơn hàng thành công!</h1>
 
 <p>Xin chào <strong>{{ $order->fullname }}</strong>,</p>
-<p>Cảm ơn bạn đã đặt hàng tại <strong>{{ config('app.name') }}</strong>!</p>
+<p>Cảm ơn bạn đã đặt hàng tại <strong>SportBay</strong>!</p>
 
 <div class="order-box">
     <h2>📦 Thông tin đơn hàng:</h2>

@@ -17,7 +17,7 @@
                         <i class="fas fa-plus me-1"></i> Thêm bài viết
                     </a>
                     <a class="btn btn-danger btn-sm" href="{{ route('admin.blogs.delete') }}">
-                        <i class="fas fa-trash-alt me-1"></i> Dữ liệu đã ẩn
+                        <i class="fas fa-eye-slash"></i> Dữ liệu đã ẩn
                     </a>
                 </div>
                 <form method="GET" action="{{ route('admin.blogs.index') }}" class="mb-3">

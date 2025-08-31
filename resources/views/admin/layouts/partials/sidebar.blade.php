@@ -29,7 +29,7 @@
             <li class="app-menu__section">TỔNG QUAN</li>
             <li><a class="app-menu__item {{ request()->routeIs('admin.dashboard.index') ? 'active' : '' }}" href="{{route('admin.dashboard.index')}}">
                         <i class="app-menu__icon bx bx-tachometer"></i><span class="app-menu__label">Bảng điều khiển</span></a></li>
-            <li><a class="app-menu__item {{ request()->routeIs('chat.index') ? 'active' : '' }}" href="{{ route('admin.chat') }}">
+            <li><a class="app-menu__item {{ request()->routeIs('admin.chat') ? 'active' : '' }}" href="{{ route('admin.chat') }}">
                         <i class="app-menu__icon fas fa-comment-dots"></i><span class="app-menu__label">Hỗ trợ khách hàng</span></a></li>
             {{-- <li><a class="app-menu__item {{ request()->is('phan-mem-ban-hang*') ? 'active' : '' }}" href="phan-mem-ban-hang.html">
                         <i class="app-menu__icon bx bx-cart-alt"></i><span class="app-menu__label">POS Bán Hàng</span></a></li> --}}

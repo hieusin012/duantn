@@ -16,7 +16,7 @@
                         </a>
                     </div>
                     <div class="col-sm-2 mb-2">
-                        <a class="btn btn-danger btn-sm" type="button" title="Ẩn" href="{{ route('admin.blog-categories.delete') }}"><i class="fas fa-trash-alt"></i> Dữ liệu đã ẩn</a>
+                        <a class="btn btn-danger btn-sm" type="button" title="Ẩn" href="{{ route('admin.blog-categories.delete') }}"><i class="fas fa-eye-slash"></i> Dữ liệu đã ẩn</a>
                     </div>
                 </div>
 

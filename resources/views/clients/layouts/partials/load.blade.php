@@ -10,7 +10,7 @@
         align-items: center;
         justify-content: center;
         z-index: 9999;
-        transition: opacity 0.5s ease-out;
+        transition: opacity 0.1s ease-out;
     }
 
     .loading-spinner-wrapper {
@@ -82,6 +82,6 @@
     window.addEventListener('load', function () {
         const loader = document.getElementById('loading-screen');
         loader.style.opacity = '0';
-        setTimeout(() => loader.style.display = 'none', 500);
+        setTimeout(() => loader.style.display = 'none', 100);
     });
 </script>
