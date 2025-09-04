@@ -564,7 +564,7 @@
                                             <small class="text-muted">
                                                 @if($comment->variant->color)
                                                 Màu:
-                                                <span class="fw-semibold" style="color: {{ $comment->variant->color->color_code }}">
+                                                <span class="fw-semibold">
                                                     <b>{{ $comment->variant->color->name }}</b>
                                                 </span>
                                                 @endif
