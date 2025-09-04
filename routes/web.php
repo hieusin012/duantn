@@ -335,7 +335,7 @@ Route::get('/product/variant-info', [ClientProductController::class, 'getVariant
 
 
 // comment
-Route::post('/comments/client-store', [CommentController::class, 'storeClient'])->name('client.comments.store')->middleware('auth');
+Route::post('/comments/client-store/{variantId}', [CommentController::class, 'storeClient'])->name('client.comments.store')->middleware('auth');
 
 //contact
 Route::get('/contact', [ClientContactController::class, 'showForm'])->name('client.contact');
