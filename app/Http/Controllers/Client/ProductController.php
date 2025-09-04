@@ -29,96 +29,77 @@ class ProductController extends Controller
     }
 
     public function show($slug)
-{
-    $product = Product::with(['variants'])
-        ->where('slug', $slug)
-        ->firstOrFail();
+    {
+        $product = Product::with(['variants'])
+            ->where('slug', $slug)
+            ->firstOrFail();
 
-    $product->load([
-        'galleries',
-        'category',
-        'brand',
-        'variants' => function ($q) {
-            $q->withTrashed()->with(['color', 'size']);
-        },
-        'comments'
-    ]);
+        $product->load([
+            'galleries',
+            'category',
+            'brand',
+            'variants' => function ($q) {
+                $q->withTrashed()->with(['color', 'size']);
+            },
+            'comments'
+        ]);
 
-    $relatedProducts = Product::where('category_id', $product->category_id)
-        ->where('id', '!=', $product->id)
-        ->latest()
-        ->take(15)
-        ->get();
+        $relatedProducts = Product::where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->latest()
+            ->take(15)
+            ->get();
 
-    $productImages = $product->galleries;
-    $variants = $product->variants;
+        $productImages = $product->galleries;
+        $variants = $product->variants;
 
-    $colors = $product->variants->pluck('color')->unique('id')->values();
-    $sizes = $product->variants->pluck('size')->unique('id')->values();
-    $quantity = $product->variants->pluck('quantity')->unique('id')->values();
+        $colors = $product->variants->pluck('color')->unique('id')->values();
+        $sizes = $product->variants->pluck('size')->unique('id')->values();
+        $quantity = $product->variants->pluck('quantity')->unique('id')->values();
 
-    // ================= LOGIC MỚI CHO PHẦN ĐÁNH GIÁ =================
-    $comments = $product->comments()
-        ->where('status', 1)
-        ->with('user')
-        ->latest()
-        ->get();
+        // ================= LOGIC MỚI CHO PHẦN ĐÁNH GIÁ =================
+        $comments = $product->comments()
+            ->where('status', 1)
+            ->with(['user', 'variant.color', 'variant.size'])
+            ->latest()
+            ->get();
 
-    $totalReviews = $comments->count();
-    $averageRating = 0;
-    $ratingPercentages = [
-        '5' => 0,
-        '4' => 0,
-        '3' => 0,
-        '2' => 0,
-        '1' => 0
-    ];
 
-    if ($totalReviews > 0) {
-        $averageRating = round($comments->avg('rating'), 1);
-        $ratingCounts = $comments->groupBy('rating')->map->count();
 
-        foreach ($ratingCounts as $rating => $count) {
-            if (isset($ratingPercentages[$rating])) {
-                $ratingPercentages[$rating] = round(($count / $totalReviews) * 100);
+        $totalReviews = $comments->count();
+        $averageRating = 0;
+        $ratingPercentages = [
+            '5' => 0,
+            '4' => 0,
+            '3' => 0,
+            '2' => 0,
+            '1' => 0
+        ];
+
+        if ($totalReviews > 0) {
+            $averageRating = round($comments->avg('rating'), 1);
+            $ratingCounts = $comments->groupBy('rating')->map->count();
+
+            foreach ($ratingCounts as $rating => $count) {
+                if (isset($ratingPercentages[$rating])) {
+                    $ratingPercentages[$rating] = round(($count / $totalReviews) * 100);
+                }
             }
         }
+
+        return view('clients.products.show', compact(
+            'product',
+            'productImages',
+            'relatedProducts',
+            'variants',
+            'colors',
+            'sizes',
+            'comments',
+            'totalReviews',
+            'averageRating',
+            'ratingPercentages',
+        ));
     }
-
-    // ===== GÁN GIÁ TRỊ MẶC ĐỊNH =====
-    $hasPurchased = false;
-    $hasReviewed = false;
-
-    // ===== THÊM KIỂM TRA ĐÃ MUA & CHƯA ĐÁNH GIÁ =====
-    if (Auth::check()) {
-        $userId = Auth::id();
-
-        $hasPurchased = \App\Models\OrderDetail::whereHas('order', function($q) use ($userId) {
-            $q->where('user_id', $userId)
-              ->where('status', 'Đã giao hàng');
-        })->where('product_id', $product->id)->exists();
-
-        $hasReviewed = \App\Models\Comment::where('user_id', $userId)
-            ->where('product_id', $product->id)
-            ->exists();
-    }
-    // =================== KẾT THÚC LOGIC MỚI =======================
-
-    return view('clients.products.show', compact(
-        'product',
-        'productImages',
-        'relatedProducts',
-        'variants',
-        'colors',
-        'sizes',
-        'comments',
-        'totalReviews',
-        'averageRating',
-        'ratingPercentages',
-        'hasPurchased',
-        'hasReviewed'
-    ));
-}
 
 
 
@@ -229,6 +210,4 @@ class ProductController extends Controller
 
         return view('clients.products.hot_deals', compact('products', 'categories', 'brands'));
     }
-
 }
-

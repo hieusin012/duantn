@@ -360,9 +360,6 @@
                                     <div class="product-form-submit addcart fl-1 ms-3">
                                         <button type="submit" id="add-to-cart-btn" class="btn btn-primary">Thêm vào giỏ hàng</button>
                                     </div>
-                                    <div class="product-form-submit buyit fl-1 ms-3">
-                                        <button type="submit" class="btn btn-primary proceed-to-checkout"><span>Mua ngay</span></button>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -548,7 +545,7 @@
                                 @forelse ($comments as $comment)
                                 <div class="spr-review d-flex w-100">
                                     <div class="spr-review-profile flex-shrink-0">
-                                        <img class="blur-up lazyload" data-src="{{ asset('storage/' . $comment->user->avatar) }}" src="{{ asset('storage/' . $comment->user->avatar) }}" alt="" width="80" height="80" />
+                                        <img class="blur-up lazyload" data-src="{{ asset('storage/' . $comment->user->avatar) }}" src="{{ asset('storage/' . $comment->user->avatar) }}" alt="" width="100" height="100" />
                                     </div>
                                     <div class="spr-review-content flex-grow-1">
                                         <div class="d-flex justify-content-between flex-column mb-2">
@@ -563,6 +560,20 @@
                                                 </span>
                                             </div>
                                             <span class="spr-review-header-byline">{{ $comment->created_at->format('d/m/Y') }}</span>
+                                            @if($comment->variant)
+                                            <small class="text-muted">
+                                                @if($comment->variant->color)
+                                                Màu:
+                                                <span class="fw-semibold" style="color: {{ $comment->variant->color->color_code }}">
+                                                    <b>{{ $comment->variant->color->name }}</b>
+                                                </span>
+                                                @endif
+
+                                                @if($comment->variant->size)
+                                                | Size: {{ $comment->variant->size->name }} ({{ $comment->variant->size->value }})
+                                                @endif
+                                            </small>
+                                            @endif
                                         </div>
                                         <p class="spr-review-body">{{ $comment->content }}</p>
                                     </div>
@@ -573,93 +584,6 @@
                             </div>
                         </div>
                     </div>
-
-                    {{-- RIGHT COLUMN: REVIEW FORM --}}
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-6 mb-4">
-                        @auth
-                        @if($hasPurchased && !$hasReviewed)
-                        <form method="post" action="{{ route('client.comments.store') }}" id="commentForm" class="product-review-form new-review-form">
-                            @csrf
-                            <input type="hidden" name="product_id" value="{{ $product->id }}">
-                            <h3 class="spr-form-title">Viết đánh giá của bạn</h3>
-                            <p>Email của bạn sẽ không được công khai. Các trường bắt buộc được đánh dấu <span class="required">*</span></p>
-                            <fieldset class="row spr-form-contact">
-                                <div class="col-sm-6 spr-form-contact-name form-group">
-                                    <label class="spr-form-label" for="nickname">Tên <span class="required">*</span></label>
-                                    <input class="spr-form-input spr-form-input-text" id="nickname" type="text" value="{{ auth()->user()->fullname }}" readonly />
-                                </div>
-                                <div class="col-sm-6 spr-form-contact-email form-group">
-                                    <label class="spr-form-label" for="email">Email <span class="required">*</span></label>
-                                    <input class="spr-form-input spr-form-input-email" id="email" type="email" value="{{ auth()->user()->email }}" readonly />
-                                </div>
-
-                                <div class="col-12 spr-form-review-rating form-group">
-                                    <label class="spr-form-label">Đánh giá của bạn <span class="required">*</span></label>
-                                    <div class="rating-stars" id="formRatingStars">
-                                        <input type="radio" id="star5" name="rating" value="5"><label for="star5"><i class="icon anm anm-star-o"></i></label>
-                                        <input type="radio" id="star4" name="rating" value="4"><label for="star4"><i class="icon anm anm-star-o"></i></label>
-                                        <input type="radio" id="star3" name="rating" value="3"><label for="star3"><i class="icon anm anm-star-o"></i></label>
-                                        <input type="radio" id="star2" name="rating" value="2"><label for="star2"><i class="icon anm anm-star-o"></i></label>
-                                        <input type="radio" id="star1" name="rating" value="1"><label for="star1"><i class="icon anm anm-star-o"></i></label>
-                                    </div>
-                                    @error('rating')
-                                    <div class="text-danger mt-1">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="col-12 spr-form-review-body form-group">
-                                    <label class="spr-form-label" for="message">Nội dung đánh giá <span class="required">*</span></label>
-                                    <div class="spr-form-input">
-                                        <textarea class="spr-form-input spr-form-input-textarea" id="message" name="content" rows="3"></textarea>
-                                    </div>
-                                    @error('content')
-                                    <div class="text-danger mt-1">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </fieldset>
-                            <div class="spr-form-actions clearfix">
-                                <input type="submit" class="btn btn-primary spr-button spr-button-primary" value="Gửi đánh giá" />
-                            </div>
-                        </form>
-                        @elseif(!$hasPurchased)
-                        <div class="alert alert-warning d-flex align-items-center" role="alert">
-                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                            <span>Bạn cần mua hàng để đánh giá sản phẩm này.</span>
-                        </div>
-                        @else
-                        <div class="alert alert-success d-flex align-items-center" role="alert">
-                            <i class="bi bi-check-circle-fill me-2"></i>
-                            <span>Bạn đã đánh giá sản phẩm này rồi.</span>
-                        </div>
-                        @endif
-
-
-                        @else
-                        <div class="text-center p-4 border rounded">
-                            <h4 class="mb-3">Viết đánh giá</h4>
-                            <p>Vui lòng <a href="{{ route('login') }}" class="fw-bold text-primary">Đăng nhập</a> để viết đánh giá.</p>
-                        </div>
-                        @endguest
-                    </div>
-                </div>
-            </div>
-
-            <div id="comments" class="tab-content">
-                <h3 rel="comments">Bình luận của khách hàng</h3>
-                <div id="comments-section">
-                    <div id="comment-list"></div>
-
-                    @auth
-                    <form id="comment-form" class="mt-3">
-                        @csrf
-                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                        <input type="hidden" name="parent_id" id="parent_id">
-                        <textarea name="content" class="form-control" placeholder="Nhập bình luận..." required></textarea>
-                        <button type="submit" class="btn btn-primary mt-2">Gửi</button>
-                        <button type="button" class="btn btn-secondary mt-2" id="cancel-reply" style="display:none">Hủy</button>
-                    </form>
-                    @else
-                    <p>Bạn cần <a href="{{ route('login') }}">đăng nhập</a> để bình luận</p>
-                    @endauth
                 </div>
             </div>
         </div>

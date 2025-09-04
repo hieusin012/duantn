@@ -106,13 +106,14 @@ class CommentController extends Controller
         $comment->delete();
         return redirect()->route('admin.comments.index')->with('success', 'Xóa đánh giá thành công.');
     }
-    public function storeClient(Request $request)
+    public function storeClient(Request $request, $variantId)
     {
         // $request->validate([
         $validator = Validator::make($request->all(), [
             'product_id' => 'required|exists:products,id',
             'content' => 'required|string|max:500|min:10|not_regex:/<script\b[^>]*>(.*?)<\/script>/i',
-            'rating' => 'required|integer|min:1|max:5',
+            'rating_' . $variantId => 'required|integer|min:1|max:5',
+            'variant_id' => 'required|exists:product_variants,id',
         ], [
             'product_id.required' => 'Vui lòng chọn sản phẩm.',
             'product_id.exists' => 'Sản phẩm không tồn tại.',
@@ -124,6 +125,8 @@ class CommentController extends Controller
             'rating.integer' => 'Điểm đánh giá phải là một số.',
             'rating.min' => 'Điểm đánh giá tối thiểu là :min.',
             'rating.max' => 'Điểm đánh giá tối đa là :max.',
+            'variant_id.required' => 'Vui lòng chọn biến thể sản phẩm.',
+            'variant_id.exists' => 'Biến thể sản phẩm không tồn tại.',
         ]);
 
         if ($validator->fails()) {
@@ -136,10 +139,12 @@ class CommentController extends Controller
         Comment::create([
             'user_id' => Auth::id(),
             'product_id' => $request->product_id,
+            'variant_id' => $request->variant_id,
             'content' => $request->content,
-            'rating' => $request->rating,
+            'rating' => $request->rating_ . $variantId,
             'status' => true, // nếu cần duyệt thì set false
         ]);
+        
 
         // return redirect()->back()->with('success', 'Bình luận đã được gửi.');
         return response()->json([
