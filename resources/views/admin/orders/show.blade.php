@@ -65,7 +65,7 @@
                             };
                             @endphp
                             <button type="submit" class="btn {{ $statusColor }} btn-sm rounded-pill shadow-sm mf-4" title="Click để chuyển trạng thái">
-                                @if($order->status == 'Đã giao hàng')
+                                @if($order->status !== 'Đã giao hàng')
                                 <i class="fas fa-sync-alt me-1"></i>
                                 @else
                                 <i class="fas fa-check me-1"></i>

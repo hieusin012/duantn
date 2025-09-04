@@ -141,7 +141,7 @@ class CommentController extends Controller
             'product_id' => $request->product_id,
             'variant_id' => $request->variant_id,
             'content' => $request->content,
-            'rating' => $request->rating_ . $variantId,
+            'rating' => $request->{"rating_$variantId"},
             'status' => true, // nếu cần duyệt thì set false
         ]);
         
