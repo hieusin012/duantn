@@ -40,7 +40,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="7" class="text-center text-danger">Không có phiếu nhập nào đã xóa</td>
+                            <td colspan="7" class="text-center text-danger">Không có phiếu nhập nào đã ẩn</td>
                         </tr>
                         @endforelse
                     </tbody>
