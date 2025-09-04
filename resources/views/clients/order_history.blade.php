@@ -104,7 +104,7 @@
                             <td>{{ $order->created_at->format('d/m/Y H:i:s') }}</td>
                             {{-- <td>{{ $order->delivered_at ? $order->delivered_at->format('d/m/Y H:i:s') : 'Chưa giao' }}</td> --}}
                             <td>
-                                @if ($order->delivered_at)
+                                @if ($order->status === 'Đã giao hàng' && $order->delivered_at)
                                     {{ $order->delivered_at->format('d/m/Y H:i:s') }}
                                 @else
                                     @switch($order->status)

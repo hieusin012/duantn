@@ -33,15 +33,15 @@
                         <div class="col-md-3">
                             <strong>Thanh toán:</strong><br>
                             {{-- <span class="badge {{ $order->payment_status === 'Đã thanh toán' ? 'bg-success' : 'bg-warning text-dark' }}">
-                                {{ $order->payment_status }}
+                            {{ $order->payment_status }}
                             </span> --}}
                             @php
-                                $paymentClass = match($order->payment_status) {
-                                    'Chưa thanh toán' => 'bg-danger',
-                                    'Đã thanh toán' => 'bg-success',
-                                    'Đã hoàn tiền' => 'bg-warning',
-                                    default => 'bg-secondary'
-                                };
+                            $paymentClass = match($order->payment_status) {
+                            'Chưa thanh toán' => 'bg-danger',
+                            'Đã thanh toán' => 'bg-success',
+                            'Đã hoàn tiền' => 'bg-warning',
+                            default => 'bg-secondary'
+                            };
                             @endphp
                             <span class="badge {{ $paymentClass }}">
                                 {{ $order->payment_status }}
@@ -73,6 +73,12 @@
                                 {{ $order->status }}
                             </button>
                         </form>
+                        @if($order->status !== 'Đã giao hàng' && $order->status !== 'Đơn hàng đã hủy')
+                        <form action="{{ route('admin.orders.cancel', $order->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc muốn hủy đơn này không?');">
+                            @csrf
+                            <button type="submit" class="btn btn-danger btn-sm ml-2">Hủy đơn hàng</button>
+                        </form>
+                        @endif
                     </div>
 
                     @if ($order->status === 'Đơn hàng đã hủy')
@@ -179,11 +185,11 @@
                             <td class="fw-medium text-nowrap">{{ $detail->product_name ?? 'N/A' }}</td>
                             <td>
                                 @if ($detail->product_image)
-                                    <img src="{{ asset('storage/' . $detail->product_image) }}" width="60"
-                                        class="img-thumbnail border border-secondary" alt="Ảnh sản phẩm" />
+                                <img src="{{ asset('storage/' . $detail->product_image) }}" width="60"
+                                    class="img-thumbnail border border-secondary" alt="Ảnh sản phẩm" />
                                 @else
-                                    <img src="{{ asset('images/no-image.jpg') }}" width="60"
-                                        class="img-thumbnail border border-secondary" alt="Ảnh sản phẩm" />
+                                <img src="{{ asset('images/no-image.jpg') }}" width="60"
+                                    class="img-thumbnail border border-secondary" alt="Ảnh sản phẩm" />
                                 @endif
                             </td>
                             <td class="text-nowrap">{{ $detail->color ?? 'N/A' }}</td>
