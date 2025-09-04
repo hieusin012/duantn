@@ -586,6 +586,25 @@
                     </div>
                 </div>
             </div>
+            <div id="comments" class="tab-content">
+                <h3 rel="comments">Bình luận của khách hàng</h3>
+                <div id="comments-section">
+                    <div id="comment-list"></div>
+
+                    @auth
+                    <form id="comment-form" class="mt-3">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <input type="hidden" name="parent_id" id="parent_id">
+                        <textarea name="content" class="form-control" placeholder="Nhập bình luận..." required></textarea>
+                        <button type="submit" class="btn btn-primary mt-2">Gửi</button>
+                        <button type="button" class="btn btn-secondary mt-2" id="cancel-reply" style="display:none">Hủy</button>
+                    </form>
+                    @else
+                    <p>Bạn cần <a href="{{ route('login') }}">đăng nhập</a> để bình luận</p>
+                    @endauth
+                </div>
+            </div>
         </div>
     </div>
 </div>
