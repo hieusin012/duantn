@@ -17,6 +17,8 @@ class CartController extends Controller
     // Hiển thị giỏ hàng
     public function index()
     {
+        $userId = Auth::id();
+
         $cart = Cart::with('items.product', 'items.variant')
             ->where('user_id', Auth::id())
             ->where('status', 'active') // ĐÚNG KIỂU string
@@ -26,6 +28,9 @@ class CartController extends Controller
             ->whereDate('start_date', '<=', now())
             ->whereDate('end_date', '>=', now())
             ->whereColumn('used', '<', 'quantity') // chỉ hiển thị voucher còn lượt dùng
+            ->whereDoesntHave('users', function ($query) use ($userId) {
+                $query->where('user_id', $userId); // loại bỏ voucher đã dùng của user
+            })
             ->get();
 
         $products = Product::where('is_active', 1)
@@ -40,6 +45,7 @@ class CartController extends Controller
             }
             $cart->load(['items.product', 'items.variant']);
         }
+        
 
 
         return view('clients.cart.cart', compact('cart', 'products', 'voucher'));
@@ -79,9 +85,9 @@ class CartController extends Controller
         // } 
 
         $product = Product::findOrFail($request->product_id);
-        $isHotDeal = $product->is_hot_deal 
-            && $product->discount_percent > 0 
-            && $product->deal_end_at 
+        $isHotDeal = $product->is_hot_deal
+            && $product->discount_percent > 0
+            && $product->deal_end_at
             && now()->lt($product->deal_end_at);
 
         // Nếu là Hot Deal → giảm giá theo phần trăm từ variant->price
@@ -96,7 +102,7 @@ class CartController extends Controller
         if (is_null($price)) {
             return back()->with('error', 'Không thể thêm sản phẩm chưa có giá.');
         }
-        
+
         // Kiểm tra xem biến thể đã có trong giỏ hàng chưa
         $item = $cart->items()
             ->where('product_id', $request->product_id)

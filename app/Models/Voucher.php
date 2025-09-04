@@ -13,6 +13,7 @@ class Voucher extends Model
         'discount_type',
         'quantity',
         'max_price',
+        'user_id',
         'start_date',
         'end_date',
         'used', // Thêm 'used' vào fillable nếu bạn muốn cập nhật nó qua mass assignment
@@ -55,8 +56,13 @@ class Voucher extends Model
         // 4. Đã đến hoặc qua ngày bắt đầu (start_date)
 
         return !$this->isExpired() &&
-               $this->is_active &&
-               $this->quantity > $this->used && // So sánh quantity với used
-               (is_null($this->start_date) || now()->gte($this->start_date)); // Đã đến hoặc qua ngày bắt đầu
+            $this->is_active &&
+            $this->quantity > $this->used && // So sánh quantity với used
+            (is_null($this->start_date) || now()->gte($this->start_date)); // Đã đến hoặc qua ngày bắt đầu
+    }
+    // Voucher.php
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'voucher_user');
     }
 }

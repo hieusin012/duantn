@@ -13,6 +13,8 @@ class ApplyVoucherController extends Controller
 {
     public function applyVoucher(Request $request)
     {
+        $userId = Auth::id();
+
         $request->validate([
             'code' => 'required|string'
         ]);
@@ -31,22 +33,37 @@ class ApplyVoucherController extends Controller
             ]);
         }
 
-        // Giả sử tổng tiền từ frontend gửi lên (hoặc tự tính)
+        // ✅ Kiểm tra user đã dùng chưa
+        if ($voucher->users()->where('user_id', $userId)->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Bạn đã sử dụng mã giảm giá này rồi!'
+            ]);
+        }
+
+        // ✅ Kiểm tra số lượt còn lại
+        if ($voucher->used >= $voucher->quantity) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Voucher đã hết lượt sử dụng!'
+            ]);
+        }
+
+        // Giả sử tổng tiền từ frontend gửi lên
         $cartTotal = (int) $request->cart_total;
 
         // Tính tiền giảm
-        if ($voucher->discount_type === 'percent') {
-            $discount = $cartTotal * ($voucher->discount / 100);
-        } else {
-            $discount = $voucher->discount;
-        }
+        $discount = $voucher->discount_type === 'percent'
+            ? $cartTotal * ($voucher->discount / 100)
+            : $voucher->discount;
 
-        // Áp dụng giới hạn giảm tối đa
+        // Giới hạn giảm tối đa
         if ($voucher->max_price && $discount > $voucher->max_price) {
             $discount = $voucher->max_price;
         }
 
         $newTotal = max($cartTotal - $discount, 0);
+
 
         return response()->json([
             'success' => true,
