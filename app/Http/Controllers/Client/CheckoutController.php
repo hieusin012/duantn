@@ -395,7 +395,11 @@ class CheckoutController extends Controller
                     return redirect()->route('checkout.success', ['order' => $order->code, 'message' => 'success',]);
                 } else {
                     // ❌ KHÔNG thành công → vẫn hiển thị trang thành công, nhưng chưa thanh toán
+                    $order->update([
+                        'payment' => 'Thanh toán khi nhận hàng',
+                    ]);
                     return redirect()->route('checkout.success', ['order' => $order->code, 'message' => 'warning',]);
+                    
                 }
             }
 

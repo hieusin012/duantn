@@ -358,7 +358,7 @@
                                         </div>
                                     </div>
                                     <div class="product-form-submit addcart fl-1 ms-3">
-                                        <button type="submit" id="add-to-cart-btn" class="btn btn-primary">Thêm vào giỏ hàng</button>
+                                        <button type="submit" id="add-to-cart-btn" class="btn btn-primary proceed-to-checkout">Thêm vào giỏ hàng</button>
                                     </div>
                                 </div>
                             </div>

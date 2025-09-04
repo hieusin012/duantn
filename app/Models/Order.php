@@ -19,6 +19,8 @@ class Order extends Model
         'payment',
         'status',
         'delivered_at',
+        'cancel_reason',
+        'cancel_note',
         'payment_status',
         'shiping',
         'discount',

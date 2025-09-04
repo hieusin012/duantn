@@ -181,7 +181,9 @@ class OrderController extends Controller
 
         // ✅ Lưu trạng thái + lý do hủy
         $order->status = 'Đơn hàng đã hủy';
-        $order->payment_status = 'Đã hoàn tiền';
+        if($order->payment == 'Thanh toán qua VNPay'){
+            $order->payment_status = 'Đã hoàn tiền';
+        }
         $order->cancel_reason = $request->cancel_reason;
         $order->cancel_note   = $request->cancel_note;
         $order->save();
@@ -238,6 +240,27 @@ class OrderController extends Controller
 
         return back()->with('error', 'Không thể cập nhật trạng thái đơn hàng.');
     }
+    //hủy đơn hàng
+    public function cancelAdmin(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
+        // Hủy đơn
+        $order->update([
+            'status' => 'Đơn hàng đã hủy',
+            'cancel_reason' => 'Admin hủy',
+            'cancel_note' => 'Khách hàng không nhận hàng',
+        ]);
+        $order->orderDetails->each(function ($detail) {
+            $variant = ProductVariant::find($detail->variant_id);
+            if ($variant) {
+                $variant->increment('quantity', $detail->quantity);
+            }
+        });
+
+
+        return back()->with('success', 'Đơn hàng đã được hủy thành công.');
+    }
+
     // in dữ liệu
     // OrderController.php
     public function print($id)
